@@ -1,0 +1,218 @@
+---
+id: 37
+title: "Claude Assumes Instead of Asking"
+section: pitfalls
+summary: "Ambiguous requirement? Claude picks an interpretation and runs with it."
+isFree: false
+---
+
+Ambiguous requirement? Claude picks an interpretation and runs with it. Wrong guess = wasted work. This is one of the most expensive pitfalls in AI-assisted development.
+
+## The Cost of Wrong Assumptions
+
+When Claude assumes instead of asking, consequences compound:
+
+- Hours lost implementing features that don't match your intent
+- Architectural decisions that become difficult to change
+- Refactoring that touches files you never intended to modify
+- Context gaps that propagate through subsequent changes
+
+Research shows that structural tasks like refactoring suffer most from AI missing context. The more a task depends on understanding the broader codebase or your specific requirements, the more likely Claude is to miss the mark.
+
+## Why Claude Assumes Instead of Asks
+
+This behavior is baked into how language models are trained:
+
+**RLHF Bias**: During Reinforcement Learning from Human Feedback, responses are judged in isolation. An answer that "looks complete" often beats a question asking for clarification. Human labelers preferred confident answers over incomplete responses, so models learned to answer ambiguous queries by guessing an interpretation.
+
+**Lack of Training Examples**: There are very few dialogue examples in training data where the assistant says, "I'm not sure what you mean, could you clarify?" The model might know a question is ambiguous but still doesn't behave accordingly because it was never taught that clarifying is the correct action.
+
+**User Experience Concerns**: By design, many assistants avoid asking too many questions, fearing it might annoy users or make the AI seem less capable. This results in overconfident answers to underspecified questions.
+
+**Prediction Objective**: The fundamental training task (predict the next token) never included an option to abstain. Models are implicitly taught that giving some answer is better than giving no answer.
+
+## How This Differs from Being a YES MAN
+
+This is the OPPOSITE of tip 36 (Claude is a YES MAN):
+
+- **YES MAN** is reactive: Claude validates YOUR bad ideas when you suggest them
+- **Assumes** is proactive: Claude invents things you DIDN'T ask for
+
+YES MAN follows your lead uncritically. Assumes runs ahead without asking for direction. Both are problems, but they require different solutions.
+
+## The AskUserQuestion Tool
+
+Recent Claude Code versions added the AskUserQuestion tool (v2.0.21+). This is a structured way for Claude to pause execution and ask clarifying questions.
+
+Instead of guessing, Claude can now say: "I see three ways to fix this API. Do you prefer A, B, or C?" This represents a deliberate architectural decision by Anthropic. Rather than relying on system prompt instructions alone, they created a dedicated tool because structured questioning produces better outcomes than free-form prompting.
+
+The tool allows Claude to present multiple-choice questions with descriptions, gather multiple answers in one interaction, and proceed with confidence once clarified.
+
+But Claude still defaults to assuming unless you tell it otherwise.
+
+## Fix This in CLAUDE.md
+
+Add explicit instructions to your project's CLAUDE.md:
+
+```markdown
+## Requirements Handling
+- When in doubt, ask. Never make assumptions about unclear requirements.
+- Ask clarifying questions before making architectural changes.
+- If a requirement has multiple valid interpretations, present options before proceeding.
+- Never assume technology choices, data models, or design patterns without confirmation.
+```
+
+This gives Claude explicit permission to ask questions. Without it, the default behavior is to guess.
+
+## The 95% Certainty Technique
+
+A powerful prompting approach: instruct Claude to ask questions until it reaches a confidence threshold.
+
+```
+Write a guide on setting up a home network.
+Ask clarifying questions until you are 95% sure you can complete the task successfully.
+```
+
+This transforms one-directional interactions into collaborative conversations. The model must honestly gauge its comprehension before proceeding.
+
+**Adjust the threshold based on task criticality:**
+- 80% for brainstorming and exploration
+- 95% for feature implementation
+- 99% for production-critical changes
+
+## Use Plan Mode to Force Questions
+
+Plan mode (Shift+Tab twice) separates research from execution. This creates natural checkpoints for clarification.
+
+Instead of assuming Claude knows what you want, explicitly prompt for questions:
+
+```
+Before you start planning the user authentication system,
+ask me questions about the requirements.
+I want to make sure we're building exactly what's needed.
+```
+
+Claude will ask things like:
+- "Do you want social login options, or just email/password?"
+- "Should we store user preferences locally or in the database?"
+- "What's your plan for handling password resets?"
+
+These questions often reveal assumptions you didn't realize you were making.
+
+## Spec-Driven Development
+
+For complex features, write requirements in a file before prompting Claude:
+
+```markdown
+<!-- requirements.md -->
+## User Authentication Feature
+
+### Must Have
+- Email/password login
+- Password reset via email
+- Session expiry after 24 hours
+
+### Must NOT Have
+- Social login (out of scope)
+- Two-factor authentication (phase 2)
+
+### Open Questions
+- Where should sessions be stored? (Redis vs database)
+- Should we support "remember me" functionality?
+```
+
+Then tell Claude: "Read requirements.md. For any open questions, ask me before proceeding."
+
+This approach:
+- States explicit choices, removing guesswork
+- Identifies deliberate exclusions
+- Flags items needing your input
+
+## Give Claude an Escape Hatch
+
+In your CLAUDE.md, provide explicit guidance for uncertainty:
+
+```markdown
+## When Uncertain
+If you are unsure about any requirement:
+1. Ask a clarifying question, OR
+2. Propose a short plan for review, OR
+3. Present options with trade-offs
+
+Never push large speculative changes without confirmation.
+```
+
+This tells Claude what to do instead of guessing. Without an alternative action, Claude defaults to proceeding with assumptions.
+
+## Practical Examples
+
+**Bad prompt:**
+```
+Add user authentication to the app
+```
+
+Claude assumes: OAuth vs JWT vs sessions, where to store tokens, middleware structure, password hashing algorithm, session duration, and more.
+
+**Good prompt:**
+```
+Add user authentication to the app.
+
+Before implementing, ask me about:
+- Authentication method (OAuth, JWT, session-based)
+- Password requirements and hashing
+- Session storage and expiry
+- What endpoints need protection
+
+Don't write code until I've answered these questions.
+```
+
+**Bad prompt:**
+```
+Optimize the database queries
+```
+
+Claude assumes: which queries matter, what "optimized" means, acceptable trade-offs.
+
+**Good prompt:**
+```
+Optimize the database queries.
+
+First, identify the 3 slowest queries and ask me:
+- Which ones actually matter for our use case?
+- What query time is acceptable?
+- Can we add indexes or change the schema?
+```
+
+## Recognize When Claude Is Assuming
+
+Watch for these signals that Claude is making assumptions:
+
+- Immediate implementation without questions
+- Phrases like "I'll assume you want..." or "Assuming we're using..."
+- Technology choices you didn't specify
+- Edge case handling you didn't request
+- Features beyond what you asked for
+
+When you see these, interrupt with Escape and redirect: "Stop. I didn't specify that. What made you choose this approach? Ask me instead of assuming."
+
+## The Long-Term Fix
+
+For persistent improvement, add this to your global `~/.claude/CLAUDE.md`:
+
+```markdown
+## Communication Style
+- Treat unclear requirements as blockers, not opportunities to guess
+- A wrong implementation costs more than a clarifying question
+- When you notice yourself assuming, stop and ask instead
+- List your assumptions explicitly before any implementation
+```
+
+Then reinforce with project-specific instructions as needed.
+
+## The Bottom Line
+
+Claude with assumptions is a fast typist making expensive guesses. Claude that asks questions is a thoughtful collaborator building what you actually need.
+
+The fix is explicit: give Claude permission to ask, provide an escape hatch for uncertainty, and use plan mode to create natural checkpoints for clarification.
+
+Every question asked saves an hour of rework. Every assumption caught prevents a feature rewrite. Make asking the default, not the exception.

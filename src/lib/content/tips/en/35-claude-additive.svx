@@ -1,0 +1,159 @@
+---
+id: 35
+title: "Claude is Additive, Never Subtractive"
+section: pitfalls
+summary: "Claude only adds code. It never removes. You have to explicitly force deletion."
+isFree: false
+---
+
+Claude only adds code. It never removes. Ask it to delete a feature? It comments it out. Refactor a function? Old imports stay. Remove dead code? Gets wrapped in `if (false)`.
+
+Every edit is additive. Legacy cruft accumulates. This is not a bug. It is Claude's default behavior.
+
+## Why This Happens
+
+Claude is trained to be cautious. Deletion is destructive and irreversible. Addition is safe. When uncertain about whether code is needed elsewhere, Claude defaults to preservation.
+
+The training data reinforces this. Production codebases rarely show deletion commits in isolation. Most code changes are additions or modifications. Claude pattern-matches to this reality and treats removal as risky.
+
+Context window limitations compound the problem. Claude cannot always see the full impact of removing code. It cannot trace every function call across a large codebase to verify nothing depends on the code being deleted. When in doubt, it preserves.
+
+There is also the "lost in the middle" problem. Research from Stanford demonstrated that language models perform best when relevant information appears at the very beginning or very end of context, with significant degradation for information in the middle. If the reason to delete code was established 50 messages ago, Claude may no longer weigh it appropriately.
+
+## The Symptoms
+
+**Commented-Out Code Instead of Deletion**
+
+You ask Claude to remove a feature. Instead of deleting the code, it wraps everything in comments. The code remains in the file, cluttering the codebase and confusing future readers.
+
+**Orphaned Imports After Refactoring**
+
+Claude refactors a function to use a different approach. The old imports remain at the top of the file. The new code does not use them, but Claude does not clean them up.
+
+**Unused Variables Left Behind**
+
+Variables that were part of the old implementation stay in the code. They are declared, maybe even initialized, but nothing references them anymore.
+
+**Dead Code Wrapped in Flags**
+
+Instead of deleting code, Claude wraps it in `if (false)` or `if (FEATURE_DISABLED)`. The code is unreachable but still present, still parsed, still adding to cognitive load.
+
+**Parallel Functions with "New" Suffix**
+
+When asked to rewrite a function, Claude sometimes creates a new version alongside the old one. You end up with `processData` and `processDataNew`, both in the codebase. The old one is never called but never removed.
+
+**Accumulated Legacy Cruft**
+
+As one engineering team reported: "Claude Code will decide to rewrite something and leave the old stuff around." Over time, this accumulation creates a codebase filled with dead ends, abandoned approaches, and code nobody remembers writing.
+
+## The Cost
+
+Commented-out code is a recognized code smell. Kent Beck and Martin Fowler popularized this concept in the 1990s, and it remains foundational to clean code practices. Dead code adds noise, increases cognitive load, and signals deeper design problems.
+
+The technical debt compounds. GitClear's analysis of 211 million lines of code found an 8-fold increase in code duplication during 2024, coinciding with widespread AI coding tool adoption. One API evangelist with 35 years of experience reported never seeing "so much technical debt being created in such a short period of time."
+
+Dead code creates confusion. Other developers see commented-out code and wonder: Is this important? Should I uncomment it? Was it disabled for a reason? This uncertainty derails focus and wastes time.
+
+There are security implications too. Unreviewed dead code can contain vulnerabilities, hardcoded credentials, or deprecated patterns. Security scanners may flag it. Code reviewers must spend time determining if it matters.
+
+Perhaps most critically: accumulated garbage confuses Claude itself. If the codebase is littered with dead code from previous sessions, Claude may reference it, copy its patterns, or fail to understand what the "real" implementation is. The mess feeds back into worse outputs.
+
+## The Fix: CLAUDE.md Rules
+
+Add explicit deletion instructions to your CLAUDE.md:
+
+```markdown
+## Code Cleanup Rules
+
+- When removing functionality, DELETE the code. Do not comment it out.
+- After refactoring, remove all orphaned imports and unused variables.
+- Never wrap dead code in if(false) or feature flags as a deletion substitute.
+- When replacing a function, DELETE the old implementation entirely.
+- Check for and remove any code made obsolete by your changes.
+- Commented-out code is not version control. Git is version control.
+```
+
+The key is explicit language. "Remove dead code" is too vague. Claude interprets it as "handle dead code" which can mean commenting, flagging, or wrapping. You need: "DELETE. Remove from the file. Not comment. Not flag. Gone."
+
+## Prompt-Level Techniques
+
+When requesting deletions, be surgical:
+
+**Explicit Deletion Request:**
+> "Delete the getUserById function entirely. Remove it from the file. Remove its import from any files that imported it. I want zero references remaining."
+
+**Post-Refactor Cleanup:**
+> "You just refactored this file. Now remove all orphaned imports, unused variables, and any code that is no longer called. Delete them, do not comment them out."
+
+**Dedicated Cleanup Session:**
+
+Clear context before cleanup. When Claude has spent an entire session building something, it has difficulty shifting to deletion mode. Start fresh:
+
+```bash
+/clear
+```
+
+Then prompt:
+> "There is dead code in src/utils/helpers.ts. Examine the code carefully and remove any dead code. Delete it entirely. Do not comment it out."
+
+This approach works because Claude is no longer anchored to its previous creative work.
+
+## Git Diff Review Checklist
+
+Before every commit, run `git diff --cached` and check for:
+
+- **Commented-out code blocks** - Should these be deleted instead?
+- **Orphaned imports** - Are all imports at the top actually used?
+- **Unused variables** - Declared but never referenced?
+- **Functions/classes no longer called** - Dead code that should be removed?
+- **Duplicate implementations** - Old and new versions both present?
+
+This manual review catches what Claude misses. As one developer noted: "Re-reading the diff finds countless bugs."
+
+## Detection Tools
+
+Automated tools provide a safety net:
+
+**JavaScript/TypeScript:**
+- ESLint with `no-unused-vars` and `@typescript-eslint/no-unused-vars` rules
+- Knip for project-wide dead code detection (helped Vercel delete ~300k lines of unused code)
+- TypeScript compiler with `--noUnusedLocals` and `--noUnusedParameters`
+
+**Python:**
+- Vulture for AST-based dead code detection, including unreachable code after return statements
+- Autoflake removes unused imports and variables automatically
+- Pylint with unused-import and unused-variable checks
+
+**Pre-commit Integration:**
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/PyCQA/autoflake
+    hooks:
+      - id: autoflake
+        args: [--remove-all-unused-imports, --in-place]
+```
+
+Run these tools after every Claude session to catch what slipped through.
+
+## The Cleanup Workflow
+
+1. **Commit your work first** - Create a checkpoint before cleanup
+2. **Clear context** - Run `/clear` to give Claude fresh perspective
+3. **Use focused cleanup prompt** - Ask Claude to examine specific files for dead code
+4. **Review changes carefully** - Claude may occasionally remove something still needed
+5. **Run linter and type checker** - Catch any remaining issues
+6. **Commit cleanup separately** - Keep cleanup commits distinct from feature work
+
+This separation matters. If Claude accidentally removes something needed, you can revert the cleanup commit without losing feature work.
+
+## Summary
+
+Claude is biased toward addition. Every edit adds; nothing gets removed unless you force it. This is not malice. It is risk aversion built into the training.
+
+The fix is explicit instruction. Add deletion rules to CLAUDE.md. Use surgical prompts that say DELETE, not remove. Review every diff for orphaned code. Use automated tools as a safety net.
+
+Cleanup is not optional. Without active maintenance, the garbage accumulates until it confuses both humans and Claude. The codebase becomes a museum of abandoned approaches.
+
+Delete mercilessly. Git remembers everything. Your codebase should not.

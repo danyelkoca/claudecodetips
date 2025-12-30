@@ -1,0 +1,153 @@
+---
+id: 12
+title: "Ultrathink Always On"
+section: prompting
+summary: "Never let Claude say what comes to mind first. Let it think. ALWAYS."
+isFree: true
+---
+
+Never let Claude say what comes to mind first. Quality deteriorates if that's the case. Let it think. ALWAYS. This single tip will improve your results more than anything else. Claude with thinking time is a different beast than Claude rushing to answer.
+
+## How Extended Thinking Works
+
+When Claude uses extended thinking, it benefits from "serial test-time compute" - using multiple sequential reasoning steps before producing its final output. The model literally generates a hidden chain-of-thought internally, then uses that reasoning to produce a better answer.
+
+Research shows Claude's accuracy improves logarithmically as the number of "thinking tokens" increases. On the 2024 AIME math exam, giving Claude a larger thinking budget led directly to higher scores - more reasoning steps equals better accuracy.
+
+## The Three-Tier Thinking System
+
+Claude Code implements three distinct thinking levels with specific token allocations:
+
+### Basic Think (4,000 tokens)
+
+Triggered by: `think`
+
+Use for routine debugging, basic refactoring, and straightforward problem-solving. Adds roughly 30% to response time.
+
+### Megathink (10,000 tokens)
+
+Triggered by: `think hard`, `think deeply`, `think a lot`, `think about it`, `think more`, `megathink`
+
+Use for API integration, optimization problems, non-trivial bugs, and multi-file modifications. Response time roughly doubles.
+
+### Ultrathink (31,999 tokens)
+
+Triggered by: `think harder`, `think intensely`, `think longer`, `think really hard`, `think super hard`, `think very hard`, `ultrathink`
+
+Use for complex architectural decisions, performance optimization challenges, unfamiliar codebase analysis, and debugging elusive failures. Response time triples.
+
+## When to Use Each Level
+
+### Use Standard Mode (No Thinking Keywords)
+
+- Quick completions and straightforward edits
+- Simple questions about code
+- Routine daily tasks
+
+### Use "think" (4,000 tokens)
+
+- Non-trivial bugs
+- Multi-file modifications
+- When you need Claude to pause before responding
+
+### Use "think hard" / "megathink" (10,000 tokens)
+
+- Complex refactoring
+- Implementing new patterns
+- Debugging failures that aren't obvious
+- Architectural planning for medium complexity
+
+### Use "ultrathink" (31,999 tokens)
+
+- Consequential decisions affecting your codebase for months
+- Complex architectural challenges
+- Performance optimization requiring deep analysis
+- Debugging race conditions or timing issues
+- System migration planning
+- Regulatory compliance in financial systems
+- Multi-tenancy complexities in SaaS platforms
+
+## Viewing Claude's Thinking Process
+
+Use `--verbose` flag or `Ctrl+O` to toggle verbose mode and see Claude's internal reasoning displayed as gray italic text.
+
+Since v2.0.0, thinking is no longer shown in verbose mode by default. Press `Ctrl+O`, then `Ctrl+E`, and scroll up to see the thinking content.
+
+Press `Tab` to toggle extended thinking on/off during a conversation.
+
+## The Science: Test-Time Compute Scaling
+
+Extended thinking represents a shift from training-time compute to test-time compute. Rather than requiring a larger model, the same model can produce better results by "thinking longer."
+
+Research shows this approach can improve accuracy from 15.6% to 71% on difficult math problems - and up to 86.7% with multiple attempts. Claude achieved 96.2% on MATH 500 and 96.5% on physics problems using extended thinking.
+
+The key insight: giving a model more "thinking budget" at inference time can be more cost-effective than training a larger model.
+
+## Performance Benchmarks
+
+With extended thinking enabled:
+
+- **Math (MATH 500)**: 96.2% accuracy
+- **Physics (GPQA subset)**: 96.5% accuracy
+- **Graduate-level reasoning (GPQA overall)**: 84.8% accuracy
+- **Software engineering (SWE-bench)**: 73.3% (128K thinking budget)
+
+## Best Practices
+
+### Progressive Escalation
+
+Start with `think`, escalate to `megathink` if responses seem shallow, reserve `ultrathink` for persistent challenges. Systematic ultrathink usage wastes tokens and generates disproportionate costs.
+
+### Context Preparation
+
+Load relevant files before invoking thinking modes. Claude performs significantly better with relevant contextual information.
+
+### Planning vs Implementation
+
+Extended thinking provides the most value during planning, not implementation. Use ultrathink to create a plan, then execute without it.
+
+### Don't Overthink Simple Tasks
+
+Don't use ultrathink for simple tasks - it wastes tokens and time. Match the thinking level to problem complexity.
+
+### Verify the Work
+
+Ask Claude to verify its solution with test cases before declaring a task complete. Self-checking improves consistency and reduces errors.
+
+## Real-World Example
+
+A React race condition appearing only under specific timing. Standard prompting produced surface-level symptom fixes. Adding "ultrathink through the state synchronization" revealed the exact sequence causing failure - a `useEffect` cleanup firing after a new effect had started - enabling a genuine solution.
+
+## Combining with Other Techniques
+
+### With Plan Mode
+
+Use ultrathink with Plan Mode for maximum planning intelligence. Combine Opus for reasoning with Sonnet 4 for execution.
+
+### With Multishot Prompting
+
+Provide examples of how to think through problems. Claude will follow similar reasoning patterns within its extended thinking blocks. Use XML tags like `<thinking>` or `<scratchpad>` in your examples.
+
+### With High-Level Instructions
+
+Claude often performs better with high-level instructions to "think deeply" rather than step-by-step prescriptive guidance. The model's creativity in approaching problems may exceed your ability to prescribe the optimal thinking process.
+
+## Critical Limitations
+
+### Claude Code Only
+
+These keywords work exclusively in Claude Code's CLI, not in Claude.ai's web interface or the API. The keywords trigger programmatic token budget allocation in Claude Code specifically.
+
+### Token Costs
+
+Ultrathink uses significant token budget. Use it strategically for consequential decisions, not every request.
+
+### Diminishing Returns
+
+Doubling from 4,000 to 10,000 tokens yields significant gains. Improvements beyond 10,000 follow diminishing returns except for genuinely complex tasks.
+
+## The Bottom Line
+
+Ultrathink is a scalpel, not a hammer. Use it for the 10% of problems that are genuinely hard. For everything else, basic `think` or no thinking keyword at all is sufficient.
+
+But when you do need it - for architectural decisions, complex debugging, or thorny optimization problems - ultrathink transforms Claude from a fast-but-shallow assistant into a thoughtful collaborator that catches edge cases and proposes robust solutions.

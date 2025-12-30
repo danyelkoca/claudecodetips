@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+:root {
+  color-scheme: light only;
+}
+
+body {
+  color: #0f172a;
+  font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+}
+
+.prose a {
+  color: #dc2626;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.prose a:hover {
+  opacity: 0.8;
+}
+
+.prose code {
+  background-color: #f1f5f9;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.prose pre {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}

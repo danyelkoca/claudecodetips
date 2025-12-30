@@ -1,0 +1,132 @@
+<script>
+	import { Check, ChevronDown, Menu, X } from 'lucide-svelte';
+	import logo from '$lib/images/logo.png?enhanced';
+	import { languages } from '$lib/i18n/loader.js';
+
+	export let t;
+	export let lang;
+
+	let mobileMenuOpen = false;
+	let langMenuOpen = false;
+	let langMenuRef;
+	let mobileMenuRef;
+
+	$: currentLanguage = languages.find((l) => l.code === lang);
+	$: currentLanguageName = currentLanguage?.nativeName || t.langName;
+
+	function toggleMobileMenu() {
+		mobileMenuOpen = !mobileMenuOpen;
+	}
+
+	function toggleLangMenu() {
+		langMenuOpen = !langMenuOpen;
+	}
+
+	function handleClickOutside(event) {
+		if (langMenuOpen && langMenuRef && !langMenuRef.contains(event.target)) {
+			langMenuOpen = false;
+		}
+		if (mobileMenuOpen && mobileMenuRef && !mobileMenuRef.contains(event.target)) {
+			mobileMenuOpen = false;
+		}
+	}
+</script>
+
+<svelte:window on:click={handleClickOutside} />
+
+<nav class="border-b border-slate-200 bg-white relative z-[9999]">
+	<div class="max-w-5xl mx-auto px-4">
+		<div class="flex justify-between items-center py-4">
+			<a href="/{lang}" class="flex items-center gap-2 hover:opacity-80">
+				<enhanced:img src={logo} alt="{t.siteBrand} logo" class="h-12 w-auto" />
+				<span class="hidden md:inline text-2xl font-semibold text-slate-900">{t.siteBrand}</span>
+				<span class="md:hidden text-sm font-semibold text-slate-900">{t.siteBrand}</span>
+			</a>
+
+			<!-- Desktop Navigation -->
+			<div class="hidden md:flex items-center gap-6">
+				<a href="/{lang}/guide" class="text-slate-600 hover:opacity-80">
+					{t.nav.guide}
+				</a>
+
+				<!-- Language Switcher -->
+				<div class="relative" bind:this={langMenuRef}>
+					<button
+						on:click={toggleLangMenu}
+						class="flex items-center gap-1 text-sm text-slate-600 hover:opacity-80 cursor-pointer"
+					>
+						{currentLanguageName}
+						<ChevronDown class="w-3 h-3" />
+					</button>
+
+					{#if langMenuOpen}
+						<div class="absolute top-full right-0 mt-1 w-40 bg-white border border-slate-200 rounded-lg shadow-sm z-50">
+							{#each languages as language}
+								<a
+									href="/{language.code}"
+									on:click={() => (langMenuOpen = false)}
+									class="flex items-center justify-between px-3 py-2 text-sm hover:bg-slate-50"
+								>
+									{language.nativeName}
+									{#if language.code === lang}
+										<Check class="w-4 h-4 text-red-600" />
+									{/if}
+								</a>
+							{/each}
+						</div>
+					{/if}
+				</div>
+
+				<a href="/{lang}#pricing" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:opacity-80 font-bold cursor-pointer">
+					{t.landing.pricing.cta}
+				</a>
+			</div>
+
+			<!-- Mobile Navigation -->
+			<div class="flex md:hidden items-center gap-2">
+				<button
+					on:click|stopPropagation={toggleMobileMenu}
+					class="p-2 hover:opacity-80 rounded-lg cursor-pointer"
+					aria-label={t.nav.toggleMenu}
+				>
+					{#if mobileMenuOpen}
+						<X class="w-6 h-6" />
+					{:else}
+						<Menu class="w-6 h-6" />
+					{/if}
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Mobile Menu Dropdown -->
+	{#if mobileMenuOpen}
+		<div bind:this={mobileMenuRef} class="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-sm z-[9999]">
+			<div class="max-w-5xl mx-auto px-4 py-4 space-y-3">
+				<a href="/{lang}/guide" on:click={() => (mobileMenuOpen = false)} class="block px-2 py-1 hover:opacity-80">
+					{t.nav.guide}
+				</a>
+
+				<a href="/{lang}#pricing" on:click={() => (mobileMenuOpen = false)} class="block px-4 py-2 bg-red-600 text-white rounded-lg hover:opacity-80 font-bold text-center">
+					{t.landing.pricing.cta}
+				</a>
+
+				<!-- Language Switcher (Mobile) -->
+				<div class="border-t border-slate-200 pt-3 mt-3 space-y-2">
+					{#each languages as language}
+						<a
+							href="/{language.code}"
+							on:click={() => (mobileMenuOpen = false)}
+							class="flex items-center justify-between px-2 py-1 hover:opacity-80 text-sm"
+						>
+							{language.nativeName}
+							{#if language.code === lang}
+								<Check class="w-4 h-4 text-red-600" />
+							{/if}
+						</a>
+					{/each}
+				</div>
+			</div>
+		</div>
+	{/if}
+</nav>

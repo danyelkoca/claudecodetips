@@ -1,0 +1,179 @@
+---
+id: 32
+title: "Claude Makes Up URLs"
+section: pitfalls
+summary: "Hallucinates URLs that don't exist. Always verify before trusting external links."
+isFree: false
+---
+
+Claude and other LLMs routinely fabricate URLs, documentation links, package names, and API endpoints that do not exist. This is not a bug - it is an inherent behavior of language models that predict plausible text. Always verify any external reference before clicking, installing, or trusting it.
+
+## The Scale of the Problem
+
+A 2025 Ahrefs study analyzed 16 million unique URLs cited by ChatGPT, Perplexity, Copilot, Gemini, Claude, and Mistral. The findings: AI assistants send users to 404 pages 2.87x more often than Google Search.
+
+ChatGPT leads with 2.38% of all cited URLs returning 404 errors. Claude follows at 0.58%. Even this "better" rate means roughly 1 in 170 links Claude provides leads nowhere.
+
+The URLs are not random garbage. They are semantically plausible - correct domain, realistic path structure, believable slugs. The AI constructs what a URL "should" look like based on patterns, without verifying it exists.
+
+## Why Claude Hallucinates URLs
+
+Anthropic's 2025 interpretability research revealed the mechanism. Claude's default behavior is to decline answering when uncertain. Hallucinations occur when this inhibition fires incorrectly.
+
+When Claude recognizes a topic but lacks specific knowledge, the "known entity" feature activates and suppresses the "don't know" response. Claude then confabulates - generating plausible but untrue information to fulfill the request.
+
+As Anthropic researcher Josh Batson notes: "Hallucination is the most natural thing in the world for these models, given how they're just trained to give possible completions."
+
+Claude sometimes even fabricates reasoning steps to reach its answers. The chain-of-thought can be entirely made up, designed to appear logical while being completely disconnected from facts.
+
+## The Real Dangers
+
+### Phishing and Malicious Sites
+
+Security researchers found that when asking LLMs for login URLs to well-known brands, 34% of URLs returned were not owned by those brands. One led directly to an active phishing site.
+
+Attackers exploit this through "slopsquatting" - registering domains that LLMs commonly hallucinate. When users click AI-generated links, they land on attacker-controlled sites.
+
+As security researcher J Stephen Kowski warns: "When AI models hallucinate URLs pointing to unregistered domains, attackers can simply register those exact domains and wait for victims to arrive."
+
+### Malicious Package Installation
+
+The "slopsquatting" attack extends to package managers. Research on 16 code-generation models found roughly 20% of recommended packages do not exist. Attackers register these hallucinated package names with malware.
+
+Real example: A researcher uploaded an empty package named "huggingface-cli" (a name Claude hallucinates). In three months, it received 30,000+ downloads. Alibaba's GraphTranslator installation instructions still reference this fake package.
+
+When you run `npm install` or `pip install` on an AI-suggested package without verification, you may be installing malware.
+
+### Fake API Endpoints and Documentation
+
+Claude invents API endpoints, function signatures, and documentation links. Research shows GPT-4o achieves only 38.58% accuracy on low-frequency API invocations. The other 61%+ are hallucinated.
+
+This leads to:
+- Code that calls non-existent endpoints
+- Authentication flows that do not match the actual API
+- Hours debugging "bugs" that are actually fabricated APIs
+
+### Supply Chain Attacks
+
+The pattern is repeatable. Researchers found 43% of hallucinated packages appeared in all 10 repeated queries - making them predictable targets.
+
+Attackers do not need massive datasets. They prompt LLMs, identify consistently hallucinated names, and register them. The malicious package then spreads through every developer who trusts AI suggestions.
+
+## What Gets Hallucinated
+
+Claude fabricates:
+- **Documentation URLs**: Links to guides, tutorials, and reference pages that do not exist
+- **Package names**: npm, PyPI, and other repository packages that sound right but are not real
+- **API endpoints**: REST paths, GraphQL schemas, and SDK methods that were invented
+- **GitHub repositories**: Fake repo links with plausible org/repo naming
+- **Stack Overflow answers**: Citations to questions and answers that never existed
+- **Research papers**: Academic citations with convincing titles, authors, and DOIs that are completely fabricated
+
+## How to Verify Before Trusting
+
+### For URLs
+
+Before clicking any Claude-provided link:
+
+1. **Check the domain** - Is this the official domain for this product/service?
+2. **Use curl to verify** - Run `curl -I <url>` to check the HTTP status code
+3. **Search directly** - Go to the official site and find the page yourself
+
+Quick verification command:
+```bash
+curl -o /dev/null --silent --head --write-out '%{http_code}' "https://example.com/docs/some-page"
+```
+
+A 200 means the page exists. A 404 means Claude made it up.
+
+### For Package Names
+
+Before running `npm install` or `pip install` on AI-suggested packages:
+
+1. **Search the registry directly** - Go to npmjs.com or pypi.org and search
+2. **Check package age** - Was it created recently? New packages matching hallucinated names are suspicious
+3. **Verify download counts** - Legitimate packages have download history
+4. **Inspect the repository** - Does it link to a real GitHub repo with actual code and history?
+5. **Read the source** - Open the package and read what it actually does
+
+For Python, use tools like `pipask` which checks packages before installation.
+
+### For API Endpoints
+
+Before using any API endpoint Claude suggests:
+
+1. **Read the official documentation** - Navigate to the actual docs, do not trust Claude's links
+2. **Check the OpenAPI/Swagger spec** - If available, verify the endpoint exists in the spec
+3. **Test with minimal impact** - Use `curl` or Postman to hit the endpoint before writing code around it
+
+### For GitHub Repositories
+
+1. **Visit the URL directly** - See if the repo exists
+2. **Check the stars and activity** - Real repos have history
+3. **Verify the organization** - Is this the real org for this project?
+
+## Claude Code-Specific Mitigations
+
+### Use WebFetch with Verification
+
+Claude Code's WebFetch tool can check if URLs are valid by actually fetching them. If a fetch fails, the URL does not exist.
+
+Configure allowed domains in your settings to limit what Claude can access:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.example.com)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}
+```
+
+### Add Verification Instructions to CLAUDE.md
+
+Add explicit instructions to your project's `CLAUDE.md`:
+
+```markdown
+## URL Verification Rules
+
+- NEVER provide URLs without verifying they exist first
+- Use WebFetch to check any external link before suggesting it
+- For package names, verify on the official registry before recommending installation
+- If you cannot verify a URL exists, say "I'm not certain this URL is valid" and suggest the user verify manually
+```
+
+### Ask Claude to Verify
+
+When Claude provides a link, immediately ask:
+
+> "Can you verify that URL actually exists? Try to fetch it."
+
+This forces Claude to attempt validation rather than assuming.
+
+## What to Never Trust
+
+**Never trust without verification:**
+
+- Documentation URLs Claude "remembers"
+- Package installation commands for packages you have not heard of
+- API endpoints Claude generates from memory
+- GitHub repository links
+- Links to tutorials, blog posts, or guides
+- Academic citations and paper links
+- Stack Overflow answer links
+
+## The Bottom Line
+
+Claude does not have a database of URLs. It predicts what URLs should look like based on patterns. Sometimes these predictions match reality. Often they do not.
+
+Every hallucinated URL is a potential:
+- Phishing attack vector
+- Malware installation opportunity
+- Wasted debugging time
+- Security breach
+
+The solution is simple: verify everything. Check that the URL returns 200 before clicking. Confirm the package exists before installing. Read the actual documentation instead of trusting Claude's summary of it.
+
+This is not Claude being broken. This is how language models work. Plan accordingly.

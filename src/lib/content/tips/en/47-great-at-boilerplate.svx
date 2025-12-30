@@ -1,0 +1,217 @@
+---
+id: 47
+title: "Claude is Great at Boilerplate"
+section: use-cases
+summary: "CRUD operations, forms, config files, repetitive patterns. Let Claude grind."
+isFree: false
+---
+
+CRUD operations, forms, config files, repetitive patterns. Developers spend up to 40% of their time on repetitive coding tasks. Don't waste your brain cycles on boring code - let Claude grind through the tedious stuff.
+
+## What is Boilerplate?
+
+Boilerplate code is repetitive, standardized code that appears in many projects with minimal variation. It's necessary but tedious: class declarations, getter/setters, file headers, config files, CRUD operations, form validation, test scaffolding.
+
+The problem? Boilerplate fatigue is real. Copying and pasting the same patterns kills momentum and leads to burnout. This is exactly where Claude excels.
+
+## Categories of Boilerplate
+
+Claude handles these categories well:
+
+### API & Backend
+
+- REST endpoint CRUD operations
+- GraphQL type definitions and resolvers
+- Express/Koa/Fastify middleware chains
+- Error handling wrappers
+- Request/response DTOs
+
+### Frontend
+
+- Form components with validation
+- State management setup (Redux slices, Zustand stores, Pinia stores)
+- Component scaffolding with props/types
+- API client functions
+- Loading/error state handling
+
+### Database
+
+- Prisma/TypeORM/Sequelize models
+- Migration files
+- Seed data scripts
+- Repository patterns
+
+### Configuration
+
+- ESLint/Prettier configs
+- TypeScript tsconfig.json
+- Webpack/Vite configs
+- Docker/Docker Compose files
+- CI/CD pipelines (GitHub Actions, GitLab CI)
+
+### Testing
+
+- Jest/Vitest/Pytest test file structure
+- Mock factories
+- Test fixtures
+- E2E test scaffolding
+
+### Authentication
+
+- JWT token handling
+- OAuth flow boilerplate
+- Session management
+- Protected route wrappers
+
+## How to Prompt for Boilerplate
+
+Use the **Role + Goal + Constraints** pattern:
+
+```
+You are a TypeScript API developer.
+Generate a CRUD REST API for a "products" resource.
+Constraints:
+- Use Express with async/await
+- Include input validation with Zod
+- Follow existing patterns in src/routes/users.ts
+- Include error handling
+```
+
+**Key techniques:**
+
+1. **Reference existing code**: "Follow the pattern in `src/routes/users.ts`"
+2. **Specify the stack**: "Use Prisma, not raw SQL"
+3. **Set boundaries**: "Just the boilerplate, I'll add business logic"
+4. **Request types**: "Include full TypeScript types"
+
+## Example Prompts
+
+### CRUD API Endpoint
+
+```
+Generate Express CRUD routes for a "comments" resource:
+- GET /comments (list with pagination)
+- GET /comments/:id
+- POST /comments
+- PUT /comments/:id
+- DELETE /comments/:id
+
+Use async/await, Zod validation, and Prisma. Follow patterns in src/routes/posts.ts.
+```
+
+### Form with Validation
+
+```
+Create a React form component for user registration:
+- Fields: email, password, confirmPassword, name
+- Use react-hook-form with Zod validation
+- Show inline error messages
+- Match styling in src/components/LoginForm.tsx
+```
+
+### Database Migration
+
+```
+Generate a Prisma schema for a blog system:
+- User (id, email, name, posts)
+- Post (id, title, content, author, comments, createdAt)
+- Comment (id, content, author, post, createdAt)
+
+Include proper relations and indexes.
+```
+
+### Test File Scaffolding
+
+```
+Generate Jest test boilerplate for src/services/PaymentService.ts.
+Include:
+- Describe blocks for each public method
+- Mock setup for Stripe client
+- Happy path and error case stubs
+- beforeEach/afterEach hooks
+```
+
+### Config File
+
+```
+Generate a GitHub Actions workflow for a Node.js app:
+- Run on push to main and PRs
+- Install deps, lint, test, build
+- Cache node_modules
+- Use Node 20
+```
+
+## Best Practices
+
+### Always Review Generated Code
+
+AI-generated code can contain security vulnerabilities. Research shows 45% of AI-generated code has security flaws. Common issues:
+
+- Missing input validation
+- SQL injection vectors
+- XSS vulnerabilities
+- Hardcoded credentials
+- Improper error exposure
+
+**Rule**: Treat AI boilerplate as a first draft. Review before committing.
+
+### Match Existing Patterns
+
+Don't let Claude invent new patterns. Point it to existing code:
+
+```
+Read src/services/UserService.ts first.
+Generate ProductService.ts following the exact same patterns.
+```
+
+### Set Clear Boundaries
+
+Tell Claude what you'll handle:
+
+```
+Generate the boilerplate structure only.
+I'll implement the business logic in processPayment().
+Just give me the class skeleton with types.
+```
+
+### Validate Critical Sections
+
+For authentication, payments, or data handling - double-check:
+
+- Input sanitization
+- Error messages (no sensitive data leaks)
+- Proper async/await handling
+- Edge cases
+
+## What NOT to Use Boilerplate Generation For
+
+Claude excels at structured, repetitive patterns. It struggles with:
+
+- **Novel architecture decisions** - Don't ask Claude to design your system
+- **Security-critical custom logic** - Write auth/crypto logic yourself
+- **Complex business rules** - Domain-specific logic needs human judgment
+- **Performance-sensitive code** - Optimization requires understanding your data
+
+**The rule**: If it requires creativity or domain expertise, guide Claude heavily or do it yourself. If it's "I've written this 100 times before" - let Claude handle it.
+
+## Workflow Integration
+
+Combine boilerplate generation with other tips:
+
+1. **Plan Mode (Tip 8)**: Plan what boilerplate you need first
+2. **Force End-to-End (Tip 11)**: Generate all related files together
+3. **Copy Existing (Tip 34)**: Always reference existing patterns
+4. **Review Output (Tip 21)**: Don't trust "all done" - verify
+
+## The Productivity Gain
+
+Studies show AI coding assistants reduce boilerplate time by 30-60%. That's hours per week you can spend on actual problem-solving instead of typing the same patterns again.
+
+Claude Code is particularly strong here because:
+
+- It reads your existing codebase patterns
+- It generates complete, runnable code
+- It handles multiple related files together
+- It includes types, validation, error handling
+
+Save your brain for the interesting problems. Let Claude grind through the tedious stuff.

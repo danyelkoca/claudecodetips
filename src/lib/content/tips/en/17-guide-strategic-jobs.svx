@@ -1,0 +1,231 @@
+---
+id: 17
+title: "Claude Excels at Assistant Tasks - Guide It for Strategic Jobs"
+section: prompting
+summary: "Convert strategic tasks into assistant-like jobs by guiding Claude to research first."
+isFree: false
+---
+
+Claude excels at assistant-like tasks: writing functions, debugging errors, writing tests, refactoring code, formatting data. These are well-defined problems with clear success criteria.
+
+It struggles with open-ended strategic questions like "What monetization model should I use?" or "How should I restructure my business?" These require judgment, creativity, market understanding, and domain expertise that AI fundamentally lacks.
+
+But you can bridge this gap. Convert strategic tasks into research-heavy assistant tasks by instructing Claude to gather information first.
+
+## Why Claude Struggles with Strategic Tasks
+
+### The Pattern Matching Limitation
+
+MIT CSAIL researchers found that LLMs can recite answers but struggle to reason when it comes to abstract task-solving. They excel at pattern recognition and statistical correlations but falter when facing problems requiring genuine logical deduction.
+
+Research from Apple confirms this: despite reinforcement learning improvements, models fail to develop generalizable problem-solving capabilities for planning tasks. Performance collapses beyond a certain complexity threshold.
+
+### What AI Does Well vs. What Humans Do Better
+
+Research consistently shows AI excels at:
+- Data processing and rapid decision-making
+- Automating repetitive, time-consuming tasks
+- Document processing, scheduling, email management
+- Extracting structured information from unstructured data
+- Analyzing large datasets and surfacing patterns
+
+Humans remain superior at:
+- Contextual adaptation and long-term strategic thinking
+- Judgment, political analysis, psychological influences
+- Flexibility, creativity, visionary thinking
+- Navigating ambiguity and organizational dynamics
+- Social legitimacy and stakeholder management
+
+The equivalence between AI and human expertise is "only partial, and contingent to specific contexts"—tactical decisions more than strategic ones, hard skills more than soft skills.
+
+### The Creative Homogenization Problem
+
+Wharton research shows that while ChatGPT improves the quality of individual ideas, it leads groups to generate more similar ideas, reducing the variety essential for breakthrough innovation. Repetitive prompts and AI model design produce overlapping, less diverse responses.
+
+For strategic decisions, you need divergent thinking and novel solutions. AI defaults to convergent, consensus-based outputs.
+
+## The Solution: Transform Strategic Tasks into Research Tasks
+
+Instead of asking Claude to make strategic decisions, instruct it to gather information that helps you make better decisions.
+
+### The Core Technique
+
+When faced with a strategic question like "What revenue streams should I explore?", restructure the request:
+
+```
+Research the web at least 10 times, read 10-20 articles from trusted sources
+(industry publications, peer-reviewed research, reputable news outlets),
+then synthesize findings about [your strategic topic].
+```
+
+This converts an impossible creative task into a manageable research task.
+
+### Example Transformations
+
+**Bad (Strategic Ask):**
+> "How should I monetize my SaaS product?"
+
+**Good (Research Task):**
+> "Research at least 15 sources about SaaS monetization strategies in 2025. Include
+> sources from industry analysts (McKinsey, Gartner), successful SaaS companies'
+> case studies, and pricing strategy experts. Summarize:
+> 1) The 5 most common pricing models
+> 2) When each works best
+> 3) Real examples with revenue data when available
+> 4) Common mistakes to avoid"
+
+**Bad (Strategic Ask):**
+> "Should I pivot to enterprise customers?"
+
+**Good (Research Task):**
+> "Research the web thoroughly about SMB vs enterprise go-to-market strategies for
+> [my product category]. Find 10+ articles covering: the typical sales cycle
+> differences, required organizational changes, case studies of companies that
+> made this transition successfully and unsuccessfully, and signals that indicate
+> enterprise readiness. Cite your sources."
+
+### Why This Works
+
+You are leveraging what AI does well: synthesizing information from multiple sources, extracting structured data, and organizing findings. You remove what AI does poorly: generating original strategic insight from nothing.
+
+McKinsey describes this as using AI for the "building blocks of strategy" rather than strategy itself. AI helps brainstorm, pressure test, and model scenarios. The strategic judgment remains yours.
+
+## Advanced Techniques for Better Results
+
+### 1. Specify Source Quality
+
+Ask for specific types of sources:
+
+```
+Use only peer-reviewed academic sources, official government publications,
+and analysis from top-tier consulting firms. Avoid random blog posts.
+```
+
+Claude uses Brave Search under the hood. The top results are returned, scanned, filtered, and cited. You can influence quality through explicit source requirements.
+
+### 2. Use the Research-First Pattern
+
+Structure your prompts in phases:
+
+```
+Phase 1: Research [topic] thoroughly. Search at least 10 times, building
+each search on what you learn from previous searches.
+
+Phase 2: Synthesize findings into a structured analysis with citations.
+
+Phase 3: Based ONLY on the research (not your internal knowledge),
+identify patterns, contradictions, and key decision factors.
+```
+
+### 3. Request Explicit Citation
+
+Always require sources:
+
+```
+Cite every claim with [Source Name, URL]. I will verify these manually.
+```
+
+Testing shows AI tools sometimes fabricate sources. Verification is essential. Perplexity tends to be more reliable for citations than Claude or ChatGPT.
+
+### 4. Chain-of-Thought for Complex Analysis
+
+For multi-step strategic analysis, use Plan-and-Solve prompting:
+
+```
+Let's first understand the problem and devise a plan to solve it.
+Then carry out the plan step by step.
+
+Problem: [Your strategic question]
+```
+
+This triggers the model to decompose complex questions into manageable research subtasks.
+
+### 5. Pressure Test with Challenger Prompts
+
+McKinsey strategists use AI to play a challenger role:
+
+```
+I'm considering [strategic decision]. Research arguments AGAINST this
+decision. Find case studies of similar decisions that failed.
+What are the hidden pitfalls management teams typically miss?
+```
+
+AI is useful for countering your own blind spots and biases.
+
+## Real-World Application Examples
+
+### Competitive Analysis
+
+```
+Research my top 5 competitors: [list them]. For each, find:
+- Their pricing model and any recent changes
+- Customer reviews highlighting strengths and weaknesses
+- Recent funding, acquisitions, or strategic moves
+- Product roadmap indicators from blog posts or announcements
+
+Use at least 3 sources per competitor. Summarize in a comparison table.
+```
+
+### Market Entry Decision
+
+```
+Research entering [market/geography]. Search for:
+- Market size data from analyst reports
+- Regulatory requirements and compliance challenges
+- Existing competitors and their market share
+- Failed market entry attempts by similar companies
+- Cultural or localization considerations
+
+I need facts and data, not recommendations. I will make the strategic
+decision based on your research.
+```
+
+### Pricing Strategy
+
+```
+Research how companies similar to mine ([describe your company]) price
+their products. Find:
+- Specific pricing pages and their structures
+- Case studies about pricing experiments
+- Expert analysis of pricing psychology for [your category]
+- Data on price sensitivity in [your market]
+
+Present findings organized by pricing model type, with pros/cons
+based on research, not opinion.
+```
+
+## What Not to Expect
+
+Even with perfect research prompts, remember:
+
+**AI cannot replace strategic judgment.** Research shows human-AI combinations underperform the best individual agent when humans over-rely on AI recommendations without applying their own contextual expertise.
+
+**AI will homogenize your thinking if you let it.** The best approach: use AI to gather hypotheses, then validate with real-world data and your own analysis.
+
+**Sources need verification.** Testing shows Claude achieved 68% accuracy on FDA drug approvals after manual verification. ChatGPT showed 72% but occasionally fabricated sources.
+
+**Strategic decisions involve stakeholders.** Major decisions require board approval, team buy-in, and organizational change management. AI cannot navigate human negotiation.
+
+## The Optimal Workflow
+
+1. **Frame the strategic question clearly** - What decision are you trying to make?
+
+2. **Convert to research tasks** - What information would help you decide?
+
+3. **Instruct Claude to research thoroughly** - Specify sources, depth, and format
+
+4. **Synthesize findings** - Have Claude organize research into structured analysis
+
+5. **Apply your judgment** - Use research as input, not as answer
+
+6. **Validate externally** - Cross-check key claims and data points
+
+This transforms Claude from a flawed strategist into a powerful research assistant—which is exactly what it was designed to be.
+
+## The Bottom Line
+
+The gap between AI and human strategic capability is real and unlikely to close soon. Rather than waiting for AI to develop genuine strategic reasoning, adapt your workflow now.
+
+Guide Claude to do what it does best: gathering, synthesizing, and organizing information from multiple sources. Reserve the strategic judgment—the part that requires creativity, context, and human insight—for yourself.
+
+You will get better results, faster research, and more informed decisions. And you will avoid the trap of outsourcing judgment to a system that fundamentally lacks it.

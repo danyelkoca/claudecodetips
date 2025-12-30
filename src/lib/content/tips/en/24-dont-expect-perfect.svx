@@ -1,0 +1,145 @@
+---
+id: 24
+title: "Don't Expect Perfect First Try"
+section: multi-agent
+summary: "Let 1 agent code, use another agent to check the code."
+isFree: false
+---
+
+When you ask Claude to both code AND verify its own work in a single session, you're fighting against a fundamental architectural limitation. AI-generated code has a **1.7x higher bug rate** than human-written code, and the same model that generated flawed code cannot reliably catch its own mistakes.
+
+## Why Single-Agent Perfection Fails
+
+### The Confirmation Bias Problem
+
+When the same model generates and reviews code, it cannot see its own blind spots. Research shows LLMs exhibit confirmation bias: they preferentially interpret information consistent with their own outputs. The initial generation creates an anchor that constrains all subsequent analysis.
+
+This isn't a prompting problem. It's an architecture problem.
+
+The review agent should not have access to the original generation prompt. This prevents anchoring and confirmation bias at the architectural level. When a separate agent approaches the code with fresh context, there's no anchoring bias, no confirmation bias - just clean analysis.
+
+### The Numbers Don't Lie
+
+AI-generated code introduces:
+- **1.75x more** logic and correctness errors
+- **1.64x more** code quality and maintainability issues
+- **1.57x more** security findings
+- **2.25x more** algorithmic errors
+
+Only **3.8% of developers** report both low hallucination rates AND high confidence shipping AI code without human review. The solution isn't hoping for perfect output - it's building verification into your workflow.
+
+## The Generator-Critic Pattern
+
+The most effective approach separates generation from verification:
+
+**Generator Agent**: Optimized for speed, syntax correctness, and pattern matching. Its job is to get from requirements to working code quickly.
+
+**Critic/Reviewer Agent**: Configured for adversarial thinking, with no access to the original prompt and different optimization targets. Its job is to find problems, not validate solutions.
+
+This separation works because the reviewer approaches code with fresh context. Companies adopting multi-agent approaches report **40-60% improvement** in code quality - not from better models, but from better architecture.
+
+## Practical Implementation Strategies
+
+### Strategy 1: Parallel Code Review
+
+One Claude writes code while a separate instance reviews it:
+
+1. Agent A generates the implementation
+2. Start a fresh session (new context window)
+3. Agent B reviews the code without seeing Agent A's reasoning
+4. Iterate based on B's feedback
+
+In Claude Code, this means opening a new terminal or using git worktrees to run independent sessions.
+
+### Strategy 2: Test-Driven Multi-Agent Development
+
+The AgentCoder framework demonstrates this with three specialized agents:
+- **Programmer Agent**: Focuses on code generation and refinement
+- **Test Designer Agent**: Generates test cases for the code
+- **Test Executor Agent**: Runs tests and provides feedback
+
+This achieves **91.5% pass rates** with GPT-4 compared to 86.8% with single-agent approaches.
+
+### Strategy 3: Plan-Validate-Execute
+
+Extend the planning pattern with explicit verification:
+
+1. **Planner**: Generates multi-step implementation plan
+2. **Validator**: Reviews plan before execution (different implementation than planner)
+3. **Executor**: Implements each step
+4. **Verifier**: Confirms output matches requirements
+
+The validator must have a different implementation than the planner to avoid making the same mistakes.
+
+### Strategy 4: Subagent Verification in Claude Code
+
+Anthropic recommends using subagents to "verify details or investigate particular questions, especially early on in a conversation." This preserves context while getting independent analysis.
+
+Ask Claude to: "Verify with independent subagents that the implementation isn't overfitting to the tests."
+
+You can define a custom code-reviewer subagent in your CLAUDE.md:
+
+```yaml
+subagents:
+  code-reviewer:
+    description: "Review code for quality, security, and best practices"
+    tools:
+      - Read
+      - Grep
+      - Glob
+```
+
+## Context Window Benefits
+
+Each agent gets its own context window. This provides:
+- **Larger effective context**: Distributed pieces across multiple LLM instances
+- **Reduced context pollution**: Specialized tasks don't pollute main conversation
+- **Independent perspectives**: No cumulative bias from earlier reasoning
+
+Research shows sessions at 90% context utilization produce more code but lower quality - "more bugs slip through, architectural decisions become inconsistent, earlier patterns get forgotten." Sessions at 75% utilization produce less output but higher-quality, more maintainable code.
+
+## The Self-Critique Paradox
+
+Interestingly, self-critique has nuanced effectiveness:
+- For tasks where models already succeed (>90% accuracy), self-critique can actually **degrade** performance
+- For tasks where models struggle (under 35% accuracy), critique works like magic - real errors get caught
+
+This means self-critique is most valuable for complex, error-prone tasks - exactly where you'd want a separate reviewer anyway.
+
+## Iterative Refinement That Works
+
+The Self-Refine pattern shows that iterative feedback improves outputs by ~20% on average:
+
+1. Generate initial output
+2. Get feedback (from separate model/agent)
+3. Refine based on feedback
+4. Repeat until satisfactory
+
+The key insight: feedback should come from a different evaluation context than generation.
+
+## Real-World Multi-Agent Coordination
+
+Production systems coordinate multiple specialized agents:
+- backend-architect
+- database-architect
+- frontend-developer
+- test-automator
+- security-auditor
+- deployment-engineer
+
+Each agent has domain expertise and reviews others' work from their specialized perspective.
+
+## Best Practices
+
+1. **Never let the generator review its own output** - use a fresh context
+2. **Limit agent count to 3-5** - beyond that, merge complexity eats the gains
+3. **Define clear interfaces** - each agent should have specific responsibilities
+4. **Use git worktrees** for parallel development without conflicts
+5. **Commit frequently** - clean state makes verification easier
+6. **Run tests between generations** - catch errors early with automated feedback
+
+## The Bottom Line
+
+Perfect first-try code is a myth. Even the best models produce bugs at rates higher than human developers. The solution isn't waiting for better models - it's building multi-agent verification into your workflow.
+
+Let one agent code. Use another to check. Your code quality will thank you.

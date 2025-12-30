@@ -1,0 +1,134 @@
+---
+id: 2
+title: "Create CLAUDE.md"
+section: setup
+summary: "Your project's instruction manual for Claude. The single most important file for effective Claude Code usage."
+isFree: true
+---
+
+Your project's instruction manual for Claude. Put it at project root. This is the single most important file in your codebase for effective Claude Code usage - your agent's "constitution."
+
+## The Framework: WHAT / WHY / HOW
+
+Structure your CLAUDE.md around three dimensions:
+
+- **WHAT**: Your tech stack, project structure, key files. Give Claude a map of the codebase. Critical in monorepos - identify apps, shared packages, and what everything is for.
+- **WHY**: Purpose of components, architectural decisions. Help Claude understand intent, not just structure.
+- **HOW**: Build commands, test procedures, verification steps. How Claude should actually work on the project. Use bun instead of node? Say so here.
+
+## What to Document
+
+### Essential
+
+- **Build commands**: `npm run dev`, `npm run build`, `npm test`
+- **Today's date**: So Claude researches current info, not outdated docs
+- **Core files**: Key utilities, entry points, and their purposes
+- **Code style**: Patterns to follow, patterns to avoid
+
+### Important
+
+- **Testing instructions**: Which tests to run, how to verify changes
+- **Repository etiquette**: Branch naming, commit message style, merge vs rebase
+- **Developer environment**: Required tools, versions, setup steps
+- **Project quirks**: Unexpected behaviors, known issues, workarounds
+
+### Critical Pitfalls to Prevent
+
+- Using outdated library versions
+- Adding unnecessary fallbacks or error handling
+- Not thinking holistically (fixing one thing, breaking another)
+- Not reading files before modifying them
+- Creating new utilities when similar ones exist
+
+## Critical Constraint: The 150-200 Rule
+
+Research shows frontier LLMs follow ~150-200 instructions with reasonable consistency. Performance degrades as instruction count increases.
+
+Claude Code's system prompt already has ~50 instructions. Your CLAUDE.md should contain as few instructions as possible - ideally only universally applicable ones.
+
+**Key insight**: Claude receives a system reminder that CLAUDE.md content "may or may not be relevant to your task." The more non-universal content you include, the higher the chance Claude ignores your instructions entirely.
+
+Keep it under 200 lines. Some teams keep their root file under 60 lines.
+
+## Best Practices
+
+### Make Instructions Stick
+
+- **Use emphasis markers** for critical rules: "IMPORTANT", "YOU MUST", "NEVER", "ALWAYS"
+- **Run through prompt improvers** - Anthropic teams do this to tune instruction-following
+- **Test effectiveness** - A common mistake is adding extensive content without testing if Claude follows it
+
+### Structure for Maintainability
+
+- **Prefer pointers over copies**: Use `file:line` references instead of code snippets. Snippets become outdated quickly.
+- **Provide alternatives**: "Use Y instead of X" works better than just "Never use X"
+- **Start with guardrails, not manuals**: Document based on observed errors, not comprehensive coverage
+
+### What NOT to Put Here
+
+- **Linting rules**: Never send an LLM to do a linter's job. Use hooks instead (see Tip 40).
+- **Task-specific guidance**: Database schema details distract when Claude works on unrelated tasks
+- **Full documentation embeds**: Don't `@` mention extensive files. Instead, tell Claude when to read supplementary docs: "For advanced troubleshooting, see path/to/docs.md"
+
+## Quick Setup
+
+### Getting Started
+
+```bash
+# Auto-generate initial CLAUDE.md
+/init
+```
+
+### Building Over Time
+
+- Press `#` during sessions to add instructions you find yourself repeating
+- These additions accumulate into a CLAUDE.md that reflects how you actually work
+- Include updates in your commits for team benefit
+
+### Progressive Disclosure Pattern
+
+For larger projects, create separate doc files instead of stuffing everything into CLAUDE.md:
+
+```
+agent_docs/
+  |- building_the_project.md
+  |- running_tests.md
+  |- code_conventions.md
+  |- service_architecture.md
+```
+
+Reference these from CLAUDE.md and instruct Claude to read relevant files for specific tasks.
+
+## Placement Options
+
+- `CLAUDE.md` at project root (shared with team)
+- `CLAUDE.local.md` (personal, add to .gitignore)
+- `~/.claude/CLAUDE.md` (global, applies to all projects)
+- `.claude/rules/` folder (modular rules in separate files)
+
+See Tip 29 for hierarchical CLAUDE.md strategies across directories.
+
+## Example Structure
+
+```markdown
+# Project Name
+
+## Build Commands
+npm run dev      # Start dev server
+npm run build    # Production build
+npm test         # Run tests
+
+## Architecture
+[Brief description of project structure]
+
+## Key Patterns
+- [Pattern 1]
+- [Pattern 2]
+
+## Rules
+- IMPORTANT: Always [X] before [Y]
+- NEVER [Z]
+- For [complex task], read path/to/docs.md first
+```
+
+See Tip 51 for a full battle-tested CLAUDE.md example.

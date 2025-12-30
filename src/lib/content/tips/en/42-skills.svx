@@ -1,0 +1,285 @@
+---
+id: 42
+title: "Skills"
+section: advanced
+summary: "Auto-triggered behaviors that load automatically when relevant."
+isFree: false
+---
+
+Skills are folders containing instructions, scripts, and resources that Claude discovers and loads automatically when relevant to your task. Unlike slash commands (you type `/command`) or CLAUDE.md (always loaded), Skills activate only when Claude determines they match what you're doing.
+
+## Why Skills Matter
+
+Skills solve the context efficiency problem. Your CLAUDE.md loads every conversation. MCP servers consume tokens just by being connected. But Skills use progressive disclosure - Claude only sees the name and description at startup (~100 tokens per Skill), then loads full content only when needed.
+
+Think of Skills as modular chunks of expertise. Instead of stuffing everything into CLAUDE.md, you package specialized knowledge into Skills that Claude accesses on-demand.
+
+## How Skills Work
+
+**Step 1: Discovery**
+At startup, Claude scans available Skills and loads only their frontmatter (name + description). This is cheap - dozens of tokens per Skill.
+
+**Step 2: Matching**
+When you make a request, Claude reads the Skill descriptions and uses language understanding to match your intent. No regex, no keyword matching - pure reasoning.
+
+**Step 3: Activation**
+When Claude finds a match, it asks permission to load the Skill. You see a confirmation prompt before the full `SKILL.md` enters context.
+
+**Step 4: Execution**
+Claude follows the Skill's instructions, loading referenced files or running bundled scripts as needed.
+
+## Directory Structure
+
+Skills live in specific locations:
+
+```
+~/.claude/skills/          # Personal - available in all projects
+.claude/skills/            # Project - shared with team via git
+```
+
+Each Skill is a folder containing at minimum a `SKILL.md` file:
+
+```
+my-skill/
+├── SKILL.md              # Required - core instructions
+├── reference.md          # Optional - detailed docs
+├── examples.md           # Optional - usage examples
+└── scripts/
+    └── helper.py         # Optional - utility scripts
+```
+
+## SKILL.md Format
+
+Every Skill needs YAML frontmatter with `name` and `description`, followed by markdown instructions:
+
+```yaml
+---
+name: code-review
+description: Reviews code for security, performance, and best practices. Use when reviewing code changes or PRs.
+allowed-tools: Read, Grep, Glob
+---
+
+# Code Review
+
+## Instructions
+1. Read all changed files completely
+2. Check for security vulnerabilities (OWASP Top 10)
+3. Identify performance issues
+4. Flag edge cases and error handling gaps
+
+## Checklist
+- [ ] No hardcoded secrets
+- [ ] Input validation present
+- [ ] Error messages don't leak internals
+- [ ] No SQL injection vectors
+```
+
+## Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Lowercase, numbers, hyphens only. Max 64 chars. |
+| `description` | Yes | What it does + when to use. Max 1024 chars. Claude uses this for matching. |
+| `allowed-tools` | No | Tools Claude can use without permission (e.g., `Read, Grep, Glob, Bash(python:*)`) |
+| `model` | No | Override model for this Skill (e.g., `claude-sonnet-4-20250514`) |
+
+## Writing Effective Descriptions
+
+The description is critical - it's how Claude decides whether to activate your Skill.
+
+**Bad:**
+```yaml
+description: Helps with documents
+```
+
+**Good:**
+```yaml
+description: Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDF files or when the user mentions PDFs, forms, or document extraction.
+```
+
+Include:
+1. **What it does**: Specific capabilities
+2. **Trigger words**: Keywords users would naturally say
+
+## Progressive Disclosure
+
+Keep `SKILL.md` under 500 lines. For larger Skills, split content:
+
+```markdown
+## Quick start
+[Essential instructions here - always loaded]
+
+## Detailed reference
+See [reference.md](reference.md) for complete API docs.
+
+## Examples
+See [examples.md](examples.md) for common patterns.
+```
+
+Claude only reads referenced files when needed. This keeps token usage minimal.
+
+**Key rule:** Keep references one level deep. Don't chain links (A references B references C). Claude may partially read nested files.
+
+## Bundling Scripts
+
+Skills can include executable code that runs without loading into context:
+
+```
+pdf-skill/
+├── SKILL.md
+└── scripts/
+    ├── extract_text.py
+    ├── fill_form.py
+    └── validate.py
+```
+
+In your SKILL.md:
+
+```markdown
+## Extract text
+Run: `python scripts/extract_text.py input.pdf > output.txt`
+
+## Fill form
+Run: `python scripts/fill_form.py template.pdf data.json output.pdf`
+```
+
+Scripts execute via Bash. Only the output enters context - the script code itself stays on disk.
+
+## Skills vs. Alternatives
+
+| Feature | Skills | Slash Commands | CLAUDE.md | Subagents |
+|---------|--------|----------------|-----------|-----------|
+| Activation | Auto (Claude chooses) | Manual (`/command`) | Always loaded | Claude delegates |
+| Supporting files | Yes | No | No | N/A |
+| Separate context | No | No | No | Yes |
+| Best for | Specialized expertise | Repeatable prompts | Project rules | Heavy tasks |
+
+**Use Skills when:**
+- You want Claude to auto-apply expertise based on context
+- You have multi-file workflows with scripts/references
+- The capability is domain-specific (PDF processing, code review, data analysis)
+
+**Use Slash Commands when:**
+- You want explicit, predictable invocation
+- The workflow is simple (single markdown file)
+- You need argument passing (`/review $FILE`)
+
+## Tool Restrictions
+
+Limit which tools Claude can use when a Skill is active:
+
+```yaml
+---
+name: safe-reader
+description: Read-only file exploration. Use when browsing code without modifications.
+allowed-tools: Read, Grep, Glob
+---
+```
+
+This prevents accidental writes during exploratory Skills.
+
+## Practical Examples
+
+### Commit Message Generator
+
+```yaml
+---
+name: commit-messages
+description: Generates clear commit messages from git diffs. Use when writing commits or reviewing staged changes.
+---
+
+## Process
+1. Run `git diff --staged` to see changes
+2. Generate commit message with:
+   - Summary under 50 characters (imperative mood)
+   - Blank line
+   - Detailed body explaining what and why
+
+## Format
+- feat: new features
+- fix: bug fixes
+- refactor: code changes without behavior change
+- docs: documentation only
+- test: adding tests
+```
+
+### API Documentation Skill
+
+```yaml
+---
+name: api-docs
+description: Generates API documentation from code. Use when documenting endpoints, functions, or modules.
+allowed-tools: Read, Grep, Glob
+---
+
+## Instructions
+1. Read the source file completely
+2. Extract function signatures, parameters, return types
+3. Generate markdown documentation with:
+   - Description
+   - Parameters table
+   - Return value
+   - Example usage
+   - Error cases
+
+For OpenAPI specs, see [openapi-template.md](openapi-template.md).
+```
+
+## Installing Community Skills
+
+Anthropic maintains official Skills at `github.com/anthropics/skills`:
+- `pdf` - Extract, fill forms, merge PDFs
+- `docx` - Create/edit Word documents
+- `xlsx` - Spreadsheet manipulation
+- `pptx` - Presentation creation
+
+Install via plugin system:
+
+```bash
+/plugin marketplace add anthropics/skills
+/plugin install document-skills@anthropic-agent-skills
+```
+
+Then just mention the capability: "Extract form fields from invoice.pdf" - Claude loads the Skill automatically.
+
+## Debugging Skills
+
+**Skill not triggering?**
+- Description too vague. Add specific trigger words.
+- Check file path: must be `SKILL.md` (case-sensitive on some systems).
+
+**Skill not loading?**
+- Verify YAML syntax (no tabs, `---` on line 1).
+- Run `claude --debug` to see Skill discovery logs.
+
+**Multiple Skills conflicting?**
+- Make descriptions more distinct with specific trigger terms.
+- Claude chooses based on best semantic match.
+
+## Skills with Subagents
+
+Custom subagents can use Skills. In your `.claude/agents/AGENT.md`:
+
+```yaml
+---
+name: code-reviewer
+description: Reviews code for quality and security
+skills: code-review, security-check
+---
+```
+
+**Note:** Built-in agents (Explore, Plan, Verify) and the Task tool cannot use Skills. Only custom subagents with explicit `skills` field.
+
+## Best Practices
+
+1. **Write in third person.** Descriptions inject into system prompt. "Processes PDFs" not "I can process PDFs."
+
+2. **Test with all models.** What works for Opus may need more detail for Haiku.
+
+3. **Assume Claude is smart.** Don't over-explain. Only add context Claude doesn't already have.
+
+4. **Include feedback loops.** For complex tasks, add validation steps: run, validate, fix, repeat.
+
+5. **Use scripts for deterministic work.** PDF parsing, data transformation, file manipulation - code is more reliable than generation.
+
+6. **Version your Skills.** Commit `.claude/skills/` to git. They evolve with your project.

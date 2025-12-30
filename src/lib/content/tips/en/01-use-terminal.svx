@@ -1,0 +1,80 @@
+---
+id: 1
+title: "Use Terminal"
+section: setup
+summary: "Use Claude Code in terminal - it's the most flexible way to interact with it."
+isFree: false
+---
+
+Claude Code was built terminal-first. While IDE extensions exist (VS Code, JetBrains), the terminal is where Claude Code's full power lives.
+
+Anthropic's design philosophy: "Not another chat window. Not another IDE. Claude Code meets you where you already work." The terminal is chosen because developers already spend significant time there, eliminating context switching.
+
+## What IDE Extensions Lack
+
+| Feature | Terminal | VS Code Extension |
+|---------|----------|-------------------|
+| All slash commands | Yes | Subset only |
+| Context rewind | Yes | No |
+| Checkpoints | Yes | No |
+| Tab completion | Yes | No |
+| Bash shortcut (`!`) | Yes | No |
+| MCP server config | Yes | Must use CLI |
+| Headless mode (`-p`) | Yes | No |
+
+## Context Rewind (Terminal-Only)
+
+Press `Esc` twice to access any previous message. Edit it, and Claude rewinds both the conversation AND your code to that exact state. This creates branches that rescue stuck sessions without starting over.
+
+This feature alone justifies terminal usage. When Claude goes down the wrong path, you can surgically revert to any decision point instead of clearing context and losing everything.
+
+## Environment Inheritance
+
+Terminal inherits your full bash environment automatically:
+
+- All your aliases work
+- Custom scripts are available
+- PATH modifications apply
+- SSH keys, credentials, tooling - everything
+
+No configuration needed. Your development environment is Claude's environment.
+
+## Remote Development
+
+Terminal enables location-independent work:
+
+- SSH into any machine and run Claude directly
+- Use tmux or zellij for persistent sessions that survive disconnections
+- Access from phone via Termux + Tailscale
+- Use mosh for unreliable connections
+
+One perfectly configured machine becomes accessible from anywhere. Switch devices without losing flow state.
+
+## Resource Efficiency
+
+Terminal runs as a lightweight process. IDE extensions add memory and CPU overhead, especially with multiple sessions. With terminal, spinning up concurrent Claude instances is trivial - just open more tabs.
+
+## When IDE Extensions Make Sense
+
+IDE extensions help beginners who want:
+
+- Visual diffs showing changes in real-time
+- Editable plan mode to modify Claude's proposals before execution
+- Familiar sidebar interface within VS Code
+
+But once comfortable, terminal unlocks capabilities IDE extensions cannot match. Experienced users report preferring CLI's "context control, keyboard efficiency, and lightweight resource footprint."
+
+## Getting Started
+
+```bash
+cd your-project
+claude
+```
+
+That's it. Claude Code scopes to your project directory and inherits your environment.
+
+## Related Tips
+
+- **Tip 3**: All keyboard shortcuts and slash commands
+- **Tip 27**: Git worktrees for parallel sessions
+- **Tip 44**: Headless mode for automation

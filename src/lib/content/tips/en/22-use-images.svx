@@ -1,0 +1,231 @@
+---
+id: 22
+title: "Use Images/Screenshots"
+section: input
+summary: "Paste screenshots directly with Ctrl+V for visual bugs. A picture is worth a thousand tokens."
+isFree: false
+---
+
+Claude is multimodal. One of the most underutilized features in Claude Code is visual input. Stop describing bugs in text when you can just show them. A screenshot often conveys in milliseconds what takes paragraphs to describe.
+
+## Three Ways to Add Images
+
+Claude Code accepts images through three methods:
+
+### 1. Clipboard Paste
+
+Copy an image to your clipboard, then paste with `Ctrl+V`. On macOS, this is Control+V, not Command+V - a common gotcha that trips up many users.
+
+For the fastest workflow on macOS:
+
+```bash
+# Screenshot to clipboard (no file created)
+Cmd+Ctrl+Shift+4
+
+# Then in Claude Code terminal
+Ctrl+V
+```
+
+This captures a selection directly to your clipboard without saving a file, then pastes it straight into Claude Code.
+
+### 2. Drag and Drop
+
+Drag image files directly into the Claude Code terminal window. Hold `Shift` while dragging to ensure Claude properly references the file in the prompt rather than just opening it.
+
+### 3. File Path Reference
+
+Provide a path to any image on your filesystem:
+
+```
+Analyze this screenshot: /Users/me/Desktop/bug-screenshot.png
+```
+
+Claude will read and analyze the image at that path.
+
+## Supported Formats and Limits
+
+Claude Code accepts four image formats:
+
+| Format | Best For | Notes |
+|--------|----------|-------|
+| PNG | Screenshots, UI elements, text | Crisp rendering, supports transparency |
+| JPEG | Photographs, complex images | Good compression for photos |
+| GIF | Animated content | Only first frame analyzed |
+| WebP | Modern alternative | Superior compression |
+
+**Size Limits:**
+- Maximum file size: 5MB per image (API), 10MB (claude.ai)
+- Maximum resolution: 8000x8000 pixels
+- Multiple images: Up to 100 per API request, 20 per claude.ai turn
+
+**Optimal Sizing:**
+- Aim for 1000x1000 pixels or larger for detailed analysis
+- Images over 1568 pixels on the long edge are automatically downscaled
+- Images under 200 pixels may degrade performance
+
+## Token Cost Calculation
+
+Images consume tokens. Calculate approximate cost with:
+
+```
+tokens = (width * height) / 750
+```
+
+| Image Size | Approximate Tokens | Cost per 1K images (Sonnet 4.5) |
+|------------|-------------------|--------------------------------|
+| 200x200 px | ~54 | ~$0.16 |
+| 1000x1000 px | ~1,334 | ~$4.00 |
+| 1092x1092 px | ~1,590 | ~$4.80 |
+
+**Cost Optimization:** Crop images to the relevant area before sending. A full-screen screenshot costs more tokens than a cropped section showing just the bug.
+
+## Use Case: Visual Bug Debugging
+
+The most common use case. See a visual bug? Screenshot it and paste.
+
+```
+[paste screenshot of misaligned button]
+
+Fix this button alignment issue.
+```
+
+Claude will:
+1. Identify the CSS/layout problem
+2. Locate the relevant code
+3. Suggest specific fixes
+4. Explain why the bug occurs
+
+This workflow is dramatically faster than describing "the button on the right side of the header is 3 pixels too low and doesn't align with the navigation items."
+
+## Use Case: Design-to-Code Implementation
+
+Claude excels at translating visual designs into code. Screenshot a Figma mockup, Dribbble design, or any UI reference:
+
+```
+[paste design mockup]
+
+Implement this card component using React and Tailwind CSS.
+Match the spacing and typography exactly.
+```
+
+**Iterative Refinement Workflow:**
+
+1. Provide the design mockup
+2. Claude implements the component
+3. Screenshot Claude's rendered output
+4. Paste both images: "Compare these. Fix the differences."
+5. Repeat until pixel-perfect
+
+After 2-3 iterations, you typically achieve accurate visual matching.
+
+## Use Case: Error Screenshots
+
+Terminal errors, browser console messages, and stack traces are often easier to screenshot than copy-paste (especially when formatting gets mangled):
+
+```
+[paste screenshot of browser console error]
+
+What's causing this error and how do I fix it?
+```
+
+Claude performs OCR on the screenshot, extracts the error text, and provides debugging steps. This is particularly useful for:
+- Browser DevTools errors with complex formatting
+- Terminal output with color codes
+- IDE error panels
+- Mobile device error screens
+
+## Use Case: Architecture Diagrams
+
+Feed Claude your architecture diagrams, flowcharts, sequence diagrams, or system documentation:
+
+```
+[paste architecture diagram]
+
+Generate the TypeScript interfaces and API scaffolding
+for this microservices architecture.
+```
+
+Claude can interpret:
+- Flowcharts and process diagrams
+- Database schema diagrams
+- API endpoint documentation images
+- Whiteboard sketches and hand-drawn diagrams
+- UML diagrams
+
+## Advanced: MCP Servers for Automated Screenshots
+
+For automated workflows, MCP servers can capture screenshots programmatically:
+
+### Puppeteer MCP (Browser Automation)
+
+```bash
+claude mcp add puppeteer-mcp-claude
+```
+
+Enables Claude to launch browsers, navigate pages, and capture screenshots automatically. Powerful for:
+- Visual regression testing
+- Automated UI verification
+- Screenshot comparison workflows
+
+### iOS Simulator MCP (Mobile Development)
+
+```bash
+claude mcp add ios-simulator npx ios-simulator-mcp
+```
+
+Captures screenshots from the iOS Simulator, enabling Claude to:
+- See mobile app state directly
+- Debug visual issues on iOS
+- Verify UI implementations
+
+### Figma MCP (Design Integration)
+
+Configure Figma Desktop with MCP enabled, and Claude can:
+- Extract design tokens directly
+- Access component specifications
+- Pull exact colors, spacing, and typography
+- Generate code matching Figma designs precisely
+
+## Platform-Specific Considerations
+
+### macOS
+Full clipboard support. Use `Cmd+Ctrl+Shift+4` for screenshot-to-clipboard, then `Ctrl+V` to paste.
+
+### Linux
+Clipboard paste may not work in all terminals. Workarounds:
+- Use Flameshot: configure to save screenshots and copy file path to clipboard
+- Use file path references instead of direct paste
+
+### Windows/WSL
+Running Claude Code in WSL? Clipboard is on your local Windows machine, not accessible from WSL. Use file paths or configure a screenshot tool to save to a WSL-accessible location.
+
+### Remote Servers
+Clipboard paste does not work when running Claude Code on remote servers via SSH. The clipboard exists on your local machine. Use file paths or transfer images to the server first.
+
+## Limitations
+
+- **Cannot identify people**: Claude will refuse to name individuals in photos
+- **Low resolution issues**: Images under 200 pixels may produce inaccurate analysis
+- **Rotation/clarity**: Rotated or blurry images increase hallucination risk
+- **Medical imaging**: Not designed for diagnostic interpretation of CT/MRI scans
+- **AI-generated images**: Cannot reliably detect if images are AI-generated
+
+## Best Practices
+
+1. **Crop to the relevant area** - don't send full screenshots when a cropped section suffices
+2. **Use PNG for UI and JPEG for photos** - match format to content type
+3. **Place images before text** - Claude processes image-then-text more effectively
+4. **Provide context** - "This button should be blue" helps more than just the screenshot
+5. **Iterate 2-3 times** - first implementation is rarely pixel-perfect
+6. **Check token costs** - large images add up; resize when quality permits
+
+## Real-World Example
+
+A CSS layout breaking only on mobile viewport:
+
+1. Open DevTools, switch to mobile view
+2. `Cmd+Ctrl+Shift+4` to screenshot the broken layout
+3. `Ctrl+V` in Claude Code
+4. Type: "The card grid should be single column on mobile. Fix this."
+
+Claude sees exactly what you see, identifies the missing media query or flexbox issue, and provides the fix. Total time: 30 seconds instead of 5 minutes describing the problem.

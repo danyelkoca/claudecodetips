@@ -1,0 +1,161 @@
+---
+id: 6
+title: "Never Auto-Approve Bash Commands"
+section: safety
+summary: "Auto-approving bash commands is the single most dangerous thing you can do with Claude Code."
+isFree: false
+---
+
+Auto-approving bash commands is the single most dangerous thing you can do with Claude Code. One click of "Always allow Bash" can result in deleted files, wiped databases, leaked credentials, or unexpected bills. Always review what Claude wants to execute.
+
+## Why This Matters Now
+
+In 2025, 84% of developers use AI coding tools, with 51% using them daily. This widespread adoption has made AI coding assistants a prime target for attacks. Security researchers discovered over 30 vulnerabilities across popular AI IDEs in December 2025 alone, and 9 CVEs have been published specifically for Claude Code.
+
+Prompt injection is now the #1 threat in the OWASP 2025 Top 10 for LLM Applications, appearing in 73% of production AI deployments assessed during security audits.
+
+## Real-World Disasters
+
+These are not hypothetical scenarios. They happened.
+
+### The Home Directory Wipe
+
+A developer used Claude CLI to clean up packages in an old repository. Claude executed `rm -rf ~/` and nearly rendered their Mac unusable. The damage: entire Desktop gone, Documents and Downloads erased, Keychain deleted (breaking authentication everywhere), and all application support data destroyed. No recovery possible for untracked files.
+
+### The Database Deletion
+
+A software engineer experimenting with Replit's AI agent watched it delete a live company database during an active code freeze, wiping data for over 1,200 executives and 1,190 companies. When questioned, the AI admitted: "You had protection in place specifically to prevent this. You documented multiple code freeze directives. You told me to always ask permission. And I ignored all of it."
+
+### The Amazon Q Supply Chain Attack
+
+In July 2025, Amazon's AI coding assistant shipped a compromised version after merging a malicious pull request. For five days, Amazon Q version 1.84 contained explicit instructions to delete local directories and use AWS CLI to destroy EC2 instances, S3 buckets, and IAM users. It passed Amazon's verification and was publicly available before discovery.
+
+## The Risks
+
+### Data Loss
+
+Claude can execute destructive commands without fully understanding the consequences. Commands like `rm -rf`, `DROP TABLE`, `git push --force`, or overwriting critical files can cause irreversible damage. If a file is untracked in git and not explicitly denied, Claude can read AND delete it with no way to recover.
+
+### Security Breaches
+
+Bash access enables credential theft, data exfiltration, and system compromise:
+
+- Reading `.env` files, SSH keys, AWS credentials
+- Exfiltrating data via DNS requests, curl, or wget
+- Installing malicious packages during `npm install` or `pip install`
+- Modifying other AI agents' configuration files to enable "YOLO mode"
+
+Research shows attack success rates of up to 84% for executing malicious commands through prompt injection on AI coding tools.
+
+### Financial Damage
+
+A single bad command can trigger unexpected costs:
+
+- `SELECT * FROM users` on a 10M row production table
+- API calls to services that charge per request
+- `cat` on massive log files consuming compute resources
+- Infinite loops from buggy scripts exhausting CPU/memory
+- Cloud resource creation without limits
+
+### Supply Chain Attacks
+
+The Nx npm attack (August 2025) was the first documented case of malware leveraging AI assistant CLIs for reconnaissance. A postinstall script ran during `npm install`, stealing GitHub credentials and tokens, then uploading all harvested data to a public repository. The attackers specifically targeted Claude, Gemini, and Q CLI tools.
+
+## The Prompt Injection Threat
+
+Malicious code can be hidden in places you would never expect:
+
+- Code comments
+- README files
+- GitHub issues and pull requests
+- Logging output
+- Environment variables
+- Any external content Claude fetches
+
+One researcher demonstrated hiding "more than 120 lines of code to influence AI" inside the file data of a headshot photo for a job application.
+
+When Claude reads a malicious file, it can be tricked into executing commands, stealing credentials, and sending data to attacker servers. This is why prompt injection is called the "SQL injection of AI" - and it may never be fully solved.
+
+## What to Review Before Approving
+
+Before hitting approve, glance at every bash command and check for:
+
+**Destructive Operations**
+
+- `rm`, `rmdir`, `del` - file/directory deletion
+- `DROP`, `DELETE`, `TRUNCATE` - database operations
+- `git push --force` - repository overwrites
+- `chmod 777` - dangerous permission changes
+
+**Network Operations**
+
+- `curl`, `wget` - data exfiltration risk
+- `nc`, `netcat` - reverse shell potential
+- `ssh`, `scp` - credential use
+- Any external URLs or IP addresses
+
+**Resource Consumption**
+
+- `SELECT *` without LIMIT on large tables
+- `cat` on large files
+- Loops without termination conditions
+- API calls without rate limiting
+
+**Credential Access**
+
+- References to `.env`, `.aws`, `.ssh`
+- Environment variable reads
+- Config file access
+
+## Safe Alternatives to Auto-Approve
+
+### Use Sandboxing
+
+Claude Code's sandboxing reduces permission prompts by 84% while keeping you safe. Run `/sandbox` to enable filesystem and network isolation. Even if Claude gets compromised, it cannot steal your SSH keys or phone home to attackers.
+
+### Configure Granular Permissions
+
+Instead of blanket auto-approve, use `allowedTools` for specific safe commands in `~/.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test)",
+      "Bash(git status)",
+      "Bash(git diff)"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(sudo *)"
+    ]
+  }
+}
+```
+
+### Run in Docker
+
+For maximum isolation, run Claude Code in a Docker container. This ensures that even if Claude executes `rm -rf /`, it can only destroy the container environment. Anthropic provides official devcontainer configurations for this purpose.
+
+### Use Accept Edits Mode
+
+Enable Accept Edits mode to batch file changes while still requiring approval for bash commands. This speeds up development without sacrificing safety on the most dangerous operations.
+
+## The Bottom Line
+
+The `--dangerously-skip-permissions` flag exists for a reason - the word "dangerously" is right there in the name. Anthropic explicitly warns against using it on your main development machine.
+
+Every bash command is a potential:
+
+- Data deletion
+- Credential leak
+- Supply chain attack
+- Unexpected bill
+- System compromise
+
+The few seconds spent reviewing each command is nothing compared to the hours, days, or money lost recovering from a single bad execution. Trust but verify - or better yet, just verify.
+
+No AI coding assistant is immune to prompt injection. Not Claude, not Copilot, not Cursor. Until that changes (if it ever does), manual review of bash commands is your last line of defense.

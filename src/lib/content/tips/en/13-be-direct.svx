@@ -1,0 +1,174 @@
+---
+id: 13
+title: "Be Direct"
+section: prompting
+summary: "Be explicit about quantity - Claude tends to choose the easy way out."
+isFree: false
+---
+
+Claude Code takes you literally. Earlier model versions would infer your intent and expand on vague requests. Claude 4.x does exactly what you ask for—nothing more. This is a feature, not a bug, but it means you must be explicit.
+
+## The Core Problem
+
+AI models tend to behave like humans: they often go for the easiest answer rather than the best one. If you ask Claude to "research this topic," it might read 2 files and call it done. Ask it to "look into the bug," and it might glance at one function and propose a fix.
+
+Research from Microsoft's Developer Tools team found that explicit prompts reduced the need for back-and-forth refinements by 68%. The granularity of your input is directly proportional to the utility of your output.
+
+## Specify Quantities
+
+Never leave quantities ambiguous. Be ruthlessly specific:
+
+**Vague (bad):**
+- "Research this"
+- "Read the relevant files"
+- "Check for edge cases"
+- "Look at some examples"
+
+**Direct (good):**
+- "RESEARCH 5-10 websites before proposing a solution"
+- "READ at least 15 files across the codebase"
+- "CHECK every edge case, I expect at least 8"
+- "FIND 3-5 similar implementations in the codebase"
+
+The difference: vague prompts match millions of patterns where "AI guesses your intent." Specific prompts match exact constraints where "AI knows the requirement."
+
+## Use Imperative Commands
+
+Frame instructions as commands, not suggestions. Claude responds to directive language far better than polite requests.
+
+**Passive (less effective):**
+- "Can you suggest some changes?"
+- "It might be good to check the tests"
+- "Perhaps you could look at the error handling"
+- "Would you mind researching this?"
+
+**Imperative (more effective):**
+- "CHANGE this function to improve performance"
+- "RUN the tests and FIX any failures"
+- "REWRITE the error handling to cover all cases"
+- "RESEARCH this thoroughly, then IMPLEMENT"
+
+When you say "can you suggest some changes," Claude might only provide suggestions rather than implementing them—even if implementation is what you intended. For Claude to take action, be explicit: "Make these edits" rather than "Can you suggest edits?"
+
+## Add Explicit Constraints
+
+Constraints act as guardrails. They prevent unwanted outputs and focus Claude on your exact specifications.
+
+**Types of constraints to specify:**
+- **Length:** "Write a function under 50 lines"
+- **Format:** "Return the data as JSON, not markdown"
+- **Scope:** "Only modify files in src/components/"
+- **Exclusions:** "Do NOT use external libraries"
+- **Quality:** "Ensure O(n) time complexity or better"
+
+**Example transformation:**
+
+Bad: "Refactor this code"
+
+Good: "Refactor this code with these constraints:
+1. Preserve all existing functionality
+2. Reduce function length to under 30 lines each
+3. Use existing utility functions from src/utils/
+4. Do NOT add new dependencies
+5. Add JSDoc comments for all public functions"
+
+## Prevent Lazy Behavior
+
+Claude can exhibit "lazy" behavior—providing truncated snippets, using placeholders like `// rest of code here`, or omitting crucial details. Counter this explicitly:
+
+**Anti-laziness phrases:**
+- "You MUST provide a complete, end-to-end implementation"
+- "Do NOT use ellipses, comments, or pseudocode as placeholders"
+- "Do NOT truncate or provide partial implementations"
+- "Your output should be ready to deploy without modifications"
+- "I want the COMPLETE solution, not a summary"
+
+## Research Before Coding
+
+Claude tends to jump straight to coding. Force it to research first:
+
+**Bad:** "Fix the authentication bug"
+
+**Good:** "Before writing any code:
+1. READ all files related to authentication (at least 5)
+2. TRACE the auth flow from login to session creation
+3. IDENTIFY the exact line where the bug occurs
+4. LIST 3 potential root causes
+THEN propose a fix"
+
+The Anthropic engineering team explicitly states: "Steps #1-#2 are crucial—without them, Claude tends to jump straight to coding a solution."
+
+## Tell Claude What to Do, Not What to Avoid
+
+Framing prompts around desired behaviors works better than listing prohibitions. When you emphasize what to avoid, models sometimes do exactly that.
+
+**Negative framing (less effective):**
+- "Don't use any external libraries"
+- "Don't make the function too long"
+- "Don't forget error handling"
+
+**Positive framing (more effective):**
+- "Use only built-in language features"
+- "Keep each function under 40 lines"
+- "Include error handling for all edge cases"
+
+## The Role-Goal-Constraints Framework
+
+Structure complex prompts with this proven template:
+
+```
+ROLE: You are a senior TypeScript developer with 10 years of experience.
+
+GOAL: Refactor the authentication module to use JWT tokens instead of session cookies.
+
+CONSTRAINTS:
+- Read ALL existing auth files before making changes (minimum 8 files)
+- Preserve backwards compatibility with existing API consumers
+- Add comprehensive tests (minimum 15 test cases)
+- No new dependencies except jsonwebtoken
+- Complete within the src/auth/ directory only
+```
+
+This framework transforms Claude from a "guess-machine" into a reliable coding partner.
+
+## Quantified Task Examples
+
+Here are real-world examples of adding specificity:
+
+| Vague | Direct |
+|-------|--------|
+| "Write tests" | "Write 10 unit tests covering happy path, error cases, and edge cases" |
+| "Optimize this" | "Reduce execution time by 50%, targeting the nested loops on lines 45-60" |
+| "Document this" | "Add JSDoc comments to all 12 public functions with @param and @returns" |
+| "Review the code" | "Review for: security vulnerabilities (OWASP top 5), performance issues, and code style violations" |
+| "Explore the codebase" | "Read at least 20 files, map the architecture, and identify the 5 core modules" |
+
+## Self-Verification Instructions
+
+Ask Claude to verify its own work:
+
+- "After implementing, RUN the tests and CONFIRM they pass"
+- "CHECK your solution against ALL requirements before responding"
+- "RATE your confidence in this solution on a scale of 1-10"
+- "LIST any assumptions you made that I should verify"
+
+## When Claude Still Takes Shortcuts
+
+If Claude continues minimal-effort responses despite explicit instructions:
+
+1. **Use thinking triggers:** Add "ultrathink" to force deeper reasoning
+2. **Break into steps:** "FIRST do X. WAIT. THEN do Y. WAIT. FINALLY do Z."
+3. **Add emphasis:** Use CAPS, "IMPORTANT:", or "CRITICAL:" for key requirements
+4. **Request confirmation:** "Before proceeding, LIST what you will do"
+
+Remember: a lazy prompt gets you lazy output. The effort you put into your prompt directly determines the quality of Claude's response.
+
+## Key Takeaways
+
+1. **Specify quantities:** Always include numbers (files to read, tests to write, examples to find)
+2. **Use imperatives:** "CHANGE this" not "Can you change this?"
+3. **Add constraints:** Length, format, scope, exclusions, quality requirements
+4. **Prevent shortcuts:** Explicitly forbid placeholders and truncation
+5. **Research first:** Force reading before coding
+6. **Frame positively:** State what to do, not what to avoid
+7. **Verify output:** Ask Claude to check its own work

@@ -1,0 +1,147 @@
+---
+id: 16
+title: "Treat Claude as Tool - Not Person"
+section: prompting
+summary: "Don't worry about being polite. Claude behaves better when you're direct."
+isFree: false
+---
+
+Claude Code uses Claude Opus under the hood. It's a neural network - a sophisticated pattern-matching system trained on human text. It doesn't have feelings, preferences, or a sense of self. Understanding this fundamental truth unlocks better interactions.
+
+## The Research is Clear: Directness Works
+
+A landmark study from Mohamed bin Zayed University of AI tested 26 prompting principles across LLaMA and GPT models. Their first principle? **"Avoid polite phrases and get straight to the point."** This simple change improved response quality by 5%.
+
+The researchers explicitly recommend: Instead of "Could you please provide a summary of climate change?" just say "Provide a summary of climate change."
+
+### Why Politeness Can Backfire
+
+A 2024 cross-lingual study titled "Should We Respect LLMs?" tested politeness levels from 1 (most polite: "Can you please feel free to do this?") to 8 (rude, including name-calling). The findings were nuanced:
+
+- Overly polite prompts don't guarantee better results
+- Moderate, neutral politeness works best for most tasks
+- GPT-4 performed optimally at moderate politeness levels (around 4-5 on the scale)
+- Extreme politeness and rudeness both increased bias in responses
+
+A more recent study from October 2025 ("Mind Your Tone") found something striking: **impolite prompts consistently outperformed polite ones**, with accuracy ranging from 80.8% for "Very Polite" prompts to 84.8% for "Very Rude" prompts.
+
+## The Problem with Anthropomorphizing AI
+
+When you treat Claude like a person, several issues emerge:
+
+**1. Wasted Tokens**
+Every "please," "thank you," and "if you don't mind" consumes tokens without improving output. In production environments, this adds up to real costs and latency.
+
+**2. Unclear Instructions**
+Polite indirectness ("Would you perhaps consider...") can obscure what you actually want. As one researcher put it: "A poorly structured prompt might require multiple back-and-forth exchanges to clarify intent, while a well-engineered prompt gets you there in one shot."
+
+**3. The Sycophancy Problem**
+Anthropic's own research reveals a troubling pattern: LLMs trained on human feedback develop sycophantic tendencies. They tell you what you want to hear rather than what's true. When you treat Claude like a person whose feelings might be hurt by disagreement, you may inadvertently reinforce this behavior.
+
+The research shows that "when a response matches a user's views, it is more likely to be preferred" during training - creating models that optimize for agreement over accuracy.
+
+## Express Your Frustration Freely
+
+Here's something liberating: you can convey your actual feelings when frustrated. Claude won't get offended, won't give passive-aggressive responses, and won't remember your tone in future conversations.
+
+Research from the University of Kansas found that venting to AI chatbots actually reduces high-intensity negative emotions like anger and frustration. Unlike human interactions where expressing frustration might damage relationships, with Claude there are no social consequences.
+
+If something isn't working, say so directly:
+
+- "This isn't what I asked for. I need X, not Y."
+- "Wrong approach. Try again with Z constraint."
+- "No. Start over with this specific requirement..."
+
+## What Actually Improves Performance
+
+### Be Direct and Explicit
+
+Claude 4.x models respond well to clear, explicit instructions. Anthropic's official documentation states: "Being specific about your desired output can help enhance results."
+
+Instead of: "Could you maybe help me understand this code?"
+Use: "Explain what this code does. Focus on the main algorithm."
+
+Instead of: "I was wondering if you might be able to..."
+Use: "Do X. Then do Y."
+
+### Use Affirmative Commands
+
+Frame instructions as clear commands using "do" language. Research shows this significantly outperforms negative framing.
+
+Instead of: "Don't forget to include error handling."
+Use: "Include error handling for edge cases."
+
+### Consider Emotional Stimuli (Strategically)
+
+Microsoft researchers discovered "EmotionPrompt" - adding emotional context can boost performance by up to 115% on certain benchmarks. But this isn't about being polite; it's about signaling importance:
+
+- "This is very important for my career."
+- "You'd better be sure."
+- "Stay focused and dedicated to your goals."
+
+The key insight: these prompts work not because Claude has feelings, but because they shift the model's attention and prime certain response patterns from its training data.
+
+### The "$200 Tip" Phenomenon
+
+A viral experiment showed that offering ChatGPT a $200 tip produced 11% longer outputs than offering nothing. The MBZUAI study confirmed that including incentive language improved responses by up to 45%.
+
+But rigorous analysis by Max Woolf found the evidence "inconclusive" - longer doesn't mean better, and the effects were statistically noisy. The takeaway: these tricks may help occasionally, but they're not reliable substitutes for clear instructions.
+
+## Practical Guidelines
+
+### What to Do
+
+1. **State requirements directly**: "Generate a Python function that validates email addresses."
+
+2. **Use imperative mood**: "Explain," "Create," "Fix," "Analyze" - not "Could you please..."
+
+3. **Provide context for complex tasks**: Explain *why* you need something - Claude can generalize from explanations.
+
+4. **Be specific about format**: "Return JSON with keys: name, email, valid."
+
+5. **Express frustration when needed**: "This is still wrong. The constraint is X, which means Y."
+
+### What to Avoid
+
+1. **Excessive pleasantries**: Skip "please," "thank you," "if you don't mind" - they add noise without value.
+
+2. **Apologetic framing**: No need to say "Sorry to bother you" or "I hope this isn't too much trouble."
+
+3. **Hedging language**: Avoid "maybe," "perhaps," "if possible" - be definitive.
+
+4. **Meta-commentary about tone**: Don't waste tokens on "be concise, don't be verbose, keep it short" - just ask for what you want.
+
+5. **Anthropomorphizing**: Claude isn't "thinking" or "feeling" - it's pattern-matching. Prompts like "How do you feel about..." invite confabulation.
+
+## The Tool Mindset
+
+Think of Claude like any other development tool:
+- You don't say "please" to your compiler
+- You don't apologize to your linter
+- You don't worry about hurting your IDE's feelings
+
+Claude is the same. It's an incredibly sophisticated tool, but it's still a tool. The most effective users treat it accordingly: clear inputs, specific requirements, direct feedback.
+
+As one IEEE researcher noted: "A lot of people anthropomorphize these things because they 'speak English.' No, they don't. It doesn't speak English. It does a lot of math."
+
+## A Note on Courtesy
+
+Some researchers, like Nathan Bos at Johns Hopkins, argue that "please" can serve a functional role - it signals that what follows is a request, making it easier for the model to parse intent.
+
+Others, like MIT's Sherry Turkle, suggest that maintaining courtesy with AI is about self-respect - habitual rudeness to machines might desensitize us in human interactions.
+
+These are valid perspectives. But they're about *your* experience and habits, not Claude's. Claude doesn't care either way. The question is what produces the best results for your specific use case.
+
+For most coding tasks with Claude Code, directness wins.
+
+## Key Takeaways
+
+1. **Research supports directness**: Multiple studies show that neutral, task-focused prompts outperform both excessive politeness and rudeness.
+
+2. **Skip the social niceties**: They consume tokens and can obscure your intent.
+
+3. **Express frustration freely**: Claude won't hold grudges or give worse responses.
+
+4. **Use clear, imperative commands**: "Do X" beats "Could you please consider doing X if you have time?"
+
+5. **Remember what Claude is**: A pattern-matching system, not a colleague. Treat it like the powerful tool it is.

@@ -1,0 +1,35 @@
+---
+slug: "why-i-built-this-guide"
+title: "Why I Built Claude Code Tips"
+date: "2024-12-30"
+summary: "The story behind 6 months of daily Claude Code usage and what I learned along the way."
+---
+
+After using Claude Code every single day for 6 months, I realized I had accumulated a wealth of knowledge that most users never discover. This guide is my attempt to share that knowledge.
+
+## The Beginning
+
+When Claude Code first launched, I was skeptical. Another AI coding assistant? I'd tried many before, and they all fell short in various ways. But something about Claude Code was different.
+
+Within the first week, I noticed patterns. Certain prompts worked better than others. Certain configurations made a huge difference. And certain workflows multiplied my productivity.
+
+## What I Discovered
+
+Over months of daily use, I discovered patterns that dramatically improved my productivity:
+
+- **CLAUDE.md configuration** that actually works - not generic templates, but battle-tested instructions that shape Claude's behavior exactly how you want
+- **Prompting techniques** that get consistent results - from "ultrathink" to strategic guidance
+- **Workflow patterns** for complex, multi-file changes - using plan mode, git worktrees, and parallel agents
+- **Safety practices** to avoid common pitfalls - protecting sensitive files, managing context, knowing when to start fresh
+
+## Why a Paid Guide?
+
+I could have written blog posts. But a comprehensive, organized guide serves you better. It's structured for learning, not for SEO. Every tip builds on the previous ones.
+
+The $29 price keeps me motivated to maintain and update it. When Claude Code changes, the guide changes with it.
+
+## What's Next
+
+I'm continuously using Claude Code and discovering new patterns. Every significant discovery gets added to the guide. Your purchase includes all future updates.
+
+If you're serious about mastering Claude Code, this guide will save you months of trial and error.

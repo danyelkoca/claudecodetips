@@ -1,0 +1,195 @@
+---
+id: 27
+title: "Git Worktrees"
+section: multi-agent
+summary: "Multiple working directories from same repo. Run Claude in each."
+isFree: false
+---
+
+Git worktrees let you check out multiple branches of the same repository into separate directories simultaneously. Unlike cloning multiple times (which duplicates the entire .git directory), worktrees share a single repository database - making them lightweight and keeping all branches in sync.
+
+## Why Worktrees Beat Stashing and Cloning
+
+| Approach | Disk Usage | Context Switching | Parallel Work |
+|----------|------------|-------------------|---------------|
+| git stash | Minimal | Sequential only | No |
+| git clone | High (full repo copy) | Parallel | Yes, but wasteful |
+| git worktree | Low (shared .git) | Parallel | Yes, efficient |
+
+The problem with stash: stashes pile up, conflicts happen on pop, and you lose mental context. The problem with multiple clones: wasted disk space and divergent histories.
+
+Worktrees give you separate folders for each branch, all sharing the same Git history. No stashing, no conflicts, no wasted space.
+
+## Basic Commands
+
+```bash
+# Create worktree with new branch
+git worktree add ../feature-auth -b feature-auth
+
+# Create worktree from existing branch
+git worktree add ../hotfix hotfix-branch
+
+# Create worktree tracking remote branch
+git worktree add ../feature-api origin/feature-api
+
+# List all worktrees
+git worktree list
+
+# Remove a worktree when done
+git worktree remove ../feature-auth
+
+# Clean up stale worktree references
+git worktree prune
+```
+
+## The Claude Code Parallel Workflow
+
+This is where worktrees become powerful. Run multiple Claude Code instances simultaneously, each in its own worktree:
+
+```bash
+# Set up your worktrees
+git worktree add ../my-app-auth -b feature-auth
+git worktree add ../my-app-api -b feature-api
+git worktree add ../my-app-ui -b feature-ui
+
+# Now you have:
+# ~/projects/my-app/        (main branch - your primary work)
+# ~/projects/my-app-auth/   (auth feature - Claude instance 1)
+# ~/projects/my-app-api/    (api feature - Claude instance 2)
+# ~/projects/my-app-ui/     (ui feature - Claude instance 3)
+```
+
+Open separate terminal tabs, cd into each worktree, and run Claude Code. Each instance works independently - no file conflicts, no context bleeding.
+
+Benefits:
+- **Parallelization**: One Claude refactors auth while another builds a data visualization component
+- **Comparison**: Run the same prompt in two worktrees, compare which produces better results
+- **Long-running tasks**: Claude works in one worktree while you continue coding in another
+- **Code review**: Keep main clean, spin up a worktree to review a PR without disrupting your flow
+
+## Advanced: Bare Repository Setup
+
+For a cleaner directory structure, use a bare clone:
+
+```bash
+# Create project directory
+mkdir my-project && cd my-project
+
+# Clone as bare repository
+git clone --bare git@github.com:user/repo.git .bare
+
+# Create pointer file
+echo "gitdir: ./.bare" > .git
+
+# Fix remote fetching
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+git fetch origin
+
+# Now create worktrees
+git worktree add main origin/main
+git worktree add feature-branch -b feature-branch
+```
+
+Result:
+```
+my-project/
+├── .bare/              # Git database (hidden)
+├── .git                # Pointer file
+├── main/               # Worktree: main branch
+└── feature-branch/     # Worktree: feature branch
+```
+
+## Handling Dependencies
+
+Each worktree is a separate folder - dependencies are not shared:
+
+```bash
+# After creating a worktree, install dependencies
+cd ../my-app-feature
+npm ci  # Faster than npm install for clean installs
+
+# Or copy node_modules from another worktree
+cp -r ../my-app/node_modules .
+cp ../my-app/.env .  # Copy env files too
+```
+
+Automate this with a config file or shell alias:
+```bash
+# In ~/.zshrc or ~/.bashrc
+wt-add() {
+  git worktree add "../$1" -b "$1"
+  cd "../$1"
+  npm ci
+  cp ../my-app/.env .
+}
+```
+
+## IDE Integration
+
+VS Code has native worktree support (added July 2025):
+- Source Control > More Actions > Worktrees > Create Worktree
+- Right-click worktree > "Open Worktree in New Window"
+
+Or use extensions like "Git Worktrees" for enhanced management.
+
+Open each worktree in a separate VS Code window - each maintains its own IDE state, breakpoints, and terminal sessions.
+
+## Best Practices
+
+**Directory structure**: Keep worktrees as siblings to your main repo:
+```
+~/projects/my-app/           # main
+~/projects/my-app-feature/   # feature branch
+~/projects/my-app-hotfix/    # hotfix branch
+```
+
+**Naming convention**: Use `repo-branchname` pattern for clarity.
+
+**Regular cleanup**: Don't accumulate worktrees. Create, work, merge, remove:
+```bash
+git worktree remove ../my-app-feature
+git branch -d feature-branch
+```
+
+**Merge frequently**: Pull updates from main into worktrees to prevent massive merge conflicts.
+
+## Troubleshooting
+
+**"Branch already checked out" error**: You can't check out the same branch in multiple worktrees. Create a new branch or use a different one.
+
+**Deleted worktree manually?** Run `git worktree prune` to clean up stale references.
+
+**Worktree on portable drive?** Lock it to prevent pruning:
+```bash
+git worktree lock ../portable-worktree --reason "On external drive"
+git worktree unlock ../portable-worktree  # When done
+```
+
+**Submodules?** Each worktree needs its own submodule initialization:
+```bash
+cd ../my-app-feature
+git submodule update --init
+```
+
+## Performance for Large Repos
+
+For monorepos, enable Git's file system monitor:
+```bash
+git config core.fsmonitor true
+```
+
+This can make `git status` up to 14x faster in large worktrees.
+
+Consider combining with sparse checkout if you only need part of the repo:
+```bash
+git sparse-checkout init --cone
+git sparse-checkout set src/my-module
+```
+
+## When Not to Use Worktrees
+
+- Quick 10-minute fixes (overhead isn't worth it)
+- When features touch many shared files (merge conflicts defeat the purpose)
+- If you forget to clean up (20 stale worktrees is worse than stash chaos)
+
+Start small: use worktrees for your next hotfix or code review. Expand to parallel Claude sessions as you get comfortable.

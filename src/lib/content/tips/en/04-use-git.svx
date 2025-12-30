@@ -1,0 +1,240 @@
+---
+id: 4
+title: "Use Git Extensively"
+section: safety
+summary: "Git is your safety net when Claude makes sweeping changes. Commit often, review diffs, and know your recovery commands."
+isFree: false
+---
+
+Claude Code can modify dozens of files in seconds. Without version control, a single bad prompt can leave your codebase in an unrecoverable state. Git is not optional when working with AI coding assistants. It is your undo button, your safety net, and your debugging tool combined.
+
+## Commit Before You Prompt
+
+Always start Claude sessions with a clean git state. Before asking Claude to make any changes:
+
+```bash
+git status                    # Check current state
+git add -A && git commit -m "Checkpoint before Claude session"
+```
+
+This creates a clear checkpoint. If Claude goes off the rails, you can instantly return to a known-good state. The biggest mistake developers make is letting uncommitted changes pile up, then asking Claude to modify the same files. When things break, you have no way to isolate which changes came from Claude versus your own work.
+
+## Make Atomic Commits
+
+An atomic commit represents one logical change. When working with Claude, this discipline becomes critical.
+
+**Why atomic commits matter for AI-assisted development:**
+
+- **Surgical rollbacks**: If Claude introduces a bug, you can revert just that change without losing unrelated work
+- **Faster debugging**: Fewer commits to examine when hunting down issues
+- **Better code reviews**: Reviewers see step-by-step logic, even if squashed later
+- **AI-readable history**: Clean commits help Claude understand project evolution when analyzing your codebase
+
+**Recommended cadence**: Commit after every significant Claude interaction. If Claude works for 30-60 minutes, that is likely multiple commits worth of changes.
+
+```bash
+# After Claude completes a task
+git diff                      # Review what changed
+git add -A
+git commit -m "Add user search endpoint (Claude-assisted)"
+```
+
+## Review Every Change Before Committing
+
+Never blindly commit Claude's output. Always review diffs:
+
+```bash
+git diff                      # Unstaged changes
+git diff --staged             # Staged changes
+git diff HEAD                 # Both staged and unstaged
+```
+
+**What to look for:**
+
+- Unintended modifications to files you did not ask to change
+- Debug statements or console.log left behind
+- Credentials, API keys, or secrets accidentally added
+- Scope creep beyond the requested change
+- Removed code that should have been preserved
+
+### Partial Staging for Granular Control
+
+Use `git add -p` to stage specific chunks instead of entire files:
+
+```bash
+git add -p src/auth/login.js
+```
+
+Git presents each change and asks: `Stage this hunk [y,n,q,a,d,s,e,?]?`
+
+- `y` - stage this chunk
+- `n` - skip this chunk
+- `s` - split into smaller chunks
+- `e` - manually edit the chunk
+
+This lets you cherry-pick only the changes you approve and leave problematic ones unstaged for further review or discard.
+
+## Mark AI Contributions in Commit Messages
+
+Include AI involvement in your commit messages for transparency:
+
+```bash
+git commit -m "Refactor auth middleware for JWT support (Claude-assisted)"
+git commit -m "Add pagination to user list API (AI-generated)"
+```
+
+This creates an audit trail. When debugging issues months later, you will know which commits warrant extra scrutiny. It also helps teammates understand code origin and apply appropriate review standards.
+
+## Recovery Commands You Must Know
+
+Claude will make mistakes. Know how to undo them.
+
+### git reset - Undo Local Commits
+
+```bash
+# Undo last commit, keep changes staged
+git reset --soft HEAD~1
+
+# Undo last commit, keep changes unstaged (default)
+git reset HEAD~1
+
+# Undo last commit, DISCARD all changes (dangerous)
+git reset --hard HEAD~1
+```
+
+Use `--soft` when Claude's commit message was wrong but the code is fine. Use `--hard` when you want to completely discard Claude's work and start fresh.
+
+### git revert - Safe Undo for Shared History
+
+```bash
+# Create a new commit that undoes a specific commit
+git revert abc123
+
+# Revert without auto-committing (review first)
+git revert --no-commit abc123
+```
+
+Use `git revert` when the problematic commit has already been pushed. It preserves history while undoing the changes.
+
+### git reflog - Your Emergency Recovery Tool
+
+The reflog records every HEAD movement. Even after a hard reset, your commits are not truly gone:
+
+```bash
+git reflog                    # View recent HEAD history
+git reset --hard HEAD@{3}     # Restore to state 3 moves ago
+```
+
+Reflog entries persist for 30-90 days. If you accidentally reset away Claude's good work, reflog can save you.
+
+## Use Feature Branches
+
+Isolate Claude's experimental work on dedicated branches:
+
+```bash
+git checkout -b feature/claude-auth-refactor
+# ... work with Claude ...
+git checkout main             # Return to stable code
+```
+
+**Benefits:**
+
+- Discard entire experiments with `git branch -D feature/claude-experiment`
+- Main branch stays stable while Claude experiments
+- Easy to compare Claude's approach versus your own
+
+**Naming conventions:**
+- `feature/claude-user-search` - Claude-built features
+- `experiment/claude-perf-optimization` - Exploratory work
+- `fix/claude-login-bug` - Bug fixes
+
+For parallel Claude sessions on different features, use git worktrees (see Tip 27).
+
+## Git Stash for Quick Context Switches
+
+When you need to pause Claude's work for an urgent fix:
+
+```bash
+git stash push -m "WIP: Claude auth refactor"
+# ... handle urgent issue ...
+git stash pop                 # Resume where you left off
+```
+
+Stash is local and temporary. For longer work-in-progress, prefer feature branches.
+
+## Debugging with Git History
+
+When Claude's changes introduce bugs, Git helps you find them.
+
+### git blame - Find When Lines Changed
+
+```bash
+git blame src/api/users.js
+```
+
+Shows who changed each line and when. Useful for identifying exactly which Claude session introduced problematic code.
+
+### git bisect - Binary Search for Bugs
+
+When you know something worked before but not which commit broke it:
+
+```bash
+git bisect start
+git bisect bad                # Current commit is broken
+git bisect good abc123        # This old commit worked
+# Git checks out middle commit, you test it
+git bisect good               # or git bisect bad
+# Repeat until Git finds the exact breaking commit
+git bisect reset              # Return to original state
+```
+
+With atomic commits, bisect quickly narrows down which Claude interaction caused the regression.
+
+## Pre-Commit Hooks as Safety Net
+
+Automate quality checks before every commit. The pre-commit framework catches issues Claude might introduce:
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-added-large-files
+      - id: detect-private-key
+```
+
+```bash
+pre-commit install            # Set up hooks
+```
+
+Now every commit automatically checks for trailing whitespace, large files, and leaked secrets. See Tip 40 for more on hooks.
+
+## Claude Code's Built-in Git Features
+
+Claude Code can handle git operations through natural language:
+
+```bash
+# Auto-generate contextual commit messages
+/commit
+
+# Full workflow: commit, push, create PR
+/commit-push-pr
+```
+
+You can also ask Claude directly:
+- "Commit these changes with a descriptive message"
+- "Create a PR for this feature"
+- "Resolve the merge conflicts in package.json"
+- "Revert the last commit"
+
+Claude understands complex git operations like rebasing, cherry-picking, and conflict resolution.
+
+## The Golden Rule
+
+Never approve changes across multiple files without reviewing diffs first.
+
+AI-generated code is not inherently safe. Studies show nearly half of AI code suggestions contain potential vulnerabilities. When Claude modifies a dozen files simultaneously and you approve without reviewing, any problems become impossible to diagnose later.
+
+Git makes this manageable: small commits, frequent reviews, clear history. Without Git discipline, you are flying blind.

@@ -1,0 +1,163 @@
+---
+id: 18
+title: "One Task = One Session"
+section: session
+summary: "Once task ends, close it down. Use /clear to wipe context and start fresh."
+isFree: false
+---
+
+Once task ends, close it down. Use `/clear` to wipe context and start fresh. Your CLAUDE.md persists, everything else gets wiped.
+
+## Why This Matters
+
+LLMs are stateless. They reprocess the entire conversation history with every message. As your session grows, several problems emerge:
+
+1. **Token consumption accelerates** - A fresh monorepo session costs ~20k tokens baseline. The remaining 180k fills faster than you think.
+
+2. **Attention degrades** - Research shows LLMs exhibit U-shaped attention bias. Information in the middle of long contexts gets ignored, even in explicitly long-context models. MIT researchers in 2025 discovered this stems from causal masking in transformer architecture.
+
+3. **Errors accumulate** - Old instructions, failed attempts, and correction history pile up. Important grounding information gets pushed out while noise remains.
+
+4. **Performance tanks** - Claude gets slower. Responses become generic. Previous decisions get forgotten. Code quality degrades noticeably.
+
+## The Science Behind Context Degradation
+
+The "Lost in the Middle" phenomenon (documented by Stanford researchers) shows that LLM performance drops significantly when relevant information sits in the middle of long contexts. In Anthropic's own testing, Claude 2.1's accuracy on middle-positioned information dropped to 27%.
+
+As conversations grow:
+- Critical instructions from early in the session lose influence
+- Claude starts making mistakes you specifically corrected earlier
+- It forgets which files it was working on
+- Hallucination rates increase
+
+Studies show hallucination rates fall to 16% when context is persistently stored and reused across sessions rather than accumulated in one long conversation.
+
+## The `/clear` Command
+
+```bash
+/clear
+```
+
+This wipes the conversation history clean. What persists:
+- Your CLAUDE.md instructions
+- Memory files (if configured)
+- Project structure knowledge
+
+What gets wiped:
+- All conversation history
+- File contents Claude read
+- Commands and their outputs
+- Error messages and corrections
+
+## When to Use `/clear`
+
+**After every completed task.** Don't let unrelated work pile up in the same session.
+
+Specific triggers:
+- Finished implementing a feature
+- Fixed a bug
+- Completed a refactoring
+- Moving to unrelated work
+- Claude starts going in circles
+- Same mistakes keep appearing
+- Responses feel generic or unfocused
+
+## `/clear` vs `/compact` vs New Session
+
+| Action | Effect | Use When |
+|--------|--------|----------|
+| `/clear` | Wipes history, keeps CLAUDE.md | Task done, starting fresh work |
+| `/compact` | Summarizes history, loses detail | Need partial memory, mid-complex-task |
+| New session | Clean slate, full reinitialization | Everything feels off, nuclear option |
+
+**Prefer `/clear` over `/compact`.** After compaction, Claude loses detail. It doesn't know what files it was looking at and needs to re-read them. It will repeat mistakes you corrected earlier.
+
+## The Document-Then-Clear Workflow
+
+For complex multi-session tasks, don't rely on `/compact`. Instead:
+
+1. **Before clearing:** Have Claude dump its plan and progress into a markdown file
+2. **Run `/clear`**
+3. **Start fresh:** Tell Claude to read the markdown file and continue
+
+This creates durable external memory that survives context resets.
+
+```bash
+# Before clearing
+"Write your current progress and next steps to progress.md"
+
+# After clearing
+"Read progress.md and continue from where we left off"
+```
+
+## External Memory Files
+
+The Claude Code todo list doesn't persist across sessions. Use external files instead:
+
+- **plan.md** - Current implementation plan with checkboxes
+- **progress.md** - What's been done, what's next
+- **decisions.md** - Key architectural decisions made
+
+Track tasks with `[ ]` checkboxes. Claude can read and update these across sessions.
+
+## Monitoring Your Context
+
+Run `/context` mid-session to see where tokens are going:
+- System prompt and tools
+- Memory files (CLAUDE.md)
+- Conversation messages
+- File contents read
+
+When you hit ~80% capacity, auto-compaction triggers. Don't wait for this. Clear proactively at logical breakpoints.
+
+## Signs Your Session Needs Clearing
+
+Watch for these warning signs:
+
+- Responses take noticeably longer
+- Claude asks about things it should know
+- Same errors keep appearing after fixes
+- Generic advice instead of project-specific guidance
+- Claude suggests approaches you already rejected
+- Performance feels "off"
+- Sessions lasting 8-12+ exchanges in complex projects
+
+## The Ideal Workflow
+
+1. **Start fresh** for each discrete task
+2. **Use CLAUDE.md** for persistent instructions (not per-session reminders)
+3. **Keep scope small** - Plan what you'll do in ~30 minutes or less
+4. **Commit often** - Each session produces a clean, reviewable commit
+5. **Clear aggressively** - When in doubt, clear
+6. **Document for handoff** - Before clearing complex work, externalize state
+
+## What Survives Sessions
+
+**CLAUDE.md is your persistent memory.** Use it for:
+- Project-specific rules
+- Common commands
+- Architecture overview
+- Code style guidelines
+
+Don't put session-specific context in CLAUDE.md. It's read at every session start.
+
+## Parallel Isolated Sessions
+
+For truly parallel work, use git worktrees:
+
+```bash
+git worktree add ../my-project-feature feature-branch
+```
+
+Now you have isolated directories. Run separate Claude sessions in each. No context pollution between tasks.
+
+## Key Takeaways
+
+- **One task = one session.** Clear between tasks.
+- **Don't trust auto-compact.** It's a fallback, not a strategy.
+- **Externalize state** for multi-session work.
+- **Monitor context usage** with `/context`.
+- **Clear at logical breakpoints** before performance degrades.
+- **CLAUDE.md persists.** Everything else doesn't.
+
+The context window is a resource. Use it wisely, clear it regularly, and leverage persistent memory for anything you'll need again.

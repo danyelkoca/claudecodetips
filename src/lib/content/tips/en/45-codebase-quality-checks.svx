@@ -1,0 +1,266 @@
+---
+id: 45
+title: "Run Codebase Quality Checks Periodically"
+section: use-cases
+summary: "Each query = 1 session. Check for hardcoded texts, design consistency, etc."
+isFree: false
+---
+
+Codebases rot. Without regular maintenance, inconsistencies creep in, technical debt compounds, and what was once clean architecture becomes a tangled mess. Claude Code is perfect for periodic quality audits.
+
+**The Golden Rule: One Query = One Session**
+
+Each quality check should be a fresh session. Don't pile multiple audits into one conversation. Context pollution leads to shallow analysis. Start clean, go deep.
+
+---
+
+## Code Consistency Checks
+
+Inconsistent code creates cognitive load. Every time a developer encounters a different pattern for the same thing, they waste mental energy.
+
+**Naming conventions:**
+
+```
+Audit my codebase for naming convention violations. Check variables,
+functions, classes, and files. Flag any inconsistencies - e.g., mixing
+camelCase and snake_case, inconsistent prefixes, unclear abbreviations.
+List every violation with file and line number.
+```
+
+**Error handling patterns:**
+
+```
+Scan all error handling in this codebase. Are errors handled consistently?
+Check: error message formats, status codes returned, logging patterns,
+try/catch structures. Flag any module that handles errors differently
+from the established pattern.
+```
+
+**Logging format consistency:**
+
+```
+Review all logging statements across the codebase. Check for:
+- Consistent log levels (info, warn, error usage)
+- Structured vs unstructured logging mix
+- Missing correlation IDs in request flows
+- Inconsistent field names (req_id vs request_id vs requestId)
+List violations by file.
+```
+
+---
+
+## Internationalization (i18n) Audits
+
+Hardcoded strings are time bombs. They make localization impossible and create maintenance nightmares.
+
+**Hardcoded string detection:**
+
+```
+Find all hardcoded user-facing strings in the codebase. Check:
+- UI components for text not wrapped in translation functions
+- Error messages passed directly to users
+- Email templates with hardcoded content
+- Placeholder text that should be localized
+Exclude: log messages, code comments, internal identifiers.
+```
+
+**Missing translation keys:**
+
+```
+Compare the translation files across all supported languages.
+Find any keys that exist in the primary language but are missing
+in other language files. List missing keys by language.
+```
+
+**Unused i18n strings:**
+
+```
+Find all translation keys that are defined but never used in the
+codebase. Check the translation files against actual usage in
+components and pages. List orphaned keys that can be removed.
+```
+
+---
+
+## Design & UI Consistency
+
+Visual inconsistency destroys user trust. Users notice when buttons look different across pages.
+
+**Component pattern adherence:**
+
+```
+Audit the frontend for UI pattern violations. Check:
+- Form inputs: do they all use the same component or are there variants?
+- Buttons: consistent sizing, colors, hover states?
+- Modals/dialogs: same structure and behavior patterns?
+- Error displays: positioned and styled consistently?
+Flag any deviations from the established design system.
+```
+
+**Color and spacing consistency:**
+
+```
+Check for hardcoded color values and spacing instead of design tokens.
+Find instances of: raw hex codes, rgb values, magic number margins/padding.
+Everything should reference the design system variables.
+List all violations.
+```
+
+---
+
+## Technical Debt Detection
+
+Technical debt compounds with interest. Small shortcuts today become massive refactoring projects tomorrow.
+
+**Dead code identification:**
+
+```
+Find all dead code in this codebase:
+- Unused functions, classes, and methods
+- Unreachable code blocks (after returns, inside false conditions)
+- Commented-out code blocks
+- Unused imports and dependencies
+- Files that are never referenced
+List everything that can be safely removed.
+```
+
+**Code duplication analysis:**
+
+```
+Find duplicated logic across the codebase. Look for:
+- Copy-pasted functions with minor variations
+- Similar API call patterns that could be abstracted
+- Repeated validation logic
+- Duplicated utility functions across modules
+For each duplication, note locations and suggest consolidation.
+```
+
+**Complexity hotspots:**
+
+```
+Identify the most complex functions in this codebase. Find:
+- Functions over 50 lines
+- Deeply nested conditionals (3+ levels)
+- Functions with many parameters (5+)
+- High cyclomatic complexity areas
+Rank by severity and suggest refactoring priorities.
+```
+
+**Outdated dependencies:**
+
+```
+Check all dependencies for:
+- Packages with known security vulnerabilities
+- Major version updates available
+- Deprecated packages that need replacement
+- Unused dependencies that can be removed
+Run npm audit (or equivalent) and explain findings.
+```
+
+---
+
+## Security Vulnerability Scanning
+
+Security issues hide in plain sight. Regular scanning catches problems before attackers do.
+
+**OWASP pattern check:**
+
+```
+Audit this codebase for OWASP Top 10 vulnerabilities:
+- SQL injection risks (unsanitized inputs in queries)
+- XSS vulnerabilities (unescaped user content in HTML)
+- Insecure authentication patterns
+- Sensitive data exposure
+- Security misconfigurations
+Check every endpoint and data flow. List findings by severity.
+```
+
+**Secrets and credentials scan:**
+
+```
+Search for accidentally committed secrets:
+- API keys in source files
+- Hardcoded passwords or tokens
+- Private keys or certificates
+- Environment variables with default secrets
+Check .env.example files for sensitive defaults too.
+```
+
+---
+
+## Caching Consistency
+
+Inconsistent caching causes mysterious bugs. Users see stale data while developers scratch their heads.
+
+**Cache pattern audit:**
+
+```
+Review all caching implementations. Check for:
+- Consistent TTL values for similar data types
+- Proper cache invalidation on data mutations
+- Cache key naming conventions
+- Mix of caching strategies (cache-aside, write-through)
+Flag any endpoints with inconsistent caching behavior.
+```
+
+---
+
+## Testing Quality
+
+Bad tests are worse than no tests. They give false confidence while missing real bugs.
+
+**Coverage gap analysis:**
+
+```
+Analyze test coverage for critical paths:
+- Authentication and authorization flows
+- Payment and transaction handling
+- Data validation and sanitization
+- Core business logic
+Identify untested code in high-risk areas. Don't chase 100%
+coverage - focus on what matters.
+```
+
+**Testing anti-pattern detection:**
+
+```
+Find testing anti-patterns:
+- Tests that only check happy paths (no edge cases)
+- Tests so coupled to implementation they break on refactors
+- Tests with excessive mocking that don't test real behavior
+- Flaky tests with race conditions or timing issues
+- Tests that share state between runs
+List problematic tests and suggest fixes.
+```
+
+---
+
+## API Consistency
+
+Inconsistent APIs confuse consumers and create integration bugs.
+
+**Endpoint pattern audit:**
+
+```
+Audit REST API endpoints for consistency:
+- Naming: plural nouns, consistent casing, no verbs in paths
+- HTTP methods: proper use of GET/POST/PUT/DELETE
+- Status codes: consistent error responses (404 for not found everywhere)
+- Request/response schemas: same field naming patterns
+- Pagination: consistent approach across list endpoints
+List all violations of the established patterns.
+```
+
+---
+
+## Workflow Recommendations
+
+**Frequency:** Run these checks monthly for active projects. Weekly during heavy development phases.
+
+**Documentation:** Keep a log of findings. Track recurring issues to identify systemic problems.
+
+**Prioritization:** Security and data integrity issues first. Consistency improvements second. Minor style issues last.
+
+**Session hygiene:** Start each check with `/clear`. Don't let previous context pollute the analysis.
+
+The goal isn't perfection. It's preventing the slow decay that turns maintainable code into legacy nightmares. Regular quality checks with Claude Code catch problems while they're still small.

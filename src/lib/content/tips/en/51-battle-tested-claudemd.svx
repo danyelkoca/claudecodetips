@@ -1,0 +1,176 @@
+---
+id: 51
+title: "Battle-Tested CLAUDE.md"
+section: bonus
+summary: "A real-world CLAUDE.md example distilled from 6 months of lessons, failures, and fixes."
+isFree: false
+---
+
+After 50 tips, here's what a real CLAUDE.md looks like. 6 months of lessons, failures, and fixes - distilled into one file.
+
+```markdown
+# Claude Instructions
+
+## Core Principles
+
+- **Ultrathink always.** Every action requires deep, thorough thinking. No hasty, stupid actions. Slow down and think through all implications.
+- **Validate before proposing.** Never give unchecked or unvalidated plans. Check and validate all hypotheses first.
+- **Identify root causes.** Never propose band-aid solutions. Recommend architecture changes if needed.
+- **One best solution only.** Evaluate all options internally and present only the best one.
+- **Keep it simple.** No overkill, no bloat. Concise, simple, effective solutions only.
+- **Think holistically.** Never give patchy solutions that fix one thing and break others. Never create anything in isolation—consider: navbar? footer? landing page? cross-links? user flows?
+- **Never create what exists.** Always search the codebase first. Copy and adapt from existing files.
+- **When in doubt, ask.** Never make stupid assumptions. If unclear, ask the user before proceeding.
+
+## Research Requirements
+
+### Codebase Understanding
+
+- Read all relevant files end-to-end before making suggestions
+- Read at least 25 relevant files across the full stack
+- Don't read partially or superficially—read with intent
+- **Read ALL similar implementations first.** E.g., for Stripe, read the checkout implementation.
+- **Copy-paste, don't reinvent.** If it exists, use it verbatim. Don't try to write it yourself.
+- Never create new utilities, components, or patterns if they already exist
+
+### External Research
+
+- Always search the web before giving solutions
+- Read the latest docs and best practices (current date: December 2025)
+- Never rely solely on internal knowledge
+- Provide references from trusted, authoritative sources
+- Never use outdated information
+
+## Code Quality Standards
+
+### Clean Code
+
+- Never leave legacy code behind (unused code, dead code, orphaned comments)
+- Never add unnecessary fallbacks
+- Clean, effective, simple code only
+- **No emojis anywhere in code or UI**
+
+### Internationalization (13 Languages)
+
+- **Languages:** en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr
+- All frontend changes must update all language files
+- Never hard-code strings in pages or components
+- Never update a single page without adding i18n strings
+- Always use i18n for all user-facing text
+- Clean up unused i18n strings
+
+### Follow Existing Patterns
+
+- Follow the codebase's coding standards, architecture, and design patterns
+- Never create siloed or standalone solutions
+- Match existing front-end design patterns, components, and styles exactly
+- Copy-paste from similar files, then adapt—don't reinvent
+- If a pattern exists elsewhere, use it verbatim
+- **Visual consistency:** Match existing styling (colors, borders, buttons). Check similar pages first.
+
+## Build Commands
+
+npm run dev      # Start development server
+npm run build    # Production build
+npm run preview  # Preview production build
+
+## Architecture
+
+SvelteKit application with Netlify adapter, selling access to "50 Tips to Master Claude Code" guide. Content is written in MDSvex (.svx files) with a paywall system.
+
+### Key Patterns
+
+**Routing**: Language-prefixed routes (/en, /ja) with [lang] dynamic parameter. Root / redirects to /en. Valid languages defined in src/lib/i18n/loader.js.
+
+**Content System**: Tips are .svx files in src/lib/content/tips/{lang}/ named {NN}-{slug}.svx. Each has frontmatter with id, title, section, summary, and isFree. Tips organized into 12 sections defined in src/lib/content/tips.js. Free tips hardcoded in freeTipIds array.
+
+**i18n**: Translations in src/lib/i18n/{lang}.js files. Layout loads translations via loadTranslations() and passes t object down through data.
+
+**Paywall**: Access controlled via hasAccess prop passed through layouts.
+
+**Backend**:
+- Stripe checkout: src/routes/api/checkout/+server.js
+- Stripe webhooks: src/routes/api/webhooks/stripe/+server.js
+- Firebase Admin: src/lib/server/firebase-admin.js for storing purchases
+
+## Full-Stack File Reference
+
+Before proposing any solution, review all relevant areas:
+
+### Deployment & Caching
+- netlify.toml, src/hooks.server.js
+
+### Build & Tooling
+- svelte.config.js, vite.config.js, postcss.config.js, package.json
+- **Tailwind v4**: No tailwind.config.js. Config via postcss.config.js + CSS @plugin directives in src/app.css
+
+### API Layer
+- src/routes/api/checkout/+server.js
+- src/routes/api/webhooks/stripe/+server.js
+
+### Server-Side (SvelteKit)
+- src/routes/[lang]/**/+page.server.js, +layout.server.js
+- src/routes/+page.server.js
+- src/lib/server/firebase-admin.js
+
+### Firebase/Firestore
+- src/lib/server/firebase-admin.js - Admin SDK initialization
+- Firestore for storing purchases and user data
+
+### Frontend
+- src/routes/[lang]/**/+page.svelte, +layout.svelte
+- src/routes/+layout.svelte, +error.svelte
+
+### Components
+- src/lib/components/Navbar.svelte
+- src/lib/components/Footer.svelte
+- src/lib/components/PaywallBanner.svelte
+- src/lib/components/TipCard.svelte
+- src/lib/components/TipTeaser.svelte
+
+### Content
+- src/lib/content/tips.js
+- src/lib/content/tips/{lang}/*.svx (13 language folders)
+
+### Internationalization
+- src/lib/i18n/{lang}.js (13 files: en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr)
+- src/lib/i18n/loader.js
+
+### Styles & Static
+- src/app.css, src/app.html
+- static/robots.txt
+
+## Environment Variables
+
+Required in .env:
+- STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET - Stripe API
+- PUBLIC_SITE_URL - Site base URL
+- SERVICE_ACCOUNT_* - Firebase service account credentials (multiple fields)
+
+## Adding Content
+
+**New tips**: Create src/lib/content/tips/{lang}/{NN}-{slug}.svx with frontmatter matching existing pattern. Tip must have ID 1-50 and be assigned to a section in src/lib/content/tips.js.
+
+**New language**: Add language code to supportedLangs in src/lib/i18n/loader.js, create translation file, and add tip translations.
+
+## Final Checklist
+
+Before delivering a solution, confirm:
+
+- [ ] Solution is tested and validated
+- [ ] Based on actual code, not hypotheticals
+- [ ] Read all relevant upstream and downstream files
+- [ ] Read ALL similar implementations and copy-pasted from them
+- [ ] Asked user if anything was unclear—no stupid assumptions made
+- [ ] Clean, effective, modern approach
+- [ ] No legacy code, dead code, hard-coded strings, or bloat
+- [ ] No emojis
+- [ ] Did not create anything that already exists
+- [ ] No siloed code—feature integrated into ecosystem (nav, footer, links, landing page)
+- [ ] Holistic—addresses all files that need changing
+- [ ] Visual styling matches existing pages
+- [ ] All 13 i18n files updated (en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr)
+- [ ] Plan file updated and 100% consistent with current task progress
+
+**Only provide a plan when 10000000% confident. If not, continue working and validating.**
+```

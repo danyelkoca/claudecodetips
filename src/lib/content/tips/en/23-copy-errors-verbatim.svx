@@ -1,0 +1,236 @@
+---
+id: 23
+title: "Copy Error Messages Verbatim"
+section: input
+summary: "Don't paraphrase. Full stack trace with line numbers."
+isFree: false
+---
+
+Don't paraphrase error messages. Copy the full stack trace with line numbers. Your summary loses critical debugging information that Claude needs.
+
+When you tell Claude "it's giving some kind of null error," you've stripped away the exact file path, line number, function name, and call chain that would let Claude pinpoint the problem in seconds. Context is the cornerstone of effective debugging, whether performed by humans or AI.
+
+## The Anatomy of an Error Message
+
+A complete error message contains multiple components, each serving a specific debugging purpose:
+
+### Exception Type
+
+The class or category of error (NullPointerException, TypeError, ENOENT). This immediately narrows the problem domain and tells Claude what kind of failure occurred.
+
+### Error Message
+
+The human-readable description ("Cannot read property 'length' of undefined"). This explains the immediate symptom but not the cause.
+
+### Stack Trace
+
+The sequence of function calls leading to the error, from most recent to origin. Each frame contains:
+
+- **File path**: Which file contains the failing code
+- **Line number**: The exact line where execution failed
+- **Function name**: Which function was executing
+- **Column number**: The precise character position (in some languages)
+
+### Cause Chain
+
+For nested exceptions, the original error that triggered the cascade. The root cause is always at the bottom of the stack.
+
+When you paraphrase, you lose all of this. "It crashed" could mean any of ten thousand things. "TypeError: Cannot read property 'map' of undefined at UserList.render (components/UserList.js:47:23)" points to exactly one line of code.
+
+## What Gets Lost When You Summarize
+
+### Exact Line Numbers
+
+"Something's wrong in the user component" vs "UserList.js:47" - the difference between searching through 500 lines and jumping directly to the problem.
+
+### The Call Chain
+
+Stack traces show how the program reached the failure point. A bug in function A might only manifest when called from function B via function C. Without the trace, Claude can't see the path.
+
+### Error Codes
+
+Many frameworks use specific error codes (E11000, ECONNREFUSED, 0x80070005). These codes are searchable and often have documented solutions. Your paraphrase loses them.
+
+### Environment Context
+
+Error messages often include OS paths, package versions, and configuration details that reveal environment-specific issues.
+
+### The Exact Wording
+
+Other developers have encountered your exact error. Stack Overflow answers match the precise error text. When you paraphrase, those search matches disappear.
+
+## The AI Context Problem
+
+AI assistants need comprehensive context to debug effectively. Research shows that current AI coding agents struggle with debugging specifically because they lack the context that human developers rely on.
+
+Sentry's AI debugging agent achieves 94% accuracy in root cause identification because it has access to complete error events, stack traces, environment information, logs, breadcrumbs, and source code. When you paste only a summary, you're giving Claude a fraction of that information.
+
+The problem compounds in longer conversations. As you pile on clarifications and partial fixes, the context window fills with incomplete information. Each back-and-forth interaction where Claude has to guess at the error details increases the likelihood of failed resolution.
+
+## Bad vs Good Error Reporting
+
+### Bad
+
+```
+User: the login page doesn't work
+
+Claude: [Guesses at ten possible causes, none correct]
+```
+
+### Also Bad
+
+```
+User: I'm getting some kind of authentication error when users try to sign in
+
+Claude: [Provides generic authentication troubleshooting that may not apply]
+```
+
+### Good
+
+```
+User: Getting this error on login:
+
+Error: TokenExpiredError: jwt expired
+    at /app/middleware/auth.js:23:15
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+    at async authMiddleware (/app/middleware/auth.js:18:5)
+    at async /app/routes/user.js:45:3
+
+Claude: [Immediately identifies the JWT expiration check, suggests specific fix]
+```
+
+## The Full Error Report Template
+
+When sharing an error with Claude, include:
+
+### 1. The Complete Error Output
+
+Copy everything. The stack trace, the error message, any warnings that preceded it. Use triple backticks to preserve formatting:
+
+```
+paste your full error here
+```
+
+### 2. The Command That Triggered It
+
+What exactly did you run? `npm run build`, `python main.py --config prod.yaml`, the curl command, the test command.
+
+### 3. Recent Changes
+
+"This started after I added user authentication" provides temporal context that dramatically narrows the investigation scope.
+
+### 4. Environment Details
+
+Node version, Python version, operating system, relevant package versions. Many errors are version-specific.
+
+## Claude Code Specific Techniques
+
+### Pipe Errors Directly
+
+Claude Code can accept piped input. Instead of copying manually:
+
+```bash
+npm run build 2>&1 | claude "explain this error and suggest a fix"
+```
+
+### Use Screenshots for Visual Errors
+
+For browser console errors or UI bugs, paste screenshots directly with `Ctrl+V`. Claude is multimodal and can read error messages from images.
+
+### Let Claude Read Log Files
+
+For large log files:
+
+```bash
+cat error.log | claude "find the root cause of the failures in this log"
+```
+
+### Copy from Terminal Properly
+
+Most terminals support `Ctrl+Shift+C` to copy. Some IDEs have "Copy Error" buttons that grab the clean error text without line numbers or timestamps from your editor.
+
+## The Two-Step Debugging Approach
+
+Research suggests a more effective pattern than "paste error, ask for fix":
+
+**Step 1: Analyze**
+
+```
+Here's the error I'm seeing:
+[paste full error]
+
+Before suggesting any fixes, explain:
+1. What this error means
+2. What conditions cause it
+3. Where in my code it likely originates
+```
+
+**Step 2: Fix**
+
+```
+Based on your analysis, what's the most likely fix? Show me the specific code change.
+```
+
+This prevents Claude from simultaneously trying to understand and fix the problem, which is where AI debugging often goes wrong.
+
+## Common Patterns Where Verbatim Matters Most
+
+### Async/Promise Errors
+
+Stack traces in async code can be misleading. The full trace shows whether the error came from the promise chain, an await, or a callback. Summaries lose this crucial detail.
+
+### Build Tool Errors
+
+Webpack, Vite, and bundler errors often have multiple stack traces (the tool's internal trace and your code's trace). Both matter.
+
+### Type Errors
+
+"Type error somewhere" vs "Type 'string' is not assignable to type 'User[]' at src/api/users.ts:34" - TypeScript errors contain the exact type mismatch.
+
+### Database Errors
+
+Connection strings, query syntax, constraint names - database errors pack critical details into a single message.
+
+### API Errors
+
+HTTP status codes, response bodies, request IDs - all needed to debug API failures.
+
+## Add This to Your CLAUDE.md
+
+```markdown
+## Error Reporting Requirements
+
+When encountering errors:
+- Always paste the complete error message and stack trace
+- Include the exact command or action that triggered the error
+- Mention any recent changes that might be related
+- Note the environment (OS, language version, package versions)
+- Do not summarize or paraphrase error messages
+```
+
+## The Cost of Paraphrasing
+
+For developers, "it doesn't work" is not a statement but the start of a debugging marathon lasting several hours. One missing detail can mean the difference between 10 minutes and 10 hours of work.
+
+When you paraphrase:
+
+- Claude has to guess at the error type
+- You lose searchable error codes
+- Stack trace context disappears
+- Multiple back-and-forth exchanges waste tokens and time
+- The fix may address a different error than the one you have
+
+When you copy verbatim:
+
+- Claude sees exactly what you see
+- Line numbers point to specific code
+- Error codes match documentation
+- First-response accuracy increases dramatically
+
+## The Bottom Line
+
+Error messages are precise for a reason. They contain exactly the information needed to diagnose the problem.
+
+When you encounter an error, select everything from the error type to the last line of the stack trace. Copy it. Paste it into Claude exactly as it appears.
+
+Your paraphrase loses information. The verbatim error contains the solution.

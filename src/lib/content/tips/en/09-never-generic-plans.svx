@@ -1,0 +1,125 @@
+---
+id: 9
+title: "Never Accept Generic Plans"
+section: planning
+summary: "Always make sure plan is detailed at code level and factual."
+isFree: false
+---
+
+Generic plans are the #1 cause of wasted work with Claude Code. When Claude says "update the authentication system" without specifying files, functions, or line numbers, it hasn't actually read your code. It's guessing.
+
+## Why Generic Plans Fail
+
+Research from the ACM shows that AI code generation improves by 25.4% when models plan with specific steps before generating code. The reason is simple: without specificity, Claude:
+
+1. **Hallucinates file paths** - Studies show 21.7% of AI-suggested package names don't exist. The same applies to your codebase. Claude will reference `utils/helpers.ts` when your project uses `lib/helpers.js`.
+
+2. **Misses context** - A 2024 study found 42% of AI code snippets contain errors. Generic plans mean Claude hasn't examined the actual function signatures, data structures, or patterns in your code.
+
+3. **Regresses to training data** - Without reading your specific files, Claude defaults to patterns from GitHub's training data, not your architecture.
+
+4. **Makes assumptions** - Ambiguous plans let Claude pick interpretations that may not match your intent.
+
+## Bad Plans vs. Good Plans
+
+**Bad Plan:**
+> "Refactor the authentication flow to use JWT tokens."
+
+This plan tells you nothing. Which files? What's the current implementation? What specifically changes?
+
+**Good Plan:**
+> "Refactor authentication from session-based to JWT:
+> 1. Modify `src/auth/login.ts` lines 45-67: Replace session creation with JWT generation using existing `src/lib/crypto.ts:generateToken()`
+> 2. Update `src/middleware/auth.ts:verifySession()` (line 23) to verify JWT instead
+> 3. Add refresh token logic in `src/auth/refresh.ts` - new file, pattern from `src/auth/login.ts`
+> 4. Update `AuthContext` in `src/context/auth.tsx` lines 12-34 to store token in memory, not cookies
+> 5. Modify logout in `src/auth/logout.ts` line 15 to clear token from state"
+
+This plan proves Claude has read the code. Every file path, line number, and function name is verifiable.
+
+**Another Bad Plan:**
+> "Add input validation to the form."
+
+**Good Version:**
+> "Add validation to UserRegistrationForm:
+> 1. In `src/components/forms/UserRegistration.tsx`, add Zod schema at line 8 (import from existing `src/lib/validation.ts`)
+> 2. Validate email format using existing `isValidEmail()` from `src/utils/validators.ts:12`
+> 3. Add password strength check - minimum 8 chars, matching existing `PasswordPolicy` interface at `src/types/auth.ts:34`
+> 4. Display errors using existing `FormError` component from `src/components/ui/FormError.tsx`
+> 5. Block submit until validation passes - modify `handleSubmit` at line 45"
+
+## How to Force Detailed Plans
+
+### 1. Ask Claude to Read First
+
+Before accepting any plan, say:
+> "Read the relevant files first. Then give me a plan with specific file paths, line numbers, and function names."
+
+This forces Claude to actually examine your codebase instead of guessing.
+
+### 2. Reject Vague Steps
+
+When Claude says "update the API endpoint," push back:
+> "Which file? Which function? What line numbers? What specifically changes?"
+
+### 3. Use the Stepwise Approach
+
+One developer learned this the hard way: "an AI gave me a massive refactoring plan that went completely off the rails by step three."
+
+Instead of accepting a 10-step plan all at once:
+- Approve step 1
+- Verify it works
+- Then move to step 2
+
+This keeps you in control and catches hallucinations early.
+
+### 4. Demand File References
+
+Add to your CLAUDE.md:
+> "Every plan must include: exact file paths, line numbers, function names, and references to existing patterns in the codebase. Never accept generic descriptions."
+
+### 5. Verify Against Reality
+
+Before executing a plan, spot-check:
+- Do the mentioned files exist?
+- Are the line numbers accurate?
+- Do the referenced functions have the signatures Claude claims?
+
+If anything is wrong, Claude is guessing. Send it back to read the code.
+
+## The Specification-Driven Approach
+
+Modern AI coding workflows recommend creating a spec.md before any implementation:
+
+1. **Requirements**: What exactly should change?
+2. **Files affected**: Which specific files and why?
+3. **Dependencies**: What existing code does this touch?
+4. **Acceptance criteria**: How do we know it works?
+
+This forces specificity upfront and prevents Claude from inventing solutions that don't fit your architecture.
+
+## Real-World Consequences of Generic Plans
+
+Without specific plans:
+- Developers spend 62% of their time fixing AI-generated errors
+- AI assistants hallucinate function calls to non-existent methods
+- Generated code violates internal conventions (but looks plausible)
+- One case: a Gemini CLI issued hallucinated move commands and deleted real user files
+
+With specific plans:
+- Microsoft found 68% reduction in back-and-forth corrections
+- Self-verification becomes possible (check file paths before executing)
+- Errors surface at planning stage, not after implementation
+
+## The Bottom Line
+
+A generic plan is Claude admitting it hasn't done its homework. Code-level specificity proves Claude understands your actual codebase, not a fictional one it imagined.
+
+Never accept "I'll update X" without knowing:
+- Which file?
+- Which lines?
+- Which functions?
+- What specifically changes?
+- What existing patterns does this follow?
+
+If Claude can't answer these questions, it hasn't read the code. Send it back until it does.

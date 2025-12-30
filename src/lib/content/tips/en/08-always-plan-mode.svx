@@ -1,0 +1,170 @@
+---
+id: 8
+title: "Always Use Plan Mode"
+section: planning
+summary: "Press Shift+Tab twice to enter plan mode before complex tasks. Claude thinks before coding."
+isFree: false
+---
+
+Plan Mode is the single most important workflow feature in Claude Code. It transforms Claude from a code generator that makes assumptions into a collaborative architect that thinks before acting.
+
+Press `Shift+Tab` twice to enter plan mode. Press again to exit. When active, you will see `plan mode on` at the bottom of your terminal.
+
+## What Plan Mode Does
+
+In plan mode, Claude operates in read-only capacity. It can explore your codebase, analyze dependencies, search for patterns, and formulate strategies. But it cannot edit files, run commands, or make any changes until you explicitly approve the plan.
+
+This separation between research and execution is what makes the difference. Without it, Claude jumps straight to coding and often goes down the wrong path. With it, Claude builds understanding first.
+
+**Available in plan mode:**
+- Read files and view content
+- Search with Glob and Grep
+- Analyze project structure
+- Create detailed plans
+- Research via web search
+- Spawn research subagents
+
+**Blocked until you approve:**
+- File edits and creation
+- Command execution
+- Git operations
+- Any system modifications
+
+## Why This Changes Everything
+
+Most developers treat AI coding tools like faster autocomplete. They describe what they want and expect immediate code. This approach fails for anything beyond trivial changes.
+
+Plan mode forces the correct workflow: understand first, plan second, execute third. This mirrors how senior engineers actually work. They do not start coding when faced with a new feature request. They read existing code, understand the problem space, identify patterns, and architect a solution. Only then do they build.
+
+**Benefits observed in practice:**
+
+- **Prevents scope creep**: When Claude must articulate the full solution upfront, hidden complexities surface early. No more "simple" features that balloon into major refactors.
+- **Catches integration issues**: Forces consideration of how new code fits with existing systems. Database changes, API modifications, and dependencies get identified before implementation.
+- **Reduces expensive rework**: It is much easier to change a plan than to change code. Architecture decisions made thoughtfully upfront result in cleaner code than reactive fixes.
+- **Creates shared understanding**: You and Claude align on strategy before any files change. Assumptions get surfaced and validated.
+
+## When to Use Plan Mode
+
+**Multi-file changes**: Any feature spanning multiple files benefits from coordinated planning. Claude can map all affected files before touching any of them.
+
+**New features**: Before building something new, let Claude analyze where it fits in your architecture, what patterns to follow, and what edge cases exist.
+
+**Refactoring**: Large-scale changes like library migrations or architecture shifts need comprehensive planning. See the complete strategy before committing to it.
+
+**Code exploration**: Perfect for understanding unfamiliar codebases. Claude researches thoroughly without risk of accidental changes.
+
+**Brainstorming**: Use plan mode to explore different solutions, solicit feedback on approaches, or research a problem space before deciding on direction.
+
+## When to Skip Plan Mode
+
+**Single-line fixes**: Typo corrections, small bug fixes, or one-file edits do not need formal planning. The overhead outweighs the benefit.
+
+**Speed-critical work**: When latency matters and you trust the change, auto-accept mode is faster.
+
+**Mechanical transformations**: Code formatting, boilerplate generation, or repetitive refactoring patterns need execution, not strategy.
+
+## The Plan Mode Workflow
+
+**Step 1: Activate and describe**
+
+```bash
+# Press Shift+Tab twice, then:
+> I need to add OAuth2 authentication. Analyze the current auth system and create a detailed migration plan.
+```
+
+**Step 2: Review Claude's analysis**
+
+Claude reads relevant files, identifies patterns, and presents a structured plan. It might surface questions: "Should we support multiple OAuth providers? How should we handle existing sessions?"
+
+**Step 3: Iterate on the plan**
+
+Ask follow-up questions. Request changes. Validate assumptions. This is cheap to do now, expensive after code is written.
+
+```bash
+> What about backward compatibility with existing JWT tokens?
+> How should we handle the database migration?
+```
+
+**Step 4: Approve and execute**
+
+When satisfied, exit plan mode with `Shift+Tab`. Claude now has a clear specification and executes with confidence. When exiting, Claude asks for additional confirmation about the task it is about to execute.
+
+## Combining Plan Mode with Extended Thinking
+
+For maximum quality, use `ultrathink` while in plan mode:
+
+```bash
+> ultrathink. Analyze this authentication system and propose a comprehensive refactoring plan. Don't code yet.
+```
+
+This allocates maximum thinking budget to the planning phase, where deep analysis matters most. The combination of plan mode's read-only safety and extended thinking's reasoning power produces the best architectural decisions.
+
+## Saving Plans for Large Projects
+
+For extensive planning sessions, have Claude save the plan to a file:
+
+```bash
+> Save this plan to docs/PLAN.md
+```
+
+This creates a persistent artifact you can:
+- Review and edit manually
+- Share with team members
+- Reference in future sessions
+- Track in version control
+
+Plans stored in `~/.claude/plans/` persist across sessions. Start a new session tomorrow and Claude automatically references the latest plan.
+
+## Opus 4.5 Plan Mode
+
+The latest enhancement uses Opus 4.5 for planning and Sonnet for execution. To enable:
+
+```bash
+/model
+# Select option 4: "Use Opus 4.5 in plan mode, Sonnet 4.5 otherwise"
+```
+
+Opus asks clarifying questions about ambiguous requirements, creates structured plans with task breakdowns and dependencies, then hands off to Sonnet for faster implementation. This achieves better results with fewer tokens.
+
+## Common Mistakes to Avoid
+
+**Skipping the question phase**: Encourage Claude to ask questions during planning. "Before you start planning this feature, ask me questions about requirements." This surfaces assumptions early.
+
+**Overly large scope**: Plan what you can execute in 30 minutes or less. Keep iterations small. Large plans tend to drift during execution.
+
+**Not iterating on plans**: The first plan is rarely the best plan. Ask Claude to consider alternatives, identify risks, or explore edge cases.
+
+**Using plan mode for trivial tasks**: If the change is obvious and isolated, skip the ceremony. Plan mode is for complexity, not compliance.
+
+## Starting Sessions in Plan Mode
+
+Configure plan mode as your default for new sessions:
+
+```json
+// .claude/settings.json
+{
+  "permissions": {
+    "defaultMode": "plan"
+  }
+}
+```
+
+Or start individual sessions in plan mode:
+
+```bash
+claude --permission-mode plan
+```
+
+For headless analysis without interactive session:
+
+```bash
+claude --permission-mode plan -p "Analyze the authentication system and suggest improvements"
+```
+
+## The Bottom Line
+
+Plan mode is not optional for serious work. It is the difference between Claude as a fast-typing intern and Claude as a thoughtful senior engineer.
+
+The recommended workflow: explore, plan, code, commit. The first two steps require plan mode. Skip them and you are flying blind.
+
+Every minute spent planning saves ten minutes debugging. Every assumption validated saves an hour of rework. Plan mode makes this discipline automatic.

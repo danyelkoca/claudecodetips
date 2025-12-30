@@ -1,0 +1,331 @@
+---
+id: 44
+title: "Headless Mode"
+section: advanced
+summary: "Run Claude without interactive session. For automation and scripts."
+isFree: false
+---
+
+Headless mode lets you run Claude Code programmatically without an interactive session. Add the `-p` (or `--print`) flag to execute a single query and exit. This is the foundation for integrating Claude into CI/CD pipelines, shell scripts, pre-commit hooks, and automation workflows.
+
+## Basic Syntax
+
+```bash
+# One-shot query - execute and exit
+claude -p "explain this error"
+
+# Pipe data from stdin
+cat error.log | claude -p "what's causing this crash"
+git diff | claude -p "review for bugs"
+echo "function add(a,b) { return a + b }" | claude -p "add TypeScript types"
+
+# Output to file
+claude -p "write a README for this project" > README.md
+
+# Combine with other Unix tools
+claude -p "list all API endpoints" | grep POST
+```
+
+Claude Code follows Unix philosophy - it's composable and can be piped to and from other commands.
+
+## Output Formats
+
+Control how Claude returns data with `--output-format`:
+
+| Format | Use Case |
+|--------|----------|
+| `text` | Default human-readable output |
+| `json` | Structured data with metadata (cost, session ID, tokens) |
+| `stream-json` | Real-time streaming for long operations |
+
+```bash
+# Plain text (default)
+claude -p "summarize this file"
+
+# JSON with metadata - essential for scripting
+claude -p "analyze code quality" --output-format json
+
+# Streaming JSON for real-time processing
+claude -p "process large codebase" --output-format stream-json
+```
+
+**JSON output structure:**
+```json
+{
+  "result": "Claude's response text",
+  "session_id": "abc123...",
+  "usage": {
+    "input_tokens": 1234,
+    "output_tokens": 567
+  }
+}
+```
+
+**Extract fields with jq:**
+```bash
+# Get just the result
+claude -p "summarize" --output-format json | jq -r '.result'
+
+# Capture session ID for multi-step workflows
+session_id=$(claude -p "start review" --output-format json | jq -r '.session_id')
+```
+
+## Structured Output with JSON Schema
+
+Force Claude to return data matching a specific schema:
+
+```bash
+claude -p "Extract all TODO items from the codebase" \
+  --output-format json \
+  --json-schema '{
+    "type": "object",
+    "properties": {
+      "todos": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "file": {"type": "string"},
+            "line": {"type": "number"},
+            "task": {"type": "string"}
+          }
+        }
+      }
+    }
+  }' | jq '.structured_output.todos'
+```
+
+This guarantees parseable output for downstream processing.
+
+## Session Management
+
+Continue conversations across multiple invocations:
+
+```bash
+# Continue most recent conversation
+claude -p "now focus on security issues" --continue
+
+# Resume specific session by ID
+claude -p "continue the review" --resume "$session_id"
+
+# Multi-step workflow example
+session_id=$(claude -p "Review this codebase for performance issues" --output-format json | jq -r '.session_id')
+claude -p "Now focus on database queries" --resume "$session_id"
+claude -p "Generate a summary of all issues found" --resume "$session_id"
+```
+
+**Note:** Sessions may expire after extended periods. For long-running workflows, capture and persist session IDs.
+
+## Tool Control
+
+Specify which tools Claude can use without prompting:
+
+```bash
+# Allow specific tools
+claude -p "fix linting errors" --allowedTools "Read,Edit,Bash"
+
+# Restrict Bash to specific commands
+claude -p "create a commit" \
+  --allowedTools "Bash(git diff:*),Bash(git log:*),Bash(git status:*),Bash(git commit:*)"
+
+# Read-only analysis
+claude -p "analyze architecture" --allowedTools "Read,Grep,Glob"
+```
+
+**Colon syntax restricts commands:** `Bash(npm test:*)` only allows `npm test` and variants.
+
+## Execution Limits
+
+Prevent runaway operations:
+
+```bash
+# Limit autonomous actions
+claude -p "refactor this module" --max-turns 10
+
+# Combine limits with tool restrictions
+claude -p "fix all type errors" --max-turns 5 --allowedTools "Read,Edit"
+```
+
+## System Prompts
+
+Customize Claude's behavior for specific tasks:
+
+```bash
+# Append to default system prompt (recommended)
+gh pr diff "$PR_NUMBER" | claude -p "Review this diff" \
+  --append-system-prompt "You are a security engineer. Focus on vulnerabilities."
+
+# Replace system prompt entirely (use carefully)
+claude -p "query" --system-prompt "You are a Python expert. Only suggest Python solutions."
+
+# Load from file
+claude -p "query" --system-prompt-file ./prompts/security-review.txt
+```
+
+**Prefer `--append-system-prompt`** - it preserves Claude Code's default behaviors while adding your instructions.
+
+## CI/CD Integration
+
+### GitHub Actions
+
+```yaml
+name: Claude Code Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Review PR
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          gh pr diff ${{ github.event.pull_request.number }} | \
+          claude -p "Review for bugs and security issues" \
+          --allowedTools "Read,Grep" \
+          --output-format json | jq '.result'
+```
+
+### GitLab CI/CD
+
+```yaml
+code_review:
+  script:
+    - git diff origin/main...HEAD | claude -p "Review merge request"
+      --allowedTools "Read,Bash(git show:*)"
+      --output-format json | jq '.result'
+```
+
+### Multi-Step Pipeline
+
+```bash
+# Capture session for continuation
+session_id=$(claude -p "Audit codebase security" --output-format json | jq -r '.session_id')
+echo "SESSION_ID=$session_id" >> $GITHUB_ENV
+
+# Later step continues the session
+claude -p "Now check authentication flows" --resume "$SESSION_ID"
+```
+
+## Pre-Commit Hooks
+
+Block commits that fail checks:
+
+```bash
+#!/bin/bash
+# .git/hooks/pre-commit
+
+# Check for secrets
+result=$(git diff --cached | claude -p "Any API keys, passwords, or secrets exposed? Reply only YES or NO" --allowedTools "")
+if [[ "$result" == *"YES"* ]]; then
+  echo "Potential secrets detected. Commit blocked."
+  exit 1
+fi
+
+# Check for security issues
+git diff --cached | claude -p "Any critical security vulnerabilities? Reply only YES or NO" --allowedTools ""
+```
+
+## Batch Processing
+
+Process multiple files in a loop:
+
+```bash
+# Analyze all Python files
+for file in $(find src -name "*.py"); do
+  claude -p "Review $file for type hints and docstrings" \
+    --allowedTools "Read" \
+    --output-format json >> results.jsonl
+done
+
+# Process with parallel execution
+find src -name "*.ts" | xargs -P 4 -I {} claude -p "Add JSDoc to {}" --allowedTools "Read,Edit"
+```
+
+## Fanning Out Pattern
+
+For large-scale migrations, generate a task list and iterate:
+
+```bash
+# Generate task list
+tasks=$(claude -p "List all files that need React to Vue migration" --output-format json | jq -r '.result')
+
+# Process each task
+echo "$tasks" | while read file; do
+  claude -p "Migrate $file from React to Vue. Return OK if succeeded, FAIL if failed" \
+    --allowedTools "Read,Edit" \
+    --max-turns 5
+done
+```
+
+## Environment Variables
+
+```bash
+# Required: API key
+export ANTHROPIC_API_KEY="sk-..."
+
+# Alternative providers
+export CLAUDE_CODE_USE_BEDROCK=1  # Use AWS Bedrock
+export CLAUDE_CODE_USE_VERTEX=1   # Use Google Vertex AI
+
+# Auto-exit for scripts
+export CLAUDE_CODE_EXIT_AFTER_STOP_DELAY=5000  # Exit 5s after idle
+```
+
+## Docker & Sandboxing
+
+For fully automated environments, use containers:
+
+```bash
+# Run in Docker with permissions bypassed (isolated environment only)
+docker run -v $(pwd):/workspace \
+  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \
+  claude-code-image \
+  claude --dangerously-skip-permissions -p "refactor the codebase"
+```
+
+**Warning:** Only use `--dangerously-skip-permissions` in isolated containers without internet access. It bypasses all safety checks.
+
+## Debugging
+
+```bash
+# Enable verbose logging
+claude -p "query" --verbose
+
+# Debug specific categories
+claude -p "query" --debug "api,mcp"
+```
+
+Disable `--verbose` in production for cleaner output.
+
+## Best Practices
+
+1. **Start read-only:** Begin with `--allowedTools "Read,Grep,Glob"` before enabling writes
+2. **Use JSON output:** Always use `--output-format json` for scripting - parse with jq
+3. **Limit tool access:** Restrict Bash to specific commands with colon syntax
+4. **Set max-turns:** Prevent runaway operations with `--max-turns`
+5. **Capture session IDs:** Enable multi-step workflows by persisting session IDs
+6. **Append, don't replace:** Use `--append-system-prompt` to preserve defaults
+7. **Handle errors:** Check exit codes and implement retry logic
+8. **Monitor costs:** Extract `.usage` from JSON output to track spending
+
+## Limitations
+
+- **No slash commands:** `/commit`, `/review` etc. only work in interactive mode - describe the task instead
+- **No interactive prompts:** Tools must be pre-approved with `--allowedTools`
+- **No mid-task questions:** Claude can't ask for clarification
+- **Sessions expire:** Long-running workflows need session persistence
+- **No real-time feedback:** Use `stream-json` for progress on long operations
+
+## Security Considerations
+
+- Restrict tools to minimum required: `--allowedTools "Read"` for analysis-only
+- Never expose API keys in CI logs - use secrets
+- Run in containers for untrusted code
+- Avoid `--dangerously-skip-permissions` outside isolated environments
+- Review tool restrictions before enabling `Bash` or `Edit`
+
+Headless mode transforms Claude Code from an interactive assistant into a powerful automation engine. Start with read-only operations, add write access gradually, and always validate outputs in CI before pushing to production.

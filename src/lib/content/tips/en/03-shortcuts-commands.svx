@@ -1,0 +1,144 @@
+---
+id: 3
+title: "Shortcuts & Commands"
+section: setup
+summary: "Essential keyboard shortcuts and commands for efficient Claude Code usage."
+isFree: false
+---
+
+## Interrupt & Control
+
+| Shortcut | Action |
+|----------|--------|
+| `Esc` | Stop generation mid-response |
+| `Esc` + `Esc` | Rewind to previous state |
+| `Ctrl+C` | Cancel current input/generation |
+| `Ctrl+D` | Exit Claude Code session |
+
+## Screen & History
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+L` | Clear terminal screen (keeps conversation) |
+| `Ctrl+R` | Reverse search command history |
+| `Up/Down` | Navigate through previous inputs |
+| `Ctrl+O` | Toggle verbose output |
+| `?` | Show available shortcuts |
+
+## Mode Switching
+
+| Shortcut | Action |
+|----------|--------|
+| `Shift+Tab` | Cycle: Normal -> Auto-Accept -> Plan Mode |
+| `Option+P` (Mac) / `Alt+P` | Switch model mid-prompt |
+
+## Input Methods
+
+### Images
+
+- `Ctrl+V` - Paste image from clipboard (NOT Cmd+V on Mac)
+
+### Multiline Input
+
+| Method | How |
+|--------|-----|
+| Quick escape | `\` + `Enter` |
+| macOS default | `Option+Enter` |
+| After setup | `Shift+Enter` (run `/terminal-setup` first) |
+
+## Quick Prefixes
+
+| Prefix | Name | Action |
+|--------|------|--------|
+| `/` | Slash command | Execute built-in or custom command |
+| `#` | Memory | Add instruction to CLAUDE.md |
+| `!` | Bash | Run shell command directly |
+| `@` | File mention | Trigger file path autocomplete |
+
+## Slash Commands Reference
+
+### Session & Navigation
+
+| Command | Purpose |
+|---------|---------|
+| `/help` | Get usage help and list commands |
+| `/status` | Show version, model, account info |
+| `/config` | Open settings interface |
+| `/exit` | Exit the REPL |
+| `/clear` | Wipe conversation history (CLAUDE.md persists) |
+| `/rename <name>` | Rename current session |
+| `/resume [session]` | Resume previous session by ID/name |
+
+### Context Management
+
+| Command | Purpose |
+|---------|---------|
+| `/context` | Visualize token usage as colored grid (red = about to compact) |
+| `/compact [focus]` | Compress conversation. Add focus: `/compact focus on API changes` |
+| `/rewind` | Undo mistakes, restore previous state |
+| `/export [filename]` | Export conversation to file/clipboard |
+
+### Project Tools
+
+| Command | Purpose |
+|---------|---------|
+| `/init` | Initialize project with CLAUDE.md |
+| `/memory` | Edit CLAUDE.md files |
+| `/review` | Request code review |
+| `/security-review` | Security audit of pending changes |
+| `/add-dir` | Add additional working directories |
+| `/doctor` | Check installation health |
+
+### Model & Permissions
+
+| Command | Purpose |
+|---------|---------|
+| `/model` | Select or change AI model |
+| `/permissions` | View/update tool permissions |
+| `/sandbox` | Enable sandboxed bash with isolation |
+
+### GitHub Integration
+
+| Command | Purpose |
+|---------|---------|
+| `/pr-comments` | View PR comments |
+| `/install-github-app` | Set up Claude GitHub Actions |
+
+### Advanced Features
+
+| Command | Purpose |
+|---------|---------|
+| `/mcp` | Manage MCP server connections |
+| `/hooks` | Configure tool event hooks |
+| `/agents` | Manage custom subagents |
+| `/bashes` | List/manage background tasks |
+| `/todos` | List current TODO items |
+| `/stats` | Show usage stats, streaks, history |
+
+### Account
+
+| Command | Purpose |
+|---------|---------|
+| `/login` | Switch Anthropic accounts |
+| `/logout` | Sign out |
+| `/cost` | Show token usage (subscription) |
+| `/bug` | Report bugs to Anthropic |
+
+## Background Execution
+
+Run long commands without blocking:
+
+- Ask Claude to run in background, OR
+- Press `Ctrl+B` to background current bash command
+- Use `/bashes` to manage background tasks
+
+## Custom Commands
+
+Create reusable workflows:
+
+- Project commands: `.claude/commands/*.md`
+- Personal commands: `~/.claude/commands/*.md`
+
+Execute with `/project:command-name` or `/user:command-name`.
+
+Supports `$ARGUMENTS`, `$1`, `$2` for arguments. See Tip #30 for details.

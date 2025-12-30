@@ -1,0 +1,273 @@
+---
+id: 43
+title: "GitHub Actions"
+section: advanced
+summary: "Run /install-github-app to set up Claude for your repos."
+isFree: false
+---
+
+Run `/install-github-app` to set up Claude for your repos. Claude becomes a virtual teammate that reviews PRs, responds to mentions, implements features, and catches bugs 24/7.
+
+## Quick Setup
+
+```bash
+claude
+/install-github-app
+```
+
+This command guides you through:
+
+- Installing the Claude GitHub App
+- Adding `ANTHROPIC_API_KEY` to repository secrets
+- Creating the workflow file in `.github/workflows/`
+
+**Requirements:** Repository admin access. Only available for direct Anthropic API users. For AWS Bedrock or Google Vertex AI, use manual setup.
+
+## Manual Setup
+
+**Step 1:** Install the Claude GitHub App at https://github.com/apps/claude
+
+Required permissions:
+
+- **Contents**: Read & write
+- **Issues**: Read & write
+- **Pull requests**: Read & write
+
+**Step 2:** Add `ANTHROPIC_API_KEY` to repository secrets
+
+**Step 3:** Create `.github/workflows/claude.yml`:
+
+```yaml
+name: Claude Code
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  claude:
+    runs-on: ubuntu-latest
+    if: |
+      github.actor != 'claude[bot]' &&
+      contains(github.event.comment.body, '@claude')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+The `github.actor != 'claude[bot]'` condition prevents Claude from triggering itself.
+
+## Core Features
+
+- **Intelligent Mode Detection** - Auto-selects mode based on context (mention, assignment, automation)
+- **Interactive Code Assistant** - Answers questions about code and architecture
+- **Code Review** - Analyzes PR changes, suggests improvements
+- **Code Implementation** - Fixes bugs, refactors, implements features
+- **Progress Tracking** - Visual checkboxes that update as Claude works
+- **Structured Outputs** - JSON results become GitHub Action outputs
+
+## Workflow Events
+
+**Respond to @claude mentions:**
+
+```yaml
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+```
+
+**Auto-review every PR:**
+
+```yaml
+on:
+  pull_request:
+    types: [opened, synchronize]
+```
+
+**Scheduled tasks (daily reports, maintenance):**
+
+```yaml
+on:
+  schedule:
+    - cron: "0 9 * * *"
+```
+
+## Using @claude Mentions
+
+Tag Claude in any issue or PR comment:
+
+```
+@claude implement this feature based on the issue description
+@claude how should I implement user authentication for this endpoint?
+@claude fix the TypeError in the user dashboard component
+@claude review this PR for security issues
+```
+
+Claude analyzes the context, writes code, and creates PRs. It respects your `CLAUDE.md` guidelines.
+
+## Automatic PR Reviews
+
+```yaml
+name: Code Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "/review"
+          claude_args: "--max-turns 5"
+```
+
+This provides AI code review on every PR. Claude posts inline comments with concerns and fix recommendations.
+
+## Security Reviews
+
+Claude checks for common vulnerabilities:
+
+- SQL injection risks
+- Cross-site scripting (XSS)
+- Authentication and authorization flaws
+- Insecure data handling
+- SSRF vulnerabilities
+- Dependency issues
+
+**Real-world catches:** Anthropic's own team caught a DNS rebinding vulnerability enabling remote code execution, and an SSRF attack in a credential proxy system - both before the PRs merged.
+
+For security-focused reviews:
+
+```yaml
+prompt: "Review this PR for security vulnerabilities following OWASP guidelines"
+```
+
+## Authentication Options
+
+**Direct Anthropic API** (default):
+
+```yaml
+anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+**AWS Bedrock:**
+
+```yaml
+- uses: aws-actions/configure-aws-credentials@v4
+  with:
+    role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    aws-region: us-west-2
+- uses: anthropics/claude-code-action@v1
+  with:
+    use_bedrock: "true"
+    claude_args: "--model us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+```
+
+**Google Vertex AI:**
+
+```yaml
+- uses: google-github-actions/auth@v2
+  with:
+    workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+    service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+- uses: anthropics/claude-code-action@v1
+  with:
+    use_vertex: "true"
+    claude_args: "--model claude-sonnet-4@20250514"
+  env:
+    ANTHROPIC_VERTEX_PROJECT_ID: ${{ steps.auth.outputs.project_id }}
+    CLOUD_ML_REGION: us-east5
+```
+
+For cloud providers, add `id-token: write` to permissions.
+
+## MCP Server Integration
+
+Add custom MCP servers via `claude_args`:
+
+```yaml
+claude_args: |
+  --mcp-config '{"mcpServers": {"sequential-thinking": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]}}}'
+  --allowedTools mcp__sequential-thinking__sequentialthinking
+```
+
+If your repo has `.mcp.json` at the root, Claude detects it automatically.
+
+## Cost Optimization
+
+Each interaction consumes API tokens. Control costs with:
+
+**Limit iterations:**
+
+```yaml
+claude_args: "--max-turns 5"
+```
+
+**Use cheaper models for simple tasks:**
+
+```yaml
+claude_args: "--model claude-haiku-4-5-20251101"
+```
+
+**Set workflow timeouts:**
+
+```yaml
+jobs:
+  claude:
+    timeout-minutes: 10
+```
+
+**Use concurrency controls:**
+
+```yaml
+concurrency:
+  group: claude-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+## Best Practices
+
+**Security:**
+
+- Never hardcode API keys - always use GitHub Secrets
+- Grant least-privilege permissions (`contents: read` if not pushing commits)
+- Review Claude's suggestions before merging
+- Use Workload Identity Federation for cloud providers instead of static keys
+- The action is not hardened against prompt injection - only review trusted PRs
+
+**Repository Setup:**
+
+- Create `CLAUDE.md` with your coding standards
+- Keep branch protection and CODEOWNERS active
+- Require human approval for merges
+
+**Workflow Design:**
+
+- Use specific `@claude` commands to reduce API calls
+- Set appropriate `--max-turns` to prevent excessive iterations
+- Add workflow-level timeouts
+- Prevent self-triggering with actor checks
+
+## Common Pitfalls
+
+1. **Missing permissions** - Add `id-token: write` for OIDC auth (Bedrock/Vertex)
+2. **Bot triggering itself** - Add `github.actor != 'claude[bot]'` condition
+3. **Excessive costs** - Always set `--max-turns` and timeouts
+4. **Prompt injection** - Only run on trusted PRs from known contributors
+5. **MCP tools not loading** - Explicitly add to `--allowedTools`

@@ -1,0 +1,240 @@
+---
+id: 49
+title: "Claude for Commit Messages"
+section: use-cases
+summary: "Let Claude write commits from your diff. Consistent format, captures the 'why'."
+isFree: false
+---
+
+Your diff shows what changed. Your commit message explains why. At 11pm after hours of debugging, that context slips away. Let Claude capture it while the reasoning is fresh.
+
+## Why This Matters
+
+A commit message is documentation that lives forever. Six months from now, git blame will surface this message when someone asks "why does this code exist?" Bad messages like "fixed it" or "WIP" provide zero context. Good messages explain the reasoning that code alone cannot show.
+
+Claude reads your diff and recent history to compose messages that:
+
+- Follow consistent formatting conventions
+- Capture the intent behind changes, not just the mechanics
+- Connect changes to broader context (issues, refactors, patterns)
+- Match your project's existing commit style
+
+## Quick Usage
+
+The simplest approach - just ask:
+
+```
+"Look at git diff and write a commit message"
+```
+
+Claude examines staged changes, understands the nature of the modification, and generates a message. Review it, adjust if needed, and commit.
+
+For faster workflows, use the built-in command:
+
+```
+/commit
+```
+
+This analyzes your diff and recent commit history to match project conventions.
+
+## The Anatomy of a Good Commit Message
+
+Claude follows established conventions that make commit history useful:
+
+**Structure:**
+```
+<type>(<scope>): <description>
+
+<body - explain the why>
+
+<footer - references>
+```
+
+**Subject Line Rules:**
+- 50 characters or less (GitHub truncates at 72)
+- Imperative mood: "Add feature" not "Added feature"
+- No period at the end
+- Capitalize first letter
+
+**Body Guidelines:**
+- Wrap at 72 characters
+- Explain what and why, not how (code shows the how)
+- Separate from subject with blank line
+
+## Conventional Commits Format
+
+Claude understands and can apply the Conventional Commits specification, which enables automated changelog generation and semantic versioning:
+
+| Type | Purpose | Version Bump |
+|------|---------|--------------|
+| `feat` | New feature | MINOR |
+| `fix` | Bug fix | PATCH |
+| `docs` | Documentation only | - |
+| `style` | Formatting, no logic change | - |
+| `refactor` | Code restructure, no behavior change | - |
+| `perf` | Performance improvement | PATCH |
+| `test` | Adding or fixing tests | - |
+| `chore` | Maintenance, dependencies | - |
+| `ci` | CI/CD changes | - |
+| `build` | Build system changes | - |
+
+**Breaking changes** use `!` or `BREAKING CHANGE:` footer:
+```
+feat!: remove deprecated auth endpoint
+
+BREAKING CHANGE: /api/v1/auth removed, use /api/v2/auth
+```
+
+## Good vs Bad Messages
+
+Claude helps avoid common pitfalls:
+
+**Bad - What (obvious from diff):**
+```
+Update user.js
+Add new line
+Fix bug
+Refactoring
+```
+
+**Good - Why (context from intent):**
+```
+fix(auth): prevent session hijacking on concurrent logins
+
+Multiple simultaneous logins from different IPs were sharing
+session tokens. Now invalidates previous sessions when location
+changes significantly.
+
+Fixes #234
+```
+
+**Bad - Bundled changes:**
+```
+Fix login and update styles and add tests
+```
+
+**Good - Atomic (one logical change):**
+```
+fix(auth): validate email format before API call
+```
+
+## Atomic Commits
+
+Claude works best with atomic commits - each commit should represent one logical change. Benefits:
+
+- `git revert` removes exactly one feature
+- `git bisect` pinpoints bugs faster
+- Code review focuses on single concerns
+- History tells a coherent story
+
+**Test your atomicity:** If your commit message needs "and" in it, consider splitting into multiple commits.
+
+When working with Claude over a long session, commit frequently. Do not let changes accumulate - ask Claude to commit after each logical unit of work completes.
+
+## Claude's Advantage: Capturing the "Why"
+
+Code shows what changed. The diff is right there. What gets lost is the reasoning - why this approach? Why now? What problem does it solve?
+
+Claude captures this by:
+
+1. Analyzing the nature of changes (refactor vs feature vs fix)
+2. Inferring intent from code patterns
+3. Connecting to context you provided in the conversation
+4. Matching language to your project's style
+
+At 11pm after debugging for hours, you know exactly why this change matters. By morning, that context fades. Capture it immediately with Claude.
+
+## Matching Project Conventions
+
+Claude examines recent commits to match your team's style:
+
+```
+"Look at the last 10 commits and write a message matching that style"
+```
+
+Claude adapts to:
+- Language (English, Japanese, etc.)
+- Prefix conventions (feat:, fix:, or custom)
+- Line length preferences
+- Body detail level
+- Issue reference format (#123 vs JIRA-123)
+
+For consistent team standards, define your format in CLAUDE.md:
+
+```markdown
+## Commit Messages
+- Use conventional commits: type(scope): description
+- Keep subject under 50 chars
+- Reference Jira tickets: PROJECT-123
+- No emojis
+```
+
+## Practical Examples
+
+**Simple bug fix:**
+```
+"I just fixed the login timeout issue, write a commit"
+```
+
+Claude generates:
+```
+fix(auth): extend session timeout from 15m to 30m
+
+Users were getting logged out during normal usage. Extended
+timeout and added warning toast at 5 minutes remaining.
+```
+
+**Feature addition:**
+```
+"Commit the pagination changes"
+```
+
+Claude generates:
+```
+feat(api): add cursor-based pagination to user list
+
+Offset pagination was causing duplicate results on active datasets.
+Cursor pagination provides consistent ordering regardless of
+concurrent insertions.
+
+Implements #156
+```
+
+**Refactoring:**
+```
+"Write a commit message for these changes"
+```
+
+Claude generates:
+```
+refactor(db): extract query builder from repository classes
+
+Duplicate SQL construction logic existed across 7 repositories.
+Centralized in QueryBuilder class for consistency and testability.
+
+No behavior changes - all existing tests pass.
+```
+
+## When to Review Claude's Message
+
+Always review before committing. Watch for:
+
+- **Over-explanation**: Claude sometimes adds excessive detail
+- **Wrong type**: Might label a fix as feat or vice versa
+- **Missing context**: May not know about related issues or discussions
+- **Scope creep**: If you made multiple unrelated changes, message may conflate them
+
+Edit freely. Claude's draft saves the cognitive load of starting from scratch - adjust the details as needed.
+
+## The 11pm Rule
+
+When you finally fix that bug at 11pm, the reasoning is crystal clear. By tomorrow's standup, you will remember you "fixed something in auth."
+
+Capture context immediately:
+
+```
+"I spent 3 hours debugging this. Write a commit explaining
+what was wrong and why this fix works."
+```
+
+Claude turns your debugging journey into useful documentation. Future you (and your teammates) will thank you.

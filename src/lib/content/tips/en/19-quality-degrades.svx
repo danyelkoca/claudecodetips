@@ -1,0 +1,207 @@
+---
+id: 19
+title: "Quality Degrades in Long Sessions"
+section: session
+summary: "Context window fills up. Claude gets dumber. Know when to compact or clear."
+isFree: true
+---
+
+Context window fills up. Claude gets dumber. Memory gets fuzzy. It forgets what files it was looking at, makes mistakes you specifically corrected earlier, and starts looping on solutions you already rejected. This is not a bug. It is a fundamental limitation of how large language models work.
+
+Understanding why this happens, recognizing the symptoms, and knowing how to manage it separates effective Claude Code users from frustrated ones.
+
+## Why This Happens: The Science
+
+Claude operates within a 200,000 token context window. That sounds like a lot (roughly 150,000 words or 500 pages of text), but it fills up fast during active coding sessions. Every message, every file read, every tool result, every reasoning step consumes tokens from this fixed budget.
+
+### The "Lost in the Middle" Problem
+
+Research from Stanford (Liu et al., 2023) demonstrated that language models do not robustly use information across long contexts. Performance follows a distinctive U-shaped curve. Models perform best when relevant information appears at the very beginning (primacy bias) or the very end (recency bias), and suffer significant degradation when critical information sits in the middle of the context.
+
+In practical terms: Claude remembers what you said at the start of the session and what you just said. Everything in between becomes increasingly fuzzy. GPT-3.5-Turbo showed 20%+ performance drops in multi-document QA tasks when relevant information was positioned in the middle. Claude exhibits similar patterns.
+
+### Attention Mechanism Limits
+
+The computational cost of attention scales quadratically (O(n^2)) with sequence length. As your session grows, the model must attend to exponentially more token relationships. This becomes expensive and the quality of those attention patterns degrades.
+
+Even models claiming 128K+ token support do not retain all of it meaningfully. Older information gets compressed or ignored (recency bias), making multi-step reasoning across the full context increasingly unreliable.
+
+### Context Degradation Syndrome
+
+Context Degradation Syndrome (CDS) refers to the gradual breakdown in coherence and utility during long-running conversations. Once the conversation exceeds practical limits, Claude can no longer "remember" earlier exchanges meaningfully, leading to gaps, inconsistencies, and occasionally outputs that make no logical sense.
+
+## Recognizing the Symptoms
+
+The symptoms build over time and are usually obvious once you know what to look for.
+
+### Instruction Amnesia
+
+You establish a rule: "Always use TypeScript strict mode" or "Never modify the database schema directly." Claude follows it for a few turns, then suddenly stops. It reverts to default behavior as if you never gave the instruction.
+
+### The Groundhog Day Effect
+
+The conversation starts looping. Claude asks questions you already answered. It suggests solutions you tried and rejected earlier. You feel like you're having the same conversation repeatedly.
+
+### Degrading Response Quality
+
+Responses become more generic and less nuanced. Instead of building on previous context with specific, detailed answers, Claude gives high-level, unhelpful responses. One developer described it as watching Claude become "progressively dumber."
+
+### Sudden Confusion
+
+Claude starts mixing up concepts from different parts of your conversation. It creates Frankenstein responses that combine unrelated ideas in ways that make no logical sense. It might confuse File A with File B, or apply debugging advice from one problem to a completely different one.
+
+### File and Context Confusion
+
+Claude forgets which files it was working on. Even if the steps are in your CLAUDE.md, Claude gets confused about what code is new versus existing. It may attempt to re-read files it already read, or worse, make changes to the wrong files entirely.
+
+## Your Three Options
+
+### Option 1: `/compact [focus]`
+
+The `/compact` command summarizes your conversation to free tokens while preserving important context. Claude analyzes the conversation, identifies key information worth keeping, creates a condensed summary, and replaces old messages with that summary.
+
+```bash
+/compact                              # General compaction
+/compact focus on the API changes     # Preserve specific context
+/compact summarize only the to-do items
+```
+
+**How it works:** When you run `/compact`, Claude Code takes your entire conversation history and creates a summary. It then starts a new internal session with this summary preloaded as the new context. This allows the agent to retain important information without carrying forward every single message.
+
+**What gets preserved:** Recent code changes, project architecture decisions, current task objectives, established coding patterns, and configuration details.
+
+**What gets condensed:** Detailed explanations no longer immediately relevant, resolved debugging sessions, exploratory discussions without code changes, and historical context.
+
+**Downsides:** Claude loses detail. It may repeat earlier mistakes because the nuance that led to those corrections is now summarized away. It no longer knows exactly which files it was looking at, only a summary of what it learned from them.
+
+**As of v2.0.64:** Auto-compacting is now instant.
+
+### Option 2: `/clear`
+
+The `/clear` command wipes the conversation completely and starts fresh. Your CLAUDE.md persists (it is re-read automatically), but all conversational history is gone.
+
+```bash
+/clear
+```
+
+**Best for:** When Claude is confused, going in circles, or making the same mistakes repeatedly. Sometimes compaction cannot fix a bad path. A clean slate is the only solution.
+
+**Important:** This loss is permanent. There is no way to recover the old conversation after a `/clear`. If you need to reference prior work, save it to a file first.
+
+**Pair with git:** If Claude Code has made changes you want to discard, pair `/clear` with `git reset --hard` on your working branch. Otherwise, Claude gets confused about what code is new versus existing.
+
+### Option 3: End Session Entirely
+
+Exit Claude Code and start a new instance.
+
+```bash
+exit
+claude
+```
+
+**Nuclear option:** Clean slate. Use when the task is truly done, or when everything feels off and you want to start completely fresh.
+
+**Alternative:** Use `claude --resume` to pick up a previous session if you realize you need prior context back.
+
+## The Auto-Compact System
+
+Claude Code automatically compacts when the context window reaches approximately 95% capacity (25% remaining). This is a built-in safety mechanism to prevent hitting the hard limit and causing the system to break or produce nonsensical outputs.
+
+### When It Triggers
+
+Auto-compact activates at the 95% threshold. Some versions trigger earlier (around 75% utilization) to leave working room for the compaction process itself and to allow the current task to finish gracefully.
+
+### The Process
+
+1. **Analysis:** The system examines the conversation to identify critical information
+2. **Summarization:** Creates a condensed version of prior interactions and code modifications
+3. **Replacement:** Old messages are replaced with the summary
+4. **Continuation:** Work resumes with preserved context intact
+
+### Known Issues
+
+Auto-compact is imperfect. Some users report it being "opaque, error-prone, and not well-optimized." There have been bugs where auto-compact triggered at incorrect thresholds (8-12% remaining instead of 95%+), causing constant interruptions. Another bug caused context management to become "permanently corrupted" after failed compaction attempts.
+
+### Why Not to Rely on It
+
+Do not let auto-compact hit mid-task. Claude loses the thread of what it was doing. Manual compacting at strategic breakpoints (between features, after completing a subtask) prevents workflow disruption from automatic triggering.
+
+## Proactive Management
+
+### Monitor at 70% Capacity
+
+Watch the context meter in Claude Code's status bar. At 70%, it is time to act. At 80%, exit the session and restart for complex multi-file work. The insight from experienced users: avoid the last 20% of the context window for anything touching multiple parts of your codebase.
+
+### Use the `/context` Command
+
+The `/context` command displays context usage information, showing how tokens are allocated across system prompt, system tools, MCP tools, custom agents, memory files, and messages.
+
+```bash
+/context
+# Output: 67k/200k tokens (34%)
+# MCP tools: 5.7k tokens (2.8%)
+```
+
+Before compacting, use `/context` to identify MCP servers consuming context space but not actively needed. Disabling unused MCP servers can free up significant space, potentially avoiding the need to compact altogether.
+
+### CLAUDE.md for Persistent Memory
+
+Extract stable facts into your CLAUDE.md file. This file is re-read automatically on every session start and after `/clear`. It provides persistent memory without consuming conversation context.
+
+When performance degrades, move key decisions, architectural patterns, and project-specific rules into CLAUDE.md rather than relying on Claude to remember them from the conversation.
+
+### Subagents for Context Preservation
+
+Subagents operate in isolated contexts. Delegating research, file exploration, or investigation to subagents prevents the main conversation from filling up with intermediate results.
+
+Telling Claude to use subagents to verify details or investigate particular questions, especially early in a conversation, tends to preserve context availability without much downside in terms of lost efficiency.
+
+## Advanced Strategies
+
+### The Document and Clear Pattern
+
+For complex tasks spanning multiple sessions:
+
+1. Have Claude document its plan and progress in a markdown file
+2. Run `/clear` to wipe the session
+3. Start a new session with instructions to read the progress document and continue
+
+This creates durable external memory for long-running features.
+
+### The /clear + /catchup Workflow
+
+Create a custom `/catchup` slash command that makes Claude read all changed files in your git branch:
+
+1. Run `/clear` to reset session state
+2. Run `/catchup` to have Claude read all modified files
+3. Continue with a clean context that understands current code state
+
+### Save State to Markdown
+
+When you notice context filling up:
+
+1. Ask Claude to summarize current state and next steps to a markdown file
+2. Run `/compact` or `/clear`
+3. Reference the markdown file in your next prompt
+
+This preserves nuanced context that would be lost in automatic summarization.
+
+## When to Use Each Approach
+
+| Situation | Recommended Action |
+|-----------|-------------------|
+| Finished a feature, moving to next | `/compact` at the breakpoint |
+| Claude keeps making the same mistake | `/clear` and re-prompt |
+| Claude is confused or going in circles | `/clear` |
+| Context at 70%+ | Proactive `/compact` |
+| Task is truly done | End session, start new `claude` |
+| Need to reference old work | `claude --resume` |
+| Complex multi-session feature | Document and Clear pattern |
+
+## The Bottom Line
+
+Context degradation is not a bug to be fixed. It is a fundamental characteristic of how large language models work. The 200K token context window is large but finite. Understanding this limitation and managing it proactively is essential for productive Claude Code sessions.
+
+Clear often. Compact at logical breakpoints. Do not let auto-compact surprise you mid-task. Use CLAUDE.md for persistent memory. Delegate to subagents when exploring.
+
+The developers who get the most from Claude Code are those who treat context as a precious, limited resource rather than an infinite canvas.

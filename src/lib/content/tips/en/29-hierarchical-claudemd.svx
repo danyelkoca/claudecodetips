@@ -1,0 +1,201 @@
+---
+id: 29
+title: "Hierarchical CLAUDE.md"
+section: customization
+summary: "CLAUDE.md at project root + subdirectories + global. Claude prioritizes most specific."
+isFree: false
+---
+
+Claude Code supports a powerful hierarchical memory system. Instead of cramming everything into one file, you can organize instructions across multiple levels - from global preferences to component-specific rules. Claude automatically loads and prioritizes these files based on specificity.
+
+## The Four-Level Hierarchy
+
+```
+~/.claude/CLAUDE.md                    # Level 1: User (global)
+project/CLAUDE.md                      # Level 2: Project root
+project/src/backend/CLAUDE.md          # Level 3: Subdirectory
+project/.claude/rules/api-rules.md     # Level 4: Modular rules
+```
+
+| Level | Location | Purpose | Shared With |
+|-------|----------|---------|-------------|
+| Enterprise | System directories | Organization-wide policies | All org users |
+| Project | `./CLAUDE.md` | Team standards | Team via git |
+| Local | `./CLAUDE.local.md` | Personal project overrides | Just you |
+| User | `~/.claude/CLAUDE.md` | Personal global preferences | Just you |
+
+Higher levels in the hierarchy take precedence. Enterprise policies cannot be overridden.
+
+## How Claude Discovers Memory Files
+
+Starting from your current working directory, Claude searches upward toward the root, loading every `CLAUDE.md` and `CLAUDE.local.md` it finds. This means:
+
+1. **Parent directories are included**: Running from `project/src/api/` loads both `project/CLAUDE.md` and `project/src/api/CLAUDE.md`
+2. **Subdirectories load on-demand**: Claude only loads subdirectory CLAUDE.md files when it actually accesses files in those directories
+3. **Global always applies**: `~/.claude/CLAUDE.md` loads for every session
+
+This on-demand loading keeps your active context focused and prevents token waste.
+
+## Monorepo Strategy
+
+For monorepos, hierarchical CLAUDE.md is transformational. One developer reduced their main file from 47k to 9k words by splitting context:
+
+```
+monorepo/
+├── CLAUDE.md              # Shared: workspace structure, commit conventions
+├── apps/
+│   ├── web/
+│   │   └── CLAUDE.md      # React patterns, component library
+│   └── api/
+│       └── CLAUDE.md      # API conventions, validation rules
+├── packages/
+│   └── shared/
+│       └── CLAUDE.md      # Shared utilities documentation
+└── .claude/
+    └── rules/
+        ├── testing.md     # Universal test conventions
+        └── security.md    # Security requirements
+```
+
+**Key insight**: Each service doesn't need all context at once. Backend components don't need frontend guides. This approach makes large monorepos faster and more maintainable.
+
+## The `.claude/rules/` Directory
+
+For larger projects, the `.claude/rules/` directory (introduced in v2.0.64) provides a modular alternative to monolithic CLAUDE.md files. All markdown files here automatically load as project memory.
+
+```
+.claude/
+├── CLAUDE.md              # Main project instructions
+└── rules/
+    ├── code-style.md      # Code conventions
+    ├── testing.md         # Test requirements
+    ├── security.md        # Security policies
+    └── frontend/
+        ├── react.md       # React-specific patterns
+        └── styles.md      # Styling guidelines
+```
+
+**Critical detail**: Rules files load with the same high priority as CLAUDE.md.
+
+### Path-Specific Rules with Frontmatter
+
+The power feature: scope rules to specific file patterns using YAML frontmatter:
+
+```markdown
+---
+paths:
+  - "src/api/**/*.ts"
+  - "src/routes/**/*.ts"
+---
+
+# API Development Rules
+
+- All endpoints must include input validation with Zod
+- Return consistent error response shapes
+- Log all requests with correlation IDs
+```
+
+This rule only activates when Claude works on matching files. Your API guidelines don't compete for attention when editing React components.
+
+**Important YAML note**: Glob patterns starting with `*` or `{` must be quoted (`"**/*.ts"` not `**/*.ts`).
+
+### Supported Glob Patterns
+
+| Pattern | Matches |
+|---------|---------|
+| `**/*.ts` | All TypeScript files |
+| `src/**/*` | All files under src/ |
+| `{src,lib}/**/*.ts` | Multiple directories |
+| `tests/**/*.test.ts` | Test files specifically |
+
+## Import Syntax with `@`
+
+CLAUDE.md files can import additional files using `@path/to/import` syntax:
+
+```markdown
+# Project Instructions
+
+See @README for project overview.
+See @package.json for available npm commands.
+
+# Team Guidelines
+- Git workflow: @docs/git-instructions.md
+- API patterns: @docs/api-conventions.md
+- Personal overrides: @~/.claude/my-preferences.md
+```
+
+**Features:**
+- Both relative and absolute paths work
+- Recursive imports supported (max depth: 5)
+- Home directory references allow personal instructions not in source control
+- Ignored inside code blocks and spans
+
+**Why use imports?** Importing files in the user's home directory is a convenient way for team members to provide individual instructions that are not checked into the repository.
+
+## Enterprise Deployment
+
+For organizations, CLAUDE.md and settings.json can be deployed to system directories that take highest precedence:
+
+| OS | Enterprise Location |
+|----|---------------------|
+| macOS | `/Library/Application Support/ClaudeCode/` |
+| Linux/WSL | `/etc/claude-code/` |
+| Windows | `C:\ProgramData\ClaudeCode\` |
+
+These require administrator privileges and cannot be overridden by user or project settings - perfect for enforcing company-wide security policies and coding standards.
+
+## Configuration Strategy by Team Size
+
+### Solo Developer
+```
+~/.claude/CLAUDE.md          # Personal preferences (editor, style)
+project/CLAUDE.md            # Project-specific context
+project/CLAUDE.local.md      # Experiments, temporary overrides
+```
+
+### Small Team (2-5)
+```
+project/CLAUDE.md            # Shared standards, architecture
+project/CLAUDE.local.md      # Personal workflow tweaks
+.claude/rules/               # Modular, reviewable rules
+```
+
+### Large Team / Enterprise
+```
+/etc/claude-code/CLAUDE.md   # Company policies (IT-deployed)
+project/CLAUDE.md            # Project standards
+.claude/rules/               # Domain-specific rules
+~/.claude/CLAUDE.md          # Personal preferences (within policy)
+```
+
+## Best Practices
+
+### Do
+- **Use hierarchy to reduce context size**: Don't repeat backend docs in frontend directories
+- **Keep individual files under 500 lines**: Smaller files are easier to maintain and review
+- **Use descriptive filenames**: `api-validation.md` over `rules1.md`
+- **Version control everything**: Rules are code - review changes, track history
+- **Use path targeting sparingly**: Only when rules truly apply to specific file types
+- **Test that Claude follows your rules**: Instructions that aren't followed add noise
+
+### Don't
+- **Don't duplicate content across levels**: Use imports instead
+- **Don't add path-specific rules for broad guidelines**: Unconditional rules are simpler
+- **Don't exceed 10k words total**: Beyond this, instruction-following degrades
+- **Don't put secrets in CLAUDE.md**: Use `.env` files and deny rules instead
+
+## Checking What's Loaded
+
+Use the `/memory` command to see all loaded memory files in your current session. This helps debug why certain rules aren't being applied.
+
+## Migration Strategy
+
+If your CLAUDE.md has grown unwieldy:
+
+1. **Identify domains**: Group instructions by concern (API, frontend, testing, security)
+2. **Extract to rules**: Move domain-specific content to `.claude/rules/`
+3. **Add path targeting**: Scope rules to relevant files where appropriate
+4. **Test comprehensively**: Verify Claude still follows critical instructions
+5. **Reduce root file**: Keep only universal project context in the main CLAUDE.md
+
+This prevents "priority saturation" - when everything is marked important, Claude struggles to determine what's relevant to the current task.

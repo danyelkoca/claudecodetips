@@ -1,0 +1,163 @@
+---
+id: 14
+title: "Tell What TO Do, Not What NOT to Do"
+section: prompting
+summary: "Always provide an alternative when telling Claude what not to do."
+isFree: false
+---
+
+When you tell Claude what NOT to do, you're setting it up for failure. Research consistently shows that LLMs struggle with negative instructions - and the more "DO NOTs" you add, the worse the output becomes.
+
+## The Core Problem
+
+**Bad:** "Never use the --foo flag"
+Claude gets stuck when it thinks it must use that flag.
+
+**Good:** "Don't use --foo, use --bar instead"
+Always provide an alternative.
+
+This isn't just a Claude quirk - it's fundamental to how language models work.
+
+## Why Negative Instructions Fail
+
+### The Pink Elephant Problem
+
+When you tell someone "don't think of a pink elephant," their brain must first process the concept of a pink elephant to know what to avoid. This is called Ironic Process Theory - trying to suppress a thought paradoxically makes it more likely to surface.
+
+LLMs exhibit the same behavior. When you write "NEVER create duplicate files" in your CLAUDE.md, Claude must first process the concept of creating duplicate files. Multiple users have reported that Claude creates files like `file-fixed.py` and `file-correct.py` despite explicit rules against this.
+
+### Token Prediction vs. Understanding
+
+LLMs don't "understand" negation the way humans do. They predict the most likely next token based on training data patterns.
+
+Research on BERT showed it performed well completing "A robin is a ____" but poorly on "A robin is not a ____" - the model ranked words like "robin," "bird," and "penguin" as most likely completions for the negated sentence, prioritizing semantic associations over logical negation.
+
+### Affirmation Bias
+
+Models trained on vast datasets contain far more positive instructions than negative ones. When encountering negation words, models often simply ignore them and focus on the objects mentioned instead - regardless of how you express the negation.
+
+### Technical Explanation
+
+Token generation inherently leans toward positive selection - choosing what token comes next rather than explicitly avoiding certain tokens. Negative prompts might slightly reduce probabilities of unwanted tokens, but positive prompts actively boost probabilities of desired outcomes.
+
+## Research Evidence
+
+Studies consistently demonstrate this pattern:
+
+- **InstructGPT** actually performs *worse* with negative prompts as models scale
+- The **NeQA benchmark** reveals that negation understanding doesn't reliably improve with larger models - bigger isn't better at handling "don't"
+- **GPT-3, GPT-Neo**, and other models consistently struggle with negation across multiple benchmarks
+- In **code generation tasks**, models like Gemini ignored negated objectives ("don't find maximum") and solved for the original goal ("find minimum") anyway
+
+## The Conversion Table
+
+Transform negative instructions into positive ones:
+
+| Less Effective | More Effective |
+|----------------|----------------|
+| Don't use mock data | Use only real-world data |
+| Never create new files | Apply fixes to existing files |
+| Don't use verbose comments | Write concise, professional comments |
+| Don't uppercase names | Always lowercase names |
+| Avoid using markdown | Use plain prose paragraphs |
+| Don't include empty fields | Only include valued fields |
+| Never use technical jargon | Write in clear, simple language |
+| Don't give examples before 2000 | Provide examples from 2000 onwards |
+| Do not use --foo flag | Use --bar flag for this operation |
+| Never skip tests | Run the full test suite before committing |
+
+## Real-World Examples
+
+### In Prompts
+
+**Less effective:**
+```
+Do not use markdown in your response
+```
+
+**More effective:**
+```
+Your response should be composed of smoothly flowing prose paragraphs
+```
+
+### In CLAUDE.md Files
+
+**Less effective:**
+```
+NEVER create duplicate files
+NEVER modify tests to make them pass
+DON'T use console.log for debugging
+```
+
+**More effective:**
+```
+Apply all fixes to existing files only
+Fix code to pass existing tests - tests are the source of truth
+Use the debugger or structured logging for debugging
+```
+
+### In Code Review
+
+**Less effective:**
+```
+Don't use any deprecated APIs
+```
+
+**More effective:**
+```
+Use the v3 API endpoints documented at /docs/api-v3
+```
+
+## When Negative Constraints Still Apply
+
+Negative instructions can work in specific contexts:
+
+1. **System prompts with behavioral framing**: Anthropic uses third-person descriptions like "Claude does not provide information for weapons" rather than imperative commands like "Don't provide weapon information"
+
+2. **Hard boundaries combined with positive guidance**: "Generate pros and cons of remote work, but exclude personal opinions" - the negative is a modifier on a clear positive task
+
+3. **Safety guardrails**: When establishing firm limits for harmful content or unethical behavior, negative constraints in system prompts are appropriate
+
+## Applying This to Claude Code
+
+### In Your Prompts
+
+Instead of: "Don't create helper functions"
+Say: "Implement the solution directly in the main function"
+
+Instead of: "Never use any external libraries"
+Say: "Use only the standard library for this implementation"
+
+Instead of: "Don't change the API contract"
+Say: "Maintain backward compatibility with the existing API interface"
+
+### In Your CLAUDE.md
+
+Instead of listing what Claude shouldn't do, describe what it should:
+
+```markdown
+## Code Standards
+- Apply changes to existing files
+- Use TypeScript strict mode
+- Follow the existing naming conventions in src/utils
+- Run tests before suggesting changes are complete
+```
+
+### In Refactoring Requests
+
+Instead of: "Refactor this code, but don't break anything"
+Say: "Refactor this code while maintaining all existing tests and API behavior"
+
+## Official Anthropic Guidance
+
+Anthropic's documentation explicitly recommends: "Tell Claude what to do instead of what not to do."
+
+Their Claude 4 best practices state: "Instead of 'Do not use markdown in your response,' try 'Your response should be composed of smoothly flowing prose paragraphs.'"
+
+## The Bottom Line
+
+Every time you write "don't," "never," or "avoid," stop and ask: *what should Claude do instead?*
+
+Transform your negative constraints into positive directives. This single change will dramatically improve Claude's ability to follow your instructions - because you're working with how LLMs function rather than against it.
+
+The difference between "don't uppercase names" and "always lowercase names" might seem trivial to you, but it's the difference between confusion and clarity for a language model.

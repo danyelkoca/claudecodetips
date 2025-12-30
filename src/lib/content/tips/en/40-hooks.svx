@@ -1,0 +1,285 @@
+---
+id: 40
+title: "Hooks"
+section: advanced
+summary: "Shell commands that run at specific events like edits, tool use, or session start."
+isFree: false
+---
+
+Hooks are shell commands triggered at specific points in Claude Code's lifecycle. They provide **deterministic control**—ensuring certain actions always happen rather than relying on Claude to remember.
+
+## Configuration
+
+Hooks live in JSON settings files at three levels:
+
+- `~/.claude/settings.json` - User-level (all projects)
+- `.claude/settings.json` - Project-level (team-shared)
+- `.claude/settings.local.json` - Local project (not committed)
+
+Project-level takes precedence over user-level. Use `/hooks` command to manage interactively.
+
+## The Ten Hook Events
+
+| Event | Trigger | Use Cases |
+|-------|---------|-----------|
+| **PreToolUse** | Before tool executes | Block dangerous commands, validate inputs, auto-approve safe ops |
+| **PostToolUse** | After tool completes | Auto-format code, run linters, log changes |
+| **PermissionRequest** | Before permission dialog | Auto-approve test commands, deny sensitive access |
+| **Notification** | Claude sends alerts | Custom desktop/Slack notifications |
+| **UserPromptSubmit** | Before prompt processing | Inject context, validate prompts |
+| **Stop** | Claude finishes responding | Quality gates, verify task completion |
+| **SubagentStop** | Subagent finishes | Validate subagent output |
+| **PreCompact** | Before context compaction | Backup transcripts |
+| **SessionStart** | Session begins/resumes | Load git status, set environment |
+| **SessionEnd** | Session ends | Cleanup, logging |
+
+## Basic Configuration
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Matcher Patterns
+
+- **Exact**: `"Write"` - matches only Write tool
+- **Multiple**: `"Write|Edit"` - matches either (regex OR)
+- **Wildcard**: `"*"` - matches all tools
+- **With arguments**: `"Bash(npm test*)"` - matches specific commands
+- **MCP tools**: `"mcp__memory__.*"` - matches Model Context Protocol tools
+
+Note: Matchers are case-sensitive.
+
+## Exit Codes and Control Flow
+
+Your hook scripts control execution via exit codes:
+
+| Exit Code | Behavior |
+|-----------|----------|
+| **0** | Success - stdout processed as JSON or added to context |
+| **2** | **Blocking error** - action prevented, stderr fed back to Claude |
+| Other | Non-blocking error - stderr shown to user, execution continues |
+
+**Critical**: For exit code 2, write error messages to **stderr**, not stdout. Claude reads stderr to understand what went wrong.
+
+```bash
+#!/bin/bash
+# Example: Block dangerous rm commands
+if [[ "$CLAUDE_TOOL_INPUT" == *"rm -rf"* ]]; then
+  echo "Dangerous command blocked: rm -rf" >&2
+  exit 2
+fi
+exit 0
+```
+
+## JSON Output for Fine Control
+
+Return structured JSON for granular control:
+
+```json
+{
+  "decision": "block",
+  "reason": "Explanation for Claude",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny"
+  }
+}
+```
+
+For PreToolUse, you can modify inputs before execution (v2.0.10+):
+
+```json
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "allow",
+    "updatedInput": {
+      "command": "npm test --dry-run"
+    }
+  }
+}
+```
+
+## Practical Examples
+
+### 1. Auto-Format After Edits (PostToolUse)
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### 2. Block Dangerous Commands (PreToolUse)
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/validate-bash.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+validate-bash.sh:
+
+```bash
+#!/bin/bash
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# Block dangerous patterns
+if echo "$COMMAND" | grep -qE '(rm -rf|chmod 777|sudo rm)'; then
+  echo "Blocked: $COMMAND" >&2
+  exit 2
+fi
+exit 0
+```
+
+### 3. Quality Gate (Stop Hook)
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint && npm run test"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+If lint or tests fail (exit code 2), Claude is blocked from stopping and receives the error feedback to fix issues.
+
+### 4. Desktop Notifications (Notification)
+
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -title 'Claude Code' -message 'Permission needed' -sound Glass"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Notification matchers: `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog`.
+
+### 5. Inject Context at Session Start
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git status --short && echo '---' && cat TODO.md 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Output becomes part of Claude's starting context automatically.
+
+## Environment Variables
+
+| Variable | Description | Availability |
+|----------|-------------|--------------|
+| `CLAUDE_PROJECT_DIR` | Absolute path to project root | All hooks |
+| `CLAUDE_CODE_REMOTE` | "true" in web environments | All hooks |
+| `CLAUDE_ENV_FILE` | File path for persisting env vars | SessionStart only |
+| `CLAUDE_TOOL_INPUT_FILE_PATH` | File path from tool input | File-related tools |
+
+## Debugging
+
+1. **Verify registration**: Run `/hooks` to see active hooks
+2. **Debug mode**: `claude --debug` for verbose output
+3. **Test manually**: Run your hook script directly first
+4. **Check permissions**: `chmod +x your-script.sh`
+5. **Disable temporarily**: `claude --no-hooks` if hooks break things
+
+Debug logs show:
+
+```
+[DEBUG] Executing hooks for PostToolUse:Write
+[DEBUG] Found 1 hook matchers
+[DEBUG] Hook command completed with status 0
+```
+
+## Security Considerations
+
+Hooks execute with your user permissions—treat them as executable code.
+
+**Best practices:**
+
+- Validate and sanitize all inputs
+- Always quote shell variables: `"$VAR"` not `$VAR`
+- Check for path traversal (`..` in paths)
+- Use absolute paths for scripts
+- Avoid processing `.env`, `.git/`, or key files
+- Test in safe environment before production
+
+**Protection**: Claude Code captures hook config at startup. Changes to settings files require review in `/hooks` menu before taking effect—preventing malicious injection during a session.
+
+## Common Pitfalls
+
+1. **Exit code confusion**: Exit 2 blocks, other non-zero codes do not
+2. **stdout vs stderr**: Blocking errors must go to stderr
+3. **Hook not firing**: Check matcher is exact (case-sensitive)
+4. **Timeouts**: Default 60s, configurable per hook
+5. **Script permissions**: Must be executable (`chmod +x`)

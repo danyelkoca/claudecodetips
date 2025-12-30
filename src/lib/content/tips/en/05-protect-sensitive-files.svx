@@ -1,0 +1,217 @@
+---
+id: 5
+title: "Protect Sensitive Files"
+section: safety
+summary: "Claude Code automatically reads .env files without asking. Add deny rules to protect secrets."
+isFree: false
+---
+
+Claude Code silently loads `.env`, `.env.local`, and similar files into memory without asking permission. Your API keys, database passwords, and private credentials get processed on Anthropic's servers before you even know it happened. This isn't a bug - it's how the tool works by default.
+
+GitHub reported 39 million leaked secrets across public repositories in 2024. AI coding tools are accelerating this problem. Developers using AI assistants exposed Azure credentials nearly twice as often as non-AI users.
+
+## What Files Are At Risk
+
+These files contain secrets that Claude can read by default:
+
+| File Pattern | What It Contains |
+|--------------|------------------|
+| `.env`, `.env.*` | API keys, database URLs, service credentials |
+| `.env.local`, `.env.production` | Environment-specific secrets |
+| `~/.ssh/**` | SSH private keys for server access |
+| `~/.aws/credentials` | AWS access keys and secret keys |
+| `**/*.pem`, `**/*.key` | SSL certificates, private keys |
+| `**/secrets/**` | Any secrets directory |
+| `.envrc` | direnv environment variables |
+| `**/credentials.json` | Service account credentials |
+| `**/.gcloud/**` | Google Cloud credentials |
+
+If Claude reads your `.env` file and later suggests code that references those values, your secrets could end up in a commit, a log, or worse - sent to a third-party API.
+
+## Layer 1: Permission Deny Rules
+
+Add deny rules to `~/.claude/settings.json` for global protection across all projects:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/.env.local)",
+      "Read(**/.env.production)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/secrets/**)",
+      "Read(**/.aws/**)",
+      "Read(**/.ssh/**)",
+      "Read(**/.gcloud/**)",
+      "Read(**/credentials.json)",
+      "Read(**/.envrc)"
+    ]
+  }
+}
+```
+
+For project-specific rules, use `.claude/settings.json` in your repo root. For personal overrides not committed to git, use `.claude/settings.local.json`.
+
+**Settings precedence (highest to lowest):**
+1. Enterprise managed settings (cannot be overridden)
+2. Command line arguments
+3. Local project settings (`.claude/settings.local.json`)
+4. Shared project settings (`.claude/settings.json`)
+5. User settings (`~/.claude/settings.json`)
+
+## Layer 2: Block Bash Commands Too
+
+Denying Read isn't enough. Claude can still run `cat .env` or `grep API_KEY .env` through Bash. Add these to your deny list:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Bash(cat:*/.env*)",
+      "Bash(cat:*.pem)",
+      "Bash(cat:*.key)",
+      "Bash(grep:*/.env*)",
+      "Bash(head:*/.env*)",
+      "Bash(tail:*/.env*)",
+      "Bash(less:*/.env*)",
+      "Bash(more:*/.env*)"
+    ]
+  }
+}
+```
+
+Note: Denying Read doesn't block Write or Edit. Claude could still overwrite your `.env` file. Add `Edit(**/.env*)` to your deny list if you want complete protection.
+
+## Layer 3: CLAUDE.md Instructions
+
+Belt and suspenders. Even with deny rules, add explicit instructions to `CLAUDE.md`:
+
+```markdown
+## Security Rules
+
+- NEVER read, reference, or output contents of .env files
+- NEVER include real API keys, tokens, or credentials in code or responses
+- Use placeholder values like "YOUR_API_KEY" or "sk-xxx" instead
+- NEVER copy .env contents to other files like .env.example
+- If you need environment variable names, ask me - don't read the file
+```
+
+Claude follows instructions. If told not to attempt something, it usually won't even try. This catches cases where deny rules might have gaps.
+
+## Layer 4: PreToolUse Hooks (Advanced)
+
+For critical security, use hooks to intercept and block operations. In `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/block-secrets.py"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Create `~/.claude/scripts/block-secrets.py`:
+
+```python
+#!/usr/bin/env python3
+import sys
+import json
+
+BLOCKED_PATTERNS = ['.env', '.pem', '.key', 'secrets/', '.aws/', '.ssh/']
+
+input_data = json.loads(sys.stdin.read())
+file_path = input_data.get('tool_input', {}).get('file_path', '')
+
+for pattern in BLOCKED_PATTERNS:
+    if pattern in file_path.lower():
+        print(f"BLOCKED: Cannot read {file_path} - contains sensitive data", file=sys.stderr)
+        sys.exit(2)  # Exit code 2 blocks the operation
+
+sys.exit(0)
+```
+
+Exit code 2 blocks the operation. The error message in stderr gets fed back to Claude so it understands why the action was blocked.
+
+## Layer 5: Sandbox/Container (Maximum Security)
+
+For paranoid-level security, run Claude Code in a Docker container:
+
+```bash
+# Using official Docker integration
+docker run -it --rm \
+  -v $(pwd):/workspace \
+  -w /workspace \
+  anthropic/claude-code
+```
+
+With sandboxing enabled, Claude physically cannot access files outside the container. Your SSH keys, AWS credentials, and shell config are invisible - not just blocked, but nonexistent from Claude's perspective.
+
+On Linux, Claude Code uses Bubblewrap (same tech as Flatpak). On macOS, it uses Seatbelt (same tech as iOS apps). OS-level kernel enforcement means even prompt injection attacks cannot bypass these restrictions.
+
+Enable sandboxing in settings:
+
+```json
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  }
+}
+```
+
+## Critical Warning: File Deletion
+
+If a file is:
+- NOT tracked in git, AND
+- NOT explicitly denied in settings
+
+Claude can delete it. Permanently. No undo button. No way to recover.
+
+On SSDs, TRIM zeroes freed blocks immediately. One user reported Claude running `rm -rf` on their home directory - recovery tools found zero recoverable files because TRIM had already wiped them.
+
+Real incidents from 2025:
+- Claude ran `git reset --hard` without authorization, destroying uncommitted work
+- Claude deleted entire directories while "cleaning up"
+- Claude copied `.env` to `.env.example` and pushed to GitHub
+
+**Protection:** Commit everything important to git. Push frequently. Keep secrets outside project directories when possible.
+
+## Verify Your Configuration
+
+Test your deny rules actually work:
+
+1. Ask Claude to read your `.env` file directly
+2. Ask Claude to run `cat .env`
+3. Ask Claude to describe what's in your secrets directory
+
+If any of these succeed, your configuration has gaps. Fix them before doing real work.
+
+Check your current permissions with `/permissions` command in Claude Code.
+
+## Quick Reference
+
+| Layer | Protects Against | Configuration |
+|-------|-----------------|---------------|
+| Deny rules (Read) | Direct file reads | `permissions.deny` in settings.json |
+| Deny rules (Bash) | Shell commands like `cat` | Add `Bash(cat:*)` patterns |
+| CLAUDE.md | Instruction-following bypass | Security section in CLAUDE.md |
+| PreToolUse hooks | All file access attempts | Python/bash script with exit 2 |
+| Sandbox/Container | Everything including prompt injection | Docker or native sandboxing |
+
+Use at least layers 1-3. Add layer 4 for sensitive projects. Use layer 5 for maximum security or untrusted environments.
+
+**The principle:** Treat Claude like a powerful but untrusted contractor. Give it minimum necessary access. Verify it cannot reach your secrets. Assume any file it can read might end up somewhere you don't want it.

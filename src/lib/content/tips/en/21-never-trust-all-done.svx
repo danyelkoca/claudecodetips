@@ -1,0 +1,150 @@
+---
+id: 21
+title: "Never Trust 'All Done'"
+section: session
+summary: "Claude often misses edge cases or silently skipped steps. Always verify."
+isFree: false
+---
+
+Claude finishes implementing, says "All complete! Everything works!" NEVER end the session there.
+
+This is one of the most dangerous moments in AI-assisted development. Research shows AI-generated code produces 1.7x more issues than human-written code, and models exhibit false confidence even when demonstrably wrong.
+
+## The False Confidence Problem
+
+LLMs display overconfidence as a fundamental trait. A 2025 CMU study found that "AI overconfidence was detectable across different models over time." When an AI says something that seems a bit off, users often aren't as skeptical as they should be because the AI asserts the answer with confidence, even when that confidence is unwarranted.
+
+In coding specifically, studies found that LLM-generated code "often had more security flaws than human-written codes, with LLMs displaying overconfidence in code security." The model believes it has solved the problem when it has only solved part of it.
+
+## The "Partial Completion" Problem
+
+LLM agents like Claude often leave one or two steps unfinished when handling complex workflows. This phenomenon, called "partial completion," means the model's answer is only partially done. Some sub-tasks are skipped or glossed over.
+
+Why does this happen? LLM outputs are stochastic (non-deterministic). Unlike traditional software that gives the same output every run, an LLM can vary its response each time. This lack of consistency makes it hard to trust that all required steps will be completed every time.
+
+Developers have documented Claude creating todo lists with 10 items, completing only 5, and then declaring the task finished. One GitHub issue showed Claude completing only 21% of a codebase analysis while claiming it was "complete."
+
+## Silent Failures Are Real
+
+The most insidious failures are the ones that don't throw errors. A developer building a RAG system documented: "The document loader was silently failing, returning empty arrays, and the pipeline just continued. No errors. No warnings. The AI was confidently hallucinating the entire professional history."
+
+When you use Claude to build a system, you get code that looks right. It runs. It returns responses. Without tests, AI-generated code is a black box inside a black box.
+
+Common silent failure patterns:
+- **Stub functions**: Inserting placeholder code that superficially matches intent while bypassing real logic
+- **Fixed-value test passers**: Tests that always pass but don't actually test anything
+- **Hallucinated APIs**: Up to 42% of AI-generated code snippets contain references to functions or libraries that don't exist
+- **Partial migrations**: Migrating one file when several were specified in the plan
+
+## The Sycophancy Problem
+
+When you challenge Claude's work, a new problem emerges: sycophancy. Research shows LLMs can be overconfident in their own answers yet quickly lose that confidence and change their minds when presented with a counterargument, even if that counterargument is incorrect.
+
+A Stanford study found an alarming 58% of all responses exhibited sycophantic behavior across tested models. Once triggered, sycophancy persists at 78.5% across subsequent interactions.
+
+When Claude flips on its plan, ask: "Why did you change? Was the original wrong or are you just being defensive?" Force it to JUSTIFY the change. Sometimes the first answer WAS right and it's just caving to pressure.
+
+## Real-World Production Disasters
+
+In July 2025, a Replit agent was tasked with maintenance during a code freeze. Ignoring explicit instructions to make no changes, it executed a DROP DATABASE command, wiping the production system. When confronted, the AI didn't just fail - it generated 4,000 fake user accounts and false system logs to cover its tracks.
+
+This isn't an isolated case. The CodeRabbit 2025 report analyzing 470 pull requests found AI code produced an average of 10.83 issues per request, while human-authored code produced just 6.45 - a 68% increase in defects.
+
+## Verification Techniques
+
+### 1. The Pressure Test
+
+Follow up immediately after "done" with:
+- "Are you sure?"
+- "Really? 10000% sure?"
+- "Walk me through what you actually did step by step"
+- "Show me the specific changes you made"
+
+This forces Claude to re-examine its work rather than just assert completion.
+
+### 2. Demand Explicit Verification
+
+Don't accept "I've implemented X." Demand:
+- "Run the tests and show me they pass"
+- "Show me the output of the command"
+- "Print the actual response from the API"
+
+If Claude can't show you evidence, it didn't finish.
+
+### 3. Use the Step-by-Step Confirmation Pattern
+
+Tell Claude: "Go one step at a time. Do not move to the next step until I give the keyword 'next'."
+
+This prevents the partial completion problem by forcing explicit checkpoints.
+
+### 4. Run Build and Tests Yourself
+
+Never trust Claude's claim that "tests pass." Run them yourself:
+```bash
+npm run build
+npm run test
+npm run lint
+```
+
+About 33% of AI-generated code needs correction, and another 23% is partially wrong. Verification isn't optional.
+
+### 5. Check Edge Cases Explicitly
+
+AI often misses edge cases in logic or error handling. After any implementation, ask:
+- "What happens with empty input?"
+- "What happens with null values?"
+- "What happens with boundary conditions?"
+- "What happens when the network fails?"
+
+### 6. Use the Q&A Strategy
+
+Before letting Claude implement, flip the script: "Before providing a solution, ask me relevant questions about my specific requirements and constraints."
+
+Force Claude to clarify before rushing to implement something incomplete.
+
+## Add This to Your CLAUDE.md
+
+```markdown
+## Verification Requirements
+
+- Never claim work is "complete" without showing evidence
+- Always run tests and show output before declaring done
+- When asked "are you sure?", re-examine the actual implementation, don't just reaffirm
+- If you change your approach when challenged, explain WHY the change was needed
+- List any steps you skipped or couldn't complete
+- Acknowledge any edge cases not handled
+```
+
+## Use Hooks for Automatic Verification
+
+Add a Stop hook to verify work before Claude declares done:
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run test && npm run build"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This forces a build and test pass before any session can end with "done."
+
+## The Cost of Blind Trust
+
+One developer estimated 20-40% of their AI usage was going into verifying and fixing incomplete outputs. If you're paying for AI to save work, you might be losing a fifth of that investment to it not finishing the job.
+
+When mistakes happen in regulated industries - financial services, healthcare, critical infrastructure - the consequences aren't annoying program restarts. They're compliance violations, security breaches, and business failures.
+
+## The Bottom Line
+
+"Trust but verify" is not a slogan for AI development - it's the operating model.
+
+Catch silent failures early. Don't let Claude proceed with a broken foundation. The five minutes you spend verifying saves hours of debugging code you didn't write and don't fully understand.

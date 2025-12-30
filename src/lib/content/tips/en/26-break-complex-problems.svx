@@ -1,0 +1,287 @@
+---
+id: 26
+title: "Break Complex Problems into Steps"
+section: multi-agent
+summary: "Better to have 1 session per sub-task than one massive session."
+isFree: false
+---
+
+A project has 47 prefectures. Ask Claude to evaluate data sources across all 47 in one shot? It fails. It starts making assumptions, loses track of which prefecture it analyzed, confuses data from one with another, and produces an incoherent mess. But one session per prefecture? Works perfectly every time.
+
+This is not a bug. It is a fundamental characteristic of how large language models work.
+
+## Why One-Shot Complex Tasks Fail
+
+When you hand Claude a massive, multi-part task, several problems compound:
+
+**Context Window Fills Up.** Claude operates within a 200,000 token context window. Every message, every file read, every tool result consumes tokens. A fresh monorepo session costs ~20k tokens baseline. Complex tasks that span many files and require extensive reasoning fill that remaining 180k faster than you expect.
+
+**The "Lost in the Middle" Problem.** Research from Stanford (Liu et al., 2023) demonstrated that LLM performance follows a U-shaped curve. Models perform best when relevant information appears at the very beginning or the very end of the context. Information in the middle gets increasingly ignored. In practical terms: Claude remembers your initial instructions and your most recent message. Everything in between becomes fuzzy.
+
+**Attention Degrades.** As your session grows, the computational cost of attention scales quadratically. The model must attend to exponentially more token relationships. This becomes expensive and the quality of those attention patterns degrades noticeably.
+
+**Errors Accumulate.** Failed attempts, correction history, and tangential discussions pile up. Important grounding information gets pushed out while noise remains. Claude starts making mistakes you specifically corrected earlier.
+
+Microsoft's Developer Tools research found that prompts with explicit, focused specifications reduced the need for back-and-forth refinements by 68%. The simpler and more focused your task, the better Claude performs.
+
+## The Core Principle
+
+**One sub-task = one focused session.**
+
+Break complex work into independently completable and verifiable pieces. Each piece should:
+- Fit comfortably in a fresh context window
+- Have clear success criteria
+- Produce a reviewable, committable result
+- Not depend on accumulated conversational context
+
+Break before you start, not when you're stuck. If you wait until Claude is confused, you've already wasted time and tokens.
+
+## Task Categories
+
+Not all tasks require decomposition. Understanding the categories helps you decide:
+
+**Type 1: Narrow Tasks.** Feature flag removal, unit tests for a single function, boilerplate code generation. Claude excels at these. No breakdown needed.
+
+**Type 2: Context-Dependent Tasks.** Debugging a specific error, refactoring code to match existing patterns. Requires understanding existing code but still focused. Usually fine in one session.
+
+**Type 3: Open-Ended Tasks.** "Build user authentication" or "Implement the payment system" or "Migrate the codebase to TypeScript." These must be broken down first. Attempting them in one shot virtually guarantees poor results.
+
+## Decomposition Strategies
+
+### Linear Decomposition
+
+Sequential steps where each depends on the previous:
+
+```
+1. Create auth types and interfaces
+2. Implement token generation
+3. Add login endpoint
+4. Add session middleware
+5. Create protected routes
+6. Add logout flow
+```
+
+Complete step 1, commit, clear, then step 2.
+
+### Modular Decomposition
+
+Independent pieces that combine later:
+
+```
+- Component A (can be built standalone)
+- Component B (can be built standalone)
+- Integration layer (combines A and B)
+```
+
+These can even run in parallel using git worktrees with separate Claude sessions.
+
+### Recursive Decomposition
+
+If a sub-task is still too complex, break it further:
+
+```
+"Implement user authentication"
+  └── "Implement login flow"
+        └── "Validate email format"
+        └── "Hash password with bcrypt"
+        └── "Generate JWT token"
+        └── "Store refresh token"
+```
+
+Keep breaking until each piece is small enough that Claude can complete it without degradation.
+
+## Practical Techniques
+
+### Markdown Checklist as Working Memory
+
+For large tasks like code migrations or fixing numerous lint errors, use a markdown file as external memory:
+
+```markdown
+## Migration Tasks
+- [x] Update component Header
+- [x] Update component Footer
+- [ ] Update component Sidebar
+- [ ] Update component Modal
+- [ ] Run tests
+- [ ] Fix any failures
+```
+
+Have Claude update this file as it works. This checklist survives `/clear` commands and session restarts. Claude can always check what is done and what remains.
+
+### The Document-and-Clear Pattern
+
+For complex multi-session work:
+
+```bash
+# Before clearing
+"Write your current progress, key decisions made, and next steps to progress.md"
+
+# Clear the session
+/clear
+
+# Resume in fresh session
+"Read progress.md and continue from where we left off"
+```
+
+This creates durable external memory that persists across context resets. The nuanced understanding that would be lost in automatic compaction is preserved in the document.
+
+### Fanning Out at Scale
+
+For truly large-scale work (47 prefectures, 1000 files, etc.):
+
+1. Have Claude write a script that generates a task list
+2. Loop through tasks, calling Claude programmatically for each
+3. Aggregate results in a shared document
+
+```bash
+# Generate task list
+claude -p "List all 47 prefecture names, one per line" > prefectures.txt
+
+# Process each
+while read prefecture; do
+  claude -p "Analyze data sources for $prefecture. Output to results/$prefecture.md"
+done < prefectures.txt
+```
+
+Each invocation gets a fresh context. No cross-contamination between prefectures.
+
+## Multi-Session Workflows
+
+### Git Worktrees for Parallel Work
+
+```bash
+git worktree add ../my-project-feature feature-branch
+```
+
+Now you have isolated directories:
+- `~/projects/my-project/` (main branch)
+- `~/projects/my-project-feature/` (feature branch)
+
+Run separate Claude sessions in each. No context pollution between tasks. Compare results side-by-side.
+
+### The Clear Cadence
+
+Use `/clear` aggressively:
+- After completing each sub-task
+- Before starting unrelated work
+- When Claude starts going in circles
+- When responses become generic
+- When the same mistakes keep appearing
+
+Your CLAUDE.md persists across clears. Everything else gets wiped.
+
+### External State Files
+
+The built-in todo list does not persist across sessions. Use external files:
+
+- `plan.md` - Implementation plan with checkboxes
+- `progress.md` - What is done, what is next
+- `decisions.md` - Key architectural decisions made
+
+Claude can read and update these across sessions.
+
+## When to Break Down
+
+Signs your task is too big:
+
+| Symptom | What It Means |
+|---------|---------------|
+| Claude starts making assumptions | Context overloaded, losing track of details |
+| Responses become generic | Lost specificity, reverting to defaults |
+| Same mistakes repeat | Earlier corrections pushed out of context |
+| Claude goes in circles | Confused about state, trying old solutions |
+| Asks questions you answered | Instruction amnesia from context overflow |
+
+If you see these, stop. Clear the session. Break the task smaller. Resume with focused sub-tasks.
+
+## Real-World Examples
+
+### Code Migration
+
+**Bad approach:**
+> "Migrate all 500 components from Ember to React"
+
+**Good approach:**
+1. Migrate form components (10 files)
+2. Migrate modal components (8 files)
+3. Migrate layout components (12 files)
+4. ...continue by category
+
+Each batch is its own session. Each produces a reviewable PR.
+
+### Multi-File Feature
+
+**Bad approach:**
+> "Implement user authentication with OAuth, JWT, session management, and social login"
+
+**Good approach:**
+1. Session 1: Create auth types and interfaces
+2. Session 2: Implement JWT token generation and validation
+3. Session 3: Add login endpoint
+4. Session 4: Add session middleware
+5. Session 5: Create protected route wrapper
+6. Session 6: Add logout flow
+7. Session 7: Add OAuth provider integration
+8. Session 8: Add social login buttons
+
+Each session has clear scope. Each produces testable code.
+
+### Bulk Analysis
+
+**Bad approach:**
+> "Evaluate data quality across all 47 prefectures and generate recommendations"
+
+**Good approach:**
+- One session per prefecture
+- Each session outputs to `analysis/prefecture-name.md`
+- Final session aggregates all 47 reports into summary
+
+No single session needs to hold 47 analyses in context.
+
+## Using Claude to Decompose
+
+Claude itself is excellent at breaking down tasks. Start a session specifically for planning:
+
+```bash
+# Plan mode decomposes the task
+claude -p "I need to implement user authentication. Use plan mode to break this into
+implementable sub-tasks. Each should be completable in a single focused session."
+```
+
+Claude generates the task list. You then execute each task in its own session.
+
+### Ask Claude to Generate the Checklist
+
+```bash
+claude -p "Generate a markdown checklist for migrating this codebase from JavaScript
+to TypeScript. Group by directory. Each checkbox should be one file or small group."
+```
+
+Use the generated checklist as your working memory file.
+
+## Subagents for Isolated Research
+
+Subagents operate in isolated contexts. When you need to investigate something without polluting your main session:
+
+```
+"Use a subagent to analyze the current authentication implementation
+and summarize the key patterns used."
+```
+
+The subagent does the research. The main session receives only the summary. Your main context stays clean for the actual implementation work.
+
+## Key Takeaways
+
+- **If you cannot one-shot it, break it down.** Complex tasks fail not because Claude is incapable, but because the task overwhelms context management.
+
+- **One sub-task = one session.** Clear between tasks. Do not let unrelated context accumulate.
+
+- **External files = persistent memory.** Markdown checklists, progress documents, and decision logs survive session resets.
+
+- **Break before you start.** Planning the decomposition upfront is faster than recovering from a confused session.
+
+- **Verify each piece.** Each sub-task should produce a reviewable, testable result before moving on.
+
+- **Use Claude to plan the breakdown.** Claude excels at decomposition. Let it help you structure the work.
+
+The developers who get the most from Claude Code treat it like a focused specialist, not an omniscient oracle. Give it one clear job at a time, and it will excel. Ask it to juggle everything at once, and it will drop the balls.

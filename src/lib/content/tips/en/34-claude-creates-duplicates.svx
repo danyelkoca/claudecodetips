@@ -1,0 +1,228 @@
+---
+id: 34
+title: "Claude Creates Duplicates"
+section: pitfalls
+summary: "Claude doesn't search your codebase. It just writes new code."
+isFree: false
+---
+
+Claude doesn't search your codebase. It just writes new code. You end up with 3 date formatting functions, 2 modal components, 4 ways to fetch data. Without explicit instructions, you'll watch your codebase fragment into competing implementations.
+
+## Why This Happens
+
+### The Context Window Problem
+
+AI assistants operate with a limited context window that only "sees" a small portion of your codebase at any time. When you ask to create or modify a feature, the AI might only have access to currently open files or a narrow slice of your project structure.
+
+Claude Code uses "agentic search" - grep, glob, and file reads - to explore codebases. But it doesn't automatically search before creating. It needs explicit instructions to do so.
+
+### The Safety-First Bias
+
+AI models are trained with a "better safe than sorry" approach: when uncertain whether a file exists or what its exact path is, they default to creating a new file rather than risking overwriting existing code. This conservative bias leads to duplicate file proliferation.
+
+### Pattern Recognition vs. Understanding
+
+AI systems don't actually understand code - they predict it. When generating a function, Claude isn't thinking "this logic is already encapsulated elsewhere." It's thinking "this pattern looks similar to something that worked before." To the AI, duplication isn't a flaw - it's a probability of success.
+
+## The Scale of the Problem
+
+GitClear analyzed 211 million changed lines of code from 2020-2024 and found alarming trends:
+
+- **Code cloning increased 4x** since AI tools became mainstream
+- **Copy/pasted lines rose from 8.3% to 12.3%** between 2021 and 2024
+- **Refactoring dropped from 25% to under 10%** of changed code
+- **2024 was the first year copy/pasted lines exceeded moved lines**
+
+The number of code blocks with 5+ duplicated lines increased by 8 times during 2024 alone. Instead of code getting refactored and reused, it's being duplicated at unprecedented rates.
+
+API evangelist Kin Lane stated: "I don't think I have ever seen so much technical debt being created in such a short period of time during my 35-year career in technology."
+
+## Real-World Symptoms
+
+Without proper context, Claude creates duplicate functionality like:
+
+- `user_auth.py` vs `authentication.py` vs `auth_handler.py`
+- Multiple date formatting utilities across different modules
+- Competing modal components with slight variations
+- Duplicate API client implementations
+- Similar helper functions scattered across files
+
+A developer shared: "Six months after shipping AI-generated components, nobody on the team could modify them confidently. The original context was lost, and the code style was inconsistent with the rest of the codebase."
+
+Another reported finding "experimental code, duplicate files, half-finished features" committed to the repository because Claude was committing everything without discrimination.
+
+## The Inconsistency Multiplier
+
+Code duplication creates cascading problems:
+
+**Naming Convention Drift**: AI introduced nearly 2x more naming inconsistencies compared to human-written code. Functions follow different naming conventions, error-handling strategies, and architectural patterns - depending on what mood the model was in that day.
+
+**Style Fragmentation**: Formatting problems were 2.66x more common in AI-generated PRs. LLMs default to generic naming schemes when not explicitly constrained.
+
+**Maintenance Nightmare**: Code that includes duplicate functionality is harder to maintain. If it needs updating, there's risk that only some duplicates get updated. When code with a vulnerability is duplicated, the vulnerability persists even after it's fixed in one copy.
+
+On average, 18.5% of code lines in analyzed projects were duplicates - nearly one-fifth of codebases making development harder instead of easier.
+
+## The Solution: Explicit Instructions
+
+The fix is straightforward but requires vigilance. Add this to your CLAUDE.md:
+
+```markdown
+## Before Writing ANY New Code
+
+Before writing ANY new utility, component, or helper:
+
+1. **Search the codebase first** - Use grep/glob to find existing implementations
+2. **Check for similar patterns** - Look for files with related names or functionality
+3. **Reuse what exists** - If something similar exists, use it or extend it
+4. **Never create what already exists** - Duplicate code is unacceptable
+
+If you find existing code:
+- Copy it exactly and adapt - don't reinvent
+- Follow the existing naming conventions
+- Match the existing code style
+- Use the established patterns
+```
+
+## Why "Follow Existing Patterns" Isn't Enough
+
+Vague instructions produce vague results. Telling Claude to "follow existing patterns" gives it too much latitude to interpret what that means. It will create its own version with slight inconsistencies.
+
+Be explicit:
+
+**Instead of**: "Follow existing patterns"
+**Say**: "Copy exactly what's in `/src/components/Modal.tsx`. Use the same props, same styling approach, same animation pattern. Do not deviate."
+
+**Instead of**: "Use our date formatting"
+**Say**: "Use the `formatDate()` function from `/src/utils/dates.ts`. Do not create a new date formatting function."
+
+**Instead of**: "Match our code style"
+**Say**: "Check `/src/components/` for similar components. Copy the structure, imports, and patterns exactly. No variations."
+
+## Setting Up Systematic Prevention
+
+### 1. Document Your Utilities
+
+Create a reference section in CLAUDE.md listing your existing utilities:
+
+```markdown
+## Existing Utilities - NEVER Recreate
+
+- Date formatting: `src/utils/dates.ts` (formatDate, parseDate, getRelativeTime)
+- API client: `src/lib/api/client.ts` (get, post, put, delete methods)
+- Form validation: `src/utils/validation.ts` (validateEmail, validatePhone, etc.)
+- Modal component: `src/components/Modal.tsx`
+- Button component: `src/components/Button.tsx`
+```
+
+### 2. Establish Search-First Workflow
+
+Add explicit workflow steps:
+
+```markdown
+## Implementation Workflow
+
+1. Search for existing implementations of similar functionality
+2. Check `/src/utils/`, `/src/lib/`, `/src/components/` for relevant code
+3. If found, reuse or extend - never duplicate
+4. If creating new, follow the exact pattern of similar existing code
+5. Run duplication detection before committing
+```
+
+### 3. Use Specific File References
+
+When requesting features, reference specific files:
+
+```
+Create a confirmation modal. Copy the exact structure from `/src/components/Modal.tsx`.
+Use the same animation, same close behavior, same backdrop handling.
+Only change the content and the action button text.
+```
+
+### 4. Leverage Codebase Explorer
+
+Before implementing, ask Claude to explore:
+
+```
+Before writing any code, search the codebase for:
+- Existing date formatting utilities
+- Similar modal implementations
+- API client patterns we're already using
+
+Report what you find before proceeding.
+```
+
+## The DRY Principle in the AI Era
+
+The DRY (Don't Repeat Yourself) principle states: "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system."
+
+AI challenges this principle by optimizing for immediate success rather than long-term maintainability. To counter this:
+
+**Apply the Rule of Three**: Wait until code is repeated at least three times before abstracting. But AI often creates duplicates on the first occurrence.
+
+**Refactor Regularly**: Take breaks from feature work to consolidate duplicate implementations. AI-assisted development requires more frequent refactoring cycles.
+
+**Don't Over-Abstract**: Two similar-looking discount calculation functions may represent different business rules. Don't merge them unless they truly mean the same thing.
+
+## CLAUDE.md Instructions That Work
+
+Here's a battle-tested block to add:
+
+```markdown
+## Code Reuse Requirements
+
+CRITICAL: Before writing ANY new code, you MUST:
+
+1. Search for existing implementations:
+   - grep for function names, class names, similar patterns
+   - Check `/src/utils/`, `/src/lib/`, `/src/helpers/`
+   - Look for files with related names
+
+2. If similar code exists:
+   - USE IT. Do not create duplicates.
+   - Copy and adapt if necessary - don't reinvent
+   - Follow the exact same patterns
+
+3. If creating new code:
+   - Check similar files for style/patterns
+   - Use identical naming conventions
+   - Match error handling approach
+   - Follow same file structure
+
+4. NEVER create:
+   - New utility functions that already exist
+   - New components similar to existing ones
+   - New API client methods when we have a client
+   - New date/string/validation helpers
+
+When in doubt, ask: "Does something like this already exist?"
+```
+
+## Tools for Detection
+
+Use automated tools to catch duplicates before they accumulate:
+
+- **CodeAnt AI**: Detects duplicated logic even when variable names change
+- **SonarQube**: Identifies code smells including duplication
+- **PMD/CPD**: Copy-paste detector for multiple languages
+- **jscpd**: Language-agnostic duplicate code detector
+
+Consider adding duplication checks to your CI pipeline:
+
+```bash
+# Example: jscpd check in CI
+jscpd --min-lines 5 --min-tokens 50 ./src --reporters json
+```
+
+## The Bottom Line
+
+Claude is a statistical prediction engine, not a codebase-aware collaborator. It will happily create a fourth date formatting function because nothing in its context told it three already exist.
+
+The solution is explicit, repeated, emphatic instruction:
+
+1. Search before creating
+2. Use what exists
+3. Copy patterns exactly
+4. Never duplicate
+
+Add this to CLAUDE.md. Repeat it in prompts. Make it non-negotiable. It's a constant battle - but one worth fighting. Your future self (and your teammates) will thank you.

@@ -1,0 +1,227 @@
+---
+id: 25
+title: "Multiple Agents for Big Jobs"
+section: multi-agent
+summary: "Launch multiple agents with same prompt. For big tasks it's rare 1 agent gets it right."
+isFree: false
+---
+
+For big tasks, it's rare that a single agent gets everything right the first time. The solution: run multiple agents simultaneously with the same prompt and see which one produces the best result. If one fails, you haven't lost much - just fire off another run. The cost of failure is low, making it worthwhile to take more "shots on goal."
+
+## Why Multiple Agents?
+
+A single Claude Code session has limitations:
+
+- **Context window exhaustion** - Complex tasks fill the 200K token window
+- **Single perspective** - One agent might miss edge cases another catches
+- **Sequential bottleneck** - You wait for one task to finish before starting another
+- **Non-determinism** - Same prompt can yield different quality results
+
+Running multiple agents lets you:
+
+- **Parallelize work** - 3 agents working simultaneously can finish in 1/3 the time
+- **Compare approaches** - Different agents may solve problems differently
+- **Reduce risk** - If one agent goes down a wrong path, others might succeed
+- **Gain confidence** - When multiple agents agree, you have higher confidence in the solution
+
+## Three Methods to Run Multiple Agents
+
+### Method 1: Separate Terminal Windows
+
+The simplest approach. Open multiple terminal tabs, launch Claude Code in each:
+
+```bash
+# Terminal 1
+claude
+
+# Terminal 2
+claude
+
+# Terminal 3
+claude
+```
+
+Give each the same prompt. Compare results. Works best when agents tackle non-overlapping files.
+
+### Method 2: Git Worktrees (Recommended)
+
+Worktrees provide isolated working directories sharing the same Git history:
+
+```bash
+# Create worktrees for parallel work
+git worktree add ../project-feature-a feature-a
+git worktree add ../project-feature-b feature-b
+git worktree add ../project-feature-c feature-c
+
+# Launch Claude in each
+cd ../project-feature-a && claude
+cd ../project-feature-b && claude
+cd ../project-feature-c && claude
+```
+
+**Why worktrees over separate terminals in same directory?**
+
+If both agents work on the same file in the same directory, all hell breaks loose. They overwrite each other's edits and corrupt each other's context. Worktrees prevent this by isolating workspaces - like putting agents in separate rooms.
+
+**Worktree benefits:**
+
+- Space-efficient - shares .git folder, only creates working files
+- Sync guaranteed - fetches happen across all worktrees
+- Branch safety - git won't let you check out the same branch twice
+- Easy cleanup - `git worktree remove ../project-feature-a`
+
+### Method 3: Subagents (Built-in)
+
+Claude Code can spawn instances of itself via the Task tool:
+
+```
+"Explore the codebase using 4 tasks in parallel. Each agent should explore different directories."
+```
+
+Each subagent gets its own 200K context window. This is how you gain additional context capacity for large codebases.
+
+**Built-in subagent types:**
+
+- **Explore** (Haiku) - Fast, read-only codebase searching
+- **Plan** (Sonnet) - Research during planning phase
+- **General-Purpose** (Sonnet) - Complex multi-step tasks with file modification
+
+## Real-World Results
+
+A component library refactor case study:
+
+- **Task:** Refactor across 75 files
+- **Agents:** 6 parallel agents handling different component folders
+- **Result:** 12,000+ lines changed in 2 hours
+- **Manual estimate:** 2 days
+- **Conflicts:** Zero
+
+The key was assigning each agent to non-overlapping directories.
+
+## When to Use Multiple Agents
+
+### Good Use Cases
+
+- **Large refactors** - Same pattern applied across many files
+- **Same prompt, different approaches** - Compare implementations
+- **Documentation generation** - One agent per module
+- **Test writing** - Parallelize across test files
+- **Research and exploration** - Multiple agents investigating different parts of codebase
+- **Low-stakes experiments** - Try multiple approaches, pick the best
+
+### Poor Use Cases
+
+- **Tightly coupled changes** - Where Agent A's output affects Agent B's input
+- **Quick 10-minute tasks** - Setup overhead isn't worth it
+- **Sequential dependencies** - Where order matters
+
+## Practical Tips
+
+### 1. Assign Non-Overlapping Work
+
+Partition your codebase so agents don't fight over files:
+
+- Agent 1: `src/components/auth/*`
+- Agent 2: `src/components/dashboard/*`
+- Agent 3: `src/components/settings/*`
+
+### 2. Use Consistent Prompts
+
+Give each agent the same CLAUDE.md, same constraints, same style guide. This makes outputs comparable and mergeable.
+
+### 3. Manage Mental Load
+
+Running 10 agents sounds impressive but creates cognitive overhead. You become "a moderator of multiple meetings in neighboring conference rooms." Start with 2-3, scale up as you get comfortable.
+
+### 4. Token Budget Warning
+
+Parallel agents consume tokens quickly. This is the easiest way to exceed Claude Pro subscription limits. Budget accordingly.
+
+### 5. Clean Up Worktrees
+
+Don't leave stale worktrees lying around:
+
+```bash
+# List all worktrees
+git worktree list
+
+# Remove when done
+git worktree remove ../project-feature-a
+```
+
+### 6. Consider Setup Time
+
+Creating worktrees takes time. You may need to:
+
+- Copy untracked files (`.env`, etc.)
+- Install dependencies (`npm install`)
+- Build artifacts
+
+For a 10-minute change, the setup overhead isn't worth it.
+
+## Tools for Managing Multiple Agents
+
+### Claude Squad
+
+Terminal app managing multiple agents via tmux and git worktrees:
+
+```bash
+brew install claude-squad
+cs  # Launch the TUI
+```
+
+Features: Background task processing, unified management, change review before merge.
+
+### GitButler
+
+Manages multiple branches in a single directory via lifecycle hooks. Each Claude session gets its own virtual branch automatically - no manual worktree creation.
+
+### Crystal
+
+Desktop app for running multiple Claude Code sessions in parallel git worktrees. Compare approaches and manage workflows in one place.
+
+## The Master-Clone Pattern
+
+Instead of pre-defining specialized subagents, let the main agent decide when to spawn clones:
+
+1. Main agent analyzes the task
+2. Decides to parallelize specific subtasks
+3. Spawns clones using `Task(...)` for each subtask
+4. Aggregates results
+
+This preserves context visibility in the main agent while distributing work dynamically.
+
+## Combining with Other Techniques
+
+### With Plan Mode
+
+Use Plan Mode to create a comprehensive plan, then spawn multiple agents to implement different parts of the plan in parallel.
+
+### With Hooks
+
+Use lifecycle hooks to coordinate agents:
+
+```json
+{
+  "hooks": {
+    "SubagentStop": [{
+      "hooks": [{
+        "type": "command",
+        "command": "echo 'Subagent finished, triggering next step'"
+      }]
+    }]
+  }
+}
+```
+
+### With GitHub Actions
+
+For CI/CD scale parallel work, trigger multiple Claude Code instances from external systems. Each GitHub Action execution gets complete isolation with full logging.
+
+## The Bottom Line
+
+For big jobs, don't rely on a single agent. Fire off multiple runs with the same prompt. Compare results. Pick the best one - or synthesize the best parts of each.
+
+The mental model shift: instead of watching one agent work, you orchestrate a team. You become a manager reviewing output rather than a typist watching code appear line by line.
+
+The economics favor parallelization. Engineer time costs more than API tokens. If running 3 agents for 2 hours saves you 4 hours of work, that's a good trade.

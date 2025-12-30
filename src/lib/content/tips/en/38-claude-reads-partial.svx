@@ -1,0 +1,174 @@
+---
+id: 38
+title: "Claude Reads Files Partially"
+section: pitfalls
+summary: "Claude reads the first chunk and starts working. Critical function at line 400? Missed."
+isFree: false
+---
+
+Claude reads the first chunk of a file and starts working. Critical function at line 400? Missed. Important context at the bottom? Never saw it.
+
+This isn't laziness - it's a fundamental limitation baked into how language models process long text.
+
+## The Technical Reality
+
+Claude Code's Read tool has a default limit of 2,000 lines. If your file exceeds this, only the beginning gets loaded into context. The tool offers `offset` and `limit` parameters for reading specific portions, but Claude doesn't always use them proactively.
+
+Beyond just file truncation, there's a deeper problem: the "Lost in the Middle" phenomenon.
+
+## The "Lost in the Middle" Problem
+
+Research from Stanford, Google, Anthropic, and Meta revealed that LLMs exhibit a distinctive U-shaped attention curve:
+
+- **Beginning of context:** High attention (primacy bias)
+- **Middle of context:** Lowest attention - information gets "lost"
+- **End of context:** High attention (recency bias)
+
+In testing, when relevant information was placed in the middle of a long context, GPT-3.5-Turbo's accuracy dropped below its performance when given no context at all. Even with perfect access to the data, the model effectively ignored it.
+
+This happens because of how transformer attention mechanisms work. During pre-training, models learn that the most useful tokens for prediction are typically recent ones. Rotary positional encodings (RoPE) used in many models have an inherent bias toward reduced attention at longer distances.
+
+The practical impact: even if Claude successfully loads your entire file, it may still give disproportionate weight to the beginning and end while glossing over the middle sections.
+
+## Why This Gets Worse Over Time
+
+Claude Code has a known behavior where, after 2-3 context compactions in extended sessions, it starts reverting to inefficient reading patterns:
+
+- Using `grep` and `wc` to sample files instead of reading them fully
+- Applying `offset` and `limit` parameters unnecessarily
+- Making multiple partial reads instead of one complete read
+
+The explicit instruction to "read the whole file" gets compressed away during context compaction, while the deeper efficiency bias remains. A simple 4-file validation task can balloon to 30+ tool uses after compaction as Claude samples files piecemeal instead of reading them completely.
+
+## Real-World Consequences
+
+When Claude works with incomplete file context:
+
+**Missed dependencies:** A utility function defined at line 400 gets reimplemented because Claude only saw lines 1-200.
+
+**Broken imports:** Claude adds imports for functions that already exist elsewhere in the file - it just didn't scroll down far enough.
+
+**Inconsistent patterns:** The file's established coding conventions appear after line 300. Claude's additions use different patterns because it never saw the examples.
+
+**Hallucinated details:** With partial context, Claude fills in the gaps with assumptions. These hallucinations compound as Claude proceeds with work based on incomplete understanding.
+
+**Silent failures:** Claude doesn't announce "I only read part of this file." It proceeds confidently, and you only discover the gaps when bugs appear.
+
+## How to Force Complete Reading
+
+### 1. Be Explicit About Full Reads
+
+```
+Read the ENTIRE file end-to-end before making any suggestions.
+Do not use offset or limit parameters - read the complete file.
+```
+
+### 2. Specify Line Ranges for Large Files
+
+For files over 2,000 lines:
+
+```
+Read lines 1-800 of src/utils/helpers.ts
+```
+
+Then follow up:
+
+```
+Now read lines 800-1600 of the same file
+```
+
+Build the complete picture in chunks.
+
+### 3. Call Out Critical Sections
+
+```
+Pay special attention to the validatePayment() function -
+it should be around lines 350-420.
+```
+
+Don't assume Claude will find important functions on its own.
+
+### 4. Add to CLAUDE.md
+
+```markdown
+## File Reading Rules
+- Always read files completely before suggesting changes
+- Never use grep/wc for sampling - use the Read tool directly
+- For files >500 lines, confirm you've seen the entire file
+- When in doubt, read the file again
+```
+
+### 5. Verify What Was Read
+
+After Claude claims to understand a file:
+
+```
+What function is defined at line 400?
+List all the imports at the top of this file.
+What's the last function in this file?
+```
+
+Test whether Claude actually saw the full content.
+
+### 6. Structure Your Prompt
+
+Place your question or instruction AFTER providing the file content, not before. Anthropic's own research showed this simple adjustment improved retrieval accuracy from 27% to 98% in Claude 2.1 testing.
+
+The reason: recency bias means Claude pays more attention to what comes last. Put your "what to do" instructions at the end.
+
+### 7. Use the "Find the Sentence" Technique
+
+When asking Claude to find information in a large file:
+
+```
+Find the most relevant line in this file that relates to [topic].
+Quote it exactly.
+```
+
+This prompting technique, documented by Anthropic, forces Claude to actively search rather than passively summarize.
+
+## Context Dilution Warning
+
+Even when Claude reads the full file, accuracy degrades as context grows. Research shows:
+
+- 13-85% accuracy drops as context expands
+- 20+ percentage point performance loss when moving information from edges to middle
+- At 128K tokens, attention becomes sparse and redundant information increases substantially
+
+More context isn't always better. If you're loading multiple large files, Claude's effective recall drops significantly. Be strategic about what you include.
+
+## What Claude Code Does Right
+
+Credit where due: Claude Code v1.0.53 expanded from 100-line previews to 2,000-line deep reads. The tool supports:
+
+- Reading images (PNG, JPG) directly
+- Processing PDFs page by page
+- Parsing Jupyter notebooks with outputs
+- Line numbers in cat -n format for easy reference
+
+The Read tool itself is capable. The challenge is ensuring Claude uses it correctly.
+
+## Red Flags to Watch For
+
+Your Claude session may be reading partially if:
+
+- It suggests creating utilities that already exist in the file
+- Import statements duplicate what's already imported
+- Code style suddenly differs from the file's established patterns
+- Claude asks "where is X defined?" when X is clearly in the file
+- Edits break code that appears later in the same file
+
+When you spot these, stop and verify: "Did you read the complete file?"
+
+## The Bottom Line
+
+Don't assume Claude saw everything just because it opened the file. The first 200-400 lines get premium attention. The middle gets neglected. Long files get truncated.
+
+Build explicit verification into your workflow:
+
+1. Ask Claude to confirm it read the full file
+2. Test with questions about content near the end
+3. Add full-read requirements to your CLAUDE.md
+4. Re-read files after context compaction
+
+A few seconds of verification saves hours of debugging incorrect edits based on incomplete context.

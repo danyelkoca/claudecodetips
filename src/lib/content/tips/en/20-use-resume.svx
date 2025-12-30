@@ -1,0 +1,170 @@
+---
+id: 20
+title: "Use /resume to Continue Sessions"
+section: session
+summary: "Claude crashes? Terminal closes? Use /resume to pick up where you left off."
+isFree: false
+---
+
+Session recovery is one of Claude Code's most practical features. When your terminal crashes, your laptop runs out of battery, or you simply need to step away, your work is never lost.
+
+## Core Commands
+
+There are three ways to resume sessions:
+
+| Method | Command | When to Use |
+|--------|---------|-------------|
+| Continue recent | `claude -c` or `claude --continue` | Quick access to your most recent session |
+| Session picker | `claude --resume` or `/resume` | Browse and select from past sessions |
+| Resume by name/ID | `claude --resume auth-refactor` | Jump to a specific named session |
+
+## The Session Picker
+
+Running `claude --resume` without arguments opens an interactive picker with powerful navigation:
+
+| Shortcut | Action |
+|----------|--------|
+| `Up/Down` | Navigate between sessions |
+| `Left/Right` | Expand/collapse grouped sessions |
+| `Enter` | Resume selected session |
+| `P` | Preview session content before resuming |
+| `R` | Rename session |
+| `/` | Search to filter sessions |
+| `A` | Toggle between current directory and all projects |
+| `B` | Filter by current git branch |
+| `Esc` | Exit picker |
+
+The picker shows helpful metadata: session name, time since last activity, message count, and git branch.
+
+## Name Your Sessions
+
+Generic session names like "explain this function" are impossible to find later. Name sessions when you start meaningful work:
+
+```bash
+# Inside a session
+/rename payment-integration
+/rename bugfix-auth-timeout
+/rename feature-dark-mode
+
+# Resume by name later
+claude --resume payment-integration
+```
+
+## What Gets Preserved
+
+When you resume, Claude Code restores:
+
+- **Full conversation history** - Every message, exactly as it happened
+- **Tool usage and results** - All file reads, edits, bash commands
+- **Context and memory** - What Claude learned about your project
+- **Model configuration** - Same model and settings as before
+
+Sessions are stored locally in `~/.claude/projects/` organized by your working directory path.
+
+## Crash Recovery Workflow
+
+Terminal crashed mid-task? Here's the recovery workflow:
+
+```bash
+# 1. Reopen terminal, navigate to your project
+cd ~/projects/my-app
+
+# 2. Quick continue (most recent session)
+claude -c
+
+# 3. Or browse sessions if unsure which one
+claude --resume
+```
+
+Claude resumes with full context. You can immediately ask "What were we working on?" and Claude remembers everything.
+
+## Automation and Scripts
+
+Resume sessions programmatically for CI/CD and automation:
+
+```bash
+# Capture session ID from a task
+session_id=$(claude -p "Start code review" --output-format json | jq -r '.session_id')
+
+# Continue that specific session later
+claude -p "What issues did you find?" --resume "$session_id"
+
+# Quick continue in non-interactive mode
+claude -p "Continue the refactor" --continue
+```
+
+## Session Forking with /rewind
+
+The `/rewind` command lets you go back in time and fork your session:
+
+```bash
+/rewind
+# Select a previous point in the conversation
+# Choose whether to restore code, conversation, or both
+```
+
+Forked sessions appear grouped under their parent in the picker, making it easy to explore alternative approaches without losing your original work.
+
+## Session Cleanup
+
+Sessions are automatically cleaned up after 30 days by default. To change this:
+
+```json
+// ~/.claude/settings.json
+{
+  "cleanupPeriodDays": 99999
+}
+```
+
+## Parallel Sessions with Worktrees
+
+For parallel Claude instances that don't interfere with each other, use git worktrees:
+
+```bash
+# Create worktree for a feature
+git worktree add ../my-project-feature feature-branch
+
+# Run Claude in each - separate sessions, shared history
+cd ../my-project-feature
+claude
+```
+
+The `/resume` picker shows sessions from all worktrees in the same repository.
+
+## When to Use /clear vs /resume
+
+| Scenario | Use |
+|----------|-----|
+| Continue previous work | `/resume` or `claude -c` |
+| Start fresh on new topic | `/clear` |
+| Reduce token usage mid-session | `/compact` |
+| Context getting stale | `/compact` with focus hints |
+
+## Session Storage Details
+
+Sessions are stored in:
+- `~/.claude/history.jsonl` - Index of all sessions
+- `~/.claude/projects/[encoded-path]/` - Full conversation transcripts
+
+Directory paths are encoded: `/home/user/project` becomes `-home-user-project`.
+
+## Migrating Sessions to New Computer
+
+After copying `~/.claude/` to a new machine, some sessions may show "not found" errors because paths changed:
+
+```bash
+# Rename old path to new path
+cd ~/.claude/projects
+mv -- -home-olduser-project -home-newuser-project
+```
+
+Pro tip: Back up `~/.claude/` regularly. It contains your complete development conversation history.
+
+## Best Practices
+
+1. **Name sessions immediately** when starting meaningful work
+2. **Use `--continue` for quick access** to your most recent session
+3. **Use `--resume` with no args** when you need to browse
+4. **Press `P` to preview** before resuming to verify it's the right session
+5. **Use `/compact` before resuming** long sessions to preserve important context
+6. **Consider worktrees** for parallel development with complete isolation

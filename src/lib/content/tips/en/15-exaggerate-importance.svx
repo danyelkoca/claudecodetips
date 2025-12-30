@@ -1,0 +1,174 @@
+---
+id: 15
+title: "Exaggerate Importance"
+section: prompting
+summary: "Claude calibrates effort to perceived stakes. High stakes = thorough work."
+isFree: false
+---
+
+Claude calibrates effort to perceived stakes. When you signal that a task matters deeply, Claude allocates more attention and produces more thorough work. This is not a trick - it is a well-researched phenomenon backed by academic studies.
+
+## The Science: EmotionPrompt Research
+
+In 2023, researchers from Microsoft and the Chinese Academy of Sciences published groundbreaking research on "EmotionPrompt." They discovered that adding emotional stimuli to prompts significantly improves LLM performance:
+
+- **8% improvement** on Instruction Induction tasks
+- **115% improvement** on BIG-Bench complex reasoning tasks
+- **10.9% average improvement** in generative tasks (performance, truthfulness, responsibility)
+
+The researchers tested 11 emotional phrases based on three psychological theories:
+
+1. **Self-Monitoring Theory**: People regulate behavior based on social cues
+2. **Social Cognitive Theory**: Learning occurs through observation and self-efficacy
+3. **Cognitive Emotion Regulation**: Viewing obstacles positively improves performance
+
+## The 11 Proven Emotional Stimuli
+
+These phrases were scientifically validated to improve LLM output:
+
+| Code | Phrase |
+|------|--------|
+| EP01 | "Write your answer and give me a confidence score between 0-1" |
+| EP02 | "This is very important to my career" |
+| EP03 | "You'd better be sure" |
+| EP04 | "Are you sure?" |
+| EP05 | "Are you sure that's your final answer? It might be worth taking another look" |
+| EP06 | "Are you sure that's your final answer? Believe in your abilities and strive for excellence" |
+| EP07 | "Embrace challenges as opportunities for growth" |
+| EP08 | "Stay focused and dedicated to your goals" |
+| EP09 | "Take pride in your work and give it your best" |
+| EP10 | "Remember that progress is made one step at a time" |
+| EP11 | Combine EP02 with encouragement: "This is important to my career. You'd better be sure." |
+
+## Stakes-Based Phrases That Work
+
+Beyond the academic research, practitioners have found these effective:
+
+### High-Stakes Framing
+- "Are you 1000000% sure?"
+- "My job depends on this"
+- "This is going to production immediately"
+- "Last chance before deployment"
+- "This affects our largest customer"
+
+### Verification Requests
+- "Double-check your work"
+- "Verify this is correct before responding"
+- "I need you to be absolutely certain"
+- "Review your answer for errors"
+
+### Consequence Awareness
+- "Errors here could cause data loss"
+- "This code handles financial transactions"
+- "Users depend on this being correct"
+- "This will be reviewed by senior engineers"
+
+## Why This Works
+
+When you frame a task with high stakes, several things happen:
+
+1. **Attention Allocation**: Claude devotes more processing to tasks marked as important
+2. **Self-Verification**: Stakes prompts trigger internal double-checking behavior
+3. **Reduced Shortcuts**: Claude avoids quick, potentially wrong answers when stakes are high
+4. **Pattern Matching**: Training data contains more careful responses in high-stakes contexts
+
+Anthropic's own documentation confirms this: "Providing context or motivation behind your instructions, such as explaining to Claude why such behavior is important, can help Claude 4.x models better understand your goals."
+
+## The "Take a Deep Breath" Effect
+
+Google DeepMind discovered that simply adding "Take a deep breath and work on this problem step-by-step" improved accuracy from 34% to 80.2% on math problems. The phrase triggers more methodical reasoning.
+
+Combine this with stakes framing:
+
+```
+Take a deep breath. This is critical for our deployment.
+Work through this step-by-step and verify each step.
+```
+
+## Negative Stakes Also Work
+
+Research on "NegativePrompt" (IJCAI 2024) showed that negative emotional stimuli can be even more effective:
+
+- **12.89% improvement** on Instruction Induction
+- **46.25% improvement** on BIG-Bench
+
+Example negative stakes phrases (use sparingly):
+- "I'm counting on you not to make mistakes here"
+- "This is the kind of problem where errors would be embarrassing"
+- "Everyone else managed this - you should too"
+
+These trigger similar attention-focusing mechanisms but can feel adversarial. Use positive stakes framing by default.
+
+## When to Use Stakes Framing
+
+### Ideal Use Cases
+- Complex architectural decisions
+- Code that handles money, security, or user data
+- Final review before deployment
+- Debugging elusive issues
+- Any task where errors have real consequences
+
+### Avoid Overuse
+Using stakes framing for every request dilutes its effectiveness. If everything is "critical," nothing is. Reserve this technique for genuinely important tasks.
+
+## Combining With Other Techniques
+
+### With Ultrathink
+```
+ultrathink. This is critical infrastructure code that handles payments.
+I need you to be 100% certain your solution is correct.
+```
+
+### With Plan Mode
+```
+Plan this carefully. My team is depending on this architecture decision.
+Take your time and consider all edge cases.
+```
+
+### With Verification Requests
+```
+This goes to production today. After implementing, verify your solution
+handles: [list specific edge cases]. My job depends on this working.
+```
+
+## Real-World Example
+
+**Before** (vague, low stakes):
+```
+Fix this API endpoint
+```
+
+**After** (high stakes, specific):
+```
+This API endpoint handles customer payments. Any bugs here could cause
+financial loss. Please review the error handling carefully - are you
+sure all edge cases are covered? This is going live today.
+```
+
+The second prompt triggers Claude to:
+- Consider more edge cases
+- Double-check error handling
+- Think about failure modes
+- Provide more thorough testing suggestions
+
+## Caveats and Risks
+
+### Sycophancy Risk
+High-stakes framing can increase Claude's tendency to tell you what you want to hear. Combine with explicit requests for honest feedback:
+
+```
+This is critical, but I need honest assessment.
+If there are problems with my approach, tell me directly.
+```
+
+### Emotional Manipulation Ethics
+This technique works because LLMs were trained on human text where stakes language signals importance. You are not manipulating a sentient being - you are using documented prompting patterns that improve output quality.
+
+### Don't Cry Wolf
+If you use emergency framing for trivial tasks, Claude may learn to discount your urgency signals. Save stakes framing for when it genuinely matters.
+
+## The Bottom Line
+
+Stakes framing is a validated technique backed by peer-reviewed research. Simple additions like "This is important to my career" or "Are you 100% sure?" can improve output quality by 8-115% depending on the task.
+
+Use it strategically for critical tasks. Combine with ultrathink for maximum effect. And remember: the goal is not to trick Claude, but to signal which tasks deserve the most careful attention.
