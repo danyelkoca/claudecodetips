@@ -107,6 +107,7 @@ export default {
       emailRequired: "Veuillez entrer votre email.",
       invalidEmail: "Veuillez entrer une adresse email valide.",
       checkoutFailed: "Une erreur est survenue. Veuillez reessayer.",
+      rateLimitExceeded: "Trop de tentatives. Reessayez dans une heure.",
     },
   },
 
@@ -262,9 +263,35 @@ export default {
     pricing: "Tarifs",
     blog: "Blog",
     about: "A Propos",
+    contact: "Contact",
     privacy: "Confidentialite",
     terms: "Conditions",
     disclosure: "Divulgation",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Contact - Claude Code Tips",
+    pageDescription: "Contactez-nous pour vos questions ou commentaires",
+    title: "Contactez-nous",
+    description: "Vous avez des questions ou des retours? J'aimerais avoir de vos nouvelles.",
+    nameLabel: "Nom",
+    namePlaceholder: "Votre nom",
+    emailLabel: "Email",
+    emailPlaceholder: "vous@exemple.com",
+    messageLabel: "Message",
+    messagePlaceholder: "Votre message...",
+    cta: "Envoyer le message",
+    sent: "Envoyé",
+    successMessage: "Message envoyé avec succès! Je vous répondrai bientôt.",
+    errors: {
+      nameRequired: "Veuillez entrer votre nom.",
+      emailRequired: "Veuillez entrer votre email.",
+      invalidEmail: "Veuillez entrer une adresse email valide.",
+      messageRequired: "Veuillez entrer un message (au moins 10 caractères).",
+      rateLimitExceeded: "Trop de tentatives. Reessayez dans une heure.",
+      submitFailed: "Une erreur est survenue. Veuillez reessayer.",
+    },
   },
 
   // About page

@@ -46,6 +46,7 @@ export async function load({ params, parent }) {
 		tip,
 		tipId,
 		canAccess,
+		hasAccess,
 		prevTipId,
 		nextTipId,
 		prevTip,

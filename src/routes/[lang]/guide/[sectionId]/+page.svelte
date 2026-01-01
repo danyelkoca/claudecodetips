@@ -103,7 +103,7 @@
 						<span class="px-2 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full flex-shrink-0">
 							{tip.id}
 						</span>
-						{#if tip.isFree}
+						{#if !hasAccess && tip.isFree}
 							<span class="px-2 py-1 bg-slate-50 text-slate-900 text-xs rounded-full flex-shrink-0">
 								{t.guide.free}
 							</span>

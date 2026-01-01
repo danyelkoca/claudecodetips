@@ -107,6 +107,7 @@ export default {
       emailRequired: "Lütfen e-posta adresinizi girin.",
       invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
       checkoutFailed: "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+      rateLimitExceeded: "Çok fazla deneme. Bir saat sonra tekrar deneyin.",
     },
   },
 
@@ -260,9 +261,35 @@ export default {
     pricing: "Fiyatlandırma",
     blog: "Blog",
     about: "Hakkında",
+    contact: "İletişim",
     privacy: "Gizlilik",
     terms: "Şartlar",
     disclosure: "Açıklama",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "İletişim - Claude Code Tips",
+    pageDescription: "Sorularınız veya geri bildirimleriniz için bizimle iletişime geçin",
+    title: "İletişim",
+    description: "Sorularınız veya geri bildirimleriniz mi var? Sizden haber almak isterim.",
+    nameLabel: "Ad",
+    namePlaceholder: "Adınız",
+    emailLabel: "E-posta",
+    emailPlaceholder: "siz@ornek.com",
+    messageLabel: "Mesaj",
+    messagePlaceholder: "Mesajınız...",
+    cta: "Mesaj Gönder",
+    sent: "Gönderildi",
+    successMessage: "Mesaj başarıyla gönderildi! Yakında size döneceğim.",
+    errors: {
+      nameRequired: "Lütfen adınızı girin.",
+      emailRequired: "Lütfen e-posta adresinizi girin.",
+      invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
+      messageRequired: "Lütfen bir mesaj girin (en az 10 karakter).",
+      rateLimitExceeded: "Çok fazla deneme. Bir saat sonra tekrar deneyin.",
+      submitFailed: "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+    },
   },
 
   // About page

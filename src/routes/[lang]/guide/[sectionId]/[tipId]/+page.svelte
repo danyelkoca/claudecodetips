@@ -16,6 +16,7 @@
 	$: tip = data.tip;
 	$: tipId = data.tipId;
 	$: canAccess = data.canAccess;
+	$: hasAccess = data.hasAccess;
 	$: prevTipId = data.prevTipId;
 	$: nextTipId = data.nextTipId;
 	$: prevTip = data.prevTip;
@@ -147,7 +148,7 @@
 			<span class="px-4 py-1 bg-primary/10 text-primary text-sm font-bold rounded-full">
 				{t.common.tipPrefix} {tipId}
 			</span>
-			{#if tip.isFree}
+			{#if !hasAccess && tip.isFree}
 				<span class="px-2 py-1 bg-slate-50 text-slate-500 text-xs rounded-full">
 					{t.guide.freePreview}
 				</span>

@@ -102,6 +102,7 @@ export default {
       emailRequired: "이메일을 입력해주세요.",
       invalidEmail: "유효한 이메일 주소를 입력해주세요.",
       checkoutFailed: "문제가 발생했습니다. 다시 시도해주세요.",
+      rateLimitExceeded: "시도 횟수가 너무 많습니다. 1시간 후 다시 시도하세요.",
     },
   },
 
@@ -247,9 +248,35 @@ export default {
     pricing: "가격",
     blog: "블로그",
     about: "소개",
+    contact: "문의하기",
     privacy: "개인정보 처리방침",
     terms: "이용약관",
     disclosure: "공시",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "문의하기 - Claude Code Tips",
+    pageDescription: "질문이나 피드백을 남겨주세요",
+    title: "문의하기",
+    description: "질문이나 피드백이 있으신가요? 연락 주시면 감사하겠습니다.",
+    nameLabel: "이름",
+    namePlaceholder: "이름",
+    emailLabel: "이메일",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "메시지",
+    messagePlaceholder: "메시지 입력...",
+    cta: "메시지 보내기",
+    sent: "전송됨",
+    successMessage: "메시지가 성공적으로 전송되었습니다! 곧 답변 드리겠습니다.",
+    errors: {
+      nameRequired: "이름을 입력해주세요.",
+      emailRequired: "이메일을 입력해주세요.",
+      invalidEmail: "유효한 이메일 주소를 입력해주세요.",
+      messageRequired: "메시지를 입력해주세요 (최소 10자 이상).",
+      rateLimitExceeded: "시도 횟수가 너무 많습니다. 1시간 후 다시 시도하세요.",
+      submitFailed: "문제가 발생했습니다. 다시 시도해주세요.",
+    },
   },
 
   // About page

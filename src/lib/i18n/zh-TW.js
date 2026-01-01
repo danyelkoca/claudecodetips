@@ -95,6 +95,7 @@ export default {
       emailRequired: "請輸入您的電子郵件。",
       invalidEmail: "請輸入有效的電子郵件地址。",
       checkoutFailed: "出了點問題，請重試。",
+      rateLimitExceeded: "嘗試次數過多。請一小時後重試。",
     },
   },
 
@@ -232,9 +233,35 @@ export default {
     pricing: "價格",
     blog: "部落格",
     about: "關於",
+    contact: "聯絡我們",
     privacy: "隱私",
     terms: "條款",
     disclosure: "披露",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "聯絡我們 - Claude Code Tips",
+    pageDescription: "有問題或回饋請聯絡我們",
+    title: "聯絡我們",
+    description: "有問題或回饋？我很樂意聽取您的意見。",
+    nameLabel: "姓名",
+    namePlaceholder: "您的姓名",
+    emailLabel: "電子郵件",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "留言",
+    messagePlaceholder: "您的留言...",
+    cta: "發送訊息",
+    sent: "已發送",
+    successMessage: "訊息發送成功！我會盡快回覆您。",
+    errors: {
+      nameRequired: "請輸入您的姓名。",
+      emailRequired: "請輸入您的電子郵件。",
+      invalidEmail: "請輸入有效的電子郵件地址。",
+      messageRequired: "請輸入留言（至少10個字元）。",
+      rateLimitExceeded: "嘗試次數過多。請一小時後重試。",
+      submitFailed: "出了點問題，請重試。",
+    },
   },
 
   about: {

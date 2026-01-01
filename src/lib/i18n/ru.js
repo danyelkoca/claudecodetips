@@ -102,6 +102,7 @@ export default {
       emailRequired: "Пожалуйста, введите email.",
       invalidEmail: "Пожалуйста, введите действительный email.",
       checkoutFailed: "Что-то пошло не так. Попробуйте снова.",
+      rateLimitExceeded: "Слишком много попыток. Повторите через час.",
     },
   },
 
@@ -254,9 +255,35 @@ export default {
     pricing: "Цены",
     blog: "Блог",
     about: "О нас",
+    contact: "Контакты",
     privacy: "Конфиденциальность",
     terms: "Условия",
     disclosure: "Раскрытие информации",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Контакты - Claude Code Tips",
+    pageDescription: "Свяжитесь с нами с вопросами или отзывами",
+    title: "Свяжитесь с нами",
+    description: "Есть вопросы или отзывы? Буду рад услышать от вас.",
+    nameLabel: "Имя",
+    namePlaceholder: "Ваше имя",
+    emailLabel: "Email",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "Сообщение",
+    messagePlaceholder: "Ваше сообщение...",
+    cta: "Отправить сообщение",
+    sent: "Отправлено",
+    successMessage: "Сообщение успешно отправлено! Скоро отвечу.",
+    errors: {
+      nameRequired: "Пожалуйста, введите ваше имя.",
+      emailRequired: "Пожалуйста, введите ваш email.",
+      invalidEmail: "Пожалуйста, введите действительный email.",
+      messageRequired: "Пожалуйста, введите сообщение (минимум 10 символов).",
+      rateLimitExceeded: "Слишком много попыток. Повторите через час.",
+      submitFailed: "Что-то пошло не так. Попробуйте снова.",
+    },
   },
 
   // About page

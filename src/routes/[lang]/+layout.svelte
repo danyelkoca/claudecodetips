@@ -73,9 +73,9 @@
 <JsonLd schema={websiteSchema} />
 
 <div class="min-h-screen flex flex-col">
-	<Navbar {lang} {t} />
+	<Navbar {lang} {t} hasAccess={data.hasAccess} />
 	<main class="flex-1">
 		<slot />
 	</main>
-	<Footer {lang} {t} />
+	<Footer {lang} {t} hasAccess={data.hasAccess} />
 </div>

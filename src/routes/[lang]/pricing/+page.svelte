@@ -23,21 +23,32 @@
 		}
 	};
 
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 	let email = '';
 	let loading = false;
 	let errorKey = '';
 
 	async function handleSubmit() {
-		if (!email || loading) return;
+		if (loading) return;
+		errorKey = '';
+
+		if (!email.trim()) {
+			errorKey = 'emailRequired';
+			return;
+		}
+		if (!emailRegex.test(email.trim())) {
+			errorKey = 'invalidEmail';
+			return;
+		}
 
 		loading = true;
-		errorKey = '';
 
 		try {
 			const res = await fetch('/api/checkout', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ lang, email })
+				body: JSON.stringify({ lang, email: email.trim() })
 			});
 
 			const result = await res.json();

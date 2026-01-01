@@ -5,6 +5,7 @@
 
 	export let t;
 	export let lang;
+	export let hasAccess = false;
 
 	let mobileMenuOpen = false;
 	let langMenuOpen = false;
@@ -78,9 +79,15 @@
 					{/if}
 				</div>
 
-				<a href="/{lang}/pricing" class="px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
-					{t.landing.pricing.cta}
-				</a>
+				{#if hasAccess}
+					<a href="/{lang}/guide" class="px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
+						{t.guide.startReading}
+					</a>
+				{:else}
+					<a href="/{lang}/pricing" class="px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
+						{t.landing.pricing.cta}
+					</a>
+				{/if}
 			</div>
 
 			<!-- Mobile Navigation -->
@@ -108,9 +115,15 @@
 					{t.nav.guide}
 				</a>
 
-				<a href="/{lang}/pricing" on:click={() => (mobileMenuOpen = false)} class="block px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-center transition-colors">
-					{t.landing.pricing.cta}
-				</a>
+				{#if hasAccess}
+					<a href="/{lang}/guide" on:click={() => (mobileMenuOpen = false)} class="block px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-center transition-colors">
+						{t.guide.startReading}
+					</a>
+				{:else}
+					<a href="/{lang}/pricing" on:click={() => (mobileMenuOpen = false)} class="block px-4 py-2 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-center transition-colors">
+						{t.landing.pricing.cta}
+					</a>
+				{/if}
 
 				<!-- Language Switcher (Mobile) -->
 				<div class="border-t border-slate-200 pt-4 space-y-2">

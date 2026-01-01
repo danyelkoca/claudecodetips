@@ -95,6 +95,7 @@ export default {
       emailRequired: "请输入您的电子邮箱。",
       invalidEmail: "请输入有效的电子邮箱地址。",
       checkoutFailed: "出了点问题，请重试。",
+      rateLimitExceeded: "尝试次数过多。请一小时后重试。",
     },
   },
 
@@ -232,9 +233,35 @@ export default {
     pricing: "价格",
     blog: "博客",
     about: "关于",
+    contact: "联系我们",
     privacy: "隐私",
     terms: "条款",
     disclosure: "披露",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "联系我们 - Claude Code Tips",
+    pageDescription: "有问题或反馈请联系我们",
+    title: "联系我们",
+    description: "有问题或反馈？我很乐意听取您的意见。",
+    nameLabel: "姓名",
+    namePlaceholder: "您的姓名",
+    emailLabel: "电子邮箱",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "留言",
+    messagePlaceholder: "您的留言...",
+    cta: "发送消息",
+    sent: "已发送",
+    successMessage: "消息发送成功！我会尽快回复您。",
+    errors: {
+      nameRequired: "请输入您的姓名。",
+      emailRequired: "请输入您的电子邮箱。",
+      invalidEmail: "请输入有效的电子邮箱地址。",
+      messageRequired: "请输入留言（至少10个字符）。",
+      rateLimitExceeded: "尝试次数过多。请一小时后重试。",
+      submitFailed: "出了点问题，请重试。",
+    },
   },
 
   about: {

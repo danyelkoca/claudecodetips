@@ -11,6 +11,7 @@
 
 	$: t = data.t;
 	$: lang = data.lang;
+	$: hasAccess = data.hasAccess;
 
 	// Canceled checkout handling
 	let showCanceledBanner = false;
@@ -109,10 +110,10 @@
 				<div class="space-y-4">
 					<a
 						id="hero-cta"
-						href="/{lang}/pricing"
+						href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
 						class="inline-block px-6 py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
 					>
-						{t.landing.hero.cta}
+						{hasAccess ? t.guide.startReading : t.landing.hero.cta}
 					</a>
 					<p class="text-sm text-slate-500">{t.landing.hero.guarantee}</p>
 				</div>
@@ -268,12 +269,14 @@
 											<h4 class="font-medium text-slate-900 group-hover/tip:text-primary transition-colors truncate">
 												{tip.title}
 											</h4>
-											{#if tip.isFree}
-												<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
-													{t.guide.free}
-												</span>
-											{:else}
-												<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+											{#if !hasAccess}
+												{#if tip.isFree}
+													<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
+														{t.guide.free}
+													</span>
+												{:else}
+													<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+												{/if}
 											{/if}
 										</div>
 										<p class="text-sm text-slate-500 truncate">{tip.summary}</p>
@@ -316,12 +319,14 @@
 										<h4 class="font-medium text-slate-900 group-hover/tip:text-primary transition-colors truncate">
 											{tip.title}
 										</h4>
-										{#if tip.isFree}
-											<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
-												{t.guide.free}
-											</span>
-										{:else}
-											<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+										{#if !hasAccess}
+											{#if tip.isFree}
+												<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
+													{t.guide.free}
+												</span>
+											{:else}
+												<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+											{/if}
 										{/if}
 									</div>
 									<p class="text-sm text-slate-500 truncate">{tip.summary}</p>
@@ -378,6 +383,7 @@
 	</div>
 </section>
 
+{#if !hasAccess}
 <!-- Section 5: Pricing -->
 <section id="pricing" class="py-12">
 	<div class="max-w-md mx-auto px-4 space-y-4">
@@ -407,6 +413,7 @@
 		<p class="text-center text-sm text-slate-500">{t.landing.pricing.guarantee}</p>
 	</div>
 </section>
+{/if}
 
 <!-- Sticky Mobile CTA -->
 {#if showStickyCta}
@@ -414,10 +421,10 @@
 		class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-200 shadow-lg md:hidden z-50 animate-slide-up"
 	>
 		<a
-			href="/{lang}/pricing"
+			href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
 			class="block w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-center cursor-pointer transition-colors"
 		>
-			{t.landing.hero.cta}
+			{hasAccess ? t.guide.startReading : t.landing.hero.cta}
 		</a>
 	</div>
 {/if}

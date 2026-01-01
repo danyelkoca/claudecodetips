@@ -100,6 +100,7 @@ export default {
       emailRequired: "Por favor ingresa tu correo electrónico.",
       invalidEmail: "Por favor ingresa una dirección de correo electrónico válida.",
       checkoutFailed: "Algo salió mal. Por favor intenta de nuevo.",
+      rateLimitExceeded: "Demasiados intentos. Intenta en una hora.",
     },
   },
 
@@ -247,9 +248,35 @@ export default {
     pricing: "Precios",
     blog: "Blog",
     about: "Acerca de",
+    contact: "Contacto",
     privacy: "Privacidad",
     terms: "Términos",
     disclosure: "Divulgación",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Contacto - Claude Code Tips",
+    pageDescription: "Ponte en contacto con preguntas o comentarios",
+    title: "Contáctanos",
+    description: "¿Tienes preguntas o comentarios? Me encantaría saber de ti.",
+    nameLabel: "Nombre",
+    namePlaceholder: "Tu nombre",
+    emailLabel: "Correo electrónico",
+    emailPlaceholder: "tu@ejemplo.com",
+    messageLabel: "Mensaje",
+    messagePlaceholder: "Tu mensaje...",
+    cta: "Enviar mensaje",
+    sent: "Enviado",
+    successMessage: "¡Mensaje enviado con éxito! Te responderé pronto.",
+    errors: {
+      nameRequired: "Por favor ingresa tu nombre.",
+      emailRequired: "Por favor ingresa tu correo electrónico.",
+      invalidEmail: "Por favor ingresa una dirección de correo electrónico válida.",
+      messageRequired: "Por favor ingresa un mensaje (al menos 10 caracteres).",
+      rateLimitExceeded: "Demasiados intentos. Intenta en una hora.",
+      submitFailed: "Algo salió mal. Por favor intenta de nuevo.",
+    },
   },
 
   about: {

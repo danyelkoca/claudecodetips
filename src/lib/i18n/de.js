@@ -107,6 +107,7 @@ export default {
       emailRequired: "Bitte gib deine E-Mail-Adresse ein.",
       invalidEmail: "Bitte gib eine gultige E-Mail-Adresse ein.",
       checkoutFailed: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      rateLimitExceeded: "Zu viele Versuche. Versuche es in einer Stunde erneut.",
     },
   },
 
@@ -261,9 +262,35 @@ export default {
     pricing: "Preise",
     blog: "Blog",
     about: "Uber Uns",
+    contact: "Kontakt",
     privacy: "Datenschutz",
     terms: "AGB",
     disclosure: "Offenlegung",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Kontakt - Claude Code Tips",
+    pageDescription: "Kontaktiere uns bei Fragen oder Feedback",
+    title: "Kontaktiere uns",
+    description: "Hast du Fragen oder Feedback? Ich wurde mich freuen von dir zu horen.",
+    nameLabel: "Name",
+    namePlaceholder: "Dein Name",
+    emailLabel: "E-Mail",
+    emailPlaceholder: "du@beispiel.com",
+    messageLabel: "Nachricht",
+    messagePlaceholder: "Deine Nachricht...",
+    cta: "Nachricht senden",
+    sent: "Gesendet",
+    successMessage: "Nachricht erfolgreich gesendet! Ich melde mich bald.",
+    errors: {
+      nameRequired: "Bitte gib deinen Namen ein.",
+      emailRequired: "Bitte gib deine E-Mail-Adresse ein.",
+      invalidEmail: "Bitte gib eine gultige E-Mail-Adresse ein.",
+      messageRequired: "Bitte gib eine Nachricht ein (mindestens 10 Zeichen).",
+      rateLimitExceeded: "Zu viele Versuche. Versuche es in einer Stunde erneut.",
+      submitFailed: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+    },
   },
 
   // About page

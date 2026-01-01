@@ -107,6 +107,7 @@ export default {
       emailRequired: "Por favor insira seu email.",
       invalidEmail: "Por favor insira um endereco de email valido.",
       checkoutFailed: "Algo deu errado. Por favor tente novamente.",
+      rateLimitExceeded: "Muitas tentativas. Tente em uma hora.",
     },
   },
 
@@ -258,9 +259,35 @@ export default {
     pricing: "Precos",
     blog: "Blog",
     about: "Sobre",
+    contact: "Contato",
     privacy: "Privacidade",
     terms: "Termos",
     disclosure: "Divulgacao",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Contato - Claude Code Tips",
+    pageDescription: "Entre em contato com perguntas ou feedback",
+    title: "Fale Conosco",
+    description: "Tem perguntas ou feedback? Adoraria ouvir de voce.",
+    nameLabel: "Nome",
+    namePlaceholder: "Seu nome",
+    emailLabel: "Email",
+    emailPlaceholder: "voce@exemplo.com",
+    messageLabel: "Mensagem",
+    messagePlaceholder: "Sua mensagem...",
+    cta: "Enviar mensagem",
+    sent: "Enviado",
+    successMessage: "Mensagem enviada com sucesso! Responderei em breve.",
+    errors: {
+      nameRequired: "Por favor insira seu nome.",
+      emailRequired: "Por favor insira seu email.",
+      invalidEmail: "Por favor insira um endereco de email valido.",
+      messageRequired: "Por favor insira uma mensagem (pelo menos 10 caracteres).",
+      rateLimitExceeded: "Muitas tentativas. Tente em uma hora.",
+      submitFailed: "Algo deu errado. Por favor tente novamente.",
+    },
   },
 
   // About page

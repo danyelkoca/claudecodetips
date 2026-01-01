@@ -101,6 +101,7 @@ export default {
       emailRequired: "メールアドレスを入力してください。",
       invalidEmail: "有効なメールアドレスを入力してください。",
       checkoutFailed: "問題が発生しました。もう一度お試しください。",
+      rateLimitExceeded: "試行回数が多すぎます。1時間後にお試しください。",
     },
   },
 
@@ -247,9 +248,35 @@ export default {
     pricing: "料金",
     blog: "ブログ",
     about: "概要",
+    contact: "お問い合わせ",
     privacy: "プライバシー",
     terms: "利用規約",
     disclosure: "特商法表記",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "お問い合わせ - Claude Code Tips",
+    pageDescription: "ご質問やフィードバックはこちらから",
+    title: "お問い合わせ",
+    description: "ご質問やフィードバックがありましたら、お気軽にどうぞ。",
+    nameLabel: "お名前",
+    namePlaceholder: "お名前",
+    emailLabel: "メールアドレス",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "メッセージ",
+    messagePlaceholder: "メッセージを入力...",
+    cta: "送信",
+    sent: "送信済み",
+    successMessage: "メッセージが送信されました！後ほどご連絡いたします。",
+    errors: {
+      nameRequired: "お名前を入力してください。",
+      emailRequired: "メールアドレスを入力してください。",
+      invalidEmail: "有効なメールアドレスを入力してください。",
+      messageRequired: "メッセージを入力してください（10文字以上）。",
+      rateLimitExceeded: "試行回数が多すぎます。1時間後にお試しください。",
+      submitFailed: "問題が発生しました。もう一度お試しください。",
+    },
   },
 
   // About page

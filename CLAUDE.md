@@ -292,6 +292,8 @@ Before proposing any solution, review all relevant areas:
 ### API Layer
 - `src/routes/api/checkout/+server.js`
 - `src/routes/api/webhooks/stripe/+server.js`
+- `src/routes/api/contact/+server.js`
+- `src/routes/api/restore/+server.js`
 
 ### Server-Side (SvelteKit)
 - `src/routes/[lang]/**/+page.server.js`, `+layout.server.js`
@@ -300,6 +302,7 @@ Before proposing any solution, review all relevant areas:
 
 ### Firebase/Firestore
 - `src/lib/server/firebase-admin.js` - Admin SDK initialization
+- `src/lib/server/rateLimit.js` - Rate limiting utility
 - Firestore for storing purchases and user data
 
 ### Frontend
@@ -311,10 +314,14 @@ Before proposing any solution, review all relevant areas:
 - `src/lib/components/Footer.svelte`
 - `src/lib/components/PaywallBanner.svelte`
 - `src/lib/components/TranslationDisclaimer.svelte`
+- `src/lib/components/SeoHead.svelte`
+- `src/lib/components/TipImage.svelte`
+- `src/lib/components/JsonLd.svelte`
 
 ### Content
 - `src/lib/content/tips.js`
 - `src/lib/content/tips/{lang}/*.svx` (13 language folders)
+- `src/lib/content/blog.js`
 
 ### Internationalization
 - `src/lib/i18n/{lang}.js` (13 files: en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr)
@@ -354,6 +361,7 @@ Before delivering a solution, confirm:
 - [ ] Holistic—addresses all files that need changing
 - [ ] Visual styling matches existing pages
 - [ ] All 13 i18n files updated (en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr)
+- [ ] Sitemap updated (`src/routes/sitemap.xml/+server.js`) if new page added
 - [ ] Plan file updated and 100% consistent with current task progress
 
 **Only provide a plan when 10000000% confident. If not, continue working and validating.**

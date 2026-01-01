@@ -10,7 +10,7 @@ const carouselTipIds = [
 ];
 
 export async function load({ parent }) {
-	const { lang, t } = await parent();
+	const { lang, t, hasAccess } = await parent();
 
 	// Load all tips metadata
 	const { tips: allTips } = await loadTipsMeta(lang);
@@ -46,6 +46,7 @@ export async function load({ parent }) {
 	return {
 		sampleTip,
 		curriculum,
-		carouselTips
+		carouselTips,
+		hasAccess
 	};
 }

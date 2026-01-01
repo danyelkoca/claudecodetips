@@ -65,10 +65,12 @@
 				<Layers class="w-4 h-4 text-primary" />
 				<span>{totalSections} {t.guide.sections}</span>
 			</div>
+			{#if !hasAccess}
 			<div class="flex items-center gap-2 text-slate-500">
 				<Gift class="w-4 h-4 text-primary" />
 				<span>{freeTipsCount} {t.guide.freeLabel}</span>
 			</div>
+		{/if}
 		</div>
 	</header>
 
@@ -110,7 +112,7 @@
 										<h3 class="font-medium text-slate-900 group-hover:text-primary transition-colors truncate">
 											{tip.title}
 										</h3>
-										{#if tip.isFree}
+										{#if !hasAccess && tip.isFree}
 											<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
 												{t.guide.free}
 											</span>
@@ -151,10 +153,12 @@
 							<Layers class="w-4 h-4 text-primary flex-shrink-0" />
 							<span class="text-slate-500">{totalSections} {t.guide.organizedSections}</span>
 						</li>
+						{#if !hasAccess}
 						<li class="flex items-center gap-4">
 							<Gift class="w-4 h-4 text-primary flex-shrink-0" />
 							<span class="text-slate-500">{freeTipsCount} {t.guide.freePreviews}</span>
 						</li>
+					{/if}
 					</ul>
 
 					{#if !hasAccess}

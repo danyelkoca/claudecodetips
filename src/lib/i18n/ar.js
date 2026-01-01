@@ -102,6 +102,7 @@ export default {
 			emailRequired: "الرجاء إدخال بريدك الإلكتروني.",
 			invalidEmail: "الرجاء إدخال عنوان بريد إلكتروني صالح.",
 			checkoutFailed: "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
+			rateLimitExceeded: "محاولات كثيرة جدا. حاول مرة أخرى بعد ساعة.",
 		},
 	},
 
@@ -246,9 +247,35 @@ export default {
 		pricing: "الأسعار",
 		blog: "المدونة",
 		about: "حول",
+		contact: "تواصل معنا",
 		privacy: "الخصوصية",
 		terms: "الشروط",
 		disclosure: "الإفصاح",
+	},
+
+	// Contact page
+	contact: {
+		pageTitle: "تواصل معنا - Claude Code Tips",
+		pageDescription: "تواصل معنا للأسئلة أو الملاحظات",
+		title: "تواصل معنا",
+		description: "لديك أسئلة أو ملاحظات؟ يسعدني سماع رأيك.",
+		nameLabel: "الاسم",
+		namePlaceholder: "اسمك",
+		emailLabel: "البريد الإلكتروني",
+		emailPlaceholder: "you@example.com",
+		messageLabel: "الرسالة",
+		messagePlaceholder: "رسالتك...",
+		cta: "إرسال الرسالة",
+		sent: "تم الإرسال",
+		successMessage: "تم إرسال الرسالة بنجاح! سأرد عليك قريباً.",
+		errors: {
+			nameRequired: "الرجاء إدخال اسمك.",
+			emailRequired: "الرجاء إدخال بريدك الإلكتروني.",
+			invalidEmail: "الرجاء إدخال عنوان بريد إلكتروني صالح.",
+			messageRequired: "الرجاء إدخال رسالة (10 أحرف على الأقل).",
+			rateLimitExceeded: "محاولات كثيرة جدا. حاول مرة أخرى بعد ساعة.",
+			submitFailed: "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
+		},
 	},
 
 	// About page

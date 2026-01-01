@@ -102,6 +102,7 @@ export default {
       emailRequired: "Please enter your email.",
       invalidEmail: "Please enter a valid email address.",
       checkoutFailed: "Something went wrong. Please try again.",
+      rateLimitExceeded: "Too many attempts. Try again in an hour.",
     },
   },
 
@@ -250,9 +251,35 @@ export default {
     pricing: "Pricing",
     blog: "Blog",
     about: "About",
+    contact: "Contact",
     privacy: "Privacy",
     terms: "Terms",
     disclosure: "Disclosure",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Contact - Claude Code Tips",
+    pageDescription: "Get in touch with questions or feedback",
+    title: "Contact Us",
+    description: "Have questions or feedback? I'd love to hear from you.",
+    nameLabel: "Name",
+    namePlaceholder: "Your name",
+    emailLabel: "Email",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "Message",
+    messagePlaceholder: "Your message...",
+    cta: "Send Message",
+    sent: "Sent",
+    successMessage: "Message sent successfully! I'll get back to you soon.",
+    errors: {
+      nameRequired: "Please enter your name.",
+      emailRequired: "Please enter your email.",
+      invalidEmail: "Please enter a valid email address.",
+      messageRequired: "Please enter a message (at least 10 characters).",
+      rateLimitExceeded: "Too many attempts. Try again in an hour.",
+      submitFailed: "Something went wrong. Please try again.",
+    },
   },
 
   // About page

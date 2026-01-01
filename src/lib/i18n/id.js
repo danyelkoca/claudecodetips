@@ -102,6 +102,7 @@ export default {
       emailRequired: "Silakan masukkan email Anda.",
       invalidEmail: "Silakan masukkan alamat email yang valid.",
       checkoutFailed: "Terjadi kesalahan. Silakan coba lagi.",
+      rateLimitExceeded: "Terlalu banyak percobaan. Coba lagi dalam satu jam.",
     },
   },
 
@@ -255,9 +256,35 @@ export default {
     pricing: "Harga",
     blog: "Blog",
     about: "Tentang",
+    contact: "Hubungi Kami",
     privacy: "Privasi",
     terms: "Ketentuan",
     disclosure: "Pengungkapan",
+  },
+
+  // Contact page
+  contact: {
+    pageTitle: "Hubungi Kami - Claude Code Tips",
+    pageDescription: "Hubungi kami untuk pertanyaan atau feedback",
+    title: "Hubungi Kami",
+    description: "Punya pertanyaan atau feedback? Saya senang mendengar dari Anda.",
+    nameLabel: "Nama",
+    namePlaceholder: "Nama Anda",
+    emailLabel: "Email",
+    emailPlaceholder: "anda@contoh.com",
+    messageLabel: "Pesan",
+    messagePlaceholder: "Pesan Anda...",
+    cta: "Kirim Pesan",
+    sent: "Terkirim",
+    successMessage: "Pesan berhasil dikirim! Saya akan segera membalas.",
+    errors: {
+      nameRequired: "Silakan masukkan nama Anda.",
+      emailRequired: "Silakan masukkan email Anda.",
+      invalidEmail: "Silakan masukkan alamat email yang valid.",
+      messageRequired: "Silakan masukkan pesan (minimal 10 karakter).",
+      rateLimitExceeded: "Terlalu banyak percobaan. Coba lagi dalam satu jam.",
+      submitFailed: "Terjadi kesalahan. Silakan coba lagi.",
+    },
   },
 
   // About page

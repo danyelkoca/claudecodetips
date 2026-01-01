@@ -21,6 +21,7 @@ export async function GET() {
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/terms`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/disclosure`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/restore`);
+		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/contact`);
 		// NOTE: /success excluded (post-checkout confirmation)
 
 		// Sections

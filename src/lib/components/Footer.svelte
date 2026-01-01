@@ -1,6 +1,7 @@
 <script>
 	export let t;
 	export let lang;
+	export let hasAccess = false;
 </script>
 
 <footer class="border-t border-slate-200 bg-slate-50">
@@ -25,8 +26,10 @@
 					<div class="space-y-2">
 						<a href="/{lang}/guide" class="block text-slate-900 hover:opacity-80">{t.footer.allTips}</a>
 						<a href="/{lang}/faq" class="block text-slate-900 hover:opacity-80">{t.footer.faq}</a>
-						<a href="/{lang}/restore" class="block text-slate-900 hover:opacity-80">{t.footer.restoreAccess}</a>
-						<a href="/{lang}/pricing" class="block text-slate-900 hover:opacity-80">{t.footer.pricing}</a>
+						{#if !hasAccess}
+							<a href="/{lang}/restore" class="block text-slate-900 hover:opacity-80">{t.footer.restoreAccess}</a>
+							<a href="/{lang}/pricing" class="block text-slate-900 hover:opacity-80">{t.footer.pricing}</a>
+						{/if}
 					</div>
 				</div>
 
@@ -36,6 +39,7 @@
 					<div class="space-y-2">
 						<a href="/{lang}/blog" class="block text-slate-900 hover:opacity-80">{t.footer.blog}</a>
 						<a href="/{lang}/about" class="block text-slate-900 hover:opacity-80">{t.footer.about}</a>
+						<a href="/{lang}/contact" class="block text-slate-900 hover:opacity-80">{t.footer.contact}</a>
 					</div>
 				</div>
 

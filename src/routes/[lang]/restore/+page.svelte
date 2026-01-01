@@ -1,5 +1,5 @@
 <script>
-	import { Mail, Loader2, Check, AlertCircle } from 'lucide-svelte';
+	import { Loader2, Check, AlertCircle } from 'lucide-svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 
 	export let data;
@@ -7,22 +7,33 @@
 	$: t = data.t;
 	$: lang = data.lang;
 
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 	let email = '';
 	let loading = false;
 	let success = false;
 	let errorKey = '';
 
 	async function handleSubmit() {
-		if (!email || loading) return;
+		if (loading) return;
+		errorKey = '';
+
+		if (!email.trim()) {
+			errorKey = 'emailRequired';
+			return;
+		}
+		if (!emailRegex.test(email.trim())) {
+			errorKey = 'invalidEmail';
+			return;
+		}
 
 		loading = true;
-		errorKey = '';
 
 		try {
 			const res = await fetch('/api/restore', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email })
+				body: JSON.stringify({ email: email.trim() })
 			});
 
 			const result = await res.json();
@@ -51,18 +62,13 @@
 />
 
 <div class="max-w-md mx-auto px-4 py-12 space-y-8">
-	<div class="text-center space-y-4">
-		<div class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-			<Mail class="w-4 h-4 text-slate-500" />
-		</div>
-		<div class="space-y-2">
-			<h1 class="text-3xl font-bold text-slate-900">
-				{t.restore.title}
-			</h1>
-			<p class="text-slate-500">
-				{t.restore.description}
-			</p>
-		</div>
+	<div class="text-center space-y-2">
+		<h1 class="text-3xl font-bold text-slate-900">
+			{t.restore.title}
+		</h1>
+		<p class="text-slate-500">
+			{t.restore.description}
+		</p>
 	</div>
 
 	{#if success}
