@@ -26,11 +26,6 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    X-XSS-Protection = "1; mode=block"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-
-# Redirects
-[[redirects]]
-  from = "/sitemap.xml"
-  to = "/sitemap/index.xml"
-  status = 301
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://js.stripe.com https://checkout.stripe.com https://*.googletagmanager.com; connect-src 'self' https://api.stripe.com https://checkout.stripe.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com; img-src 'self' data: https://*.stripe.com https://*.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;"

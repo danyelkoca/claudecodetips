@@ -57,6 +57,200 @@
 - If a pattern exists elsewhere, use it verbatim
 - **Visual consistency:** Match existing styling (colors, borders, buttons). Check similar pages first.
 
+## Design System
+
+### CORE RULES (NON-NEGOTIABLE)
+
+**1. NO MARGIN CLASSES**
+Never use: `m-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `mx-*`, `my-*`
+
+Exception: `mx-auto` for centering is allowed.
+
+Use instead:
+| Instead of | Use |
+|------------|-----|
+| `mb-4` between items | Parent with `space-y-4` or `flex flex-col gap-4` |
+| `mt-8` after section | Parent with `space-y-8` or section with `pt-8` |
+| `mr-2` on icon | Parent with `flex gap-2` |
+
+**2. ONE VALUE PER PROPERTY**
+No variations. No "it depends." One value per design property.
+
+### Token
+
+```css
+@theme {
+  --color-primary: #b88f4a;
+}
+```
+
+### Colors
+
+| Element | Class |
+|---------|-------|
+| Body text | `text-slate-900` |
+| Muted text | `text-slate-500` |
+| Light background | `bg-slate-50` |
+| Borders | `border-slate-200` |
+| Primary CTA | `bg-primary text-white` |
+| Primary text | `text-primary` |
+| Primary light | `bg-primary/10` |
+| Success | `text-green-600`, `bg-green-50` |
+| Error | `text-red-600`, `bg-red-50` |
+
+### Typography
+
+| Element | Class |
+|---------|-------|
+| H1 (page title) | `text-3xl font-bold` |
+| H2 (section) | `text-2xl font-bold` |
+| H3 (card title) | `text-xl font-semibold` |
+| Body | `text-base` |
+| Small/meta | `text-sm` |
+| Badge | `text-xs font-medium` |
+
+### Spacing (8px Grid) - NO MARGIN
+
+| Use | Class | Pixels |
+|-----|-------|--------|
+| Icon + text | `gap-2` | 8px |
+| Inline elements | `gap-1` | 4px |
+| List items, form fields | `gap-4` | 16px |
+| Card content, after headings | `gap-6` | 24px |
+| Content blocks, sections | `gap-8` | 32px |
+
+### Padding
+
+| Use | Class |
+|-----|-------|
+| Container horizontal | `px-4` |
+| Section vertical | `py-12` |
+| Card/modal | `p-6` |
+| Button default | `px-4 py-2` |
+| Button large | `px-6 py-3` |
+| Input | `px-4 py-3` |
+| Badge | `px-2 py-1` |
+
+### Space-Y (Vertical Stacking Without Flex)
+
+| Use | Class |
+|-----|-------|
+| Tight list | `space-y-2` |
+| Standard list | `space-y-4` |
+| Section content | `space-y-6` |
+| Page sections | `space-y-8` |
+
+Rule: Use `gap-*` with flex/grid. Use `space-y-*` for simple stacked content.
+
+**Border spacing:** When using `border-t` with `pt-*`, the parent MUST have `space-y-*` for symmetric spacing around the border.
+
+### Border Radius
+
+| Use | Class |
+|-----|-------|
+| ALL UI elements | `rounded-xl` |
+| Pills/badges only | `rounded-full` |
+
+### Shadows
+
+| Use | Class |
+|-----|-------|
+| Cards, elevated surfaces | `shadow-sm` |
+| Sticky headers, modals | `shadow-lg` |
+
+### Layout Containers
+
+| Use | Class |
+|-----|-------|
+| Default page | `max-w-5xl mx-auto px-4` |
+| Narrow (forms, pricing) | `max-w-md mx-auto px-4` |
+| Prose/article | `max-w-3xl mx-auto px-4` |
+
+### Icon Sizes
+
+| Use | Class | Pair With |
+|-----|-------|-----------|
+| Inline small text | `w-4 h-4` | text-sm, text-xs |
+| Inline body text | `w-5 h-5` | text-base, buttons |
+| Standalone/nav | `w-6 h-6` | Headers, navigation |
+| Hero/feature | `w-8 h-8` | Large icons only |
+
+### Interactive States
+
+| State | Class |
+|-------|-------|
+| ALL clickables | `cursor-pointer` |
+| Hover (buttons, links) | `hover:opacity-80` |
+| Hover (cards) | `hover:border-primary hover:shadow-sm` |
+| Focus (inputs) | `focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary` |
+| Disabled | `disabled:opacity-50 disabled:cursor-not-allowed` |
+
+### Transitions
+
+| Use | Class |
+|-----|-------|
+| Color changes | `transition-colors` |
+| Transform/scale | `transition-transform` |
+
+Rule: Never use `transition-all`. Always use specific transition classes.
+
+### Z-Index Scale
+
+| Layer | Value |
+|-------|-------|
+| Dropdowns | `z-10` |
+| Sticky elements | `z-20` |
+| Modals/overlays | `z-50` |
+| Toast/notifications | `z-[9999]` |
+
+### Responsive (Mobile-First)
+
+| Prefix | Use |
+|--------|-----|
+| (none) | Mobile base styles |
+| `md:` | Tablets, layout changes |
+| `lg:` | Desktop |
+
+Rule: Write mobile first, add `md:` for larger screens.
+
+### Component Patterns
+
+**Button (Default):**
+```
+cursor-pointer px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:opacity-80 transition-colors
+```
+
+**Button (Large CTA):**
+```
+cursor-pointer px-6 py-3 bg-primary text-white rounded-xl font-bold hover:opacity-80 transition-colors
+```
+
+**Card:**
+```
+p-6 bg-white rounded-xl border border-slate-200 shadow-sm
+```
+
+**Input:**
+```
+w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+```
+
+**Section:**
+```html
+<section class="py-12">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="space-y-8">
+      <!-- content -->
+    </div>
+  </div>
+</section>
+```
+
+### Rules
+
+- Cards on `bg-slate-50` use `bg-white`
+- Use Tailwind's shade scale (50, 200, 500, 900), not opacity hacks
+
 ## Build Commands
 
 ```bash
@@ -77,7 +271,7 @@ SvelteKit application with Netlify adapter, selling access to "50 Tips to Master
 
 **i18n**: Translations in `src/lib/i18n/{lang}.js` files. Layout loads translations via `loadTranslations()` and passes `t` object down through `data`.
 
-**Paywall**: Access controlled via `hasAccess` prop passed through layouts. Currently hardcoded to `true` in `src/routes/[lang]/+layout.server.js:18` for testing.
+**Paywall**: Access controlled via `hasAccess` prop passed through layouts. Checks Firestore for valid purchase via `purchase_session` cookie in `src/routes/[lang]/+layout.server.js`.
 
 **Backend**:
 - Stripe checkout: `src/routes/api/checkout/+server.js`
@@ -116,8 +310,7 @@ Before proposing any solution, review all relevant areas:
 - `src/lib/components/Navbar.svelte`
 - `src/lib/components/Footer.svelte`
 - `src/lib/components/PaywallBanner.svelte`
-- `src/lib/components/TipCard.svelte`
-- `src/lib/components/TipTeaser.svelte`
+- `src/lib/components/TranslationDisclaimer.svelte`
 
 ### Content
 - `src/lib/content/tips.js`

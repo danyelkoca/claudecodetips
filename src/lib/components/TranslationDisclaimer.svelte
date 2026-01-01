@@ -2,8 +2,8 @@
 	export let t;
 </script>
 
-<div class="p-4 bg-amber-50 rounded-lg border border-amber-200 text-center mb-6">
-	<p class="text-amber-800 text-sm">
+<div class="p-4 bg-primary/10 rounded-xl text-center">
+	<p class="text-primary text-sm">
 		{t.disclaimer.notTranslated}
 	</p>
 </div>

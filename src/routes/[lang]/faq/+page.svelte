@@ -1,29 +1,50 @@
 <script>
 	import { ChevronDown } from 'lucide-svelte';
+	import SeoHead from '$lib/components/SeoHead.svelte';
+	import JsonLd from '$lib/components/JsonLd.svelte';
 
 	export let data;
 	$: t = data.t;
+	$: lang = data.lang;
+
+	// FAQPage schema for semantic structure
+	$: faqSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: t.faq.items.map(item => ({
+			'@type': 'Question',
+			name: item.q,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.a
+			}
+		}))
+	};
 </script>
 
-<svelte:head>
-	<title>{t.faq.pageTitle}</title>
-	<meta name="description" content={t.faq.pageDescription} />
-</svelte:head>
+<SeoHead
+	title={t.faq.pageTitle}
+	description={t.faq.pageDescription}
+	path="/{lang}/faq"
+	{lang}
+/>
 
-<main class="min-h-screen bg-white">
-	<div class="max-w-3xl mx-auto px-4 py-12">
-		<div class="text-center mb-12">
-			<h1 class="text-4xl sm:text-5xl font-bold mb-4">{t.faq.title}</h1>
+<JsonLd schema={faqSchema} />
+
+<main class="min-h-screen">
+	<div class="max-w-3xl mx-auto px-4 py-12 space-y-8">
+		<div class="text-center">
+			<h1 class="text-3xl font-bold text-slate-900">{t.faq.title}</h1>
 		</div>
 
-		<div class="space-y-3">
+		<div class="space-y-4">
 			{#each t.faq.items as item}
-				<details class="group border border-slate-200 rounded-lg bg-white">
+				<details class="group border border-slate-200 rounded-xl">
 					<summary class="p-4 cursor-pointer flex justify-between items-center">
 						<span class="font-medium text-slate-900">{item.q}</span>
-						<ChevronDown class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0 ml-4" />
+						<ChevronDown class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform flex-shrink-0" />
 					</summary>
-					<div class="px-4 pb-4 text-slate-600">{item.a}</div>
+					<div class="px-4 pb-4 text-slate-900">{item.a}</div>
 				</details>
 			{/each}
 		</div>

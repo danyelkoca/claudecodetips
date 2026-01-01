@@ -1,9 +1,33 @@
 <!doctype html>
-<html lang="%lang%">
+<html lang="%lang%" dir="%dir%">
 	<head>
 		<meta charset="utf-8" />
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-9R8L96JNFT"></script>
+		<script>
+			if (window.location.hostname === 'claudecodetips.com') {
+				// Check for ?internal=1 to mark as internal user
+				if (location.search.includes('internal=1')) localStorage.setItem('ga4_internal', '1');
+
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				// Mark traffic as internal if flag is set
+				if (localStorage.getItem('ga4_internal')) gtag('set', {'traffic_type': 'internal'});
+
+				gtag('config', 'G-9R8L96JNFT');
+			}
+		</script>
+
 		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#b88f4a" />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<link rel="preconnect" href="https://js.stripe.com" />
+		<link rel="dns-prefetch" href="https://api.stripe.com" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

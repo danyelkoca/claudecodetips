@@ -1,19 +1,38 @@
 import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY } from '$env/static/private';
 import { PUBLIC_SITE_URL } from '$env/static/public';
-import { json, error } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import { loadTranslations, DEFAULT_LANG } from '$lib/i18n/loader.js';
+import { checkRateLimit } from '$lib/server/rateLimit.js';
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
-export async function POST({ request }) {
+export async function POST({ request, getClientAddress }) {
 	try {
+		const ip = getClientAddress();
+		try {
+			await checkRateLimit(`checkout_${ip}`, 5, 60);
+		} catch (err) {
+			if (err.message === 'rateLimitExceeded') {
+				return json({ error: 'rateLimitExceeded' }, { status: 429 });
+			}
+			throw err;
+		}
+
 		const { lang, email } = await request.json();
 		const effectiveLang = lang || DEFAULT_LANG;
 
 		if (!email) {
-			throw error(400, 'emailRequired');
+			return json({ error: 'emailRequired' }, { status: 400 });
 		}
+
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			return json({ error: 'invalidEmail' }, { status: 400 });
+		}
+
+		// Normalize email to match webhook and restore
+		const normalizedEmail = email.toLowerCase().trim();
 
 		const t = await loadTranslations(effectiveLang);
 
@@ -31,7 +50,7 @@ export async function POST({ request }) {
 				},
 				quantity: 1
 			}],
-			customer_email: email,
+			customer_email: normalizedEmail,
 			success_url: `${PUBLIC_SITE_URL}/${effectiveLang}/success?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${PUBLIC_SITE_URL}/${effectiveLang}?canceled=true`,
 			metadata: { lang: effectiveLang }
@@ -40,6 +59,6 @@ export async function POST({ request }) {
 		return json({ url: session.url });
 	} catch (err) {
 		console.error('Stripe checkout error:', err);
-		throw error(500, 'checkoutFailed');
+		return json({ error: 'checkoutFailed' }, { status: 500 });
 	}
 }

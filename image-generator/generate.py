@@ -251,7 +251,7 @@ print("=" * 50)
 
 for tip in range(1, 51):  # 50 tips (1-50)
     img = make_gradient(tip, tip * 137 + 42)
-    img.save(f'src/lib/images/tips/tip-{tip:02d}.png')
+    img.save(f'src/lib/images/tips/tip-{tip:02d}.png', optimize=True, compress_level=9)
 
     # Find section name for logging
     section_name = "unknown"
@@ -264,12 +264,12 @@ for tip in range(1, 51):  # 50 tips (1-50)
 
 # Intro image
 intro_img = make_intro()
-intro_img.save('src/lib/images/tips/intro.png')
+intro_img.save('src/lib/images/tips/intro.png', optimize=True, compress_level=9)
 print('  intro.png [welcome]')
 
 # Bonus image - THE BEST
 bonus_img = make_bonus()
-bonus_img.save('src/lib/images/tips/bonus.png')
+bonus_img.save('src/lib/images/tips/bonus.png', optimize=True, compress_level=9)
 print('  bonus.png [CELEBRATION!]')
 
 print("=" * 50)

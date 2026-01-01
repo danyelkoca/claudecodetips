@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --color-primary: #b88f4a;
+}
+
 :root {
   color-scheme: light only;
 }
@@ -11,7 +15,7 @@ body {
 }
 
 .prose a {
-  color: #dc2626;
+  color: var(--color-primary);
   font-weight: 600;
   text-decoration: none;
 }

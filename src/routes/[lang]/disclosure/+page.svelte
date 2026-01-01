@@ -1,51 +1,87 @@
 <script>
+	import SeoHead from '$lib/components/SeoHead.svelte';
+
 	export let data;
 	$: t = data.t;
+	$: lang = data.lang;
 </script>
 
-<svelte:head>
-	<title>{t.disclosure.pageTitle}</title>
-	<meta name="description" content={t.disclosure.pageDescription} />
-</svelte:head>
+<SeoHead
+	title={t.disclosure.pageTitle}
+	description={t.disclosure.pageDescription}
+	path="/{lang}/disclosure"
+	{lang}
+/>
 
-<main class="min-h-screen bg-white">
+<main class="min-h-screen">
 	<div class="max-w-5xl mx-auto px-4 py-12">
-		<div class="text-center mb-12">
-			<h1 class="text-4xl sm:text-5xl font-bold mb-4">{t.disclosure.title}</h1>
-			<p class="text-slate-500">{t.disclosure.lastUpdated}</p>
+		<div class="text-center space-y-2">
+			<h1 class="text-3xl font-bold text-slate-900">{t.disclosure.title}</h1>
 		</div>
 
-		<div class="space-y-10 leading-relaxed">
-			<!-- No Affiliation -->
-			<section>
-				<h2 class="text-2xl font-bold mb-4">{t.disclosure.affiliationTitle}</h2>
-				<p class="text-slate-700">{t.disclosure.affiliationPara}</p>
-			</section>
-
-			<!-- Editorial Independence -->
-			<section>
-				<h2 class="text-2xl font-bold mb-4">{t.disclosure.independenceTitle}</h2>
-				<p class="text-slate-700">{t.disclosure.independencePara}</p>
-			</section>
-
-			<!-- AI-Assisted -->
-			<section>
-				<h2 class="text-2xl font-bold mb-4">{t.disclosure.aiAssistedTitle}</h2>
-				<p class="text-slate-700">{t.disclosure.aiAssistedPara}</p>
-			</section>
-
-			<!-- No Sponsored Content -->
-			<section>
-				<h2 class="text-2xl font-bold mb-4">{t.disclosure.noSponsoredTitle}</h2>
-				<p class="text-slate-700">{t.disclosure.noSponsoredPara}</p>
-			</section>
-
-			<!-- Contact -->
-			<section>
-				<h2 class="text-2xl font-bold mb-4">{t.disclosure.contactTitle}</h2>
-				<p class="text-slate-700">{t.disclosure.contactPara}</p>
-				<p class="text-slate-900 font-medium mt-2">{t.disclosure.contactEmail}</p>
-			</section>
+		<div class="space-y-6 leading-relaxed pt-8">
+			<table class="w-full border-collapse">
+				<tbody>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 w-1/3 font-semibold">{t.disclosure.sellerName}</th>
+						<td class="py-3 px-4">{t.disclosure.sellerNameValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.address}</th>
+						<td class="py-3 px-4">{t.disclosure.addressValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.phone}</th>
+						<td class="py-3 px-4">{t.disclosure.phoneValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.email}</th>
+						<td class="py-3 px-4">{t.disclosure.emailValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.headOfOperations}</th>
+						<td class="py-3 px-4">{t.disclosure.headOfOperationsValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.additionalFees}</th>
+						<td class="py-3 px-4">{t.disclosure.additionalFeesValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold align-top">{t.disclosure.refundPolicy}</th>
+						<td class="py-3 px-4">
+							<div class="space-y-4">
+								<div>
+									<p class="font-medium">{t.disclosure.refundServiceIssues}</p>
+									<p>{t.disclosure.refundServiceIssuesValue}</p>
+								</div>
+								<div>
+									<p class="font-medium">{t.disclosure.refundCustomer}</p>
+									<p>{t.disclosure.refundCustomerValue}</p>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.deliveryTime}</th>
+						<td class="py-3 px-4">{t.disclosure.deliveryTimeValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.paymentMethods}</th>
+						<td class="py-3 px-4">{t.disclosure.paymentMethodsValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold">{t.disclosure.paymentPeriod}</th>
+						<td class="py-3 px-4">{t.disclosure.paymentPeriodValue}</td>
+					</tr>
+					<tr class="border-b">
+						<th class="py-3 px-4 text-left bg-slate-50 font-semibold align-top">{t.disclosure.price}</th>
+						<td class="py-3 px-4 space-y-2">
+							<p>{t.disclosure.priceValue}</p>
+							<p class="text-sm text-slate-500">{t.disclosure.priceTaxNote}</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </main>

@@ -1,383 +1,409 @@
 export default {
-	// Meta
-	lang: 'tr',
-	langName: 'Turkce',
-	siteBrand: 'Claude Code Tips',
+  // Meta
+  lang: "tr",
+  langName: "Türkçe",
+  siteBrand: "Claude Code Tips",
 
-	// Common strings
-	common: {
-		tipPrefix: 'Ipucu',
-		tip: 'ipucu',
-		tips: 'ipucu',
-		previous: 'Onceki',
-		next: 'Sonraki',
-		loading: 'Yukleniyor...',
-		backArrow: '\u2190',
-		forwardArrow: '\u2192'
-	},
+  // Common strings
+  common: {
+    tipPrefix: "İpucu",
+    tip: "ipucu",
+    tips: "ipucu",
+    previous: "Önceki",
+    next: "Sonraki",
+    loading: "Yükleniyor...",
+    backArrow: "\u2190",
+    forwardArrow: "\u2192",
+    goToSlide: "Slayta git",
+  },
 
-	// Error page
-	error: {
-		titleSuffix: 'Hata',
-		notFoundTitle: 'Sayfa Bulunamadi',
-		notFoundDescription: 'Aradiginiz sayfa mevcut degil.',
-		genericTitle: 'Bir Seyler Yanlis Gitti',
-		genericDescription: 'Beklenmeyen bir hata olustu.',
-		goHome: 'Ana Sayfaya Don',
-		// Server error keys (backend sends key, UI translates)
-		langNotFound: 'Dil bulunamadi',
-		blogNotFound: 'Blog yazisi bulunamadi',
-		sectionNotFound: 'Bolum bulunamadi',
-		tipNotInSection: 'Bu bolumde ipucu bulunamadi',
-		tipNotFound: 'Ipucu bulunamadi',
-		emailRequired: 'E-posta gerekli',
-		checkoutFailed: 'Odeme oturumu olusturulamadi'
-	},
+  // Error page
+  error: {
+    titleSuffix: "Hata",
+    notFoundTitle: "Sayfa Bulunamadı",
+    notFoundDescription: "Aradığınız sayfa mevcut değil.",
+    genericTitle: "Bir Şeyler Yanlış Gitti",
+    genericDescription: "Beklenmeyen bir hata oluştu.",
+    goHome: "Ana Sayfaya Dön",
+    // Server error keys (backend sends key, UI translates)
+    langNotFound: "Dil bulunamadı",
+    blogNotFound: "Blog yazısı bulunamadı",
+    sectionNotFound: "Bölüm bulunamadı",
+    tipNotInSection: "Bu bölümde ipucu bulunamadı",
+    tipNotFound: "İpucu bulunamadı",
+  },
 
-	// Checkout
-	checkout: {
-		productName: 'Claude Code Ustasi Olmak icin 50 Ipucu',
-		productDescription: '50 ipucunun tamami ile eksiksiz rehber - omur boyu erisim'
-	},
+  // Checkout
+  checkout: {
+    productName: "Claude Code Ustası Olmak için 51 İpucu",
+    productDescription: "51 ipucunun tamamı ile eksiksiz rehber - ömür boyu erişim",
+  },
 
-	// Navigation
-	nav: {
-		home: 'Ana Sayfa',
-		guide: 'Rehber',
-		pricing: 'Fiyatlandirma',
-		toggleMenu: 'Menuyu ac/kapat'
-	},
+  // Navigation
+  nav: {
+    guide: "Rehber",
+    toggleMenu: "Menüyü aç/kapat",
+  },
 
-	// Landing page
-	landing: {
-		hero: {
-			eyebrow: '6 aylik gunluk kullanimdan',
-			title: 'Claude Code\'u Aylar Degil, Gunler Icinde Ustalasin',
-			subtitle:
-				'Yeni baslayanlarla uzman kullanicilari ayiran is akislari, kisayollar ve yapilandirmalar.',
-			cta: 'Rehberi Al - $29',
-			guarantee: '14 gun para iade garantisi'
-		},
-		social: {
-			quote:
-				'Claude Code ile gercek urunler insa ederek 500 saatten fazla zaman gecirdikten sonra, gercekten ise yarayan tum kaliplari belgeledim.',
-			author: 'Danyel Koca',
-			role: 'Sakana AI\'da Uygulamali Arastirma Muhendisi | Eski McKinsey Kidemli Veri Bilimci',
-			benefits: [
-				'Aylarca deneme yaninlmayi atlayin',
-				'Kopyala-yapistir CLAUDE.md yapilandirmalari',
-				'Her projede calisan kaliplar'
-			]
-		},
-		curriculum: {
-			title: 'Icinde Neler Var',
-			subtitle: '12 bolumde 50 ipucu + bonus icerik'
-		},
-		sample: {
-			title: 'Kaliteyi Gorun',
-			subtitle:
-				'Bu ipucunu ucretsiz okuyun. Faydali bulursaniz, 49 tane daha hayal edin.',
-			readFull: 'Tam ipucunu ucretsiz okuyun'
-		},
-		pricing: {
-			title: 'Tek Seferlik Satin Alma',
-			price: '$29',
-			subtitle: '50 ipucunun tamamina omur boyu erisim',
-			features: [
-				'Kod ornekleriyle 50 detayli ipucu',
-				'Kopyala-yapistir CLAUDE.md yapilandirmalari',
-				'12 bolum + bonus icerik',
-				'Gelecek guncellemeler dahil'
-			],
-			cta: 'Aninda Erisim Al',
-			anchor: 'Aylarca deneme yaninlmayi atlayin.',
-			guarantee: '14 gun para iade garantisi. Soru sorulmaz.'
-		}
-	},
+  // Landing page
+  landing: {
+    hero: {
+      eyebrow: "Kumamap'in yaratıcısından (389 bin kullanıcı)",
+      title: "Claude Code'u Aylar Değil, Günler İçinde Ustalaşın",
+      subtitle: "Yeni başlayanlarla uzman kullanıcıları ayıran iş akışları, kısayollar ve yapılandırmalar.",
+      cta: "Rehberi Al - $29",
+      guarantee: "7 gün para iade garantisi",
+    },
+    social: {
+      quote: "Claude Code'un dik bir öğrenme eğrisi var. Neyin işe yaradığını ve yaramadığını anlamak için yüzlerce saat harcadım. Bu rehber, ilk günden beri sahip olmak istediğim her şey.",
+      author: "Danyel Koca",
+      role: "Sakana AI'da Yapay Zeka Mühendisi | Önceden McKinsey & Company'de Kıdemli Veri Bilimci",
+    },
+    caseStudy: {
+      title: "Claude Code ile İnşa Edildi",
+      description: "Kumamap'i — Japonya'nın 1 numaralı ayı takipçisini — tamamen Claude Code ile inşa ettim. Bu rehber size kullandığım tam kalıpları öğretiyor.",
+      cta: "Canlı ürünü gör",
+      stats: {
+        views: { value: "1,3 milyon", label: "sayfa görüntüleme" },
+        users: { value: "389.000", label: "kullanıcı" },
+        time: { value: "3 ay", label: "inşa süresi" },
+      },
+    },
+    curriculum: {
+      title: "İçinde Neler Var",
+      subtitle: "13 bölümde 51 ipucu",
+      viewAll: "Tüm {count} ipucunu gör",
+    },
+    sample: {
+      title: "Kaliteyi Görün",
+      subtitle: "Bu ipucunu ücretsiz okuyun. Faydalı bulursanız, 49 tane daha hayal edin.",
+      readFull: "Tam ipucunu ücretsiz okuyun",
+    },
+    pricing: {
+      title: "Tek Seferlik Satın Alma",
+      price: "$29",
+      subtitle: "51 ipucunun tamamına ömür boyu erişim",
+      features: [
+        "Kod örnekleriyle 51 detaylı ipucu",
+        "Kopyala-yapıştır CLAUDE.md yapılandırmaları",
+        "13 düzenlenmiş bölüm",
+        "Gelecek güncellemeler dahil",
+      ],
+      cta: "Anında Erişim Al",
+      guarantee: "7 gün para iade garantisi. Soru sorulmaz.",
+    },
+    checkoutCanceled: "Ödeme iptal edildi. Hazır olduğunuzda.",
+  },
 
-	// Guide
-	guide: {
-		title: 'Rehber',
-		overview: '50 Ipucunun Tamami',
-		overviewDescription:
-			'6 aylik gunluk kullanimdan elde edilen savas meydaninda test edilmis ipuclariyla Claude Code\'da ustalasin.',
-		backToGuide: 'Rehbere Don',
-		free: 'Ucretsiz',
-		freePreview: 'Ucretsiz Onizleme',
-		locked: 'Okumak icin ac',
-		lockedTitle: 'Bu ipucu kilitli',
-		lockedDescription: 'Tek seferlik satin alma ile 50 ipucunun tamamina erisim saglayin.',
-		unlockCta: 'Tam Rehberi Ac - $29',
-		unlockAll: '50 Ipucunun Tamamini Ac'
-	},
+  // Pricing page
+  pricingPage: {
+    pageTitle: "Ödeme - Claude Code Tips",
+    pageDescription: "51 ipucunun tamamına $29 ile anında erişim",
+    emailLabel: "E-posta Adresi",
+    emailPlaceholder: "siz@ornek.com",
+    cta: "Ödemeye Devam Et",
+    processing: "İşleniyor...",
+    errors: {
+      emailRequired: "Lütfen e-posta adresinizi girin.",
+      invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
+      checkoutFailed: "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+    },
+  },
 
-	// Section data (unified: title, short description, long description)
-	sections: {
-		title: 'Tum Bolumler',
-		description:
-			'13 bolume duzenlenmis 51 ipucunu kesfedin. Her bolum Claude Code\'da ustaligin belirli bir yonune odaklanir.',
-		tipsInSection: 'bu bolumde',
-		setup: {
-			title: 'Kurulum',
-			short: 'Terminal, CLAUDE.md, kisayollar ve komutlar',
-			long: 'Dogru terminal kurulumu, CLAUDE.md yapilandirmasi ve saatler kazandiracak temel klavye kisayollari ile Claude Code\'u optimal sekilde calistirin.'
-		},
-		safety: {
-			title: 'Guvenlik',
-			short: 'Git, izinler, hassas dosyalari koruma',
-			long: 'Kod tabaninizi ve sirlarinizi uygun git pratikleri, dosya izinleri ve hiz ile guvenligi dengeleyen akilli otomatik onay kurallari ile koruyun.'
-		},
-		planning: {
-			title: 'Planlama',
-			short: 'Plan modu, detayli planlar, uctan uca dusunme',
-			long: 'Kodlamadan once karmasik gorevleri dusunmek icin plan modunda ustalasin. Claude\'un kusursuzca yurutebilecegi detayli, eyleme gecirilebilir planlar olusturmayi ogrenin.'
-		},
-		prompting: {
-			title: 'Prompt Yazma',
-			short: 'Ultrathink, dogrudan olmak, onemi abartmak',
-			long: 'Gelismis prompt teknikleriyle Claude\'un tam potansiyelini acin. Ultrathink\'ten stratejik yonlendirmeye kadar, tutarli sekilde daha iyi sonuclar almayi ogrenin.'
-		},
-		session: {
-			title: 'Oturum',
-			short: 'Baglam yonetimi, devam etme, kalite dususu',
-			long: 'Uzun kodlama oturumlarinda baglami etkili bir sekilde yonetin. Claude\'un en yuksek performansini korumak icin ne zaman sikistirip, temizleyip veya yeniden baslamaniz gerektigini bilin.'
-		},
-		input: {
-			title: 'Girdi',
-			short: 'Gorseller, ekran goruntuleri, hata mesajlari',
-			long: 'Daha hizli hata ayiklama icin gorseller, ekran goruntuleri ve duzgun formatlanmis hata mesajlariyla Claude\'un cok modlu yeteneklerinden yararlanin.'
-		},
-		'multi-agent': {
-			title: 'Coklu Ajan',
-			short: 'Paralel ajanlar, worktree\'ler, alt ajanlar',
-			long: 'Birden fazla Claude ornegi ile uretkenliginizi olceklendirin. Git worktree\'leri, paralel ajanlar ve alt ajanlari ne zaman etkili kullanacaginizi ogrenin.'
-		},
-		customization: {
-			title: 'Ozellestirme',
-			short: 'Hiyerarsik yapilandirmalar, komutlar, ozel ajanlar',
-			long: 'Hiyerarsik CLAUDE.md dosyalari, ozel slash komutlari ve uzman ajanlarla Claude Code\'u is akisiniza uyarlayin.'
-		},
-		pitfalls: {
-			title: 'Tuzaklar',
-			short: 'Dikkat edilmesi gereken yaygin Claude davranislari',
-			long: 'Claude Code kullanicilarini tuzaga dusuren yaygin hatalardan kacinin. Asiri muhendislikten sessiz basarisizliklara kadar, neye dikkat etmeniz gerektigini ogrenin.'
-		},
-		advanced: {
-			title: 'Ileri Duzey',
-			short: 'Hook\'lar, MCP sunuculari, beceriler, basliksiz mod',
-			long: 'Otomasyon ve CI/CD entegrasyonu icin hook\'lar, MCP sunuculari, beceriler ve basliksiz mod gibi uzman kullanici ozelliklerini acin.'
-		},
-		'use-cases': {
-			title: 'Kullanim Senaryolari',
-			short: 'Kalite kontrolleri, POC\'ler, ogrenme, commit\'ler',
-			long: 'Kod tabani kalite kontrollerinden hizli prototiplemeye kadar gercek dunya uygulamalari. Claude Code\'u gunluk isinizde etkili bir sekilde nasil uygulayacaginizi gorun.'
-		},
-		closing: {
-			title: 'Kapani',
-			short: 'Is akisinizi bulmak icin son bilgelik',
-			long: 'Kisisel is akisinizi bulmak icin son bilgelik. Her ozellik herkes icin degil - sizin icin ise yarayanlara odaklanin.'
-		},
-		bonus: {
-			title: 'Bonus',
-			short: '6 aylik gunluk kullanimdan savas meydaninda test edilmis CLAUDE.md',
-			long: '6 aylik gunluk kullanimdan damitilmis eksiksiz, savas meydaninda test edilmis bir CLAUDE.md dosyasi. Kopyalayin, uyarlayin ve kendinizinki yapin.'
-		}
-	},
+  // Guide
+  guide: {
+    title: "Rehber",
+    overview: "51 İpucunun Tamamı",
+    overviewDescription: "6 aylık günlük kullanımdan elde edilen savaş meydanında test edilmiş ipuçlarıyla Claude Code'da ustalaşın.",
+    backToGuide: "Rehbere Dön",
+    free: "Ücretsiz",
+    freePreview: "Ücretsiz Önizleme",
+    locked: "Okumak için aç",
+    lockedTitle: "Bu ipucu kilitli",
+    lockedDescription: "Tek seferlik satın alma ile 51 ipucunun tamamına erişim sağlayın.",
+    unlockCta: "Tam Rehberi Aç - $29",
+    unlockAll: "51 İpucunun Tamamını Aç",
+    sections: "bölüm",
+    freeLabel: "ücretsiz önizleme",
+    whatsIncluded: "Neler Dahil",
+    detailedTips: "detaylı ipucu",
+    organizedSections: "düzenlenmiş bölüm",
+    freePreviews: "ücretsiz önizleme",
+    startReading: "Okumaya Başla",
+    jumpTo: "Bölüme Git",
+  },
 
-	// Paywall
-	paywall: {
-		title: 'Tam Rehberi Ac',
-		description: '50 ipucunun tamamina sadece $29 ile erisin',
-		cta: 'Tam Erisim Al'
-	},
+  // Section data (unified: title, short description, long description)
+  sections: {
+    setup: {
+      title: "Kurulum",
+      short: "Terminal, CLAUDE.md, kısayollar ve komutlar",
+      long:
+        "Doğru terminal kurulumu, CLAUDE.md yapılandırması ve saatler kazandıracak temel klavye kısayolları ile Claude Code'u optimal şekilde çalıştırın.",
+    },
+    safety: {
+      title: "Güvenlik",
+      short: "Git, izinler, hassas dosyaları koruma",
+      long:
+        "Kod tabanınızı ve sırlarınızı uygun git pratikleri, dosya izinleri ve hız ile güvenliği dengeleyen akıllı otomatik onay kuralları ile koruyun.",
+    },
+    planning: {
+      title: "Planlama",
+      short: "Plan modu, detaylı planlar, uçtan uca düşünme",
+      long:
+        "Kodlamadan önce karmaşık görevleri düşünmek için plan modunda ustalaşın. Claude'un kusursuzca yürütebileceği detaylı, eyleme geçirilebilir planlar oluşturmayı öğrenin.",
+    },
+    prompting: {
+      title: "Prompt Yazma",
+      short: "Ultrathink, doğrudan olmak, önemi abartmak",
+      long:
+        "Gelişmiş prompt teknikleriyle Claude'un tam potansiyelini açın. Ultrathink'ten stratejik yönlendirmeye kadar, tutarlı şekilde daha iyi sonuçlar almayı öğrenin.",
+    },
+    session: {
+      title: "Oturum",
+      short: "Bağlam yönetimi, devam etme, kalite düşüşü",
+      long:
+        "Uzun kodlama oturumlarında bağlamı etkili bir şekilde yönetin. Claude'un en yüksek performansını korumak için ne zaman sıkıştırıp, temizleyip veya yeniden başlamanız gerektiğini bilin.",
+    },
+    input: {
+      title: "Girdi",
+      short: "Görseller, ekran görüntüleri, hata mesajları",
+      long:
+        "Daha hızlı hata ayıklama için görseller, ekran görüntüleri ve düzgün formatlanmış hata mesajlarıyla Claude'un çok modlu yeteneklerinden yararlanın.",
+    },
+    "multi-agent": {
+      title: "Çoklu Ajan",
+      short: "Paralel ajanlar, worktree'ler, alt ajanlar",
+      long:
+        "Birden fazla Claude örneği ile üretkenliğinizi ölçeklendirin. Git worktree'leri, paralel ajanlar ve alt ajanları ne zaman etkili kullanacağınızı öğrenin.",
+    },
+    customization: {
+      title: "Özelleştirme",
+      short: "Hiyerarşik yapılandırmalar, komutlar, özel ajanlar",
+      long: "Hiyerarşik CLAUDE.md dosyaları, özel slash komutları ve uzman ajanlarla Claude Code'u iş akışınıza uyarlayın.",
+    },
+    pitfalls: {
+      title: "Tuzaklar",
+      short: "Dikkat edilmesi gereken yaygın Claude davranışları",
+      long:
+        "Claude Code kullanıcılarını tuzağa düşüren yaygın hatalardan kaçının. Aşırı mühendislikten sessiz başarısızlıklara kadar, neye dikkat etmeniz gerektiğini öğrenin.",
+    },
+    advanced: {
+      title: "İleri Düzey",
+      short: "Hook'lar, MCP sunucuları, beceriler, başlıksız mod",
+      long: "Otomasyon ve CI/CD entegrasyonu için hook'lar, MCP sunucuları, beceriler ve başlıksız mod gibi uzman kullanıcı özelliklerini açın.",
+    },
+    "use-cases": {
+      title: "Kullanım Senaryoları",
+      short: "Kalite kontrolleri, POC'ler, öğrenme, commit'ler",
+      long:
+        "Kod tabanı kalite kontrollerinden hızlı prototiplemeye kadar gerçek dünya uygulamaları. Claude Code'u günlük işinizde etkili bir şekilde nasıl uygulayacağınızı görün.",
+    },
+    closing: {
+      title: "Kapanış",
+      short: "İş akışınızı bulmak için son bilgelik",
+      long: "Kişisel iş akışınızı bulmak için son bilgelik. Her özellik herkes için değil - sizin için işe yarayanlara odaklanın.",
+    },
+    bonus: {
+      title: "Bonus",
+      short: "6 aylık günlük kullanımdan savaş meydanında test edilmiş CLAUDE.md",
+      long:
+        "6 aylık günlük kullanımdan damıtılmış eksiksiz, savaş meydanında test edilmiş bir CLAUDE.md dosyası. Kopyalayın, uyarlayın ve kendinizinki yapın.",
+    },
+  },
 
-	// Success page
-	success: {
-		title: 'Tesekkurler!',
-		description: 'Satin aliminiz basarili. Artik 50 ipucunun tamamina erisebilirsiniz.',
-		cta: 'Okumaya Basla'
-	},
+  // Paywall
+  paywall: {
+    title: "Tam Rehberi Aç",
+    description: "51 ipucunun tamamına sadece $29 ile erişin",
+    cta: "Tam Erişim Al",
+    alreadyPurchased: "Zaten satın aldınız mı?",
+    restoreAccess: "Erişimi geri yükle",
+  },
 
-	// Footer
-	footer: {
-		builtWith: 'Claude Code ile insa edildi',
-		guide: 'Rehber',
-		company: 'Sirket',
-		legal: 'Yasal',
-		allTips: '50 Ipucunun Tamami',
-		faq: 'SSS',
-		blog: 'Blog',
-		about: 'Hakkinda',
-		privacy: 'Gizlilik',
-		terms: 'Sartlar',
-		disclosure: 'Aciklama'
-	},
+  // Success page
+  success: {
+    title: "Teşekkürler!",
+    description: "Satın alımınız başarılı. Artık 51 ipucunun tamamına erişebilirsiniz.",
+    cta: "Okumaya Başla",
+  },
 
-	// About page
-	about: {
-		pageTitle: 'Hakkinda - Claude Code Tips',
-		pageDescription:
-			'Claude Code Tips\'in yaraticisi Danyel Koca hakkinda bilgi edinin ve bu rehberin neden var oldugunu ogrenin.',
-		heroTitle: 'Bir Uygulayici Tarafindan Insa Edildi',
-		heroSubtitle:
-			'Bu rehber, gercek urunler insa etmek icin her gun Claude Code kullanan biri tarafindan olusturuldu.',
-		storyTitle: 'Hikaye',
-		storyPara1:
-			'Ben Danyel Koca, Tokyo\'daki Sakana AI\'da Uygulamali Arastirma Muhendisiyim. Oncesinde, McKinsey & Company\'de 3 yil Kidemli Veri Bilimci olarak kurumsal musteriler icin AI/ML cozumleri insa ettim.',
-		storyPara2:
-			'Claude Code\'u piyasaya suruldugunden beri her gun kullaniyorum. Merak olarak baslayan sey saplantiya donustu - is akisimi onemli olcude iyilestiren yeni kaliplar, kisayollar ve yapilandirmalar kesfettim.',
-		storyPara3:
-			'6 aylik gunluk kullanimdan sonra, birinin bana ilk gun soylemesini istedigim duzinelerce ipucu biriktirdim. Bu yuzden bu rehberi olusturdum.',
-		whyTitle: 'Bu Rehber Neden Var',
-		whyPara1:
-			'Cogu Claude Code ogretici icerigi temel bilgileri kapsar: nasil kurulur, komutlar nasil calistirilir. Ancak sizi uretken yapan gercek kaliplari kapsamazlar.',
-		whyPara2:
-			'Bu rehber farkli. Her ipucu, uretim sistemleri insa etmenin gercek deneyiminden geliyor. Teori yok - sadece gercekten ise yarayan seyler.',
-		credentialsTitle: 'Yeterlilikler',
-		credentialsList: [
-			'Sakana AI\'da Uygulamali Arastirma Muhendisi',
-			'Eski McKinsey & Company Kidemli Veri Bilimci',
-			'Kyoto Universitesi mezunu (GNO 3.76/4)',
-			'IEEE\'de yayinlanmis arastirmaci',
-			'Uc dil biliyor: Ingilizce, Japonca (JLPT N1), Turkce'
-		],
-		contactTitle: 'Iletisim',
-		contactPara: 'Sorulariniz veya geri bildirimleriniz mi var? Sizden haber almak isterim.',
-		contactLinks: {
-			linkedin: 'LinkedIn',
-			github: 'GitHub',
-			website: 'Web Sitesi'
-		}
-	},
+  // Restore page
+  restore: {
+    pageTitle: "Erişimi Geri Yükle - Claude Code Tips",
+    title: "Erişiminizi Geri Yükleyin",
+    description: "Bu cihazda erişimi geri yüklemek için satın alırken kullandığınız e-postayı girin.",
+    emailLabel: "Satın alma e-postası",
+    emailPlaceholder: "siz@ornek.com",
+    cta: "Erişimi Geri Yükle",
+    successMessage: "Erişim başarıyla geri yüklendi!",
+    redirecting: "Rehbere yönlendiriliyor...",
+    noAccount: "Henüz satın almadınız mı?",
+    buyNow: "Şimdi Satın Al",
+    errors: {
+      restoreFailed: "Erişim geri yüklenemedi. Tekrar deneyin.",
+      emailRequired: "E-posta gerekli.",
+      invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
+      rateLimitExceeded: "Çok fazla deneme. Bir saat sonra tekrar deneyin.",
+    },
+  },
 
-	// Privacy page
-	privacy: {
-		pageTitle: 'Gizlilik Politikasi - Claude Code Tips',
-		pageDescription:
-			'Claude Code Tips\'in verilerinizi nasil isledigini ve gizliliginizi nasil korudugunu ogrenin.',
-		title: 'Gizlilik Politikasi',
-		lastUpdated: 'Son guncelleme: Aralik 2024',
-		introTitle: 'Taahhudumuz',
-		introPara:
-			'Minimum veri toplama ilkesine inaniyoruz. Yalnizca satin aliminizi islemek ve rehberi teslim etmek icin kesinlikle gerekli olanlari topluyoruz.',
-		dataCollectedTitle: 'Topladigimiz Veriler',
-		dataCollectedPara: 'Rehberi satin aldiginizda topluyoruz:',
-		dataCollectedList: [
-			'E-posta adresi (erisimi saglamak icin)',
-			'Odeme bilgileri (Stripe tarafindan guvenli bir sekilde islenir)'
-		],
-		noTrackingTitle: 'Yapmadigimiz Seyler',
-		noTrackingList: [
-			'Analitik veya izleme betikleri yok',
-			'Reklam amaçli cerezler yok',
-			'Verilerinizi ucuncu taraflarla satma veya paylasma yok',
-			'Davranissal izleme yok'
-		],
-		stripeTitle: 'Odeme Isleme',
-		stripePara:
-			'Tum odemeler Stripe tarafindan guvenli bir sekilde islenir. Kredi karti bilgilerinizin tamamini asla gormuyoruz veya saklamiyoruz. Stripe\'in gizlilik politikasi odeme isleme icin gecerlidir.',
-		retentionTitle: 'Veri Saklama',
-		retentionPara:
-			'Rehbere surekli erisim saglamak ve destek taleplerini karsilamak icin satin alma kayitlarini sakliyoruz.',
-		contactTitle: 'Sorular?',
-		contactPara: 'Gizlilikle ilgili sorular icin bize ulasin:',
-		contactEmail: 'privacy@claudecodeguide.com'
-	},
+  // Footer
+  footer: {
+    builtWith: "Claude Code ile inşa edildi",
+    guide: "Rehber",
+    company: "Şirket",
+    legal: "Yasal",
+    allTips: "51 İpucunun Tamamı",
+    faq: "SSS",
+    restoreAccess: "Erişimi geri yükle",
+    pricing: "Fiyatlandırma",
+    blog: "Blog",
+    about: "Hakkında",
+    privacy: "Gizlilik",
+    terms: "Şartlar",
+    disclosure: "Açıklama",
+  },
 
-	// Terms page
-	terms: {
-		pageTitle: 'Hizmet Sartlari - Claude Code Tips',
-		pageDescription: 'Claude Code Tips\'i kullanmak icin sartlar ve kosullar.',
-		title: 'Hizmet Sartlari',
-		lastUpdated: 'Son guncelleme: Aralik 2024',
-		serviceTitle: 'Hizmet',
-		servicePara:
-			'Claude Code Tips, Claude Code\'da ustalasmak icin 50 ipucu iceren dijital bir rehber saglar. Satin alimda, web tabanli rehbere omur boyu erisim elde edersiniz.',
-		paymentTitle: 'Odeme',
-		paymentList: [
-			'$29 USD tek seferlik odeme',
-			'Tum mevcut ve gelecek ipuclarina omur boyu erisim',
-			'Yinelenen ucret veya abonelik yok'
-		],
-		refundTitle: 'Iade Politikasi',
-		refundPara:
-			'14 gunluk para iade garantisi sunuyoruz. Rehberden memnun kalmazsaniz, tam iade icin satin alimdan sonraki 14 gun icinde bize ulasin. Soru sorulmaz.',
-		licenseTitle: 'Lisans',
-		licensePara:
-			'Satin aliminiz, rehbere erismek ve kullanmak icin kisisel, devredilemeyen bir lisans verir. Yapamazsiniz:',
-		licenseList: [
-			'Hesabinizi veya erisinizi baskalariyia paylasma',
-			'Rehber icerigini kopyalama, yeniden dagitma veya yeniden yayinlama',
-			'Icerigi izinsiz ticari amaclarla kullanma'
-		],
-		disclaimerTitle: 'Sorumluluk Reddi',
-		disclaimerPara:
-			'Bu rehber kisisel deneyime dayali olarak "oldugu gibi" saglanmaktadir. Dogruluk icin calissakta, belirli sonuclari garanti etmiyoruz. Claude Code, Anthropic\'in bir urunudur ve bu rehber Anthropic ile baglantili veya onaylanan degildir.',
-		contactTitle: 'Sorular?',
-		contactPara: 'Bu sartlar hakkinda sorular icin bize ulasin:',
-		contactEmail: 'support@claudecodeguide.com'
-	},
+  // About page
+  about: {
+    pageTitle: "Hakkında - Claude Code Tips",
+    pageDescription: "Claude Code Tips'in yaratıcısı Danyel Koca hakkında bilgi edinin ve bu rehberin neden var olduğunu öğrenin.",
+    heroTitle: "Bir Uygulayıcı Tarafından İnşa Edildi",
+    heroSubtitle: "Bu rehber, gerçek ürünler inşa etmek için her gün Claude Code kullanan biri tarafından oluşturuldu.",
+    storyTitle: "Hikaye",
+    storyPara1:
+      "Ben Danyel Koca, Tokyo'daki Sakana AI'da Uygulamalı Araştırma Mühendisiyim. Öncesinde, McKinsey & Company'de 3 yıl Kıdemli Veri Bilimci olarak kurumsal müşteriler için AI/ML çözümleri inşa ettim.",
+    storyPara2:
+      "Claude Code'u piyasaya sürüldüğünden beri her gün kullanıyorum. Merak olarak başlayan şey saplantıya dönüştü - iş akışımı önemli ölçüde iyileştiren yeni kalıplar, kısayollar ve yapılandırmalar keşfettim.",
+    storyPara3:
+      "6 aylık günlük kullanımdan sonra, birinin bana ilk gün söylemesini istediğim düzinelerce ipucu biriktirdim. Bu yüzden bu rehberi oluşturdum.",
+    whyTitle: "Bu Rehber Neden Var",
+    whyPara1:
+      "Çoğu Claude Code öğretici içeriği temel bilgileri kapsar: nasıl kurulur, komutlar nasıl çalıştırılır. Ancak sizi üretken yapan gerçek kalıpları kapsamazlar.",
+    whyPara2:
+      "Bu rehber farklı. Her ipucu, üretim sistemleri inşa etmenin gerçek deneyiminden geliyor. Teori yok - sadece gerçekten işe yarayan şeyler.",
+    credentialsTitle: "Yeterlilikler",
+    credentialsList: [
+      "Sakana AI'da Uygulamalı Araştırma Mühendisi",
+      "Eski McKinsey & Company Kıdemli Veri Bilimci",
+      "Kyoto Üniversitesi mezunu (GNO 3.76/4)",
+      "IEEE'de yayınlanmış araştırmacı",
+      "Üç dil biliyor: İngilizce, Japonca (JLPT N1), Türkçe",
+    ],
+    contactTitle: "İletişim",
+    contactPara: "Sorularınız veya geri bildirimleriniz mi var? Sizden haber almak isterim.",
+    contactLinks: {
+      linkedin: "LinkedIn",
+      github: "GitHub",
+      website: "Web Sitesi",
+    },
+  },
 
-	// Disclosure page
-	disclosure: {
-		pageTitle: 'Aciklama - Claude Code Tips',
-		pageDescription:
-			'Ortaklik iliskileri ve editoryal bagimsizlik dahil Claude Code Tips hakkinda onemli aciklamalar.',
-		title: 'Aciklama',
-		lastUpdated: 'Son guncelleme: Aralik 2024',
-		affiliationTitle: 'Anthropic ile Baglanti Yok',
-		affiliationPara:
-			'Bu rehber, Danyel Koca tarafindan olusturulan bagimsiz bir urundur. Claude ve Claude Code\'un arkasindaki sirket olan Anthropic ile baglantili, onaylanan veya sponsorlu DEGILDIR. Tum gorusler ve oneriler yalnizca yazara aittir.',
-		independenceTitle: 'Editoryal Bagimsizlik',
-		independencePara:
-			'Bu rehberdeki tum icerik, yazarin kisisel deneyime dayanan gercek goruslerini yansitir. Hicbir sirket veya kuruluş olumlu kapsam icin odeme yapmadi veya icerigi etkilemedi.',
-		aiAssistedTitle: 'Yapay Zeka Destekli Icerik',
-		aiAssistedPara:
-			'Bu rehber, Claude Code\'un kendisinin yardimiyla olusturuldu. Yazar, Claude Code\'u her gun kullaniyor ve rehber icerigini yazmak, duzenlemek ve rafine etmek icin kullandi. Bu, seffaflik ruhuyla aciklanmaktadir.',
-		noSponsoredTitle: 'Sponsorlu Icerik Yok',
-		noSponsoredPara:
-			'Rehber sponsorlu icerik, ucretli yerlestirmeler veya ortaklik baglantilari icermez. Satilan tek urun rehberin kendisidir.',
-		contactTitle: 'Sorular?',
-		contactPara: 'Bu aciklamalar hakkinda sorular icin bize ulasin:',
-		contactEmail: 'hello@claudecodeguide.com'
-	},
+  // Privacy page
+  privacy: {
+    pageTitle: "Gizlilik Politikası - Claude Code Tips",
+    pageDescription: "Claude Code Tips'in verilerinizi nasıl işlediğini öğrenin.",
+    title: "Gizlilik Politikası",
+    dataCollectedTitle: "Topladığımız Veriler",
+    dataCollectedDescription: "Rehberi satın aldığınızda:",
+    dataEmail: "E-posta (teslimat ve erişim için)",
+    paymentTitle: "Ödeme İşleme",
+    paymentDescription: "Tüm ödemeler Stripe tarafından güvenli bir şekilde işlenir. Ödeme bilgilerinizi saklamıyoruz.",
+    contactTitle: "İletişim",
+    contactLabel: "E-posta",
+    contactEmail: "hello@claudecodetips.com",
+  },
 
-	// Blog (UI strings only - post content in .svx files)
-	blog: {
-		pageTitle: 'Blog - Claude Code Tips',
-		pageDescription:
-			'50 Tips rehberinin yaraticisinden Claude Code hakkinda ipuclari, ogretici icerikler ve goruler.',
-		title: 'Blog',
-		subtitle: 'Claude Code hakkinda ipuclari, ogretici icerikler ve goruler',
-		readMore: 'Devamini oku',
-		publishedOn: 'Yayinlanma tarihi',
-		backToBlog: 'Bloga Don',
-		noPosts: 'Henuz yazi yok. Yakinda tekrar kontrol edin!'
-	},
+  // Terms page
+  terms: {
+    pageTitle: "Hizmet Şartları - Claude Code Tips",
+    pageDescription: "Claude Code Tips için hizmet şartları.",
+    title: "Hizmet Şartları",
+    serviceTitle: "Hizmet",
+    serviceDescription:
+      "Claude Code Tips, Claude Code'da ustalaşmak için 51 ipucu içeren dijital bir rehber sağlar. Satın alımda ömür boyu erişim elde edersiniz.",
+    paymentTitle: "Ödeme",
+    paymentDescription: "Rehbere erişim satın alabilirsiniz:",
+    paymentOneTime: "$29 USD tek seferlik ödeme",
+    paymentStripe: "Tüm ödemeler Stripe aracılığıyla güvenli şekilde işlenir",
+    refundTitle: "İade",
+    refundDescription: "7 günlük para iade garantisi. Memnun kalmazsanız, tam iade için 7 gün içinde bize ulaşın.",
+    contactTitle: "İletişim",
+    contactLabel: "E-posta",
+    contactEmail: "hello@claudecodetips.com",
+  },
 
-	// Disclaimer for untranslated content
-	disclaimer: {
-		notTranslated: 'Bu icerik henuz dilinizde mevcut degil. Ingilizce surum gosteriliyor.'
-	},
+  // Disclosure page (Commercial Disclosure)
+  disclosure: {
+    pageTitle: "Ticari Açıklama - Claude Code Tips",
+    pageDescription: "Claude Code Tips için ticari açıklama.",
+    title: "Ticari Açıklama",
+    sellerName: "Satıcı",
+    sellerNameValue: "Claude Code Tips",
+    address: "Adres",
+    addressValue: "Talep üzerine açıklanır",
+    phone: "Telefon",
+    phoneValue: "Talep üzerine açıklanır",
+    email: "E-posta",
+    emailValue: "hello@claudecodetips.com",
+    headOfOperations: "Operasyonlar Müdürü",
+    headOfOperationsValue: "Talep üzerine açıklanır",
+    additionalFees: "Ek Ücretler",
+    additionalFeesValue: "Yok",
+    refundPolicy: "İade Politikası",
+    refundServiceIssues: "Hizmet Sorunları",
+    refundServiceIssuesValue:
+      "Hizmet sistem sorunları nedeniyle sağlanmazsa, lütfen hello@claudecodetips.com adresinden bize ulaşın. İnceleyip tam iade yapacağız.",
+    refundCustomer: "Müşteri İptali",
+    refundCustomerValue:
+      "7 günlük para iade garantisi. Satın alımınızdan memnun kalmazsanız, soru sorulmadan tam iade için 7 gün içinde bize ulaşın.",
+    deliveryTime: "Teslimat Süresi",
+    deliveryTimeValue: "Ödemeden sonra anında erişim",
+    paymentMethods: "Ödeme Yöntemleri",
+    paymentMethodsValue: "Kredi kartları (Visa, Mastercard, American Express, JCB)",
+    paymentPeriod: "Ödeme Dönemi",
+    paymentPeriodValue: "Kredi kartı ödemesinde anında işlenir",
+    price: "Fiyat",
+    priceValue: "$29 USD",
+    priceTaxNote: "*Fiyat tüm geçerli vergileri içerir",
+  },
 
-	// FAQ page
-	faq: {
-		pageTitle: 'SSS - Claude Code Tips',
-		pageDescription: 'Claude Code Tips rehberi hakkinda sik sorulan sorular.',
-		title: 'Sik Sorulan Sorular',
-		items: [
-			{
-				q: 'Rehber hangi formatta?',
-				a: 'Herhangi bir cihazdan erisebileceginiz web tabanli bir rehber. PDF indirme gerekmiyor.'
-			},
-			{
-				q: 'Claude Code deneyimim olmali mi?',
-				a: 'Temel asinalik yardimci olur, ancak rehber ilk kurulumdan ileri tekniklere kadar her seyi kapsar.'
-			},
-			{
-				q: 'Claude Code guncellenirse ne olur?',
-				a: 'Rehber, sabit kalan is akislari ve kaliplara odaklanir. Buyuk ozellikler degistiginde, rehber de guncellenir.'
-			}
-		]
-	}
+  // Blog (UI strings only - post content in .svx files)
+  blog: {
+    pageTitle: "Blog - Claude Code Tips",
+    pageDescription: "51 Tips rehberinin yaratıcısından Claude Code hakkında ipuçları, öğretici içerikler ve görüşler.",
+    title: "Blog",
+    subtitle: "Claude Code hakkında ipuçları, öğretici içerikler ve görüşler",
+    readMore: "Devamını oku",
+    publishedOn: "Yayınlanma tarihi",
+    backToBlog: "Bloga Dön",
+    noPosts: "Henüz yazı yok. Yakında tekrar kontrol edin!",
+  },
+
+  // Disclaimer for untranslated content
+  disclaimer: {
+    notTranslated: "Bu içerik henüz dilinizde mevcut değil. İngilizce sürüm gösteriliyor.",
+  },
+
+  // FAQ page
+  faq: {
+    pageTitle: "SSS - Claude Code Tips",
+    pageDescription: "Claude Code Tips rehberi hakkında sık sorulan sorular.",
+    title: "Sık Sorulan Sorular",
+    items: [
+      {
+        q: "Rehber hangi formatta?",
+        a: "Herhangi bir cihazdan erişebileceğiniz web tabanlı bir rehber. PDF indirme gerekmiyor.",
+      },
+      {
+        q: "Claude Code deneyimim olmalı mı?",
+        a: "Temel aşinalık yardımcı olur, ancak rehber ilk kurulumdan ileri tekniklere kadar her şeyi kapsar.",
+      },
+      {
+        q: "Claude Code güncellenirse ne olur?",
+        a: "Rehber, sabit kalan iş akışları ve kalıplara odaklanır. Büyük özellikler değiştiğinde, rehber de güncellenir.",
+      },
+    ],
+  },
 };

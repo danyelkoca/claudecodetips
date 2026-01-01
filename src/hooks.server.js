@@ -10,7 +10,7 @@ export async function handle({ event, resolve }) {
 		const potentialLang = segments[0];
 
 		if (potentialLang && !supportedLangs.includes(potentialLang)) {
-			const knownRoutes = ['sitemap', 'robots.txt'];
+			const knownRoutes = ['robots.txt'];
 			if (!knownRoutes.includes(potentialLang)) {
 				throw redirect(307, `/${DEFAULT_LANG}`);
 			}
@@ -31,8 +31,10 @@ export async function handle({ event, resolve }) {
 		return resolve(event);
 	}
 
+	const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
 	const response = await resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('%lang%', lang)
+		transformPageChunk: ({ html }) => html.replace('%lang%', lang).replace('%dir%', dir)
 	});
 
 	// Add charset=utf-8 to HTML responses
@@ -40,7 +42,7 @@ export async function handle({ event, resolve }) {
 		response.headers.set('content-type', 'text/html; charset=utf-8');
 	}
 
-	// Security headers
+	// Security headers (also in netlify.toml for production, here for dev)
 	response.headers.set('X-Content-Type-Options', 'nosniff');
 	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 	response.headers.set('X-Frame-Options', 'DENY');

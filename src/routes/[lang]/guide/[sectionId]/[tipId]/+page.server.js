@@ -26,10 +26,16 @@ export async function load({ params, parent }) {
 
 	const canAccess = hasAccess || isTipFree(tipId);
 
-	// Find prev/next tips within the same section
-	const tipIndex = section.tips.indexOf(tipId);
-	const prevTipId = tipIndex > 0 ? section.tips[tipIndex - 1] : null;
-	const nextTipId = tipIndex < section.tips.length - 1 ? section.tips[tipIndex + 1] : null;
+	// Helper to find section for any tip ID
+	const findSectionForTip = (id) => sections.find(s => s.tips.includes(id));
+
+	// Global prev/next navigation (tip 1-51)
+	const prevTipId = tipId > 1 ? tipId - 1 : null;
+	const nextTipId = tipId < 51 ? tipId + 1 : null;
+
+	// Get section info for prev/next tips (for correct URL)
+	const prevSection = prevTipId ? findSectionForTip(prevTipId) : null;
+	const nextSection = nextTipId ? findSectionForTip(nextTipId) : null;
 
 	// Get full tip data for prev/next
 	const prevTip = prevTipId ? allTips.find((t) => t.id === prevTipId) : null;
@@ -44,6 +50,8 @@ export async function load({ params, parent }) {
 		nextTipId,
 		prevTip,
 		nextTip,
+		prevSection,
+		nextSection,
 		isFallback
 	};
 }

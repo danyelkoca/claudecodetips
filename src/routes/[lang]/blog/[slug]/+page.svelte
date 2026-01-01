@@ -1,7 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
 	import { loadBlogPost } from '$lib/content/blog.js';
 	import TranslationDisclaimer from '$lib/components/TranslationDisclaimer.svelte';
+	import SeoHead from '$lib/components/SeoHead.svelte';
+	import JsonLd from '$lib/components/JsonLd.svelte';
+	import { PUBLIC_SITE_URL } from '$env/static/public';
 
 	export let data;
 	$: t = data.t;
@@ -13,29 +15,52 @@
 	let PostComponent = null;
 	let contentIsFallback = false;
 
-	onMount(async () => {
-		const result = await loadBlogPost(slug, lang);
-		if (result) {
-			PostComponent = result.component;
-			contentIsFallback = result.isFallback;
+	// Reactive statement to load content when slug or lang changes
+	$: if (slug && lang) {
+		PostComponent = null;
+		loadBlogPost(slug, lang).then(result => {
+			if (result) {
+				PostComponent = result.component;
+				contentIsFallback = result.isFallback;
+			}
+		});
+	}
+
+	// Article schema for blog posts
+	$: articleSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: post.title,
+		description: post.summary,
+		datePublished: post.date,
+		author: {
+			'@type': 'Person',
+			name: 'Danyel Koca',
+			url: 'https://danyelkoca.com'
 		}
-	});
+	};
 </script>
 
-<svelte:head>
-	<title>{post.title} - {t.siteBrand}</title>
-	<meta name="description" content={post.summary} />
-</svelte:head>
+<SeoHead
+	title="{post.title} - {t.siteBrand}"
+	description={post.summary}
+	path="/{lang}/blog/{slug}"
+	{lang}
+	type="article"
+	article={{ publishedTime: post.date }}
+/>
 
-<main class="min-h-screen bg-white">
-	<div class="max-w-5xl mx-auto px-4 py-12">
-		<a href="/{lang}/blog" class="text-slate-600 hover:text-slate-900 mb-8 inline-block">
+<JsonLd schema={articleSchema} />
+
+<main class="min-h-screen">
+	<div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
+		<a href="/{lang}/blog" class="text-slate-900 hover:text-primary inline-block">
 			{t.common.backArrow} {t.blog.backToBlog}
 		</a>
 
-		<article>
-			<header class="mb-8">
-				<h1 class="text-4xl sm:text-5xl font-bold mb-4">{post.title}</h1>
+		<article class="space-y-8">
+			<header class="space-y-4">
+				<h1 class="text-3xl font-bold">{post.title}</h1>
 				<p class="text-slate-500">{t.blog.publishedOn} {post.date}</p>
 			</header>
 
@@ -47,7 +72,7 @@
 				{#if PostComponent}
 					<svelte:component this={PostComponent} />
 				{:else}
-					<p class="text-slate-500">{t.common.loading}</p>
+					<p class="text-slate-900">{t.common.loading}</p>
 				{/if}
 			</div>
 		</article>

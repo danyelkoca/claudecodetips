@@ -1,28 +1,46 @@
 <script>
+	import SeoHead from '$lib/components/SeoHead.svelte';
+	import JsonLd from '$lib/components/JsonLd.svelte';
+	import { PUBLIC_SITE_URL } from '$env/static/public';
+
 	export let data;
 	$: t = data.t;
 	$: lang = data.lang;
+
+	$: aboutSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'AboutPage',
+		name: t.about.pageTitle,
+		description: t.about.pageDescription,
+		url: `${PUBLIC_SITE_URL}/${lang}/about`,
+		inLanguage: lang
+	};
 </script>
 
-<svelte:head>
-	<title>{t.about.pageTitle}</title>
-	<meta name="description" content={t.about.pageDescription} />
-</svelte:head>
+<SeoHead
+	title={t.about.pageTitle}
+	description={t.about.pageDescription}
+	path="/{lang}/about"
+	{lang}
+/>
 
-<main class="min-h-screen bg-white">
-	<div class="max-w-5xl mx-auto px-4 py-12">
+<JsonLd schema={aboutSchema} />
+
+<main class="min-h-screen">
+	<div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
 		<!-- Hero -->
-		<div class="text-center mb-12">
-			<h1 class="text-4xl sm:text-5xl font-bold mb-6">{t.about.heroTitle}</h1>
-			<p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto">
+		<div class="text-center space-y-6">
+			<img src="/images/profile.webp" alt={t.landing.social.author} class="w-48 h-48 rounded-xl mx-auto object-cover" />
+			<h1 class="text-3xl font-bold text-slate-900">{t.about.heroTitle}</h1>
+			<p class="text-lg sm:text-xl text-slate-500 max-w-3xl mx-auto">
 				{t.about.heroSubtitle}
 			</p>
 		</div>
 
 		<!-- Story -->
-		<section class="mb-12 border-t border-slate-200 pt-12">
-			<h2 class="text-2xl font-bold mb-6">{t.about.storyTitle}</h2>
-			<div class="space-y-4 text-slate-700 leading-relaxed">
+		<section class="border-t border-slate-200 pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-slate-900">{t.about.storyTitle}</h2>
+			<div class="space-y-4 text-slate-900 leading-relaxed">
 				<p>{t.about.storyPara1}</p>
 				<p>{t.about.storyPara2}</p>
 				<p>{t.about.storyPara3}</p>
@@ -30,21 +48,21 @@
 		</section>
 
 		<!-- Why -->
-		<section class="mb-12 border-t border-slate-200 pt-12">
-			<h2 class="text-2xl font-bold mb-6">{t.about.whyTitle}</h2>
-			<div class="space-y-4 text-slate-700 leading-relaxed">
+		<section class="border-t border-slate-200 pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-slate-900">{t.about.whyTitle}</h2>
+			<div class="space-y-4 text-slate-900 leading-relaxed">
 				<p>{t.about.whyPara1}</p>
 				<p>{t.about.whyPara2}</p>
 			</div>
 		</section>
 
 		<!-- Credentials -->
-		<section class="mb-12 border-t border-slate-200 pt-12">
-			<h2 class="text-2xl font-bold mb-6">{t.about.credentialsTitle}</h2>
-			<ul class="space-y-2 text-slate-700">
+		<section class="border-t border-slate-200 pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-slate-900">{t.about.credentialsTitle}</h2>
+			<ul class="space-y-2 text-slate-900">
 				{#each t.about.credentialsList as credential}
 					<li class="flex items-start gap-2">
-						<span class="text-slate-400 mt-1">-</span>
+						<span class="text-slate-900">-</span>
 						<span>{credential}</span>
 					</li>
 				{/each}
@@ -52,15 +70,15 @@
 		</section>
 
 		<!-- Contact -->
-		<section class="mb-12 border-t border-slate-200 pt-12">
-			<h2 class="text-2xl font-bold mb-6">{t.about.contactTitle}</h2>
-			<p class="text-slate-700 mb-6">{t.about.contactPara}</p>
+		<section class="border-t border-slate-200 pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-slate-900">{t.about.contactTitle}</h2>
+			<p class="text-slate-900">{t.about.contactPara}</p>
 			<div class="flex flex-wrap gap-4">
 				<a
 					href="https://linkedin.com/in/danyelkoca"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:opacity-80"
+					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.linkedin}
 				</a>
@@ -68,7 +86,7 @@
 					href="https://github.com/danyelkoca"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50"
+					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.github}
 				</a>
@@ -76,7 +94,7 @@
 					href="https://danyelkoca.com"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50"
+					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.website}
 				</a>

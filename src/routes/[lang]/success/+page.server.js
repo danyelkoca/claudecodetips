@@ -1,6 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY } from '$env/static/private';
+import { dev } from '$app/environment';
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
@@ -20,6 +21,7 @@ export async function load({ url, cookies, params }) {
 			cookies.set('purchase_session', sessionId, {
 				path: '/',
 				httpOnly: true,
+				secure: !dev,
 				sameSite: 'strict',
 				maxAge: 60 * 60 * 24 * 365 // 1 year
 			});

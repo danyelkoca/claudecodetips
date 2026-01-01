@@ -25,7 +25,8 @@ export async function load({ parent }) {
 			const tip = allTips.find((t) => t.id === tipId);
 			return {
 				id: tipId,
-				title: tip?.title || `${t.common.tipPrefix} ${tipId}`,
+				title: tip.title,
+				summary: tip.summary,
 				isFree: freeTipIds.includes(tipId)
 			};
 		})
@@ -37,8 +38,8 @@ export async function load({ parent }) {
 		return {
 			id,
 			section,
-			title: tip?.title || `${t.common.tipPrefix} ${id}`,
-			summary: tip?.summary || ''
+			title: tip.title,
+			summary: tip.summary
 		};
 	});
 
