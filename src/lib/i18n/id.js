@@ -75,9 +75,8 @@ export default {
       viewAll: "Lihat semua {count} tips",
     },
     sample: {
-      title: "Lihat Kualitasnya",
-      subtitle: "Baca tips ini gratis. Jika membantu, bayangkan 49 lainnya.",
-      readFull: "Baca tips lengkap gratis",
+      title: "Coba Sebelum Membeli",
+      subtitle: "Baca 4 tips ini secara gratis. Jika membantu, bayangkan 47 tips lainnya.",
     },
     pricing: {
       title: "Pembelian Sekali",

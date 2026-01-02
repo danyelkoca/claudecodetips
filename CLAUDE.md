@@ -25,7 +25,7 @@
 ### External Research
 
 - Always search the web before giving solutions
-- Read the latest docs and best practices (current date: December 2025)
+- Read the latest docs and best practices (current date: January 2026)
 - Never rely solely on internal knowledge
 - Provide references from trusted, authoritative sources
 - Never use outdated information
@@ -86,59 +86,59 @@ No variations. No "it depends." One value per design property.
 
 ### Colors
 
-| Element | Class |
-|---------|-------|
-| Body text | `text-slate-900` |
-| Muted text | `text-slate-500` |
-| Light background | `bg-slate-50` |
-| Borders | `border-slate-200` |
-| Primary CTA | `bg-primary text-white` |
-| Primary text | `text-primary` |
-| Primary light | `bg-primary/10` |
-| Success | `text-green-600`, `bg-green-50` |
-| Error | `text-red-600`, `bg-red-50` |
+| Element          | Class                           |
+| ---------------- | ------------------------------- |
+| Body text        | `text-slate-900`                |
+| Muted text       | `text-slate-500`                |
+| Light background | `bg-slate-50`                   |
+| Borders          | `border-slate-200`              |
+| Primary CTA      | `bg-primary text-white`         |
+| Primary text     | `text-primary`                  |
+| Primary light    | `bg-primary/10`                 |
+| Success          | `text-green-600`, `bg-green-50` |
+| Error            | `text-red-600`, `bg-red-50`     |
 
 ### Typography
 
-| Element | Class |
-|---------|-------|
-| H1 (page title) | `text-3xl font-bold` |
-| H2 (section) | `text-2xl font-bold` |
+| Element         | Class                   |
+| --------------- | ----------------------- |
+| H1 (page title) | `text-3xl font-bold`    |
+| H2 (section)    | `text-2xl font-bold`    |
 | H3 (card title) | `text-xl font-semibold` |
-| Body | `text-base` |
-| Small/meta | `text-sm` |
-| Badge | `text-xs font-medium` |
+| Body            | `text-base`             |
+| Small/meta      | `text-sm`               |
+| Badge           | `text-xs font-medium`   |
 
 ### Spacing (8px Grid) - NO MARGIN
 
-| Use | Class | Pixels |
-|-----|-------|--------|
-| Icon + text | `gap-2` | 8px |
-| Inline elements | `gap-1` | 4px |
-| List items, form fields | `gap-4` | 16px |
-| Card content, after headings | `gap-6` | 24px |
-| Content blocks, sections | `gap-8` | 32px |
+| Use                          | Class   | Pixels |
+| ---------------------------- | ------- | ------ |
+| Icon + text                  | `gap-2` | 8px    |
+| Inline elements              | `gap-1` | 4px    |
+| List items, form fields      | `gap-4` | 16px   |
+| Card content, after headings | `gap-6` | 24px   |
+| Content blocks, sections     | `gap-8` | 32px   |
 
 ### Padding
 
-| Use | Class |
-|-----|-------|
-| Container horizontal | `px-4` |
-| Section vertical | `py-12` |
-| Card/modal | `p-6` |
-| Button default | `px-4 py-2` |
-| Button large | `px-6 py-3` |
-| Input | `px-4 py-3` |
-| Badge | `px-2 py-1` |
+| Use                  | Class       |
+| -------------------- | ----------- |
+| Container horizontal | `px-4`      |
+| Section vertical     | `py-12`     |
+| Card/modal           | `p-6`       |
+| Button default       | `px-4 py-2` |
+| Button large         | `px-6 py-3` |
+| Input                | `px-4 py-3` |
+| Badge                | `px-2 py-1` |
 
 ### Space-Y (Vertical Stacking Without Flex)
 
-| Use | Class |
-|-----|-------|
-| Tight list | `space-y-2` |
-| Standard list | `space-y-4` |
+| Use             | Class       |
+| --------------- | ----------- |
+| Tight list      | `space-y-2` |
+| Standard list   | `space-y-4` |
 | Section content | `space-y-6` |
-| Page sections | `space-y-8` |
+| Page sections   | `space-y-8` |
 
 Rule: Use `gap-*` with flex/grid. Use `space-y-*` for simple stacked content.
 
@@ -146,96 +146,101 @@ Rule: Use `gap-*` with flex/grid. Use `space-y-*` for simple stacked content.
 
 ### Border Radius
 
-| Use | Class |
-|-----|-------|
-| ALL UI elements | `rounded-xl` |
+| Use               | Class          |
+| ----------------- | -------------- |
+| ALL UI elements   | `rounded-xl`   |
 | Pills/badges only | `rounded-full` |
 
 ### Shadows
 
-| Use | Class |
-|-----|-------|
+| Use                      | Class       |
+| ------------------------ | ----------- |
 | Cards, elevated surfaces | `shadow-sm` |
-| Sticky headers, modals | `shadow-lg` |
+| Sticky headers, modals   | `shadow-lg` |
 
 ### Layout Containers
 
-| Use | Class |
-|-----|-------|
-| Default page | `max-w-5xl mx-auto px-4` |
-| Narrow (forms, pricing) | `max-w-md mx-auto px-4` |
-| Prose/article | `max-w-3xl mx-auto px-4` |
+| Use                     | Class                    |
+| ----------------------- | ------------------------ |
+| Default page            | `max-w-5xl mx-auto px-4` |
+| Narrow (forms, pricing) | `max-w-md mx-auto px-4`  |
+| Prose/article           | `max-w-3xl mx-auto px-4` |
 
 ### Icon Sizes
 
-| Use | Class | Pair With |
-|-----|-------|-----------|
-| Inline small text | `w-4 h-4` | text-sm, text-xs |
-| Inline body text | `w-5 h-5` | text-base, buttons |
-| Standalone/nav | `w-6 h-6` | Headers, navigation |
-| Hero/feature | `w-8 h-8` | Large icons only |
+| Use               | Class     | Pair With           |
+| ----------------- | --------- | ------------------- |
+| Inline small text | `w-4 h-4` | text-sm, text-xs    |
+| Inline body text  | `w-5 h-5` | text-base, buttons  |
+| Standalone/nav    | `w-6 h-6` | Headers, navigation |
+| Hero/feature      | `w-8 h-8` | Large icons only    |
 
 ### Interactive States
 
-| State | Class |
-|-------|-------|
-| ALL clickables | `cursor-pointer` |
-| Hover (buttons, links) | `hover:opacity-80` |
-| Hover (cards) | `hover:border-primary hover:shadow-sm` |
-| Focus (inputs) | `focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary` |
-| Disabled | `disabled:opacity-50 disabled:cursor-not-allowed` |
+| State                  | Class                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| ALL clickables         | `cursor-pointer`                                                             |
+| Hover (buttons, links) | `hover:opacity-80`                                                           |
+| Hover (cards)          | `hover:border-primary hover:shadow-sm`                                       |
+| Focus (inputs)         | `focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary` |
+| Disabled               | `disabled:opacity-50 disabled:cursor-not-allowed`                            |
 
 ### Transitions
 
-| Use | Class |
-|-----|-------|
-| Color changes | `transition-colors` |
+| Use             | Class                  |
+| --------------- | ---------------------- |
+| Color changes   | `transition-colors`    |
 | Transform/scale | `transition-transform` |
 
 Rule: Never use `transition-all`. Always use specific transition classes.
 
 ### Z-Index Scale
 
-| Layer | Value |
-|-------|-------|
-| Dropdowns | `z-10` |
-| Sticky elements | `z-20` |
-| Modals/overlays | `z-50` |
+| Layer               | Value      |
+| ------------------- | ---------- |
+| Dropdowns           | `z-10`     |
+| Sticky elements     | `z-20`     |
+| Modals/overlays     | `z-50`     |
 | Toast/notifications | `z-[9999]` |
 
 ### Responsive (Mobile-First)
 
-| Prefix | Use |
-|--------|-----|
-| (none) | Mobile base styles |
-| `md:` | Tablets, layout changes |
-| `lg:` | Desktop |
+| Prefix | Use                     |
+| ------ | ----------------------- |
+| (none) | Mobile base styles      |
+| `md:`  | Tablets, layout changes |
+| `lg:`  | Desktop                 |
 
 Rule: Write mobile first, add `md:` for larger screens.
 
 ### Component Patterns
 
 **Button (Default):**
+
 ```
 cursor-pointer px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:opacity-80 transition-colors
 ```
 
 **Button (Large CTA):**
+
 ```
 cursor-pointer px-6 py-3 bg-primary text-white rounded-xl font-bold hover:opacity-80 transition-colors
 ```
 
 **Card:**
+
 ```
 p-6 bg-white rounded-xl border border-slate-200 shadow-sm
 ```
 
 **Input:**
+
 ```
 w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
 ```
 
 **Section:**
+
 ```html
 <section class="py-12">
   <div class="max-w-5xl mx-auto px-4">
@@ -274,6 +279,7 @@ SvelteKit application with Netlify adapter, selling access to "50 Tips to Master
 **Paywall**: Access controlled via `hasAccess` prop passed through layouts. Checks Firestore for valid purchase via `purchase_session` cookie in `src/routes/[lang]/+layout.server.js`.
 
 **Backend**:
+
 - Stripe checkout: `src/routes/api/checkout/+server.js`
 - Stripe webhooks: `src/routes/api/webhooks/stripe/+server.js`
 - Firebase Admin: `src/lib/server/firebase-admin.js` for storing purchases
@@ -283,33 +289,40 @@ SvelteKit application with Netlify adapter, selling access to "50 Tips to Master
 Before proposing any solution, review all relevant areas:
 
 ### Deployment & Caching
+
 - `netlify.toml`, `src/hooks.server.js`
 
 ### Build & Tooling
+
 - `svelte.config.js`, `vite.config.js`, `postcss.config.js`, `package.json`
 - **Tailwind v4**: No `tailwind.config.js`. Config via `postcss.config.js` + CSS `@plugin` directives in `src/app.css`
 
 ### API Layer
+
 - `src/routes/api/checkout/+server.js`
 - `src/routes/api/webhooks/stripe/+server.js`
 - `src/routes/api/contact/+server.js`
 - `src/routes/api/restore/+server.js`
 
 ### Server-Side (SvelteKit)
+
 - `src/routes/[lang]/**/+page.server.js`, `+layout.server.js`
 - `src/routes/+page.server.js`
 - `src/lib/server/firebase-admin.js`
 
 ### Firebase/Firestore
+
 - `src/lib/server/firebase-admin.js` - Admin SDK initialization
 - `src/lib/server/rateLimit.js` - Rate limiting utility
 - Firestore for storing purchases and user data
 
 ### Frontend
+
 - `src/routes/[lang]/**/+page.svelte`, `+layout.svelte`
 - `src/routes/+layout.svelte`, `+error.svelte`
 
 ### Components
+
 - `src/lib/components/Navbar.svelte`
 - `src/lib/components/Footer.svelte`
 - `src/lib/components/PaywallBanner.svelte`
@@ -319,21 +332,25 @@ Before proposing any solution, review all relevant areas:
 - `src/lib/components/JsonLd.svelte`
 
 ### Content
+
 - `src/lib/content/tips.js`
 - `src/lib/content/tips/{lang}/*.svx` (13 language folders)
 - `src/lib/content/blog.js`
 
 ### Internationalization
+
 - `src/lib/i18n/{lang}.js` (13 files: en, ja, zh-CN, zh-TW, es, fr, pt, de, ko, ar, ru, id, tr)
 - `src/lib/i18n/loader.js`
 
 ### Styles & Static
+
 - `src/app.css`, `src/app.html`
 - `static/robots.txt`
 
 ## Environment Variables
 
 Required in `.env`:
+
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` - Stripe API
 - `PUBLIC_SITE_URL` - Site base URL
 - `SERVICE_ACCOUNT_*` - Firebase service account credentials (multiple fields)

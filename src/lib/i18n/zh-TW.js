@@ -68,9 +68,8 @@ export default {
       viewAll: "查看全部{count}個技巧",
     },
     sample: {
-      title: "查看品質",
-      subtitle: "免費閱讀此技巧。如果有幫助，想像還有49個。",
-      readFull: "免費閱讀全文",
+      title: "先試後買",
+      subtitle: "免費閱讀這4個技巧。如果有幫助，想像還有47個。",
     },
     pricing: {
       title: "一次性購買",

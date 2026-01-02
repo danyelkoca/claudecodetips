@@ -15,8 +15,17 @@ export async function load({ parent }) {
 	// Load all tips metadata
 	const { tips: allTips } = await loadTipsMeta(lang);
 
-	// Get free tips for preview section (just tip #2 for sample)
-	const sampleTip = allTips.find((tip) => tip.id === 2);
+	// Load all 4 free tips with section info
+	const freeTips = freeTipIds.map((id) => {
+		const tip = allTips.find((t) => t.id === id);
+		const section = sections.find((s) => s.tips.includes(id));
+		return {
+			id: tip.id,
+			title: tip.title,
+			summary: tip.summary,
+			section: section.id
+		};
+	});
 
 	// Build curriculum data: sections with their tips
 	const curriculum = sections.map((section) => ({
@@ -44,7 +53,7 @@ export async function load({ parent }) {
 	});
 
 	return {
-		sampleTip,
+		freeTips,
 		curriculum,
 		carouselTips,
 		hasAccess

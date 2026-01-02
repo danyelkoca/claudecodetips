@@ -75,9 +75,8 @@ export default {
       viewAll: "View all {count} tips",
     },
     sample: {
-      title: "See the Quality",
-      subtitle: "Read this tip free. If it helps, imagine 49 more.",
-      readFull: "Read full tip free",
+      title: "Try Before You Buy",
+      subtitle: "Read these 4 tips free. If they help, imagine 47 more.",
     },
     pricing: {
       title: "One-Time Purchase",

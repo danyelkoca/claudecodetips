@@ -75,9 +75,8 @@ export default {
       viewAll: "Tüm {count} ipucunu gör",
     },
     sample: {
-      title: "Kaliteyi Görün",
-      subtitle: "Bu ipucunu ücretsiz okuyun. Faydalı bulursanız, 49 tane daha hayal edin.",
-      readFull: "Tam ipucunu ücretsiz okuyun",
+      title: "Almadan Once Deneyin",
+      subtitle: "Bu 4 ipucunu ucretsiz okuyun. Yardimci olurlarsa, 47 tane daha hayal edin.",
     },
     pricing: {
       title: "Tek Seferlik Satın Alma",

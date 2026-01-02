@@ -75,9 +75,8 @@ export default {
       viewAll: "{count}개 팁 모두 보기",
     },
     sample: {
-      title: "품질 확인하기",
-      subtitle: "이 팁을 무료로 읽어보세요. 도움이 된다면 49개가 더 있습니다.",
-      readFull: "전체 팁 무료로 읽기",
+      title: "구매 전 체험하기",
+      subtitle: "4개의 팁을 무료로 읽어보세요. 도움이 된다면, 47개가 더 있습니다.",
     },
     pricing: {
       title: "일회성 구매",

@@ -74,9 +74,8 @@ export default {
       viewAll: "全{count}ヒントを見る",
     },
     sample: {
-      title: "クオリティを確認",
-      subtitle: "このヒントを無料で読んでください。役立つと感じたら、残り49個を想像してみてください。",
-      readFull: "無料で全文を読む",
+      title: "購入前にお試し",
+      subtitle: "4つのヒントを無料でお読みください。役立てば、残り47個をご想像ください。",
     },
     pricing: {
       title: "一度きりの購入",

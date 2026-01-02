@@ -68,9 +68,8 @@ export default {
       viewAll: "Ver los {count} consejos",
     },
     sample: {
-      title: "Ve la Calidad",
-      subtitle: "Lee este consejo gratis. Si te ayuda, imagina 49 mas.",
-      readFull: "Leer consejo completo gratis",
+      title: "Prueba Antes de Comprar",
+      subtitle: "Lee estos 4 consejos gratis. Si te ayudan, imagina 47 mas.",
     },
     pricing: {
       title: "Compra Única",

@@ -72,9 +72,3 @@ claude
 ```
 
 That's it. Claude Code scopes to your project directory and inherits your environment.
-
-## Related Tips
-
-- **Tip 3**: All keyboard shortcuts and slash commands
-- **Tip 27**: Git worktrees for parallel sessions
-- **Tip 44**: Headless mode for automation

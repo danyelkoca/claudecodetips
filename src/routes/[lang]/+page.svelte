@@ -3,7 +3,7 @@
 	import { Check, X, ChevronDown, ChevronRight, Lock } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { loadTipComponent } from '$lib/content/tips.js';
+	import { freeTipIds } from '$lib/content/tips.js';
 	import TipImage from '$lib/components/TipImage.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 
@@ -28,7 +28,7 @@
 	}
 	$: curriculum = data.curriculum;
 	$: carouselTips = data.carouselTips;
-	$: sampleTip = data.sampleTip;
+	$: freeTips = data.freeTips;
 
 	// Carousel state
 	let currentSlide = 0;
@@ -39,16 +39,6 @@
 			currentSlide = (currentSlide + 1) % carouselTips.length;
 		}, 4000);
 		return () => clearInterval(interval);
-	});
-
-	// Load sample tip component
-	let sampleTipComponent = null;
-
-	onMount(async () => {
-		if (sampleTip) {
-			const result = await loadTipComponent(sampleTip.id, lang);
-			sampleTipComponent = result.component;
-		}
 	});
 
 	// Sticky CTA visibility
@@ -123,8 +113,9 @@
 			<div class="hidden md:block">
 				<div class="relative">
 					{#each carouselTips as tip, i}
-						<div
-							class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm transition-opacity duration-500 {currentSlide === i ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'}"
+						<a
+							href="/{lang}/guide/{tip.section}/{tip.id}"
+							class="block bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:border-primary hover:shadow-sm transition-colors cursor-pointer group {currentSlide === i ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'}"
 						>
 							<!-- Tip Image -->
 							<div class="aspect-[1200/630] overflow-hidden">
@@ -136,11 +127,16 @@
 									<span>{t.common.tipPrefix} #{tip.id}</span>
 									<span>·</span>
 									<span>{t.sections[tip.section].title}</span>
+									{#if !hasAccess && freeTipIds.includes(tip.id)}
+										<span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">{t.guide.free}</span>
+									{:else if !hasAccess}
+										<Lock class="w-4 h-4 text-slate-400" />
+									{/if}
 								</div>
-								<h3 class="text-lg font-bold text-slate-900">{tip.title}</h3>
+								<h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">{tip.title}</h3>
 								<p class="text-slate-900 text-sm line-clamp-2">{tip.summary}</p>
 							</div>
-						</div>
+						</a>
 					{/each}
 					<!-- Carousel dots -->
 					<div class="flex justify-center gap-2 pt-4">
@@ -349,9 +345,9 @@
 	</div>
 </section>
 
-<!-- Section 4: Sample Tip -->
+<!-- Section 4: Free Tips Grid -->
 <section class="py-12 bg-slate-50">
-	<div class="max-w-3xl mx-auto px-4 space-y-6">
+	<div class="max-w-5xl mx-auto px-4 space-y-6">
 		<div class="text-center space-y-2">
 			<h2 class="text-2xl font-bold text-slate-900">
 				{t.landing.sample.title}
@@ -359,27 +355,28 @@
 			<p class="text-slate-500">{t.landing.sample.subtitle}</p>
 		</div>
 
-		{#if sampleTip}
-			<article class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
-				<div class="space-y-2">
-					<div class="text-sm text-slate-500">{t.common.tipPrefix} #{sampleTip.id}</div>
-					<h3 class="text-xl font-bold text-slate-900">{sampleTip.title}</h3>
-				</div>
-				<div class="prose prose-slate prose-sm max-w-none line-clamp-[12] overflow-hidden">
-					{#if sampleTipComponent}
-						<svelte:component this={sampleTipComponent} />
-					{:else}
-						<p>{sampleTip.summary}</p>
-					{/if}
-				</div>
+		<div class="grid md:grid-cols-2 gap-4">
+			{#each freeTips as tip}
 				<a
-					href="/{lang}/guide/setup/2"
-					class="inline-block text-primary font-medium hover:opacity-80"
+					href="/{lang}/guide/{tip.section}/{tip.id}"
+					class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:border-primary hover:shadow-sm transition-colors cursor-pointer group"
 				>
-					{t.landing.sample.readFull} →
+					<div class="aspect-[1200/630] overflow-hidden">
+						<TipImage tipId={tip.id} alt={tip.title} className="w-full h-full object-cover" />
+					</div>
+					<div class="p-6 space-y-2">
+						<div class="flex items-center gap-2 text-sm">
+							<span class="text-slate-500">{t.common.tipPrefix} #{tip.id}</span>
+							<span class="text-slate-500">·</span>
+							<span class="text-slate-500">{t.sections[tip.section].title}</span>
+							<span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">{t.guide.free}</span>
+						</div>
+						<h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">{tip.title}</h3>
+						<p class="text-slate-900 text-sm line-clamp-2">{tip.summary}</p>
+					</div>
 				</a>
-			</article>
-		{/if}
+			{/each}
+		</div>
 	</div>
 </section>
 

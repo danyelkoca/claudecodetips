@@ -75,9 +75,8 @@ export default {
       viewAll: "Alle {count} Tipps ansehen",
     },
     sample: {
-      title: "Sieh die Qualitat",
-      subtitle: "Lies diesen Tipp kostenlos. Wenn er hilft, stell dir 49 weitere vor.",
-      readFull: "Vollstandigen Tipp kostenlos lesen",
+      title: "Erst Testen, Dann Kaufen",
+      subtitle: "Lesen Sie diese 4 Tipps kostenlos. Wenn sie helfen, stellen Sie sich 47 weitere vor.",
     },
     pricing: {
       title: "Einmaliger Kauf",
