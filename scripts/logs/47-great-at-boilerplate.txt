@@ -1,0 +1,25 @@
+Done. Here's what I changed:
+
+**Removed/Fixed:**
+- Removed unverified "40% of time on repetitive tasks" claim (couldn't find reliable source)
+- Removed "Workflow Integration" section (it was essentially a "Related Tips" section)
+- Removed generic "What is Boilerplate?" textbook definition
+- Removed excessive category lists (condensed into prose)
+- Fixed "30-60% time savings" claim by adding nuance from METR study showing AI can actually slow down complex tasks
+
+**Added:**
+- Strong practitioner-focused opening
+- [Veracode 2025 study link](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) for the 45% security vulnerability claim (verified)
+- [METR study link](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) showing experienced devs were 19% slower with AI on complex tasks
+- [JetBrains 2025 survey link](https://blog.jetbrains.com/research/2025/10/state-of-developer-ecosystem-2025/) confirming boilerplate as top AI use case
+- Real practitioner example at the end
+- Nuanced take on when boilerplate generation works vs. doesn't
+
+**Quality checks passed:**
+- 142 lines (above 100 minimum)
+- No banned words/phrases
+- No em dashes
+- No "Related Tips" section
+- All URLs fetched and verified
+- Frontmatter untouched
+- No overlaps with other tips

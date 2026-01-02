@@ -1,0 +1,22 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified claims with inline links:**
+- Added link to [Claude Code's built-in subagents documentation](https://code.claude.com/docs/en/sub-agents)
+- Added link to [Haiku 4.5 announcement](https://www.anthropic.com/news/claude-haiku-4-5) with corrected speed/cost comparison (2-4x faster, one-third the cost)
+- Added link to [Factory.ai's research on context compression](https://factory.ai/news/evaluating-compression) for the 2.19-2.45/5.0 artifact tracking claim
+- Added link to [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) with updated quote about external storage
+
+**Fixed inaccuracies:**
+- Changed "4-5x faster and ~80% cheaper" to "2-4x faster at about one-third the cost" (verified from Anthropic's announcement)
+
+**Style improvements:**
+- Removed all em dashes (replaced with periods or commas)
+- Tightened the opener to be more direct
+- Condensed the "Master-Clone Pattern" section into "Let the Main Agent Decide" to reduce overlap with Tip 31
+- Changed "Security-critical" to "Security" (less hyperbolic)
+
+**Maintained:**
+- Frontmatter unchanged
+- 257 lines of content (well above 100 line minimum)
+- No "Related Tips" section
+- Core focus on the lossy compression tradeoff

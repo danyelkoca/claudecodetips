@@ -1,0 +1,23 @@
+The tip has been updated successfully. Here's a summary of the changes:
+
+**Key improvements:**
+- Added 13 verified inline links to official docs and trusted sources
+- Updated from 74 lines to 119 lines with meaningful depth
+- Added new section on the `!` bash shortcut with practical examples
+- Added Unix philosophy section with pipe/composability examples
+- Expanded remote development section with mosh details
+- Added new section on running multiple instances
+- Removed the unattributed quote about "context control, keyboard efficiency..." 
+- Replaced with verified fact from Pragmatic Engineer about 90% self-written codebase
+
+**Claims verified:**
+- Terminal-first design philosophy (official docs)
+- Feature comparison table (VS Code extension docs)
+- Checkpoints/rewind limitations (checkpointing docs)
+- tmux/zellij for persistent sessions (multiple practitioner sources)
+- Termux + Tailscale mobile access (skeptrune.com article)
+- mosh for unstable connections (mosh.org)
+- Multiple instance caveats (GitButler blog)
+- 90% self-written codebase (Pragmatic Engineer)
+
+**No overlaps with other tips:** Referenced worktrees briefly without going deep (Tip 27 covers that), mentioned headless mode exists without explaining (Tip 44 covers that), kept shortcuts minimal (Tip 3 covers that).

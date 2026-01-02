@@ -6,139 +6,175 @@ summary: "Essential keyboard shortcuts and commands for efficient Claude Code us
 isFree: false
 ---
 
-## Interrupt & Control
+These shortcuts live in muscle memory after a week. Print this page if you need to.
+
+## Core Controls
 
 | Shortcut | Action |
 |----------|--------|
 | `Esc` | Stop generation mid-response |
-| `Esc` + `Esc` | Rewind to previous state |
-| `Ctrl+C` | Cancel current input/generation |
-| `Ctrl+D` | Exit Claude Code session |
+| `Esc` + `Esc` | Open [rewind menu](https://code.claude.com/docs/en/interactive-mode) to restore previous states |
+| `Ctrl+C` | Cancel current input |
+| `Ctrl+D` | Exit session |
+| `?` | Show all shortcuts for your environment |
+
+Double-tap `Esc` on an empty prompt to rewind the conversation. Note: this resets messages only. File changes stay on disk. Pair with git or ask Claude to undo explicitly.
 
 ## Screen & History
 
 | Shortcut | Action |
 |----------|--------|
-| `Ctrl+L` | Clear terminal screen (keeps conversation) |
-| `Ctrl+R` | Reverse search command history |
-| `Up/Down` | Navigate through previous inputs |
-| `Ctrl+O` | Toggle verbose output |
-| `?` | Show available shortcuts |
+| `Ctrl+L` | Clear terminal screen (conversation persists) |
+| `Ctrl+R` | Reverse search through prompt history |
+| `Up/Down` | Navigate previous inputs |
+| `Ctrl+O` | [Toggle verbose output](https://code.claude.com/docs/en/interactive-mode) (shows tool usage details) |
+| `Ctrl+G` | Open prompt in your system's text editor |
 
-## Mode Switching
+`Ctrl+O` is gold for debugging. When Claude goes quiet mid-task, toggle verbose to see what it's actually doing.
+
+## Mode & Model Switching
 
 | Shortcut | Action |
 |----------|--------|
 | `Shift+Tab` | Cycle: Normal -> Auto-Accept -> Plan Mode |
-| `Option+P` (Mac) / `Alt+P` | Switch model mid-prompt |
+| `Alt+M` | Same as Shift+Tab (alternative binding) |
+| `Option+P` (Mac) / `Alt+P` | Switch model while typing |
+| `Tab` | Toggle extended thinking (may require `/config` on some versions) |
+
+When you're mid-prompt and realize this needs Opus 4.5 instead of Sonnet 4.5, hit `Option+P` to switch without retyping.
 
 ## Input Methods
 
 ### Images
 
-- `Ctrl+V` - Paste image from clipboard (NOT Cmd+V on Mac)
+`Ctrl+V` pastes images from clipboard. On Mac, this is `Ctrl+V`, not `Cmd+V`. On Windows, use `Alt+V`. Linux support varies by terminal.
 
 ### Multiline Input
 
 | Method | How |
 |--------|-----|
-| Quick escape | `\` + `Enter` |
-| macOS default | `Option+Enter` |
+| Universal | `\` then `Enter` |
+| macOS | `Option+Enter` |
 | After setup | `Shift+Enter` (run `/terminal-setup` first) |
+| Control sequence | `Ctrl+J` (line feed) |
+
+The `/terminal-setup` command configures Shift+Enter for [iTerm2, VS Code, Kitty, Alacritty, Zed, and Warp](https://code.claude.com/docs/en/interactive-mode). Other terminals need manual configuration.
 
 ## Quick Prefixes
 
-| Prefix | Name | Action |
-|--------|------|--------|
-| `/` | Slash command | Execute built-in or custom command |
-| `#` | Memory | Add instruction to CLAUDE.md |
-| `!` | Bash | Run shell command directly |
-| `@` | File mention | Trigger file path autocomplete |
+| Prefix | Action |
+|--------|--------|
+| `/` | Slash command (built-in or custom) |
+| `#` | Add instruction directly to CLAUDE.md |
+| `!` | Execute bash command without Claude interpreting it |
+| `@` | File path autocomplete |
 
-## Slash Commands Reference
+The `!` prefix runs commands raw. `! npm test` adds the command and output to context without Claude trying to "help."
 
-### Session & Navigation
+## Background Execution
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+B` | Push running bash command to background |
+| `/bashes` | List and manage background tasks |
+
+Tmux users: press `Ctrl+B` twice since tmux intercepts the first one.
+
+Background commands are assigned IDs like `bash_1`, `bash_2`. Claude can keep working while your dev server runs.
+
+## Slash Commands
+
+### Session Management
 
 | Command | Purpose |
 |---------|---------|
-| `/help` | Get usage help and list commands |
-| `/status` | Show version, model, account info |
-| `/config` | Open settings interface |
+| `/help` | List available commands |
+| `/status` | Version, model, account info |
+| `/config` | Open settings (thinking toggle, model, permissions) |
 | `/exit` | Exit the REPL |
-| `/clear` | Wipe conversation history (CLAUDE.md persists) |
-| `/rename <name>` | Rename current session |
-| `/resume [session]` | Resume previous session by ID/name |
+| `/clear` | Wipe conversation (CLAUDE.md persists) |
+| `/rename <name>` | Name current session |
+| `/resume [name]` | Resume session by name or ID |
 
-### Context Management
-
-| Command | Purpose |
-|---------|---------|
-| `/context` | Visualize token usage as colored grid (red = about to compact) |
-| `/compact [focus]` | Compress conversation. Add focus: `/compact focus on API changes` |
-| `/rewind` | Undo mistakes, restore previous state |
-| `/export [filename]` | Export conversation to file/clipboard |
-
-### Project Tools
+### Context Control
 
 | Command | Purpose |
 |---------|---------|
-| `/init` | Initialize project with CLAUDE.md |
+| `/context` | Token usage as [colored grid](https://code.claude.com/docs/en/slash-commands) (red = trouble) |
+| `/compact [focus]` | Compress conversation with optional focus area |
+| `/rewind` | Restore to previous checkpoint |
+| `/export [file]` | Export conversation to file or clipboard |
+
+`/compact focus on the authentication changes` preserves what matters while dropping the noise.
+
+### Code Quality
+
+| Command | Purpose |
+|---------|---------|
+| `/init` | Create CLAUDE.md for this project |
 | `/memory` | Edit CLAUDE.md files |
 | `/review` | Request code review |
-| `/security-review` | Security audit of pending changes |
-| `/add-dir` | Add additional working directories |
+| `/security-review` | [Security audit](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code) of pending changes |
 | `/doctor` | Check installation health |
+| `/add-dir` | Add working directories |
+| `/todos` | List tracked TODO items |
+
+The `/security-review` command catches SQL injection, XSS, and auth flaws before you commit. Ten keystrokes, real vulnerabilities found.
 
 ### Model & Permissions
 
 | Command | Purpose |
 |---------|---------|
-| `/model` | Select or change AI model |
-| `/permissions` | View/update tool permissions |
-| `/sandbox` | Enable sandboxed bash with isolation |
+| `/model` | Select model |
+| `/permissions` | View/update tool permissions (use `/` to search) |
+| `/sandbox` | Enable sandboxed bash with filesystem isolation |
 
-### GitHub Integration
-
-| Command | Purpose |
-|---------|---------|
-| `/pr-comments` | View PR comments |
-| `/install-github-app` | Set up Claude GitHub Actions |
-
-### Advanced Features
+### Integrations
 
 | Command | Purpose |
 |---------|---------|
-| `/mcp` | Manage MCP server connections |
+| `/mcp` | Manage [MCP server connections](https://code.claude.com/docs/en/mcp) |
+| `/ide` | Manage IDE integrations (VS Code, JetBrains) |
+| `/plugin` | Install and manage plugins |
 | `/hooks` | Configure tool event hooks |
 | `/agents` | Manage custom subagents |
-| `/bashes` | List/manage background tasks |
-| `/todos` | List current TODO items |
-| `/stats` | Show usage stats, streaks, history |
+| `/install-github-app` | Set up Claude for PR reviews |
+| `/pr-comments` | View PR comments |
 
-### Account
+### Account & Stats
 
 | Command | Purpose |
 |---------|---------|
-| `/login` | Switch Anthropic accounts |
+| `/stats` | Usage graph, streaks, model preferences |
+| `/usage` | Plan limits and rate limit status |
+| `/cost` | Token usage breakdown |
+| `/login` | Switch accounts |
 | `/logout` | Sign out |
-| `/cost` | Show token usage (subscription) |
-| `/bug` | Report bugs to Anthropic |
+| `/bug` | Report issues to Anthropic |
+| `/privacy-settings` | Manage privacy preferences |
+| `/release-notes` | What's new |
 
-## Background Execution
+### Display
 
-Run long commands without blocking:
+| Command | Purpose |
+|---------|---------|
+| `/theme` | Open theme picker |
+| `/statusline` | Configure status line display |
+| `/output-style` | Set output formatting |
+| `/vim` | Enable vim-style editing |
+| `/terminal-setup` | Configure Shift+Enter for your terminal |
 
-- Ask Claude to run in background, OR
-- Press `Ctrl+B` to background current bash command
-- Use `/bashes` to manage background tasks
+Vim mode gives you `h/j/k/l` navigation, `dd` to delete lines, `i/a/o` to insert. Run `/config` to make it permanent.
 
 ## Custom Commands
 
-Create reusable workflows:
+Create workflows as markdown files:
 
-- Project commands: `.claude/commands/*.md`
-- Personal commands: `~/.claude/commands/*.md`
+- Project: `.claude/commands/*.md`
+- Personal: `~/.claude/commands/*.md`
 
 Execute with `/project:command-name` or `/user:command-name`.
 
-Supports `$ARGUMENTS`, `$1`, `$2` for arguments. See Tip #30 for details.
+Files in subdirectories get namespaced: `.claude/frontend/component.md` becomes `/frontend:component`.
+
+Commands support `$ARGUMENTS` for all args, or `$1`, `$2` for positional parameters.

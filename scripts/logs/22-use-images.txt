@@ -1,0 +1,29 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Corrections made:**
+- Fixed file size limit for claude.ai: 30MB (was incorrectly 10MB)
+- Added Windows `Alt+V` shortcut (introduced in v1.0.93)
+- Updated token formula with verified source link
+
+**Content improvements:**
+- Removed the entire "MCP Servers for Automated Screenshots" section (overlapped heavily with Tip 41), replaced with a brief Figma MCP mention + "See Tip 41" cross-reference
+- Consolidated platform info into cleaner "Platform Quirks" section with actual workarounds for WSL users
+- Added verified inline links to Anthropic's official vision documentation
+- Improved voice: more direct, practitioner-focused
+- Added clear keyboard shortcut table at the top
+- Added specific use cases under "What works well" for visual debugging
+
+**Structure changes:**
+- Renamed "Use Case: Visual Bug Debugging" to "Visual Bug Debugging" (removed redundant prefix)
+- Renamed "Use Case: Design-to-Code Implementation" to "Design-to-Code" (tighter)
+- Renamed "Platform-Specific Considerations" to "Platform Quirks" (more direct)
+- Removed error screenshot section (Tip 23 covers error message handling)
+- Added tables for better scannability
+
+**Verified links added:**
+- [Anthropic's vision documentation](https://platform.claude.com/docs/en/build-with-claude/vision)
+- [Figma MCP setup guide](https://help.figma.com/hc/en-us/articles/35281350665623)
+- [GitHub issue #834](https://github.com/anthropics/claude-code/issues/834) for Linux clipboard issues
+- [VS Code WSL extension](https://github.com/aggroot/claude-image-paste) for WSL workaround
+
+Final line count: 210 lines (meets 100+ requirement).

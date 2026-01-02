@@ -1,0 +1,37 @@
+The tip has been successfully updated. Here's a summary of the changes made:
+
+**Changes Made:**
+
+1. **Added inline citations to verified research:**
+   - Daniel Wegner's Ironic Process Theory (Wikipedia)
+   - Allyson Ettinger's BERT research (ACL Anthology)
+   - InstructGPT negation study (arXiv)
+   - NeQA benchmark (GitHub)
+   - GPT-3/GPT-Neo negation study (arXiv)
+   - Code generation negation failures (arXiv)
+   - Anthropic's Claude 4 best practices (docs.claude.com)
+
+2. **Updated research claims with accurate data:**
+   - BERT: "preferred the true completion in 0% of negated items"
+   - Gemini: "accuracy dropped from 95% to 42.6% under hard negation"
+   - Added nuance about scaling patterns (inverse, U-shaped, or positive depending on prompting method)
+
+3. **Improved prose:**
+   - Removed redundant phrases
+   - Changed "Technical Explanation" to "Token Selection Mechanics" 
+   - Tightened "When Negative Constraints Still Apply" to "When Negative Constraints Work"
+   - Made bottom line more direct
+
+4. **Added practitioner perspective:**
+   - Changed "Multiple users have reported" to "I've seen Claude create files like..."
+
+5. **Verified all URLs are working** (fetched and confirmed each one)
+
+**Quality verification:**
+- 161 lines (above 100 minimum)
+- No banned words/phrases
+- No em dashes
+- No "Related Tips" section
+- Frontmatter untouched
+- All links verified and working
+- Focused on the negation topic without overlapping other tips

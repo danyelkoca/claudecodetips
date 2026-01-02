@@ -1,0 +1,35 @@
+I've updated the tip. Here's a summary of the changes made:
+
+## Changes Made
+
+1. **Fixed incorrect agent reference**: Changed "Built-in agents (Explore, Plan, Verify)" to "Built-in agents (general-purpose, Explore, Plan)" since "Verify" doesn't exist as a built-in agent.
+
+2. **Updated token count**: Changed "~100 tokens per Skill" to "30-50 tokens per Skill" based on official documentation.
+
+3. **Added inline documentation links**:
+   - Progressive disclosure best practices
+   - Official Skills docs
+   - GitHub anthropics/skills repository
+   - Slash commands docs for character budget info
+
+4. **Enhanced debugging section** with practical issues discovered from real GitHub issues:
+   - Prettier reformatting multi-line YAML
+   - Character budget limit (15,000 chars default)
+   - `SLASH_COMMAND_TOOL_CHAR_BUDGET` workaround
+   - Checking `/context` for "M of N commands" warnings
+   - Script permissions (`chmod +x`)
+
+5. **Updated model name**: Changed `claude-sonnet-4-20250514` to `claude-sonnet-4-5-20250929` (current format).
+
+6. **Clarified subagent behavior**: Added note that subagents don't inherit Skills from parent conversation.
+
+7. **Minor improvements**:
+   - Removed redundant info (scripts explanation was duplicated)
+   - Tightened wording throughout
+   - Added practical tip about manually copying skill folders
+
+**Verified URLs** (all fetched and confirmed working):
+- https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+- https://code.claude.com/docs/en/skills
+- https://github.com/anthropics/skills
+- https://code.claude.com/docs/en/slash-commands

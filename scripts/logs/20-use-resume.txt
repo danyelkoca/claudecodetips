@@ -1,0 +1,25 @@
+The tip has been updated. Let me verify the changes against the quality checklist:
+
+**Quality Check:**
+- ✓ Frontmatter untouched
+- ✓ No "Related Tips" section
+- ✓ No banned words/phrases
+- ✓ All URLs verified (code.claude.com docs)
+- ✓ No outdated model names
+- ✓ Removed overlaps: Git Worktrees section (Tip 27) and /clear vs /resume table (Tips 18/19)
+- ✓ Focused on session resume functionality
+- ✓ No em dashes
+- ✓ 163 lines total
+- ✓ Concrete code examples throughout
+- ✓ Strong opener: "Terminal crashes happen. Laptop batteries die. SSH connections drop."
+
+**Changes made:**
+1. **Rewrote opener** - Direct, practitioner-focused instead of generic
+2. **Added inline source links** - CLI reference, common-workflows, headless, checkpointing docs
+3. **Removed Git Worktrees section** - Overlaps with Tip 27
+4. **Removed /clear vs /resume table** - Overlaps with Tips 18/19
+5. **Added warning about cleanupPeriodDays=0** - Important footgun
+6. **Improved migration section** - Added cp -n flag, common scenarios
+7. **Replaced "Best Practices" with "The Resume Workflow"** - More practitioner voice
+8. **Added detail about session forking** - Warning about fork accumulation
+9. **Clarified path encoding** - Useful for debugging

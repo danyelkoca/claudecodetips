@@ -6,89 +6,91 @@ summary: "Create reusable workflows in .claude/commands/ folder."
 isFree: false
 ---
 
-Custom slash commands let you encode repeatable workflows as Markdown files. Instead of typing detailed instructions each time, invoke them with `/command_name`.
+Custom slash commands encode repeatable workflows as Markdown files. Drop a `.md` file in the right folder, and it becomes a command you invoke with `/command_name`. No typing detailed instructions each time.
 
-## Command Locations
+## Where Commands Live
 
-Two storage options determine scope and visibility:
+[Two storage locations](https://code.claude.com/docs/en/slash-commands) determine scope:
 
-**Project Commands** - Shared with your team via git:
+**Project Commands** in `.claude/commands/`:
 ```bash
 .claude/commands/review.md      # /project:review
-.claude/commands/test/unit.md   # /project:test:unit
+.claude/commands/fix-issue.md   # /project:fix-issue
 ```
 
-**Personal Commands** - Available across all projects:
+**Personal Commands** in `~/.claude/commands/`:
 ```bash
 ~/.claude/commands/security.md  # /user:security
 ```
 
-Project commands override personal commands with the same name.
+Project commands override personal commands with the same name. Type `/` in Claude Code to see all available commands, including which scope each belongs to.
 
-## Basic Command Structure
+## Basic Structure
 
-Create a Markdown file. The filename (minus `.md`) becomes the command name:
+The filename minus `.md` becomes the command name:
 
 ```markdown
 <!-- .claude/commands/review.md -->
 
 Review this code for:
-1. Security vulnerabilities
-2. Performance issues
-3. Edge cases
-4. Code style violations
+1. SQL injection, XSS, and authentication bypasses
+2. N+1 queries and missing indexes
+3. Null pointer risks and unhandled edge cases
+4. Violations of our style guide
 
-Provide specific suggestions with code examples.
+For each issue, show the problematic code and a fix.
 ```
 
-Type `/project:review` to execute.
+Invoke with `/project:review`. That's it.
 
-## Arguments with $ARGUMENTS
+## Dynamic Values with $ARGUMENTS
 
-Pass dynamic values using the `$ARGUMENTS` placeholder:
+The `$ARGUMENTS` placeholder captures everything after the command:
 
 ```markdown
 <!-- .claude/commands/fix-issue.md -->
 
 Analyze and fix GitHub issue: $ARGUMENTS
 
-Steps:
-1. Use `gh issue view $ARGUMENTS` to get details
+1. Run `gh issue view $ARGUMENTS` to get details
 2. Search codebase for relevant files
 3. Implement the fix
-4. Write tests
-5. Verify lint and type checks pass
+4. Write tests covering the fix
+5. Run lint and type checks
 ```
 
-Usage: `/project:fix-issue 1234` passes "1234" as the argument.
+`/project:fix-issue 1234` passes "1234" as the argument. `/project:fix-issue 1234 urgent` passes "1234 urgent" as a single string.
 
 ## Positional Arguments
 
-Access individual arguments with `$1`, `$2`, etc. (like bash):
+For commands that need discrete values, use `$1`, `$2`, `$3`:
 
 ```markdown
-<!-- .claude/commands/pr-review.md -->
+<!-- .claude/commands/compare-branches.md -->
 ---
-argument-hint: [pr-number] [priority] [assignee]
-description: Review pull request with priority and assignment
+argument-hint: [base-branch] [feature-branch]
+description: Compare two branches and summarize differences
 ---
 
-Review PR #$1 with priority $2.
-Assign findings to $3.
+Compare $1 with $2.
+
+1. Run `git log $1..$2 --oneline` to see commits
+2. Run `git diff $1...$2 --stat` for file changes
+3. Summarize what changed and potential risks
 ```
 
-Usage: `/project:pr-review 456 high alice`
+`/project:compare-branches main feat/auth` sets `$1` to "main" and `$2` to "feat/auth".
 
-## Frontmatter Configuration
+## Frontmatter Options
 
-Optional YAML metadata controls behavior:
+Optional YAML frontmatter controls behavior:
 
 ```markdown
 ---
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
+allowed-tools: Bash(git:*), Read, Edit
 argument-hint: [message]
 description: Create a conventional commit
-model: claude-3-5-haiku-20241022
+model: claude-haiku-4-5-20251001
 ---
 
 Create a git commit with message: $ARGUMENTS
@@ -96,96 +98,101 @@ Create a git commit with message: $ARGUMENTS
 
 | Field | Purpose |
 |-------|---------|
-| `allowed-tools` | Restrict which tools the command can use |
-| `argument-hint` | Shows expected args in autocomplete |
-| `description` | Brief text shown in `/help` |
-| `model` | Use specific model (haiku for speed, sonnet for reasoning) |
+| `allowed-tools` | Tools the command can use. Format: `Bash(npm:*)`, `Read`, `Edit`, etc. |
+| `argument-hint` | Shown in autocomplete. Use `[required]` and `(optional)` conventions. |
+| `description` | Brief text shown in `/help` output. |
+| `model` | Specific model ID. Inherits from conversation if not set. |
+| `disable-model-invocation` | Set to `true` to prevent automatic invocation by the SlashCommand tool. |
 
-## Bash Command Execution
+For `allowed-tools`, you can specify exact commands: `Bash(git add:*)` allows only `git add` commands. `Bash(git:*)` allows any git subcommand. If your command runs bash but you don't specify `allowed-tools`, it won't have permission to execute.
 
-Prefix shell commands with `!` to execute before Claude processes the prompt:
+## Bash Execution with !
+
+Prefix shell commands with `!` to run them before Claude sees the prompt. The output gets injected into the prompt:
 
 ```markdown
 ---
-allowed-tools: Bash(git diff:*), Bash(git status:*)
+allowed-tools: Bash(git:*)
 description: Create commit from staged changes
 ---
 
 ## Current State
 
 - Status: !`git status --short`
-- Diff: !`git diff --staged`
+- Staged diff: !`git diff --staged`
 - Branch: !`git branch --show-current`
 - Recent commits: !`git log --oneline -5`
 
 ## Task
 
-Based on the above changes, create a commit following conventional commit format.
+Based on the staged changes above, create a commit following conventional commit format.
 ```
 
-Claude sees the command output before reasoning - essential for context-aware commands.
+This is what makes commands context-aware. Claude sees the actual output of `git status`, not just instructions to run it.
 
-## File References
+## File References with @
 
-Include file contents with `@` prefix:
+Include file contents directly with `@`:
 
 ```markdown
 Compare the implementations in:
 - @src/old-version.js
 - @src/new-version.js
 
-Identify breaking changes and migration steps.
+Identify breaking changes and write migration steps.
 ```
+
+Claude reads both files before processing. Combine with `$ARGUMENTS` for dynamic file references:
+
+```markdown
+<!-- .claude/commands/explain.md -->
+Review @$ARGUMENTS and explain:
+1. What it does
+2. Key design decisions
+3. Potential improvements
+```
+
+`/project:explain src/auth/login.ts` explains that specific file.
 
 ## Practical Examples
 
-### Git Workflow Automation
+### Git Automation
 
 **Branch creation** (`.claude/commands/branch.md`):
 ```markdown
 ---
 allowed-tools: Bash(git:*)
-argument-hint: [branch-description]
-model: haiku
+argument-hint: [description]
+model: claude-haiku-4-5-20251001
 ---
 
-!`git status`
+!`git status --short`
 !`git branch --show-current`
 
 Create a feature branch for: $ARGUMENTS
 
-Steps:
-1. Checkout main and pull latest
-2. Create branch using kebab-case: feat/description
-3. Push with upstream tracking
+1. Stash any uncommitted changes
+2. Checkout main and pull latest
+3. Create branch: feat/kebab-case-description
+4. Push with -u to set upstream
+5. Pop stash if anything was stashed
 ```
 
 **Smart commit** (`.claude/commands/commit.md`):
 ```markdown
 ---
 allowed-tools: Bash(git:*)
-model: haiku
+model: claude-haiku-4-5-20251001
 ---
 
 !`git diff --staged`
 !`git log --oneline -5`
 
-Generate conventional commit message matching project style.
-Add, commit, but don't push.
+Generate a conventional commit message that matches the style of recent commits.
+Stage, commit, but don't push.
 ```
 
 ### Code Quality
-
-**Lint and fix** (`.claude/commands/lint.md`):
-```markdown
----
-allowed-tools: Bash(npm:*), Read, Edit
-model: haiku
----
-
-Run linter with auto-fix. If errors remain, fix them manually.
-Do NOT modify test files.
-```
 
 **Test runner** (`.claude/commands/test.md`):
 ```markdown
@@ -196,7 +203,20 @@ allowed-tools: Bash(npm:*), Read, Edit
 !`npm test 2>&1 | head -100`
 
 Fix any failing tests by updating the IMPLEMENTATION, not the test.
-Tests define expected behavior.
+Tests define expected behavior. If a test fails, the code is wrong.
+```
+
+**Lint and fix** (`.claude/commands/lint.md`):
+```markdown
+---
+allowed-tools: Bash(npm:*), Read, Edit
+model: claude-haiku-4-5-20251001
+---
+
+!`npm run lint 2>&1`
+
+Fix all linter errors. Do NOT disable rules. Do NOT modify test files.
+If a rule seems wrong, fix the code to comply anyway.
 ```
 
 ### Security Audit
@@ -208,98 +228,97 @@ allowed-tools: Read, Grep, Glob
 description: Security vulnerability scan
 ---
 
-Scan for:
-- SQL injection risks
-- XSS vulnerabilities
-- Exposed credentials or secrets
-- Insecure dependencies
-- Authentication bypasses
+Scan the codebase for:
+- SQL injection (string concatenation in queries)
+- XSS (unescaped user input in HTML)
+- Hardcoded secrets (API keys, passwords, tokens)
+- Insecure dependencies (check package.json)
+- Auth bypasses (missing middleware, weak checks)
 
-Report findings with severity, location, and remediation steps.
+For each finding:
+1. File and line number
+2. Severity (critical/high/medium/low)
+3. Exact vulnerable code
+4. Fixed code
 ```
 
-## Model Selection for Speed
+## Model Selection
 
-Use Haiku for fast, simple operations:
+Haiku runs fast and cheap. For simple, mechanical tasks, there's no reason to burn tokens on Sonnet:
 
 ```markdown
 ---
-model: haiku
+model: claude-haiku-4-5-20251001
 ---
 ```
 
-Haiku runs in ~20 seconds vs minutes for complex reasoning. Use for:
-- Linting, formatting
-- Simple git operations
-- Test running
+Use Haiku for:
+- Linting and formatting
+- Git operations (branch, commit, status)
+- Running tests and reporting results
 - Boilerplate generation
 
-Reserve Sonnet/default for:
+Use Sonnet (the default) for:
 - Complex debugging
 - Architecture decisions
-- PR descriptions
-- Security audits
+- Code review with nuance
+- Security analysis
 
-## Organization Best Practices
+Current model IDs as of Jan 2026:
+- `claude-haiku-4-5-20251001` (fast)
+- `claude-sonnet-4-5-20250929` (balanced)
+- `claude-opus-4-5-20251101` (max capability)
 
-Structure commands in subdirectories:
+You can also use aliases like `haiku`, `sonnet`, `opus` in most contexts.
+
+## Organization Patterns
+
+Put related commands in subdirectories for readability:
 
 ```
 .claude/commands/
   git/
-    branch.md     # /project:git:branch
-    commit.md     # /project:git:commit
-    pr.md         # /project:git:pr
+    branch.md
+    commit.md
+    pr.md
   test/
-    unit.md       # /project:test:unit
-    e2e.md        # /project:test:e2e
+    unit.md
+    e2e.md
   review/
-    security.md   # /project:review:security
-    perf.md       # /project:review:perf
+    security.md
+    perf.md
 ```
 
-## Team Benefits
+**Important caveat**: The [documented behavior](https://github.com/anthropics/claude-code/issues/2422) of subdirectory namespacing (`/project:git:branch`) doesn't work reliably. Commands in subdirectories often appear with just their filename (e.g., `/project:branch`). The subdirectory helps you organize files, but don't rely on the namespace syntax for invocation.
 
-Commands in `.claude/commands/` are version-controlled. When teammates clone, they get:
-- Consistent workflows across the team
-- Institutional knowledge encoded in prompts
-- Reduced onboarding time
-- Standardized code quality processes
+## Team Sharing
 
-## Shell Aliases for Power Users
+Commands in `.claude/commands/` get committed to git. When teammates clone, they inherit:
+- Your team's standardized workflows
+- Institutional knowledge baked into prompts
+- Consistent quality checks
 
-Skip interactive mode entirely:
+New developers run `/project:setup` on day one instead of reading a wiki nobody updates.
+
+## Non-Interactive Execution
+
+You can invoke custom slash commands with the `-p` flag:
 
 ```bash
-alias clint="claude -p '/project:lint'"
-alias cpush="claude -p '/project:commit'"
-alias cbranch="claude -p '/project:branch'"
+claude -p '/project:lint'
+claude -p '/project:commit'
 ```
 
-## Skills vs Slash Commands
+This runs the command without the interactive UI. Works for project and user commands, not built-in ones like `/compact` or `/clear`.
 
-| Aspect | Slash Commands | Skills |
-|--------|----------------|--------|
-| Trigger | Manual (`/command`) | Automatic (context-based) |
-| Structure | Single .md file | Directory with SKILL.md |
-| Use case | Repeatable workflows | Context-aware behaviors |
+## Common Mistakes
 
-Use slash commands for explicit, repeatable tasks. Use skills when Claude should automatically apply certain behaviors based on context.
+**Too generic**: "Review this code" tells Claude nothing. Include specific checklists, file patterns to check, and output formats.
 
-## MCP Integration
+**Missing context**: Without `!` commands, Claude doesn't know the current state. A commit command without `!git diff --staged` is guessing what changed.
 
-MCP servers expose prompts as slash commands:
+**Wrong model for the job**: Using the default model for `git status` burns tokens and time. Use Haiku.
 
-```
-/mcp__github__list_prs
-/mcp__github__pr_review 456
-```
+**No tool permissions**: Your command runs `npm test` but you didn't specify `allowed-tools: Bash(npm:*)`. Claude can't execute it.
 
-Configure MCP servers with `claude mcp add` or in `.mcp.json`.
-
-## Common Pitfalls
-
-- **Too generic**: Make commands specific. "Review this code" is weak. Include checklist items.
-- **No context**: Use `!` bash commands to inject real-time state before reasoning.
-- **Wrong model**: Don't use expensive models for simple tasks.
-- **Missing tools**: Specify `allowed-tools` if your command needs bash or file access.
+**Too many positional args**: More than 3 positional arguments becomes impossible to remember. Use `$ARGUMENTS` and parse naturally instead.

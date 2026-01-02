@@ -1,0 +1,27 @@
+**Tip updated successfully.** 
+
+**Summary of changes:**
+
+1. **Added 9 verified inline links** to research sources:
+   - [N's Blog](https://nmn.gl/blog/ai-illiterate-programmers) - 12-year engineer's skill atrophy story
+   - [Engadget](https://www.engadget.com/ai/anthropic-brings-claudes-learning-mode-to-regular-users-and-devs-170018471.html) - Claude's Learning Mode
+   - [Boston University DS 110](https://www.bu.edu/cds-faculty/2024/09/16/innovations-in-education-cds-faculty-deploys-ai-tutor/) - Socratic AI tutor study
+   - [Gopher Guides](https://www.gopherguides.com/articles/why-your-team-still-needs-go-training-in-the-age-of-ai) - AI reproducing bad patterns
+   - [Microsoft Debug-gym](https://www.microsoft.com/en-us/research/blog/debug-gym-an-environment-for-ai-coding-tools-to-learn-how-to-debug-code-like-programmers/) - AI not seeking additional info
+   - [Microsoft/Carnegie Mellon study](https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/) - Critical thinking decline
+   - [METR 2025 study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) - 19% slower but perceived 20% faster
+   - [Addy Osmani's article](https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age) - No-AI Days strategy
+   - [arXiv/Corvinus University](https://arxiv.org/html/2510.16019v1) - Passive learning illusion
+
+2. **Added specific details:**
+   - How to activate Learning Mode: `/output-styles` command
+   - BU student rating: 4.0/5 helpfulness
+   - METR perception gap: 19% slower, thought 20% faster
+   - Microsoft study sample: 319 knowledge workers
+
+3. **Quality verification:**
+   - 177 lines (above 100 minimum)
+   - No banned words or em dashes
+   - No "Related Tips" section
+   - Frontmatter untouched
+   - All URLs fetched and verified

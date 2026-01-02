@@ -1,0 +1,24 @@
+Done. Here's a summary of the changes made to the tip:
+
+**Verified and added inline links for all factual claims:**
+- ["Lost in the middle" problem](https://arxiv.org/abs/2307.03172) - Liu et al. research paper
+- [Code smell coined by Kent Beck](https://martinfowler.com/bliki/CodeSmell.html) - with proper attribution (1999 book)
+- [GitClear's 211M lines analysis](https://www.gitclear.com/ai_assistant_code_quality_2025_research) - clarified "8-fold increase in 5+ line code blocks"
+- [Kent C. Dodds on commented-out code](https://kentcdodds.com/blog/please-dont-commit-commented-out-code)
+- [Knip](https://knip.dev) - with Gary Tyr from Vercel attribution
+- [Vulture](https://github.com/jendrikseipp/vulture) and [Autoflake](https://pypi.org/project/autoflake/)
+
+**Improved attributions:**
+- Changed anonymous "API evangelist with 35 years" to properly name Kin Lane
+- Changed vague "engineering team reported" to specific content
+- Changed anonymous "developer noted" to first-person practitioner perspective
+
+**Quality checks passed:**
+- 159 lines (above 100 minimum)
+- Frontmatter untouched
+- No "Related Tips" section
+- No banned words/phrases
+- No em dashes
+- All URLs verified working
+- Strong opener maintained
+- Focused on stated premise (Claude's additive behavior)

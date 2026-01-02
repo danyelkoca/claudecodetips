@@ -1,0 +1,28 @@
+Updated the tip successfully. Here's a summary of changes made:
+
+**Factual corrections:**
+- Removed incorrect `/commit` and `/commit-push-pr` as built-in commands (they don't exist; users create custom slash commands)
+- Updated pre-commit-hooks version from v4.5.0 to v6.0.0
+- Clarified git reflog retention: 90 days for reachable commits, 30 days for unreachable
+
+**Added with verification:**
+- [/rewind checkpointing](https://code.claude.com/docs/en/checkpointing) explanation with limitations vs git
+- [Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) citation for 90% git usage claim
+- [Veracode's 2025 research](https://www.veracode.com/blog/ai-generated-code-security-risks/) link for 45% security flaw statistic
+- [git add -p interactive staging](https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging) documentation
+- [reflog tutorial](https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog) reference
+- [pre-commit framework](https://pre-commit.com/) link
+- `git bisect run` automation example with exit code 125 for skipping
+
+**Improvements:**
+- Added reference to Tip 30 for creating custom `/commit` command
+- Added practical context for `git add -p` (separating Claude's multi-concern changes into atomic commits)
+- Replaced "critical" with "essential" (banned word)
+
+**Quality checks passed:**
+- 243 lines (above 100 minimum)
+- No banned words
+- No em dashes
+- All URLs fetched and verified
+- Frontmatter untouched
+- No "Related Tips" section

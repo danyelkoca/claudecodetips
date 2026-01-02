@@ -1,0 +1,21 @@
+I've updated the tip with the following changes:
+
+**Verified Claims with Inline Links:**
+- Added link to [Ahrefs study](https://ahrefs.com/blog/how-often-do-ai-assistants-hallucinate-links/) (16 million URLs analyzed)
+- Added link to [Anthropic's interpretability research](https://www.anthropic.com/research/tracing-thoughts-language-model) on hallucination mechanism
+- Added link to Josh Batson's quote in [MIT Technology Review](https://www.technologyreview.com/2025/03/27/1113916/anthropic-can-now-track-the-bizarre-inner-workings-of-a-large-language-model)
+- Added link to [Netcraft/CSO Online research](https://www.csoonline.com/article/4015404/llms-are-guessing-login-urls-and-its-a-cybersecurity-time-bomb.html) on the 34% phishing finding
+- Added link to [Wikipedia for slopsquatting](https://en.wikipedia.org/wiki/Slopsquatting) (coined by Seth Larson)
+- Added link to [arxiv paper](https://arxiv.org/abs/2406.10279) on 20% package hallucination rate
+- Added link to [Bar Lanyado's research](https://www.lasso.security/blog/ai-package-hallucinations) on huggingface-cli (30,000+ downloads)
+- Added link to [CloudAPIBench research](https://arxiv.org/html/2407.09726v1) on GPT-4o's 38.58% low-frequency API accuracy
+- Added link to [repeated hallucination research](https://arxiv.org/html/2406.10279v3) (43% repeat in all 10 queries)
+
+**Improvements:**
+- Stronger opener (removed preamble)
+- Tightened phrasing throughout
+- Converted blockquote prompt example to code block for consistency
+- Consistent colon usage in numbered lists
+- No banned words or em dashes
+- All statistics verified against original sources
+- 179 lines maintained

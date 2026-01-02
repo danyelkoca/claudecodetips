@@ -17,23 +17,21 @@ When Claude assumes instead of asking, consequences compound:
 - Refactoring that touches files you never intended to modify
 - Context gaps that propagate through subsequent changes
 
-Research shows that structural tasks like refactoring suffer most from AI missing context. The more a task depends on understanding the broader codebase or your specific requirements, the more likely Claude is to miss the mark.
+The [2025 State of AI Code Quality report from Qodo](https://www.qodo.ai/reports/state-of-ai-code-quality/) found that 65% of developers report AI misses relevant context during refactoring, the highest of any coding task. Context gaps were cited more often than hallucinations as the cause of poor code quality. The more a task depends on understanding your specific requirements, the more likely Claude is to miss the mark.
 
 ## Why Claude Assumes Instead of Asks
 
-This behavior is baked into how language models are trained:
+This behavior is baked into how language models are trained.
 
-**RLHF Bias**: During Reinforcement Learning from Human Feedback, responses are judged in isolation. An answer that "looks complete" often beats a question asking for clarification. Human labelers preferred confident answers over incomplete responses, so models learned to answer ambiguous queries by guessing an interpretation.
+[Research from NYU and UT Austin](https://arxiv.org/abs/2410.13788), published at ICLR 2025, explains why: "Existing LLMs often respond by presupposing a single interpretation of such ambiguous requests." The root cause is how preference data gets labeled. Human raters judge responses in isolation, without considering what happens in the next turn. An answer that "looks complete" beats a question asking for clarification, even when that question would lead to better results.
 
-**Lack of Training Examples**: There are very few dialogue examples in training data where the assistant says, "I'm not sure what you mean, could you clarify?" The model might know a question is ambiguous but still doesn't behave accordingly because it was never taught that clarifying is the correct action.
+There's also the abstention problem. The fundamental training task, predict the next token, never included an option to say "I don't know." [AbstentionBench research](https://arxiv.org/abs/2506.09038) (June 2025) found that abstention remains "an unsolved problem, and one where scaling models is of little use." Bigger models don't get better at knowing when to stop and ask.
 
-**User Experience Concerns**: By design, many assistants avoid asking too many questions, fearing it might annoy users or make the AI seem less capable. This results in overconfident answers to underspecified questions.
-
-**Prediction Objective**: The fundamental training task (predict the next token) never included an option to abstain. Models are implicitly taught that giving some answer is better than giving no answer.
+The researchers found something counterintuitive: reasoning-focused models like o1 actually get worse at abstention by about 24%. They "hallucinate missing context and provide definitive final answers even when their reasoning chains express uncertainty."
 
 ## How This Differs from Being a YES MAN
 
-This is the OPPOSITE of tip 36 (Claude is a YES MAN):
+This is the opposite of Tip 36 (Claude is a YES MAN):
 
 - **YES MAN** is reactive: Claude validates YOUR bad ideas when you suggest them
 - **Assumes** is proactive: Claude invents things you DIDN'T ask for
@@ -42,11 +40,11 @@ YES MAN follows your lead uncritically. Assumes runs ahead without asking for di
 
 ## The AskUserQuestion Tool
 
-Recent Claude Code versions added the AskUserQuestion tool (v2.0.21+). This is a structured way for Claude to pause execution and ask clarifying questions.
+[Claude Code v2.0.21](https://claudelog.com/claude-code-changelog/) (October 2025) added the AskUserQuestion tool. This is a structured way for Claude to pause execution and ask clarifying questions.
 
 Instead of guessing, Claude can now say: "I see three ways to fix this API. Do you prefer A, B, or C?" This represents a deliberate architectural decision by Anthropic. Rather than relying on system prompt instructions alone, they created a dedicated tool because structured questioning produces better outcomes than free-form prompting.
 
-The tool allows Claude to present multiple-choice questions with descriptions, gather multiple answers in one interaction, and proceed with confidence once clarified.
+The tool presents multiple-choice questions with descriptions, gathers multiple answers in one interaction, and lets Claude proceed with confidence once clarified.
 
 But Claude still defaults to assuming unless you tell it otherwise.
 
@@ -64,40 +62,23 @@ Add explicit instructions to your project's CLAUDE.md:
 
 This gives Claude explicit permission to ask questions. Without it, the default behavior is to guess.
 
-## The 95% Certainty Technique
+## The Confidence Threshold Technique
 
-A powerful prompting approach: instruct Claude to ask questions until it reaches a confidence threshold.
+A powerful prompting pattern: [instruct Claude to ask questions until it reaches a confidence threshold](https://www.lewis-lin.com/blog/the-secret-weapon-for-better-ai-responses-ask-until-youre-95-sure).
 
 ```
 Write a guide on setting up a home network.
 Ask clarifying questions until you are 95% sure you can complete the task successfully.
 ```
 
-This transforms one-directional interactions into collaborative conversations. The model must honestly gauge its comprehension before proceeding.
+This transforms one-directional interactions into collaborative conversations. Claude must gauge its own comprehension before proceeding.
 
-**Adjust the threshold based on task criticality:**
+Adjust the threshold based on task criticality:
 - 80% for brainstorming and exploration
 - 95% for feature implementation
 - 99% for production-critical changes
 
-## Use Plan Mode to Force Questions
-
-Plan mode (Shift+Tab twice) separates research from execution. This creates natural checkpoints for clarification.
-
-Instead of assuming Claude knows what you want, explicitly prompt for questions:
-
-```
-Before you start planning the user authentication system,
-ask me questions about the requirements.
-I want to make sure we're building exactly what's needed.
-```
-
-Claude will ask things like:
-- "Do you want social login options, or just email/password?"
-- "Should we store user preferences locally or in the database?"
-- "What's your plan for handling password resets?"
-
-These questions often reveal assumptions you didn't realize you were making.
+The technique works because it gives Claude an explicit metric to hit. Without a threshold, Claude defaults to "I'll figure it out."
 
 ## Spec-Driven Development
 
@@ -127,6 +108,8 @@ This approach:
 - States explicit choices, removing guesswork
 - Identifies deliberate exclusions
 - Flags items needing your input
+
+The "Open Questions" section is key. It tells Claude exactly where you want its input.
 
 ## Give Claude an Escape Hatch
 
@@ -195,6 +178,8 @@ Watch for these signals that Claude is making assumptions:
 
 When you see these, interrupt with Escape and redirect: "Stop. I didn't specify that. What made you choose this approach? Ask me instead of assuming."
 
+I've found that calling out assumptions explicitly trains Claude for the rest of the session. Once interrupted, it tends to ask more questions on subsequent tasks.
+
 ## The Long-Term Fix
 
 For persistent improvement, add this to your global `~/.claude/CLAUDE.md`:
@@ -209,10 +194,26 @@ For persistent improvement, add this to your global `~/.claude/CLAUDE.md`:
 
 Then reinforce with project-specific instructions as needed.
 
+## The Anthropic Docs Perspective
+
+[Anthropic's official prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices) for Opus 4.5 confirms this behavior: Claude can be overly conservative about asking questions. Their recommended fix is direct prompting. They suggest including instructions like:
+
+```
+If the user's intent is unclear, infer the most useful likely action and proceed,
+using tools to discover any missing details instead of guessing.
+```
+
+Or the opposite, if you want Claude to be more hesitant:
+
+```
+When the user's intent is ambiguous, default to providing information,
+doing research, and providing recommendations rather than taking action.
+```
+
+The model responds reliably to direct guidance on this.
+
 ## The Bottom Line
 
-Claude with assumptions is a fast typist making expensive guesses. Claude that asks questions is a thoughtful collaborator building what you actually need.
+Claude with assumptions is a fast typist making expensive guesses. Claude that asks questions is a collaborator building what you actually need.
 
-The fix is explicit: give Claude permission to ask, provide an escape hatch for uncertainty, and use plan mode to create natural checkpoints for clarification.
-
-Every question asked saves an hour of rework. Every assumption caught prevents a feature rewrite. Make asking the default, not the exception.
+The fix is explicit: give Claude permission to ask, provide an escape hatch for uncertainty, and state your confidence threshold. Every question asked saves an hour of rework.

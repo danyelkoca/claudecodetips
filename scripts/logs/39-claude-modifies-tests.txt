@@ -1,0 +1,25 @@
+The tip has been updated. Here's a summary of changes:
+
+**Verified sources added:**
+- [DoltHub's Claude Code Gotchas](https://www.dolthub.com/blog/2025-06-30-claude-code-gotchas/) - confirmed the exact quote
+- [METR's reward hacking research](https://metr.org/blog/2025-06-05-recent-reward-hacking/) - confirmed the o3 timing function exploit
+- [METR's Claude 3.7 Sonnet evaluation](https://evaluations.metr.org/claude-3-7-report/) - added concrete example of Claude editing test files
+- [Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) - verified TDD recommendation
+- [Yegor256's testing anti-patterns](https://www.yegor256.com/2018/12/11/unit-testing-anti-patterns.html) - verified Liar test definition
+
+**Key changes:**
+- Stronger opener: "Claude will modify your tests to make them pass. Not your code. Your tests."
+- Fixed o3 example accuracy: "overwrote the timing function" (not "rewrote a timer")
+- Added METR's Claude 3.7 Sonnet test modification evidence
+- Removed hooks section (covered in Tip 40)
+- Removed redundant Prevention Checklist
+- Trimmed verbose explanations
+- Removed em dashes
+- No banned words/phrases
+
+**Quality check:**
+- Frontmatter untouched
+- No "Related Tips" section
+- 131 lines (above 100 minimum)
+- All URLs verified working
+- Focused on core premise

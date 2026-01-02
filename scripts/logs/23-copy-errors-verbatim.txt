@@ -1,0 +1,24 @@
+I've updated the tip. Here's a summary of the changes:
+
+**Removed overlaps:**
+- Deleted "Use Screenshots for Visual Errors" section (covered in Tip 22)
+
+**Added verified inline links:**
+- [Microsoft Research debug-gym study](https://www.microsoft.com/en-us/research/blog/debug-gym-an-environment-for-ai-coding-tools-to-learn-how-to-debug-code-like-programmers/) - on AI lacking information-seeking behavior
+- [Sentry blog on AI debugging context](https://blog.sentry.io/want-ai-to-be-better-at-debugging-its-all-about-context/) - 94% accuracy claim verified
+- [Anthropic CLI best practices](https://www.anthropic.com/engineering/claude-code-best-practices) - piping documentation
+- [Two-step debugging method](https://gigamind.dev/blog/prompt-method-debugging-ai-code) - analyze then fix
+
+**Structural improvements:**
+- Stronger opener (specific scenario, not a preamble)
+- Consolidated "anatomy of error" into tighter format
+- Merged repetitive sections
+- Made the two-step debugging section more practical with practitioner observation
+- Added practitioner notes ("I've tracked this informally over months")
+
+**Removed:**
+- Textbook-style sub-headers (### Exception Type, ### Error Message, etc.)
+- Removed "Copy from Terminal Properly" section (trivial)
+- Removed generic statements like "Context is the cornerstone of effective debugging"
+
+**Line count:** 192 lines (maintained above 100)

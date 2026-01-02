@@ -6,63 +6,94 @@ summary: "Use Claude Code in terminal - it's the most flexible way to interact w
 isFree: false
 ---
 
-Claude Code was built terminal-first. While IDE extensions exist (VS Code, JetBrains), the terminal is where Claude Code's full power lives.
+Claude Code was built terminal-first. The [official docs](https://code.claude.com/docs/en/overview) say it directly: "Not another chat window. Not another IDE. Claude Code meets you where you already work."
 
-Anthropic's design philosophy: "Not another chat window. Not another IDE. Claude Code meets you where you already work." The terminal is chosen because developers already spend significant time there, eliminating context switching.
+IDE extensions exist for [VS Code](https://code.claude.com/docs/en/vs-code) and [JetBrains](https://code.claude.com/docs/en/jetbrains), and they're getting better. But as of January 2026, they're still playing catch-up. The terminal is where Claude Code's full feature set lives.
 
 ## What IDE Extensions Lack
 
 | Feature | Terminal | VS Code Extension |
 |---------|----------|-------------------|
-| All slash commands | Yes | Subset only |
-| Context rewind | Yes | No |
-| Checkpoints | Yes | No |
-| Tab completion | Yes | No |
+| All [slash commands](https://code.claude.com/docs/en/slash-commands) | Yes | Subset only |
+| Context rewind (`Esc` twice) | Yes | Coming soon |
+| [Checkpoints](https://code.claude.com/docs/en/checkpointing) | Yes | Coming soon |
+| Tab completion for files | Yes | No |
 | Bash shortcut (`!`) | Yes | No |
 | MCP server config | Yes | Must use CLI |
 | Headless mode (`-p`) | Yes | No |
 
-## Context Rewind (Terminal-Only)
+The extension doesn't yet have full feature parity with the CLI. If you need CLI-only features, you can run `claude` directly in VS Code's integrated terminal. The extension and CLI share conversation history, so you can switch between them with `claude --resume`.
+
+## The `!` Shortcut
+
+The terminal has a bash shortcut that IDE extensions don't: prefix any command with `!` to run it directly and include the output in Claude's context.
+
+```bash
+!npm test
+```
+
+This runs the command immediately and feeds the results to Claude. Useful when you want Claude to see test failures, build output, or lint errors. You can also type `!` alone to enter shell mode, then `!` again to exit back to conversation mode.
+
+In custom slash commands, you can embed shell output dynamically:
+
+```markdown
+Create a commit message for these changes:
+!`git diff --cached`
+```
+
+The backtick syntax runs the command and inserts the output inline. Handy for building prompts that include current git state, file contents, or environment info.
+
+## Context Rewind
 
 Press `Esc` twice to access any previous message. Edit it, and Claude rewinds both the conversation AND your code to that exact state. This creates branches that rescue stuck sessions without starting over.
 
-This feature alone justifies terminal usage. When Claude goes down the wrong path, you can surgically revert to any decision point instead of clearing context and losing everything.
+When Claude goes down the wrong path, you can surgically revert to any decision point instead of clearing context and losing everything. I've saved hours with this feature alone.
+
+There's a catch: [checkpoints only track changes made by Claude's file editing tools](https://code.claude.com/docs/en/checkpointing). Bash command modifications (`rm`, `mv`, shell scripts) aren't tracked and can't be undone through rewind. Keep using git for permanent history.
 
 ## Environment Inheritance
 
-Terminal inherits your full bash environment automatically:
+Terminal inherits your full shell environment automatically:
 
 - All your aliases work
 - Custom scripts are available
 - PATH modifications apply
-- SSH keys, credentials, tooling - everything
+- SSH keys, credentials, tooling, everything
 
-No configuration needed. Your development environment is Claude's environment.
+No configuration needed. Your development environment is Claude's environment. This matters more than it sounds. When you've spent years customizing your shell, you don't want to re-teach an AI tool where everything is.
 
 ## Remote Development
 
 Terminal enables location-independent work:
 
 - SSH into any machine and run Claude directly
-- Use tmux or zellij for persistent sessions that survive disconnections
-- Access from phone via Termux + Tailscale
+- Use [tmux](https://github.com/TerminalGravity/cld-tmux) or [zellij](https://fabiorehm.com/blog/2025/11/19/using-zellij-and-claude-code-over-ssh/) for persistent sessions that survive disconnections
+- [Access from phone via Termux + Tailscale](https://www.skeptrune.com/posts/claude-code-on-mobile-termux-tailscale/)
 - Use mosh for unreliable connections
 
-One perfectly configured machine becomes accessible from anywhere. Switch devices without losing flow state.
+One well-configured machine becomes accessible from anywhere. I've made production fixes from my phone while traveling. Start a tmux session at home, SSH in from anywhere, and pick up exactly where you left off.
 
-## Resource Efficiency
+The killer feature of tmux: your Claude session continues running on the server even when you disconnect. Simply reattach and your conversation history, running processes, and even long-running builds are all still there.
 
-Terminal runs as a lightweight process. IDE extensions add memory and CPU overhead, especially with multiple sessions. With terminal, spinning up concurrent Claude instances is trivial - just open more tabs.
+For unstable connections (airplane wifi, moving vehicles, high latency networks), [mosh](https://mosh.org/) handles intermittent connectivity gracefully. It maintains your session even when switching between WiFi and cellular. Standard SSH drops frequently in these conditions, but mosh roams with you.
+
+## Running Multiple Instances
+
+Terminal makes parallelism trivial. Open multiple tabs, run `claude` in each. Each terminal is independent, so you can have one Claude on frontend, another on backend, a third writing tests.
+
+The caveat: [don't run multiple instances in the same directory on the same branch](https://blog.gitbutler.com/parallel-claude-code). They'll overwrite each other's edits. Use separate checkouts or git worktrees if you need parallel agents.
 
 ## When IDE Extensions Make Sense
 
-IDE extensions help beginners who want:
+The [VS Code extension](https://code.claude.com/docs/en/vs-code) has genuine advantages:
 
-- Visual diffs showing changes in real-time
+- Visual diffs showing changes inline before you accept
 - Editable plan mode to modify Claude's proposals before execution
-- Familiar sidebar interface within VS Code
+- Familiar sidebar interface with clickable buttons
 
-But once comfortable, terminal unlocks capabilities IDE extensions cannot match. Experienced users report preferring CLI's "context control, keyboard efficiency, and lightweight resource footprint."
+Beginners consistently report faster onboarding with the extension's visual interface. If you're new to Claude Code, starting with the extension is reasonable. The diff preview is genuinely helpful for understanding what Claude wants to change.
+
+But you'll hit walls. You can't rewind. You can't configure MCP servers without dropping to CLI. You can't run headless scripts. Eventually, you'll open a terminal anyway.
 
 ## Getting Started
 
@@ -71,4 +102,18 @@ cd your-project
 claude
 ```
 
-That's it. Claude Code scopes to your project directory and inherits your environment.
+That's it. Claude Code scopes to your project directory and inherits your environment. No setup wizard, no configuration files, no onboarding flow. Just start typing what you want.
+
+## Unix Philosophy
+
+Claude Code follows Unix conventions: composable and scriptable. You can pipe input, redirect output, and chain commands.
+
+```bash
+tail -f app.log | claude -p "Alert me if you see any errors in this log stream"
+```
+
+```bash
+cat package.json | claude -p "List all outdated dependencies"
+```
+
+This composability is why the terminal version exists at all. The [Pragmatic Engineer](https://newsletter.pragmaticengineer.com/p/how-claude-code-is-built) reports that 90% of Claude Code's own codebase was written by itself, using this same terminal interface. If the team building Claude Code prefers the CLI for their own work, that tells you something.

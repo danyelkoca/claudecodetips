@@ -8,13 +8,15 @@ isFree: false
 
 Ask for a simple function, get an abstract class with factory pattern. Request email OTP login, receive a 15-file authentication framework with factories, strategies, and middleware.
 
-This is not a bug. It is Claude's default behavior.
+This is not a bug. [Anthropic's own documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices#overeagerness-and-file-creation) confirms Claude Opus 4.5 "has a tendency to overengineer by creating extra files, adding unnecessary abstractions, or building in flexibility that wasn't requested."
 
 ## Why This Happens
 
 Claude is trained on millions of "production-ready" code examples: enterprise patterns, academic solutions, and tutorial architectures. When you ask for a feature, it pattern-matches to these examples. The result? Technically correct solutions that are practically absurd for a solo developer shipping features.
 
-As one developer put it: "Add email OTP login" becomes a 12-file authentication framework. "Update the API route" spawns an entire middleware ecosystem. "Fix this type error" somehow requires restructuring half your app.
+[Ox Security's research](https://www.ox.security/resource-category/whitepapers-and-reports/army-of-juniors/) analyzed 300 open-source repositories and found AI code exhibits "By-the-Book Fixation" (80-90% prevalence), where it "rigidly follows conventional rules, missing opportunities for more innovative, improved solutions." The same study found "Over-Specification" (80-90% prevalence), where AI "creates hyper-specific, single-use solutions instead of generalizable, reusable components."
+
+In practice: "Add email OTP login" becomes a 12-file authentication framework. "Update the API route" spawns an entire middleware ecosystem. "Fix this type error" somehow requires restructuring half your app.
 
 ## The Symptoms
 
@@ -41,17 +43,19 @@ As one developer put it: "Add email OTP login" becomes a 12-file authentication 
 
 This is not just annoyance. It is technical debt.
 
-According to research analyzing 211 million lines of code, AI-generated code shows "multiple signatures of declining code quality." One API evangelist with 35 years of experience reported never seeing "so much technical debt being created in such a short period of time."
+[GitClear's research](https://www.gitclear.com/ai_assistant_code_quality_2025_research) analyzing 211 million lines of code found "multiple signatures of declining code quality" from AI-generated code: an 8-fold increase in duplicated code blocks, a drop in refactoring from 25% to under 10%, and copy/paste code rising from 8.3% to 12.3% of all changes.
+
+API evangelist [Kin Lane](https://kinlane.com/about/) put it bluntly: "I don't think I have ever seen so much technical debt being created in such a short period of time during my 35-year career in technology."
 
 AI technical debt compounds. It introduces unnecessary dependencies, accidental complexity, and makes future changes harder. Teams end up maintaining code that nobody actually wrote.
 
 The "tech debt loop" begins with AI output that looks fine at first review. Because the code is syntactically correct, it often gets merged without scrutiny. Over time, this adds layers of complexity. When issues emerge, teams use AI to fix them, introducing further patches that add to the problem.
 
-Some companies have gone "from 'AI is accelerating our development' to 'we can't ship features because we don't understand our own systems' in less than 18 months."
+As analyst [Ana Bildea observed](https://www.infoq.com/news/2025/11/ai-code-technical-debt/): "I've watched companies go from 'AI is accelerating our development' to 'we can't ship features because we don't understand our own systems' in less than 18 months."
 
 ## The Fix: Explicit Instructions
 
-Add this to your CLAUDE.md:
+Anthropic's documentation recommends this exact prompt to counter over-engineering. Add it to your CLAUDE.md:
 
 ```markdown
 ## Code Philosophy
@@ -73,64 +77,51 @@ Add this to your CLAUDE.md:
 
 When requesting features, use explicit constraints:
 
-**The Surgical Coding Prompt:**
+**Force Codebase Alignment:**
 > "Think harder and thoroughly examine similar areas of the codebase to ensure your proposed approach fits seamlessly with the established patterns and architecture. Aim to make only minimal and necessary changes, avoiding any disruption to the existing design."
 
-This prompt does three things:
-1. Triggers extended thinking mode (more tokens for analysis)
-2. Forces code examination before proposing solutions
-3. Makes minimal changes the primary constraint
+This works because it triggers extended thinking, forces code examination before proposing solutions, and makes minimal changes the primary constraint.
 
-**Pattern Detective Variation:**
+**Pattern Detective:**
 > "List 3 similar patterns already in the codebase, then align your solution with the most appropriate one."
 
-**Deletion First Variation:**
+**Deletion First:**
 > "Check if removing or simplifying existing code achieves the goal before adding anything new."
 
 **One-File Challenge:**
 > "Can this be done modifying just one file?"
 
-## Use Plan Mode
-
-Press Shift+Tab+Tab for Plan Mode. Let Claude present its over-engineered plan. Then redirect it.
-
-When Claude shows you a 15-file solution for a simple feature, respond: "Too complex. I want the simplest possible solution that works. Maximum 3 files. No abstractions."
-
-This collaborative approach works better than hoping Claude gets it right the first time.
-
-## The Philosophy Shift
+## The Philosophy Behind It
 
 Stop asking: "What is the proper architecture?"
 Start asking: "What minimal change solves this?"
 
-The YAGNI principle (You Are Not Gonna Need It) applies here. Features are expensive to develop and maintain. Features that are not actually necessary are a huge source of waste.
+The [YAGNI principle](https://martinfowler.com/bliki/Yagni.html) (You Are Not Gonna Need It) from Extreme Programming applies here. Martin Fowler notes that presumptive features carry four costs: cost of build, cost of delay, cost of carry (added complexity makes debugging harder), and cost of repair. Features that are not actually necessary are a huge source of waste.
 
 Simple code is easier to understand, modify, and maintain. When multiple developers work on the same codebase, simplicity reduces the learning curve.
 
-Less code = fewer bugs. Mathematical fact.
-Existing code = tested code. Practical reality.
-Minimal changes = minimal risk. Engineering wisdom.
+Less code = fewer bugs.
+Existing code = tested code.
+Minimal changes = minimal risk.
 
-## Results
+## Real Results
 
-One developer reported that after applying these techniques, an email OTP feature Claude initially over-engineered was completed in:
+After adding explicit anti-over-engineering instructions to CLAUDE.md, an email OTP feature that Claude initially over-engineered was completed in:
 - 120 lines instead of 1000+
 - 3 files instead of 15
 - Zero abstractions
 - Shipped perfectly
 
-The key insight: "Sometimes the best architecture is no architecture."
+Sometimes the best architecture is no architecture.
 
 ## Model Considerations
 
-Opus models tend to over-engineer more than Sonnet models. Sonnet often matches or outperforms Opus on coding tasks specifically because Opus overcomplicates solutions.
+[Sonnet 4.5 often matches or outperforms Opus 4.5](https://www.helicone.ai/blog/claude-opus-and-sonnet-4-full-developer-guide) on coding tasks, specifically because Opus overcomplicates solutions. One comparison found that "Opus provided a theoretically brilliant, academically perfect solution... so abstract that it was almost a work of art in itself," while Sonnet delivered "a solution that was perhaps 95% as 'elegant,' but 100% practical and immediately usable."
 
-If you are seeing consistent over-engineering, consider using Sonnet for everyday coding tasks and reserving Opus for complex reasoning tasks.
-
-Claude 4 and Opus 4.5 have improved compared to earlier versions. Previous versions would sometimes rewrite half your program when you asked for one small fix. But the tendency remains. Stay vigilant.
+Anthropic's new effort parameter in Opus 4.5 helps. Users report it "feels dynamic rather than overthinking." But the underlying tendency remains. For everyday coding, Sonnet is often the better choice. Reserve Opus for complex reasoning where depth matters more than simplicity.
 
 ## Summary
 
-Claude will over-engineer unless you explicitly tell it not to. Add constraints to CLAUDE.md. Use surgical prompts. Embrace Plan Mode for redirection. Measure success by lines removed, not added.
+Claude will over-engineer unless you explicitly tell it not to. Add constraints to CLAUDE.md. Use surgical prompts. Measure success by lines removed, not added.
 
 Do not delegate architecture to AI. Architect your AI.

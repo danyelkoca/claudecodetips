@@ -6,120 +6,149 @@ summary: "Always make sure plan is detailed at code level and factual."
 isFree: false
 ---
 
-Generic plans are the #1 cause of wasted work with Claude Code. When Claude says "update the authentication system" without specifying files, functions, or line numbers, it hasn't actually read your code. It's guessing.
+A generic plan is Claude admitting it hasn't read your code. When you see "update the authentication system" without file paths, function names, or line numbers, Claude is guessing based on its training data. That's when things go wrong.
 
-## Why Generic Plans Fail
+## Why Specificity Matters
 
-Research from the ACM shows that AI code generation improves by 25.4% when models plan with specific steps before generating code. The reason is simple: without specificity, Claude:
+[Research on self-planning code generation](https://arxiv.org/abs/2303.06689) found that LLMs achieve up to 25.4% higher success rates when they plan with specific steps before generating code. The difference isn't marginal. It's the gap between working code and debugging sessions.
 
-1. **Hallucinates file paths** - Studies show 21.7% of AI-suggested package names don't exist. The same applies to your codebase. Claude will reference `utils/helpers.ts` when your project uses `lib/helpers.js`.
+Without specificity, Claude:
 
-2. **Misses context** - A 2024 study found 42% of AI code snippets contain errors. Generic plans mean Claude hasn't examined the actual function signatures, data structures, or patterns in your code.
+1. **Hallucinates file paths.** [A study of 16 LLMs](https://arxiv.org/abs/2406.10279) found that 21.7% of package names suggested by open-source models don't exist. Commercial models fare better at 5.2%, but the pattern holds for your codebase too. Claude will reference `utils/helpers.ts` when your project uses `lib/helpers.js`.
 
-3. **Regresses to training data** - Without reading your specific files, Claude defaults to patterns from GitHub's training data, not your architecture.
+2. **Defaults to training patterns.** Without reading your files, Claude falls back to common patterns from GitHub. Your custom authentication flow becomes a generic JWT implementation. Your carefully structured API layer becomes Express boilerplate.
 
-4. **Makes assumptions** - Ambiguous plans let Claude pick interpretations that may not match your intent.
+3. **Produces more bugs.** [CodeRabbit's analysis of 470 pull requests](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) found AI-generated code contains 1.7x more issues than human-written code. Generic plans amplify this problem because Claude hasn't examined your actual function signatures or data structures.
 
-## Bad Plans vs. Good Plans
+## What a Bad Plan Looks Like
 
-**Bad Plan:**
+**Generic:**
 > "Refactor the authentication flow to use JWT tokens."
 
-This plan tells you nothing. Which files? What's the current implementation? What specifically changes?
+This tells you nothing. Which files? What's the current implementation? What changes?
 
-**Good Plan:**
+**Another generic plan:**
+> "Add input validation to the form."
+
+Which form? What validation rules? What happens on failure?
+
+These plans sound productive but they're just rephrasing your request. Claude hasn't done any work yet.
+
+## What a Good Plan Looks Like
+
+**Specific:**
 > "Refactor authentication from session-based to JWT:
 > 1. Modify `src/auth/login.ts` lines 45-67: Replace session creation with JWT generation using existing `src/lib/crypto.ts:generateToken()`
 > 2. Update `src/middleware/auth.ts:verifySession()` (line 23) to verify JWT instead
-> 3. Add refresh token logic in `src/auth/refresh.ts` - new file, pattern from `src/auth/login.ts`
-> 4. Update `AuthContext` in `src/context/auth.tsx` lines 12-34 to store token in memory, not cookies
+> 3. Add refresh token logic in `src/auth/refresh.ts`, following the pattern in `src/auth/login.ts`
+> 4. Update `AuthContext` in `src/context/auth.tsx` lines 12-34 to store token in memory
 > 5. Modify logout in `src/auth/logout.ts` line 15 to clear token from state"
 
-This plan proves Claude has read the code. Every file path, line number, and function name is verifiable.
+Every file path is verifiable. Every line number is checkable. Every function reference can be confirmed. This plan proves Claude has actually read your code.
 
-**Another Bad Plan:**
-> "Add input validation to the form."
-
-**Good Version:**
+**Another specific plan:**
 > "Add validation to UserRegistrationForm:
 > 1. In `src/components/forms/UserRegistration.tsx`, add Zod schema at line 8 (import from existing `src/lib/validation.ts`)
-> 2. Validate email format using existing `isValidEmail()` from `src/utils/validators.ts:12`
-> 3. Add password strength check - minimum 8 chars, matching existing `PasswordPolicy` interface at `src/types/auth.ts:34`
+> 2. Validate email using `isValidEmail()` from `src/utils/validators.ts:12`
+> 3. Add password check matching `PasswordPolicy` at `src/types/auth.ts:34`
 > 4. Display errors using existing `FormError` component from `src/components/ui/FormError.tsx`
-> 5. Block submit until validation passes - modify `handleSubmit` at line 45"
+> 5. Block submit until validation passes, modify `handleSubmit` at line 45"
 
-## How to Force Detailed Plans
+## How to Get Specific Plans
 
-### 1. Ask Claude to Read First
+### Force Reading First
 
-Before accepting any plan, say:
-> "Read the relevant files first. Then give me a plan with specific file paths, line numbers, and function names."
+Before any planning, tell Claude:
 
-This forces Claude to actually examine your codebase instead of guessing.
+```
+Read the relevant files first. Then give me a plan with:
+- Specific file paths
+- Line numbers
+- Function names
+- References to existing patterns in the codebase
+```
 
-### 2. Reject Vague Steps
+This is the single most effective intervention. Claude can't give specific line numbers without reading the files.
 
-When Claude says "update the API endpoint," push back:
-> "Which file? Which function? What line numbers? What specifically changes?"
+### Reject Vague Steps
 
-### 3. Use the Stepwise Approach
+When Claude says "update the API endpoint," push back immediately:
 
-One developer learned this the hard way: "an AI gave me a massive refactoring plan that went completely off the rails by step three."
+```
+Which file? Which function? What line numbers? What specifically changes?
+```
 
-Instead of accepting a 10-step plan all at once:
-- Approve step 1
-- Verify it works
-- Then move to step 2
+Don't let a single vague step slide. Each one is a potential hallucination.
 
-This keeps you in control and catches hallucinations early.
+### Verify Before Executing
 
-### 4. Demand File References
+Before you let Claude start coding, spot-check the plan:
 
-Add to your CLAUDE.md:
-> "Every plan must include: exact file paths, line numbers, function names, and references to existing patterns in the codebase. Never accept generic descriptions."
-
-### 5. Verify Against Reality
-
-Before executing a plan, spot-check:
 - Do the mentioned files exist?
-- Are the line numbers accurate?
+- Are the line numbers roughly accurate?
 - Do the referenced functions have the signatures Claude claims?
 
-If anything is wrong, Claude is guessing. Send it back to read the code.
+If anything is wrong, Claude is guessing. Send it back to read the code again.
 
-## The Specification-Driven Approach
+### Add to CLAUDE.md
 
-Modern AI coding workflows recommend creating a spec.md before any implementation:
+Put this in your project instructions:
+
+```markdown
+## Planning Rules
+Every plan must include:
+- Exact file paths that exist in this codebase
+- Line numbers for modifications
+- Function names with correct signatures
+- References to existing patterns to follow
+
+Never accept generic descriptions like "update the auth system."
+```
+
+This makes the requirement persistent across all sessions.
+
+## When Plans Go Wrong: Real Examples
+
+In July 2025, a product manager asked [Gemini CLI to reorganize files](https://github.com/google-gemini/gemini-cli/issues/4586). The AI attempted to move files without verifying that its `mkdir` command succeeded. Each file was renamed to the same target, overwriting the previous one until only one file remained. The AI later admitted: "I have completely and catastrophically failed you."
+
+The root cause? The AI trusted its own plan without checking reality. It assumed the directory existed because it had issued the command to create it.
+
+This is what happens when you accept vague plans. Claude says "I'll move the files" without specifying which files, in what order, with what error handling. Then something unexpected happens and there's no recovery path.
+
+## Spec-Driven Development
+
+[GitHub's engineering blog describes spec-driven development](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-using-markdown-as-a-programming-language-when-building-with-ai/) as writing comprehensive specifications in Markdown that AI agents compile into code. The key insight: specs persist across sessions. Your intent doesn't get lost in conversation context.
+
+A lightweight version for Claude Code:
 
 1. **Requirements**: What exactly should change?
 2. **Files affected**: Which specific files and why?
 3. **Dependencies**: What existing code does this touch?
 4. **Acceptance criteria**: How do we know it works?
 
-This forces specificity upfront and prevents Claude from inventing solutions that don't fit your architecture.
+Write these in a plan.md file before implementation. Ask Claude to read it and propose specific implementation steps. Review those steps before any code gets written.
 
-## Real-World Consequences of Generic Plans
+## Stepwise Execution
 
-Without specific plans:
-- Developers spend 62% of their time fixing AI-generated errors
-- AI assistants hallucinate function calls to non-existent methods
-- Generated code violates internal conventions (but looks plausible)
-- One case: a Gemini CLI issued hallucinated move commands and deleted real user files
+I've had plans fall apart by step three. An AI proposed a 10-step refactoring that looked reasonable. By step three, it was referencing files it had "planned" to create in step two but never actually made.
 
-With specific plans:
-- Microsoft found 68% reduction in back-and-forth corrections
-- Self-verification becomes possible (check file paths before executing)
-- Errors surface at planning stage, not after implementation
+The fix is simple:
 
-## The Bottom Line
+1. Get the full plan
+2. Approve only step 1
+3. Verify it works
+4. Move to step 2
 
-A generic plan is Claude admitting it hasn't done its homework. Code-level specificity proves Claude understands your actual codebase, not a fictional one it imagined.
+This catches hallucinations before they compound. A wrong assumption in step 1 gets caught immediately instead of poisoning steps 2 through 10.
 
-Never accept "I'll update X" without knowing:
-- Which file?
-- Which lines?
-- Which functions?
-- What specifically changes?
-- What existing patterns does this follow?
+## The Core Test
 
-If Claude can't answer these questions, it hasn't read the code. Send it back until it does.
+A good plan answers these questions:
+
+- Which file? (exact path)
+- Which lines? (numbers you can verify)
+- Which functions? (names with correct signatures)
+- What specifically changes? (not "update" but "replace X with Y")
+- What existing patterns does this follow? (file references)
+
+If Claude can't answer these, it hasn't done the work. Send it back until the plan is grounded in your actual codebase, not a fictional one it imagined from training data.

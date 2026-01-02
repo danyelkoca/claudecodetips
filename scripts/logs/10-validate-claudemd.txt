@@ -1,0 +1,26 @@
+The tip has been updated. Here's a summary of the changes made:
+
+**Verified and updated claims:**
+- Fixed the instruction compliance stat: now accurately cites [Microsoft/Salesforce research](https://arxiv.org/abs/2505.06120) showing 90% → 65% (25-point drop) in multi-turn conversations
+- Added proper citation for the Claude Code system reminder text ("may or may not be relevant")
+- Updated XML tags claim with [Anthropic documentation link](https://docs.anthropic.com/en/docs/use-xml-tags)
+- Added [Self-Refine research citation](https://arxiv.org/abs/2303.17651) for the ~20% improvement claim
+
+**Removed overlaps with other tips:**
+- Removed "Combining with Plan Mode and Extended Thinking" section (overlaps with Tip 8 and Tip 12)
+- Condensed the Final Checklist example (overlaps with Tip 51)
+
+**Improved content:**
+- Made "Observable symptoms" more concrete and specific
+- Added a practical validation dialogue example showing what good validation looks like
+- Tightened "The Bottom Line" with practitioner observations
+- Replaced generic phrasing with specific scenarios
+
+**Quality checks passed:**
+- No banned words/phrases
+- No em dashes
+- All URLs fetched and verified
+- Frontmatter untouched
+- No "Related Tips" section
+- 197 lines (above 100 minimum)
+- Opens with strong statement

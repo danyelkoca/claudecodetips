@@ -1,0 +1,27 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Corrections made:**
+1. **Fixed incorrect environment variable** - Changed `CLAUDE_TOOL_INPUT_FILE_PATH` to `CLAUDE_FILE_PATHS` (the actual documented variable)
+2. **Fixed non-existent flag** - Replaced `claude --no-hooks` with the correct method: `--settings no-hooks.json` with `{"disableAllHooks": true}`
+3. **Added stdin JSON parsing** - Hooks receive input via stdin, not just env vars. Added `jq` parsing examples throughout
+4. **Added reliability warning** - Noted that some environment variables have had reliability issues; recommend parsing stdin
+5. **Removed banned word** - Replaced "Critical" with clearer wording
+
+**Improvements:**
+- Stronger practitioner-focused opener with personal experience
+- Added [inline link](https://code.claude.com/docs/en/hooks) to official documentation
+- Added warning about Stop hook infinite loops
+- Added `CLAUDE_ENV_FILE` usage example for SessionStart
+- Added sixth pitfall about JSON parsing
+- More detailed debug output example
+- All code examples now show proper stdin JSON parsing
+
+**Verified facts:**
+- 10 hook events: confirmed against official docs
+- Exit code 2 behavior: confirmed
+- v2.0.10+ for `updatedInput` feature: confirmed
+- 60-second default timeout: confirmed
+- Configuration precedence: confirmed
+- Notification matchers: confirmed
+
+Line count: 306 lines (well above 100 minimum)

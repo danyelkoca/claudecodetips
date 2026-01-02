@@ -1,0 +1,27 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Removed (overlaps with other tips):**
+- Detailed git worktree setup (covered in Tip 27)
+- Detailed subagents explanation (covered in Tip 28)
+- Master-Clone pattern (covered in Tips 28/31)
+- "Combining with Other Techniques" section (generic filler)
+- Hooks example (covered in Tip 40)
+- GitHub Actions section (covered in Tip 43)
+
+**Added/improved:**
+- Strong opening statement instead of preamble
+- Probability math with verified source (Semgrep research)
+- Rate limit information with verified source (TechCrunch)
+- Verified tool links (Claude Squad, GitButler, Crystal)
+- "Synthesizing Results" section with concrete prompt example
+- Brief references to Tip 27 and Tip 28 for detailed mechanics
+
+**Quality checks passed:**
+- Frontmatter untouched
+- No "Related Tips" section
+- No banned words (delve, leverage, seamless, etc.)
+- All URLs fetched and verified
+- No em dashes
+- 130+ lines of content
+- Opens with strong statement
+- Practitioner voice with concrete examples

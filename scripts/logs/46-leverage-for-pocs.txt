@@ -1,0 +1,35 @@
+Updated the tip. Here's a summary of changes made:
+
+**Verified and linked claims:**
+- Karpathy coined "vibe coding" Feb 2025 → linked to Simon Willison's post
+- Collins Dictionary Word of the Year 2025 → linked to Collins
+- Karpathy's "I just see stuff" quote → verified and linked
+- Perplexity CEO on 3-4 days to 1 hour → linked to Business Insider
+- YC W25 batch 25% with 95% AI-generated code → linked to TechCrunch
+- Anthropic internal teams using Claude Code → linked to official blog
+- 20+ prototypes of todo list in two days → linked to Pragmatic Engineer
+- Nanochat "vibes be damned" story → linked to Gizmodo
+
+**Removed:**
+- Unverified "60% hackathon participants" claim (couldn't find source)
+- "The Vibe Coding Workflow" section (overlapped with general Claude tips)
+- "Step 2: Choose Your Tool" section (overlapped with other tips, not POC-specific)
+- Speed benchmarks table (unverified specific numbers)
+- "The hard truth:" banned phrase
+- "perfectly" and "massive" banned words
+- All em dashes
+
+**Added:**
+- Strong opener: "POCs are where Claude Code shines."
+- Collins Word of the Year 2025 context
+- Nanochat story showing vibe coding's limits (valuable balanced perspective)
+- More specific guidance in "Use Realistic Data" section
+
+**Maintained:**
+- 134 lines (above 100 minimum)
+- Frontmatter untouched
+- Core POC focus
+- POC vs Prototype vs MVP table
+- Stakeholder management section
+- Trade-offs section
+- Common pitfalls

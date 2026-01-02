@@ -1,0 +1,34 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified claims with inline links added:**
+- [IFScale research](https://arxiv.org/html/2507.11538v1) on the 150-200 instruction threshold
+- [GitHub issue #7571](https://github.com/anthropics/claude-code/issues/7571) documenting the "may or may not be relevant" system reminder
+- [Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) on emphasis markers
+- [Prompt improver](https://claude.com/blog/prompt-improver) tool reference
+
+**Removed overlaps with other tips:**
+- Condensed "Placement Options" section (detailed hierarchy covered in Tip 29)
+- Removed ".claude/rules/" details (covered in Tip 29)
+- Removed "Progressive Disclosure Pattern" section (overlaps with Tip 29's modular approach)
+
+**Added missing content:**
+- `@import` syntax section with examples
+- `/memory` command mention
+- Clearer explanation of how the # shortcut works
+
+**Fixed/improved:**
+- Removed vague "~50 instructions" claim, replaced with accurate framing
+- Removed "Today's date" recommendation (Claude Code's system prompt includes the date automatically)
+- Stronger opener: "CLAUDE.md is Claude Code's constitution"
+- More concrete example structure with real patterns (Zod validation, RFC 7807)
+- Tighter language throughout
+
+**Quality checklist:**
+- Frontmatter untouched
+- No "Related Tips" section
+- No banned words/phrases
+- No em dashes
+- All URLs verified
+- 136 lines of content (above 100 minimum)
+- Concrete code examples
+- Opens with strong statement

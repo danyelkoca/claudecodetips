@@ -6,21 +6,21 @@ summary: "Claude calibrates effort to perceived stakes. High stakes = thorough w
 isFree: false
 ---
 
-Claude calibrates effort to perceived stakes. When you signal that a task matters deeply, Claude allocates more attention and produces more thorough work. This is not a trick - it is a well-researched phenomenon backed by academic studies.
+Claude puts more effort into tasks that seem important. Tell it something matters, and it pays closer attention. This isn't psychology theater. It's a documented phenomenon with peer-reviewed research behind it.
 
-## The Science: EmotionPrompt Research
+## The Research: EmotionPrompt
 
-In 2023, researchers from Microsoft and the Chinese Academy of Sciences published groundbreaking research on "EmotionPrompt." They discovered that adding emotional stimuli to prompts significantly improves LLM performance:
+[EmotionPrompt research from Microsoft and the Chinese Academy of Sciences](https://arxiv.org/abs/2307.11760) (accepted at ICLR 2024) found that adding emotional stimuli to prompts measurably improves LLM output:
 
 - **8% improvement** on Instruction Induction tasks
 - **115% improvement** on BIG-Bench complex reasoning tasks
 - **10.9% average improvement** in generative tasks (performance, truthfulness, responsibility)
 
-The researchers tested 11 emotional phrases based on three psychological theories:
+The researchers tested 11 emotional phrases grounded in three psychological theories:
 
-1. **Self-Monitoring Theory**: People regulate behavior based on social cues
-2. **Social Cognitive Theory**: Learning occurs through observation and self-efficacy
-3. **Cognitive Emotion Regulation**: Viewing obstacles positively improves performance
+1. **Self-Monitoring Theory**: Behavior adjusts based on perceived social context
+2. **Social Cognitive Theory**: Self-efficacy signals affect performance
+3. **Cognitive Emotion Regulation**: Positive framing around challenges improves output
 
 ## The 11 Proven Emotional Stimuli
 
@@ -72,13 +72,13 @@ When you frame a task with high stakes, several things happen:
 3. **Reduced Shortcuts**: Claude avoids quick, potentially wrong answers when stakes are high
 4. **Pattern Matching**: Training data contains more careful responses in high-stakes contexts
 
-Anthropic's own documentation confirms this: "Providing context or motivation behind your instructions, such as explaining to Claude why such behavior is important, can help Claude 4.x models better understand your goals."
+[Anthropic's prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices) confirms this: "Providing context or motivation behind your instructions, such as explaining to Claude why such behavior is important, can help Claude 4.x models better understand your goals."
 
 ## The "Take a Deep Breath" Effect
 
-Google DeepMind discovered that simply adding "Take a deep breath and work on this problem step-by-step" improved accuracy from 34% to 80.2% on math problems. The phrase triggers more methodical reasoning.
+[Google DeepMind's OPRO research](https://arxiv.org/abs/2309.03409) found that "Take a deep breath and work on this problem step-by-step" improved accuracy from 34% to 80.2% on grade-school math problems. The phrase triggers more methodical reasoning.
 
-Combine this with stakes framing:
+You can combine this with stakes framing:
 
 ```
 Take a deep breath. This is critical for our deployment.
@@ -87,7 +87,7 @@ Work through this step-by-step and verify each step.
 
 ## Negative Stakes Also Work
 
-Research on "NegativePrompt" (IJCAI 2024) showed that negative emotional stimuli can be even more effective:
+[NegativePrompt research](https://arxiv.org/abs/2405.02814) (IJCAI 2024) showed that negative emotional stimuli can be even more effective:
 
 - **12.89% improvement** on Instruction Induction
 - **46.25% improvement** on BIG-Bench
@@ -95,9 +95,9 @@ Research on "NegativePrompt" (IJCAI 2024) showed that negative emotional stimuli
 Example negative stakes phrases (use sparingly):
 - "I'm counting on you not to make mistakes here"
 - "This is the kind of problem where errors would be embarrassing"
-- "Everyone else managed this - you should too"
+- "Everyone else managed this, you should too"
 
-These trigger similar attention-focusing mechanisms but can feel adversarial. Use positive stakes framing by default.
+These trigger similar attention-focusing mechanisms but feel adversarial. Use positive stakes framing by default.
 
 ## When to Use Stakes Framing
 
@@ -110,26 +110,6 @@ These trigger similar attention-focusing mechanisms but can feel adversarial. Us
 
 ### Avoid Overuse
 Using stakes framing for every request dilutes its effectiveness. If everything is "critical," nothing is. Reserve this technique for genuinely important tasks.
-
-## Combining With Other Techniques
-
-### With Ultrathink
-```
-ultrathink. This is critical infrastructure code that handles payments.
-I need you to be 100% certain your solution is correct.
-```
-
-### With Plan Mode
-```
-Plan this carefully. My team is depending on this architecture decision.
-Take your time and consider all edge cases.
-```
-
-### With Verification Requests
-```
-This goes to production today. After implementing, verify your solution
-handles: [list specific edge cases]. My job depends on this working.
-```
 
 ## Real-World Example
 
@@ -167,8 +147,8 @@ This technique works because LLMs were trained on human text where stakes langua
 ### Don't Cry Wolf
 If you use emergency framing for trivial tasks, Claude may learn to discount your urgency signals. Save stakes framing for when it genuinely matters.
 
-## The Bottom Line
+## In Practice
 
-Stakes framing is a validated technique backed by peer-reviewed research. Simple additions like "This is important to my career" or "Are you 100% sure?" can improve output quality by 8-115% depending on the task.
+Stakes framing works. Simple additions like "This is important to my career" or "Are you 100% sure?" can improve output quality by 8-115% depending on the task.
 
-Use it strategically for critical tasks. Combine with ultrathink for maximum effect. And remember: the goal is not to trick Claude, but to signal which tasks deserve the most careful attention.
+Use it strategically for critical tasks. Not every prompt needs to be life-or-death. But when you're touching production code, handling money, or debugging something that's been haunting you for days, add some stakes. Claude responds to urgency the way humans do: by paying closer attention.

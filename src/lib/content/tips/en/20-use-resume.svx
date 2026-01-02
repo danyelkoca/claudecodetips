@@ -6,21 +6,23 @@ summary: "Claude crashes? Terminal closes? Use /resume to pick up where you left
 isFree: false
 ---
 
-Session recovery is one of Claude Code's most practical features. When your terminal crashes, your laptop runs out of battery, or you simply need to step away, your work is never lost.
+Terminal crashes happen. Laptop batteries die. SSH connections drop. Claude Code doesn't care. Every session is automatically saved, and you can pick up exactly where you left off.
 
-## Core Commands
+## Resume Commands
 
-There are three ways to resume sessions:
+The [CLI reference](https://code.claude.com/docs/en/cli-reference) documents three ways to resume:
 
-| Method | Command | When to Use |
-|--------|---------|-------------|
-| Continue recent | `claude -c` or `claude --continue` | Quick access to your most recent session |
-| Session picker | `claude --resume` or `/resume` | Browse and select from past sessions |
-| Resume by name/ID | `claude --resume auth-refactor` | Jump to a specific named session |
+| Command | When to Use |
+|---------|-------------|
+| `claude -c` or `claude --continue` | Quick access to your most recent session |
+| `claude --resume` or `/resume` | Browse and select from past sessions |
+| `claude --resume auth-refactor` | Jump to a specific named session |
+
+The difference matters. `--continue` grabs your last session in the current directory. `--resume` without arguments opens a picker. `--resume <name>` skips the picker entirely.
 
 ## The Session Picker
 
-Running `claude --resume` without arguments opens an interactive picker with powerful navigation:
+Running `claude --resume` opens an [interactive picker](https://code.claude.com/docs/en/common-workflows) with keyboard shortcuts:
 
 | Shortcut | Action |
 |----------|--------|
@@ -34,7 +36,7 @@ Running `claude --resume` without arguments opens an interactive picker with pow
 | `B` | Filter by current git branch |
 | `Esc` | Exit picker |
 
-The picker shows helpful metadata: session name, time since last activity, message count, and git branch.
+Each session shows its name, time since last activity, message count, and git branch. Press `P` to preview before committing.
 
 ## Name Your Sessions
 
@@ -52,14 +54,14 @@ claude --resume payment-integration
 
 ## What Gets Preserved
 
-When you resume, Claude Code restores:
+When you resume, Claude restores:
 
 - **Full conversation history** - Every message, exactly as it happened
 - **Tool usage and results** - All file reads, edits, bash commands
 - **Context and memory** - What Claude learned about your project
-- **Model configuration** - Same model and settings as before
+- **Model configuration** - Same model and settings you were using
 
-Sessions are stored locally in `~/.claude/projects/` organized by your working directory path.
+Sessions are stored locally in `~/.claude/projects/` organized by your working directory. The path gets encoded: `/home/user/project` becomes `-home-user-project`. This matters if you ever need to migrate sessions or debug storage issues.
 
 ## Crash Recovery Workflow
 
@@ -80,7 +82,7 @@ Claude resumes with full context. You can immediately ask "What were we working 
 
 ## Automation and Scripts
 
-Resume sessions programmatically for CI/CD and automation:
+For CI/CD and scripting, use [print mode](https://code.claude.com/docs/en/headless) with resume:
 
 ```bash
 # Capture session ID from a task
@@ -93,21 +95,25 @@ claude -p "What issues did you find?" --resume "$session_id"
 claude -p "Continue the refactor" --continue
 ```
 
+The `--output-format json` flag returns structured data including the session ID. Pipe it through `jq` to extract what you need. This is how you build multi-step workflows where Claude picks up context from previous runs.
+
 ## Session Forking with /rewind
 
-The `/rewind` command lets you go back in time and fork your session:
+The [`/rewind` command](https://code.claude.com/docs/en/checkpointing) creates a fork from any previous point:
 
 ```bash
 /rewind
-# Select a previous point in the conversation
-# Choose whether to restore code, conversation, or both
+# Opens a menu to select a checkpoint
+# Choose: conversation only, code only, or both
 ```
 
-Forked sessions appear grouped under their parent in the picker, making it easy to explore alternative approaches without losing your original work.
+You can also press `Esc` twice to trigger the rewind menu. Each rewind creates a new branch, so you can explore alternatives without losing your original work. Forked sessions appear grouped under their parent in the picker.
+
+One thing to watch: frequent rewinding creates many forks. If your session picker gets cluttered, that's why. Name important branches with `/rename` so you can find them later.
 
 ## Session Cleanup
 
-Sessions are automatically cleaned up after 30 days by default. To change this:
+Sessions are automatically cleaned up after 30 days by default. To extend retention:
 
 ```json
 // ~/.claude/settings.json
@@ -116,55 +122,41 @@ Sessions are automatically cleaned up after 30 days by default. To change this:
 }
 ```
 
-## Parallel Sessions with Worktrees
-
-For parallel Claude instances that don't interfere with each other, use git worktrees:
-
-```bash
-# Create worktree for a feature
-git worktree add ../my-project-feature feature-branch
-
-# Run Claude in each - separate sessions, shared history
-cd ../my-project-feature
-claude
-```
-
-The `/resume` picker shows sessions from all worktrees in the same repository.
-
-## When to Use /clear vs /resume
-
-| Scenario | Use |
-|----------|-----|
-| Continue previous work | `/resume` or `claude -c` |
-| Start fresh on new topic | `/clear` |
-| Reduce token usage mid-session | `/compact` |
-| Context getting stale | `/compact` with focus hints |
+**Warning:** Setting `cleanupPeriodDays` to `0` wipes all stored sessions immediately. Don't do this unless you mean it.
 
 ## Session Storage Details
 
-Sessions are stored in:
-- `~/.claude/history.jsonl` - Index of all sessions
-- `~/.claude/projects/[encoded-path]/` - Full conversation transcripts
+Sessions live in two places:
+- `~/.claude/history.jsonl` - Index with session metadata
+- `~/.claude/projects/[encoded-path]/` - Full conversation transcripts in JSONL format
 
-Directory paths are encoded: `/home/user/project` becomes `-home-user-project`.
+Each project directory contains `.jsonl` files, one per session. These are newline-delimited JSON, so you can parse them with standard tools if you need to extract information or debug issues.
 
 ## Migrating Sessions to New Computer
 
-After copying `~/.claude/` to a new machine, some sessions may show "not found" errors because paths changed:
+After copying `~/.claude/` to a new machine, sessions may show "not found" errors because paths changed. The fix is straightforward:
 
 ```bash
-# Rename old path to new path
+# List your encoded project directories
+ls ~/.claude/projects
+
+# Copy sessions from old path to new path
 cd ~/.claude/projects
-mv -- -home-olduser-project -home-newuser-project
+cp -n ./-home-olduser-project/*.jsonl ./-home-newuser-project/
 ```
 
-Pro tip: Back up `~/.claude/` regularly. It contains your complete development conversation history.
+The `-n` flag prevents overwriting any sessions you've already created on the new machine. Common scenarios include:
+- WSL to native Linux: `-home-ubuntu-*` to `-home-yourname-*`
+- macOS username change: `-Users-oldname-*` to `-Users-newname-*`
 
-## Best Practices
+Back up `~/.claude/` regularly. It contains your complete development conversation history, and there's no cloud backup.
 
-1. **Name sessions immediately** when starting meaningful work
-2. **Use `--continue` for quick access** to your most recent session
-3. **Use `--resume` with no args** when you need to browse
-4. **Press `P` to preview** before resuming to verify it's the right session
-5. **Use `/compact` before resuming** long sessions to preserve important context
-6. **Consider worktrees** for parallel development with complete isolation
+## The Resume Workflow
+
+Here's how I actually use resume in practice:
+
+1. **Name sessions immediately** when starting meaningful work. "auth-refactor" beats "explain this function" every time.
+2. **Use `--continue` for quick access.** It's muscle memory after your first terminal crash.
+3. **Press `P` to preview** before resuming. Wrong session means wrong context, and Claude will give you answers based on the wrong project.
+4. **Ask "What were we working on?"** after resuming long sessions. Claude's answer tells you if the context is still coherent or if you need to provide a summary.
+5. **Don't resume stale sessions.** If it's been a week and the codebase changed significantly, start fresh. Old context is worse than no context.

@@ -1,0 +1,34 @@
+I've updated the tip. Here's a summary of the changes:
+
+**Verified and linked sources:**
+- CodeRabbit December 2025 report (1.7x bug rate, specific error categories)
+- Google DeepMind ICLR 2024 paper on self-correction limitations
+- Qodo's State of AI Code Quality (3.8% developer stat)
+- Qodo article on confirmation bias (40-60% improvement)
+- AgentCoder paper (91.5% pass rate)
+- Anthropic's best practices (subagent recommendation)
+- Chroma context rot research
+- Self-Refine paper (~20% improvement)
+
+**Removed overlapping content:**
+- Git worktrees section (covered in Tip 27)
+- Detailed subagent YAML configuration (covered in Tip 31, and format was wrong)
+- "Real-World Multi-Agent Coordination" agent list (covered in Tip 25)
+
+**Fixed/removed unverifiable claims:**
+- Removed specific self-critique thresholds (>90%, <35%) that couldn't be verified
+- Rephrased context utilization stats to reference research without specific percentages
+
+**Improved structure:**
+- Strong opener instead of preamble
+- Consolidated implementation strategies into clearer "Options"
+- Added practical code example for review prompt
+- Tightened best practices section
+
+**Quality checks:**
+- No em dashes
+- No banned words/phrases
+- No "Related Tips" section
+- Frontmatter untouched
+- 138 content lines (above 100 minimum)
+- All URLs fetched and verified working

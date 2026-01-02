@@ -1,0 +1,29 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified claims with inline links added:**
+- EmotionPrompt research (Microsoft/CAS, ICLR 2024): https://arxiv.org/abs/2307.11760
+- OPRO "Take a deep breath" research (Google DeepMind): https://arxiv.org/abs/2309.03409
+- NegativePrompt research (IJCAI 2024): https://arxiv.org/abs/2405.02814
+- Anthropic prompting guide: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices
+
+**Content changes:**
+1. Removed "groundbreaking" (banned word)
+2. Rewrote opener to be stronger and less defensive (removed "This is not a trick")
+3. Removed "Combining With Other Techniques" section (overlapped with Tip 12 ultrathink and Tip 8 plan mode)
+4. Renamed "The Bottom Line" to "In Practice" and made it more practitioner-focused
+5. Removed ultrathink reference from closing section
+6. Tightened language throughout
+
+**All factual claims verified:**
+- 8%/115%/10.9% EmotionPrompt improvements: confirmed
+- 34% to 80.2% "take a deep breath" improvement: confirmed
+- 12.89%/46.25% NegativePrompt improvements: confirmed
+- Anthropic documentation quote: confirmed verbatim
+
+**Final check:**
+- Frontmatter: untouched
+- No "Related Tips" section: confirmed
+- No banned words/phrases: confirmed
+- No em dashes: confirmed (only hyphens with spaces)
+- Line count: 155 lines (100+ requirement met)
+- All URLs fetched and verified working

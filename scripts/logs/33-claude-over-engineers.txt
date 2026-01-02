@@ -1,0 +1,24 @@
+The tip is complete. Here's what I changed:
+
+**Verified and linked sources:**
+- Added [Anthropic's own documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices#overeagerness-and-file-creation) confirming Opus 4.5's over-engineering tendency
+- Added [Ox Security's "Army of Juniors" research](https://www.ox.security/resource-category/whitepapers-and-reports/army-of-juniors/) with specific anti-pattern percentages
+- Added [GitClear's 211M lines study](https://www.gitclear.com/ai_assistant_code_quality_2025_research) with specific metrics
+- Added [Kin Lane quote](https://kinlane.com/about/) with attribution
+- Added [Ana Bildea's 18-month observation](https://www.infoq.com/news/2025/11/ai-code-technical-debt/) from InfoQ
+- Added [Martin Fowler's YAGNI principle](https://martinfowler.com/bliki/Yagni.html) with the four costs
+- Added [Helicone comparison](https://www.helicone.ai/blog/claude-opus-and-sonnet-4-full-developer-guide) for Opus vs Sonnet
+
+**Removed overlaps:**
+- Removed "Use Plan Mode" section (covered in Tip 8)
+
+**Updated for current models:**
+- Changed outdated "Claude 4 and Opus 4.5" to current model names
+
+**Tightened structure:**
+- Stronger opener referencing Anthropic's official docs
+- Renamed sections for clarity ("The Surgical Coding Prompt" to "Force Codebase Alignment")
+- Removed redundant "This prompt does three things" numbered list
+- More direct language throughout
+
+**Line count:** 128 lines (exceeds 100+ requirement)

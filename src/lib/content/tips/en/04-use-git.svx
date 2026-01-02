@@ -8,6 +8,8 @@ isFree: false
 
 Claude Code can modify dozens of files in seconds. Without version control, a single bad prompt can leave your codebase in an unrecoverable state. Git is not optional when working with AI coding assistants. It is your undo button, your safety net, and your debugging tool combined.
 
+Claude Code has a [built-in /rewind command](https://code.claude.com/docs/en/checkpointing) for quick session-level recovery. But /rewind only tracks edits made through Claude's file tools, not bash commands, and checkpoints expire after 30 days. Git gives you permanent history, collaboration, and reliable rollback. Use both: /rewind for quick undo during a session, git for everything else.
+
 ## Commit Before You Prompt
 
 Always start Claude sessions with a clean git state. Before asking Claude to make any changes:
@@ -21,7 +23,7 @@ This creates a clear checkpoint. If Claude goes off the rails, you can instantly
 
 ## Make Atomic Commits
 
-An atomic commit represents one logical change. When working with Claude, this discipline becomes critical.
+An atomic commit represents one logical change. When working with Claude, this discipline becomes essential.
 
 **Why atomic commits matter for AI-assisted development:**
 
@@ -59,7 +61,7 @@ git diff HEAD                 # Both staged and unstaged
 
 ### Partial Staging for Granular Control
 
-Use `git add -p` to stage specific chunks instead of entire files:
+Use `git add -p` to [interactively stage specific chunks](https://git-scm.com/book/en/v2/Git-Tools-Interactive-Staging) instead of entire files:
 
 ```bash
 git add -p src/auth/login.js
@@ -72,7 +74,7 @@ Git presents each change and asks: `Stage this hunk [y,n,q,a,d,s,e,?]?`
 - `s` - split into smaller chunks
 - `e` - manually edit the chunk
 
-This lets you cherry-pick only the changes you approve and leave problematic ones unstaged for further review or discard.
+This lets you cherry-pick only the changes you approve and leave problematic ones unstaged for further review or discard. When Claude touches multiple concerns in one file, this is how you separate them into atomic commits.
 
 ## Mark AI Contributions in Commit Messages
 
@@ -118,14 +120,14 @@ Use `git revert` when the problematic commit has already been pushed. It preserv
 
 ### git reflog - Your Emergency Recovery Tool
 
-The reflog records every HEAD movement. Even after a hard reset, your commits are not truly gone:
+The [reflog](https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog) records every HEAD movement. Even after a hard reset, your commits are not truly gone:
 
 ```bash
 git reflog                    # View recent HEAD history
 git reset --hard HEAD@{3}     # Restore to state 3 moves ago
 ```
 
-Reflog entries persist for 30-90 days. If you accidentally reset away Claude's good work, reflog can save you.
+Reflog entries persist for 90 days (reachable commits) or 30 days (unreachable commits). If you accidentally reset away Claude's good work, reflog can save you.
 
 ## Use Feature Branches
 
@@ -188,17 +190,24 @@ git bisect good               # or git bisect bad
 git bisect reset              # Return to original state
 ```
 
-With atomic commits, bisect quickly narrows down which Claude interaction caused the regression.
+With atomic commits, bisect quickly narrows down which Claude interaction caused the regression. For automated bisecting, write a test script and let git do the work:
+
+```bash
+git bisect start HEAD abc123
+git bisect run ./test-regression.sh
+```
+
+The script should exit 0 for good commits, non-zero for bad. Git will binary search through your history automatically. For commits that cannot be tested (build failures, etc.), exit with code 125 to skip them.
 
 ## Pre-Commit Hooks as Safety Net
 
-Automate quality checks before every commit. The pre-commit framework catches issues Claude might introduce:
+Automate quality checks before every commit. The [pre-commit framework](https://pre-commit.com/) catches issues Claude might introduce:
 
 ```yaml
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: check-added-large-files
@@ -211,30 +220,24 @@ pre-commit install            # Set up hooks
 
 Now every commit automatically checks for trailing whitespace, large files, and leaked secrets. See Tip 40 for more on hooks.
 
-## Claude Code's Built-in Git Features
+## Working with Claude on Git Operations
 
-Claude Code can handle git operations through natural language:
+[Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) note that many of their engineers use Claude for 90%+ of their git interactions. You can ask Claude directly:
 
-```bash
-# Auto-generate contextual commit messages
-/commit
-
-# Full workflow: commit, push, create PR
-/commit-push-pr
-```
-
-You can also ask Claude directly:
 - "Commit these changes with a descriptive message"
 - "Create a PR for this feature"
 - "Resolve the merge conflicts in package.json"
+- "What changes made it into v1.2.3?"
 - "Revert the last commit"
 
-Claude understands complex git operations like rebasing, cherry-picking, and conflict resolution.
+Claude handles complex git operations like rebasing, cherry-picking, and conflict resolution. It also searches git history to answer questions about project evolution, feature ownership, and design decisions.
+
+For repetitive git workflows, create custom slash commands. A commit command at `.claude/commands/commit.md` lets you run `/commit` to stage and commit with a generated message. See Tip 30 for custom command setup.
 
 ## The Golden Rule
 
 Never approve changes across multiple files without reviewing diffs first.
 
-AI-generated code is not inherently safe. Studies show nearly half of AI code suggestions contain potential vulnerabilities. When Claude modifies a dozen files simultaneously and you approve without reviewing, any problems become impossible to diagnose later.
+[Veracode's 2025 research](https://www.veracode.com/blog/ai-generated-code-security-risks/) found that AI-generated code introduces security flaws in 45% of coding tasks. When Claude modifies a dozen files simultaneously and you approve without reviewing, any problems become impossible to diagnose later.
 
 Git makes this manageable: small commits, frequent reviews, clear history. Without Git discipline, you are flying blind.

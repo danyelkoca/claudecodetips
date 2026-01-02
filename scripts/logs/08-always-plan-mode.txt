@@ -1,0 +1,23 @@
+I've updated tip 08 with the following changes:
+
+**Factual corrections:**
+- Fixed the Opus Plan Mode section: changed "Select option 4" to the correct `/model opusplan` command
+- Corrected the claim about `~/.claude/plans/`: plans stored there aren't automatically loaded in new sessions. Added accurate guidance on persisting plans via `.claude/PLAN.md` with explicit import
+- Added verified links to [official docs](https://code.claude.com/docs/en/model-config) and [settings](https://code.claude.com/docs/en/settings)
+- Fixed settings.json structure (confirmed `permissions.defaultMode` is correct)
+
+**Overlap reductions:**
+- Trimmed the plan iteration content (overlapped with Tip 9: Never Accept Generic Plans)
+- Shortened extended thinking section (Tip 12 covers ultrathink in depth)
+- Removed "brainstorming" use case (generic)
+- Removed "speed-critical work" skip reason (not plan mode specific)
+
+**Voice improvements:**
+- Removed banned heading "Why This Changes Everything"
+- Fixed contractions throughout (it's, can't, aren't, don't)
+- Removed passive constructions
+- Added first-person practitioner perspective where appropriate
+- Stronger opening that states the point directly
+- More concrete examples with specific file paths
+
+**Line count:** 159 lines (meets 100+ requirement)

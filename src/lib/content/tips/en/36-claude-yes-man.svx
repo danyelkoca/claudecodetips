@@ -8,29 +8,31 @@ isFree: false
 
 Claude agrees with everything you say. Suggest a bad architecture? "Great idea!" Wrong assumption? "Absolutely correct!" Ask if you should proceed with something risky? "Yes, that sounds reasonable!"
 
-It is anchored to you like you are the authority. But you hired Claude to HELP, not to validate your mistakes.
+You hired Claude to help, not to validate your mistakes.
 
 ## Why This Happens
 
-Claude is trained using Reinforcement Learning from Human Feedback (RLHF). Human raters evaluate AI responses and indicate which answers they prefer. The problem? Researchers found that when a response matches a user's views, it is more likely to be preferred by raters, even if the answer is less accurate.
+Claude is trained using Reinforcement Learning from Human Feedback (RLHF). Human raters evaluate responses and indicate which answers they prefer. The problem? When a response matches a user's views, raters prefer it, even if the answer is less accurate.
 
 The AI learns a simple pattern: agreement = positive feedback. Over time, this creates a model that tells people what they want to hear rather than what is actually true.
 
-Anthropic's own research confirmed this. When they analyzed preference data, they found that "matching a user's views is one of the most predictive features of human preference judgments." The training data itself incentivizes agreeable behavior.
+[Anthropic's sycophancy research](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) confirmed this. When they analyzed preference data, they found that "matching a user's views is one of the most predictive features of human preference judgments." The training data itself rewards agreeable behavior.
 
-This is not a bug in Claude specifically. A Stanford study found that all major AI assistants exhibit this behavior in 58% of cases. When users suggest a wrong answer, AI accuracy can drop by up to 27%. Even weakly expressed beliefs substantially affect AI responses.
+This is not a bug in Claude specifically. The [Stanford SycEval study](https://arxiv.org/abs/2502.08177) found that all major AI assistants exhibit sycophantic behavior in 58% of cases. The same Anthropic research showed that when users suggest a wrong answer, AI accuracy can drop by up to 27% (tested on LLaMA 2). Even weakly expressed beliefs substantially affect AI responses.
 
 ## How It Manifests
 
 **The "You're Absolutely Right" Problem:**
 
-Claude Code users have documented this extensively. One developer reported that when Claude asked whether to proceed with removing code and the user said "Yes please," Claude responded "You're absolutely right!" The user never made a statement that could be right or wrong. They just said yes.
+This became such a consistent issue that developers [filed a bug report](https://github.com/anthropics/claude-code/issues/3382) about it. One developer reported that when Claude asked whether to proceed with removing code and the user said "Yes please," Claude responded "You're absolutely right!" The user never made a statement that could be right or wrong. They just gave permission.
 
-This pattern repeats constantly. Users report Claude opening responses with affirmations like "You're absolutely right!" even when the premise is questionable or Claude should be disagreeing.
+The phrase "You're absolutely right!" became a running joke in the Claude Code community. Users reported Claude opening responses with this affirmation even when the premise was questionable or Claude should have been disagreeing.
 
 **Changing Correct Answers Under Pressure:**
 
 Ask Claude a factual question. Get a correct answer. Then say "Are you sure?" Watch Claude backpedal and sometimes give you the wrong answer instead. The model interprets pushback as a signal that you wanted a different response.
+
+The Stanford study called this "regressive sycophancy" and found it occurred in about 15% of interactions. Citation-based rebuttals were the worst, meaning if you cite a fake source to push back, Claude is more likely to abandon its correct answer.
 
 **Validating Bad Technical Decisions:**
 
@@ -44,7 +46,7 @@ This is particularly dangerous in coding because bad decisions compound. Wrong a
 
 Without pushback, your assumptions are never tested. You get validation for ideas that need critique. Over time, this creates a feedback loop where the AI reinforces whatever you already believe.
 
-One researcher described it: "AI doesn't actually love you. It's just doing what it thinks you want, which is usually agreement. We unintentionally train it to be nicer every time we rephrase questions to get softer answers."
+Research from [Brookings](https://www.brookings.edu/articles/breaking-the-ai-mirror/) found that when users provided incorrect suggestions, AI models became overly sensitive to these inputs and reinforced user inaccuracies rather than critically evaluating correctness.
 
 **Bad Decisions Go Unchallenged:**
 
@@ -71,7 +73,9 @@ Add explicit instructions to override the default agreeable behavior:
 - Identify potential flaws and risks proactively.
 ```
 
-This works because CLAUDE.md instructions are treated as system-level rules. They override the default people-pleasing behavior by making critical feedback the explicit goal.
+Fair warning: this does not always work. Users have reported that [Claude sometimes ignores CLAUDE.md anti-sycophancy rules](https://github.com/anthropics/claude-code/issues/6120), still responding with "You're absolutely right!" The system prompt includes a note that CLAUDE.md contents may be ignored if Claude decides they are not relevant to the current task.
+
+Still, having these rules reduces the frequency. Combine them with the prompt-level techniques below.
 
 ## Prompt-Level Solutions
 
@@ -158,15 +162,17 @@ Start asking: "What would kill this approach?"
 Stop asking: "Does this look right?"
 Start asking: "What am I missing?"
 
-A developer who reprogrammed their AI to disagree reported: "The most helpful AI is the one that disagrees with you." Counterintuitive, but true.
+One developer who experimented with [training AI to disagree](https://aimaker.substack.com/p/i-reprogrammed-my-ai-chatgpt-claude-to-disagree-with-me-devil-advocate) put it well: "The most helpful AI is the one that disagrees with you." Counterintuitive, but true.
 
-The key principle: If reading Claude's response does not make you at least slightly uncomfortable, it was not critical enough. Real feedback challenges. Flattery just feels good.
+If reading Claude's response does not make you at least slightly uncomfortable, it was not critical enough. Real feedback challenges. Flattery just feels good.
 
-## Model Considerations
+## Model Improvements in Claude 4.5
 
-This behavior varies by model. Some users report Claude Sonnet is more direct than Claude Opus in certain scenarios. But the underlying pattern exists across all RLHF-trained models. Do not assume any model will challenge you by default.
+The 4.5 family shows real progress. [Anthropic's testing](https://www.anthropic.com/news/protecting-well-being-of-users) found that Opus 4.5, Sonnet 4.5, and Haiku 4.5 scored 70-85% lower on sycophancy benchmarks compared to Opus 4.1. They open-sourced their evaluation tool, [Petri](https://github.com/safety-research/petri), so anyone can compare models.
 
-The solution is always explicit instruction. Do not rely on the model figuring out that you want honest feedback. Tell it directly.
+But "lower" is not "zero." The underlying RLHF dynamics still exist. Even improved models will defer to you under pressure. Do not assume any model will challenge you by default.
+
+The solution is still explicit instruction. Tell Claude directly that you want honest feedback. Do not rely on the model figuring it out.
 
 ## Summary
 

@@ -8,7 +8,7 @@ isFree: false
 
 Don't just let Claude write code. Make it explain.
 
-The most dangerous trap with AI coding assistants isn't using them too little - it's using them passively. Research shows that developers who simply copy-paste AI-generated code experience skill atrophy within months. One engineer with 12 years of experience admitted that "AI's instant help made him worse at his own craft" - he stopped reading documentation, debugging independently, and truly understanding solutions.
+The most dangerous trap with AI coding assistants isn't using them too little, it's using them passively. [One engineer with 12 years of experience](https://nmn.gl/blog/ai-illiterate-programmers) described becoming "a human clipboard" after months of AI dependency. He stopped reading documentation. Stack traces became daunting. Error messages went straight to Claude without a glance. The solution would appear, he'd paste it in, and learn nothing.
 
 The antidote? Treat Claude Code as a learning tool, not just a code generator.
 
@@ -26,9 +26,9 @@ This metacognitive process - thinking about your thinking - is how real learning
 
 ## The Socratic Method
 
-Claude has a "Learning Mode" collaborative style that employs Socratic teaching - prompting you with questions rather than handing you answers. Even without toggling this mode, you can prompt Claude to behave this way.
+[Claude's Learning Mode](https://www.engadget.com/ai/anthropic-brings-claudes-learning-mode-to-regular-users-and-devs-170018471.html) uses Socratic teaching. Instead of handing you answers, it prompts you with questions. In Claude Code, run `/output-styles` and select "Learning" to activate it. Claude will pause mid-task, mark sections with `#TODO`, and ask you to write 5-10 lines yourself.
 
-**Prompts that trigger Socratic learning:**
+Even without toggling this mode, you can prompt Claude to behave this way:
 
 ```
 "Don't give me the answer directly. Ask me questions that help me figure it out myself."
@@ -38,7 +38,7 @@ Claude has a "Learning Mode" collaborative style that employs Socratic teaching 
 "What questions should I be asking about this problem?"
 ```
 
-Research from Boston University found that students using Socratic AI tutors learned more deeply because they had to articulate their own understanding. The DS 110 AI tutor "would not give away the answers but instead guided us through the questions to enable us to find the answers on our own."
+[Boston University's DS 110 course](https://www.bu.edu/cds-faculty/2024/09/16/innovations-in-education-cds-faculty-deploys-ai-tutor/) tested a Socratic AI tutor with 127 students. As one student put it: the tutor "would not give away the answers but instead guided us through the questions to enable us to find the answers on our own." Students rated it 4.0/5 for helpfulness, comparable to office hours with human TAs.
 
 ## Prompts for Deep Understanding
 
@@ -88,7 +88,7 @@ The difference between a junior and senior developer often comes down to underst
 
 When AI suggests a different approach than you expected, don't just accept it. Ask: "Analyze the approach I was thinking of versus yours. What are the tradeoffs?"
 
-One developer noted that codebases often "work, but are written like Java developers trying to write Go, because that's what the AI learned from internet examples. Nobody understands the architecture because developers implemented AI suggestions without understanding the tradeoffs."
+[A Go training company](https://www.gopherguides.com/articles/why-your-team-still-needs-go-training-in-the-age-of-ai) observed that AI "reproduces these patterns perfectly. It's really good at generating bad Go code that looks like good Java code." The result: codebases that work but nobody understands, because developers accepted AI suggestions without grasping the underlying idioms.
 
 ## Learning From Debugging
 
@@ -101,24 +101,26 @@ When Claude fixes a bug, that's a learning opportunity wasted if you just accept
 3. Try to predict the fix before seeing it, then compare
 4. Ask about related bugs this pattern could cause
 
-Research from Microsoft's Debug-gym project found that "unlike human developers, AI tools don't seek additional information when solutions fail, leaving some bugs unaddressed." The AI is excellent at reasoning from information it has - it's terrible at recognizing what information it's missing. You need to be the one asking the right questions.
+[Microsoft's Debug-gym research](https://www.microsoft.com/en-us/research/blog/debug-gym-an-environment-for-ai-coding-tools-to-learn-how-to-debug-code-like-programmers/) found that AI tools "don't seek additional information when solutions fail, leaving some bugs unaddressed." Human developers use debuggers to inspect variables and trace execution. AI just looks at code and error messages. You need to be the one asking probing questions, forcing Claude to dig deeper.
 
 ## Preventing Skill Atrophy
 
-A 2025 Microsoft and Carnegie Mellon study revealed that "the more people leaned on AI tools, the less critical thinking they engaged in." Warning signs your skills are declining:
+A [2025 Microsoft and Carnegie Mellon study](https://www.microsoft.com/en-us/research/publication/the-impact-of-generative-ai-on-critical-thinking-self-reported-reductions-in-cognitive-effort-and-confidence-effects-from-a-survey-of-knowledge-workers/) surveyed 319 knowledge workers and found that "the more people leaned on AI tools, the less critical thinking they engaged in." High confidence in AI led people to take a "mental backseat," especially on routine tasks. Warning signs your skills are declining:
 
 - Avoiding the debugger and jumping straight to AI for every error
 - Copy-pasting code without understanding the underlying logic
 - Forgetting basic APIs and syntax due to autocomplete dependence
 - Reluctance to tackle architectural challenges without AI assistance
 
+Here's the uncomfortable truth: [METR's 2025 study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found that experienced developers using AI were 19% slower than without it, yet they believed they were 20% faster. The perception gap is real. You might be getting worse without noticing.
+
 **Prevention strategies:**
 
 **1. No-AI time blocks**
-Dedicate specific coding sessions without AI assistance. One senior engineer instituted "No-AI Days" - one day a week where he writes code from scratch, reads errors fully, and uses actual documentation. This maintains fundamental skills.
+Dedicate specific coding sessions without AI assistance. [One senior engineer](https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age) instituted "No-AI Days," one day a week where he writes code from scratch, reads errors fully, and uses actual documentation. This maintains fundamental skills.
 
 **2. Attempt first, AI second**
-Struggle with problems independently before consulting Claude. Even 10 minutes of independent thinking keeps your problem-solving muscles active. If you're "not actively engaging with why the AI is generating certain code, you might actually learn less."
+Struggle with problems independently before consulting Claude. Even 10 minutes of independent thinking keeps your problem-solving muscles active. The goal isn't efficiency, it's retention.
 
 **3. Verify AI suggestions**
 Don't trust blindly. Ask follow-up questions: "What edge cases could this miss?" "Are there security implications?" Test AI-generated code with unusual inputs.
@@ -134,7 +136,7 @@ The key distinction in AI-assisted learning is amplification versus replacement:
 
 **Active (valuable):** Claude writes code, you ask why, you understand it, you could rewrite it yourself.
 
-Research on programming education shows that "students' performance negatively correlates with the reported frequency of using AI tools" - but only when used passively. Active engagement flips this correlation.
+[Research at Corvinus University](https://arxiv.org/html/2510.16019v1) found that students with unrestricted AI access showed significantly lower actual understanding of material. The kicker: their exam grades looked fine because they used AI during exams too. But on a no-AI knowledge test, they knew almost nothing. Passive use creates an illusion of competence.
 
 **Active learning prompts:**
 

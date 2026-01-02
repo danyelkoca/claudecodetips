@@ -1,0 +1,32 @@
+The tip has been updated. Here's what I changed:
+
+**Verified and corrected factual claims:**
+- Fixed model pricing: The original tip had inaccurate speed claims ("27s", "86s", "76s") and cost claims ("5x Sonnet"). Updated with [verified pricing from Anthropic](https://www.anthropic.com/news/claude-haiku-4-5): Haiku $1/$5, Sonnet $3/$15, Opus $5/$25 per million tokens
+- Added the complete tools list including `Task`, `BashOutput`, `KillShell`
+- Added MCP tool inheritance behavior
+- Updated `--debug` flag to show it accepts category filters
+
+**Added missing features:**
+- `--agents` CLI flag for dynamic agent definition
+- Details on how `/agents` command works
+- Priority order: Project > CLI > User level agents
+
+**Removed overlaps with Tip 28 (Subagents - Use with Caution):**
+- Removed the "Context Isolation Benefits" section (covered extensively in Tip 28)
+- Removed general subagent architecture discussion (Tip 28's focus)
+- Kept this tip focused on **creating and configuring** custom agents
+
+**Improved structure:**
+- Stronger opener that explains what agents are in one sentence
+- Consolidated 4 example agents into 3 focused examples with clear purposes
+- Added "Writing Good Agent Prompts" section with actionable patterns
+- Added "Single Responsibility Principle" to prevent bloated agents
+- Rewrote model selection with practitioner perspective
+
+**Cleaned up style:**
+- Removed em dashes
+- No banned words remain
+- Direct, specific language throughout
+- Added inline links to [official documentation](https://code.claude.com/docs/en/sub-agents) and [Anthropic's Haiku announcement](https://www.anthropic.com/news/claude-haiku-4-5)
+
+Final tip: 277 lines (well above the 100-line minimum)

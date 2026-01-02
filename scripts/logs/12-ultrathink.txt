@@ -1,0 +1,22 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Key updates:**
+1. **Corrected outdated three-tier system**: The official docs now state only `ultrathink` allocates the 31,999 token budget. "think", "think hard", and "megathink" are now just interpreted as prompt text without token allocation.
+
+2. **Added inverse scaling research**: [Anthropic's July 2025 paper](https://alignment.anthropic.com/2025/inverse-scaling/) found extended thinking can hurt performance on certain tasks. Claude gets "increasingly distracted by irrelevant information" as reasoning extends.
+
+3. **Updated model defaults**: Sonnet 4.5 and Opus 4.5 have thinking enabled by default. Other models have it disabled.
+
+4. **Added effort parameter**: Opus 4.5 supports a new [effort parameter](https://platform.claude.com/docs/en/build-with-claude/effort) (low/medium/high) that controls token usage across the entire response.
+
+5. **Clarified benchmark attribution**: The 96.2% MATH 500 and 84.8% GPQA scores are from Claude 3.7 Sonnet. Added Opus 4.5's 80.9% SWE-bench score.
+
+6. **Added inline links**: All factual claims now have verified source links.
+
+7. **Removed overlap with Tip 8**: Removed the "With Plan Mode" section that duplicated Plan Mode content.
+
+8. **Simplified enabling methods**: Clear list of 4 ways to enable thinking (ultrathink keyword, Tab toggle, /config, environment variable).
+
+9. **Removed unverified claims**: Removed response time percentages (30%, doubles, triples) and Ctrl+E shortcut that weren't in official docs.
+
+The tip is 132 lines, all URLs verified, no banned words, no em dashes, and maintains the practitioner voice.

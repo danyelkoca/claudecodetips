@@ -1,0 +1,25 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Major changes:**
+- Removed CI/CD section (GitHub Actions, GitLab examples) since Tip 43 covers GitHub Actions specifically
+- Removed redundant "Security Considerations" section (merged into sandboxing section)
+- Simplified JSON output structure description to avoid outdated specifics
+- Removed unverified statistic I couldn't trace to a primary source
+
+**Quality improvements:**
+- Stronger opener: "The `-p` flag turns Claude Code into a scriptable CLI tool"
+- Added inline link to official [CLI reference](https://code.claude.com/docs/en/cli-reference)
+- Clarified `--allowedTools` vs `--disallowedTools` (removed confusing `--tools` comparison that was inaccurate)
+- Added practitioner insight: "I set `--max-turns 10` as a default for most automation"
+- Fixed colon syntax example inconsistency (`npm test:*` vs `Bash(npm test:*)`)
+- Removed all em dashes
+- More concise throughout
+
+**Verification:**
+- All CLI flags verified against official docs
+- Output formats confirmed: text, json, stream-json
+- Session management flags confirmed: --continue, --resume
+- Tool control flags confirmed: --allowedTools, --disallowedTools
+- System prompt flags confirmed: --append-system-prompt, --system-prompt, --system-prompt-file
+
+The tip now focuses tightly on headless mode mechanics without overlapping other tips or including unverified claims.

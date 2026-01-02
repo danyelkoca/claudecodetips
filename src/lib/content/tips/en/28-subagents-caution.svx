@@ -6,9 +6,9 @@ summary: "Subagent summaries lose detail. For critical code, have main agent rea
 isFree: true
 ---
 
-Subagents are powerful. They can explore your entire codebase, research documentation, and execute complex multi-step tasks - all without polluting your main conversation's context window. But there is a fundamental tradeoff: **when a subagent reports back, you only get a summary, not the full picture.**
+Subagents can explore your entire codebase, research documentation, and execute multi-step tasks without polluting your main context window. But there is a fundamental tradeoff: **when a subagent reports back, you only get a summary, not the full picture.**
 
-This is not a bug. It is an architectural choice. And understanding it is critical to using Claude Code effectively.
+This is not a bug. It is an architectural choice. Understanding it determines whether subagents help or hurt your work.
 
 ## How Subagents Work
 
@@ -16,7 +16,7 @@ When you invoke a subagent (via `Task(...)` or when Claude automatically delegat
 
 1. **A new context window opens.** The subagent gets its own isolated 200K token context, completely separate from your main conversation.
 
-2. **The subagent works independently.** It reads files, searches code, reasons through problems - all within its isolated environment.
+2. **The subagent works independently.** It reads files, searches code, and reasons through problems, all within its isolated environment.
 
 3. **Only a summary returns.** When complete, the subagent distills its work into a condensed response that gets injected into your main conversation.
 
@@ -24,19 +24,21 @@ This isolation is intentional. If every file the subagent read flooded back into
 
 ## The Three Built-in Subagent Types
 
+[Claude Code's built-in subagents](https://code.claude.com/docs/en/sub-agents) have different defaults:
+
 | Agent | Model | Purpose | Context Inheritance |
 |-------|-------|---------|---------------------|
 | **Explore** | Haiku | Fast, read-only codebase searching | Fresh slate (no prior context) |
 | **Plan** | Sonnet | Research during planning phase | Inherits full conversation |
 | **General-Purpose** | Sonnet | Complex multi-step tasks with modifications | Inherits full conversation |
 
-**Why Explore uses Haiku:** Speed and cost. When scanning dozens of files looking for patterns, Haiku is 4-5x faster and ~80% cheaper than Sonnet. The tradeoff is less nuanced reasoning - acceptable for search tasks, problematic for architectural decisions.
+**Why Explore uses Haiku:** Speed and cost. When scanning dozens of files, [Haiku 4.5 runs 2-4x faster at about one-third the cost](https://www.anthropic.com/news/claude-haiku-4-5) of Sonnet. The tradeoff is less nuanced reasoning, which is acceptable for search tasks, problematic for architectural decisions.
 
-**Why Explore starts fresh:** Search tasks are often independent. A subagent looking for "all authentication-related files" does not need your conversation history about payment processing. Starting fresh keeps context focused.
+**Why Explore starts fresh:** Search tasks are often independent. A subagent looking for "all authentication-related files" does not need your conversation history about payment processing. Starting fresh keeps context focused and avoids token overhead.
 
 ## The Fundamental Problem: Lossy Compression
 
-When a subagent reads 50 files and returns a summary, information is inevitably lost. This is not Claude being lazy - it is mathematically impossible to preserve all detail when compressing 100K tokens of file contents into a 2K token summary.
+When a subagent reads 50 files and returns a summary, information is inevitably lost. It is mathematically impossible to preserve all detail when compressing 100K tokens of file contents into a 2K token summary.
 
 **What gets preserved:**
 - High-level patterns and structure
@@ -51,7 +53,7 @@ When a subagent reads 50 files and returns a summary, information is inevitably 
 - Context that seemed unimportant but matters later
 - The nuanced understanding that comes from reading code yourself
 
-Research from Factory.ai found that even the best compression methods only score 2.19-2.45 out of 5.0 on artifact tracking (remembering which files were modified, exact locations, specific values). **The things that matter most for debugging are the hardest to preserve in summaries.**
+[Factory.ai's research on context compression](https://factory.ai/news/evaluating-compression) found that even the best methods score only 2.19-2.45 out of 5.0 on artifact tracking (remembering which files were modified, exact locations, specific values). **The things that matter most for debugging are the hardest to preserve in summaries.**
 
 ## The "Game of Telephone" Problem
 
@@ -67,7 +69,7 @@ Main Agent's Understanding (lossy)
 Summary 2 (even more compressed)
 ```
 
-Each stage introduces distortion. By the time information reaches your conversation, subtle but critical details may have vanished. Anthropic's own multi-agent research system addresses this by having "subagents store outputs to external systems rather than routing everything through the lead agent" - explicitly acknowledging the degradation problem.
+Each stage introduces distortion. By the time information reaches your conversation, subtle but critical details may have vanished. [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) addresses this by having subagents "call tools to store their work in external systems, then pass lightweight references back to the coordinator." They explicitly acknowledge the degradation problem.
 
 ## When Subagents Work Well
 
@@ -79,7 +81,7 @@ Subagents excel at broad codebase exploration:
 "Use subagents to find all places where user permissions are checked"
 ```
 
-The Explore agent scans rapidly across files, returning a map of locations. For this use case, you do not need the full implementation details - just pointers to where to look next.
+The Explore agent scans rapidly across files, returning a map of locations. For this use case, you do not need the full implementation details. You just need pointers to where to look next.
 
 ### Documentation Gathering
 
@@ -130,7 +132,7 @@ When tracking down subtle bugs, every detail matters:
 
 ```
 "Read the failing test file and the implementation file it tests.
-Do not use subagents - I need you to see the exact code."
+Do not use subagents. I need you to see the exact code."
 ```
 
 Subagent summaries might say "the test checks user validation" but miss that it specifically validates email format with a regex that has a known edge case.
@@ -152,7 +154,7 @@ Some code cannot be summarized without losing critical information:
 
 - Configuration files with precise values
 - Migration files with exact schema changes
-- Security-critical code where every condition matters
+- Security code where every condition matters
 - Integration code with specific API contracts
 
 ## Practical Decision Framework
@@ -168,18 +170,11 @@ Some code cannot be summarized without losing critical information:
 | "Research React 19 migration steps" | Yes | External doc synthesis |
 | "Apply React 19 changes to our codebase" | No | Must see our specific patterns |
 
-## The Master-Clone Pattern
+## Let the Main Agent Decide
 
-Instead of custom subagents with predefined roles, let the main agent decide when to spawn clones:
+The main agent should control when to delegate. Let it analyze the task, decide which subtasks benefit from delegation, spawn subagents using `Task(...)`, and aggregate results with awareness of what was summarized.
 
-1. Main agent analyzes the task
-2. Decides specific subtasks benefit from delegation
-3. Spawns general-purpose clones using `Task(...)`
-4. Aggregates results with awareness of what was summarized
-
-This preserves holistic reasoning in the main agent. It sees the full picture and makes informed decisions about what to delegate vs. handle directly.
-
-**Why this beats specialized subagents:** Custom subagents like `PythonTests` or `SecurityAudit` hide context from your main agent. It can no longer reason holistically about how changes affect tests or security. The master-clone pattern keeps strategic awareness centralized.
+This keeps holistic reasoning in the main agent. It sees the full picture and makes informed decisions about what to delegate vs. handle directly. Overly specialized subagents like "PythonTests" or "SecurityAudit" hide context from your main agent, fragmenting its understanding of how changes ripple across the codebase.
 
 ## Signs You Are Over-Relying on Subagents
 
@@ -250,7 +245,7 @@ But costs:
 - **Invisible work** - You cannot see the subagent's thinking
 - **Verification overhead** - You may need to re-read files anyway
 
-The tradeoff is not good or bad - it depends on your task.
+The tradeoff is not good or bad. It depends on your task.
 
 ## Key Takeaways
 

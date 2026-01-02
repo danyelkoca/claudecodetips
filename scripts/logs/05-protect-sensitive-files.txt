@@ -1,0 +1,30 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified and linked claims:**
+- GitHub 39 million secrets (2024) - linked to GitHub blog
+- Azure credentials 2x exposure with AI - linked to Apiiro research
+- Deny rules bugs - linked to GitHub issue #6699
+- PreToolUse hooks Write/Edit bug - linked to GitHub issue #13744
+- SSD TRIM forensics - linked to Elcomsoft blog
+- Git checkout incident - linked to GitHub issue #11237
+
+**Corrections made:**
+- Fixed settings precedence (now 6 levels, added remote managed settings)
+- Fixed deny rule syntax (using `./` prefix per official docs)
+- Added note that Bash rules use prefix matching, not regex
+- Fixed Docker command (`docker sandbox run claude` per Docker docs)
+- Added sandbox configuration options from official docs
+
+**Critical warnings added:**
+- Deny rules have had bugs and may not be enforced reliably
+- PreToolUse hooks with exit code 2 don't reliably block Write/Edit operations
+
+**Reduced overlap:**
+- Trimmed hooks section significantly (now references Tip 40 for complete examples)
+- Kept CLAUDE.md section brief since it's security-specific
+
+**Style improvements:**
+- Removed em dashes throughout
+- Stronger, more direct opening
+- No banned words/phrases
+- 203 lines maintained (100+ requirement met)

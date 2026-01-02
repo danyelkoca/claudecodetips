@@ -1,0 +1,28 @@
+The tip has been updated. Here's what I changed:
+
+**Verified and linked claims:**
+- [25.4% improvement with self-planning](https://arxiv.org/abs/2303.06689) (ACM/arXiv paper)
+- [21.7% package hallucination rate for open-source, 5.2% for commercial](https://arxiv.org/abs/2406.10279) (arXiv study)
+- [1.7x more issues in AI-generated code](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) (CodeRabbit analysis)
+- [Gemini CLI file deletion incident](https://github.com/google-gemini/gemini-cli/issues/4586) (GitHub issue)
+- [Spec-driven development](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-using-markdown-as-a-programming-language-when-building-with-ai/) (GitHub blog)
+
+**Removed unverified claims:**
+- "42% of AI code snippets contain errors" (was about developer trust, not error rates)
+- "62% of developers time fixing AI errors" (couldn't verify exact figure)
+- "Microsoft 68% reduction in back-and-forth" (couldn't find source)
+
+**Structural improvements:**
+- Stronger opener ("A generic plan is Claude admitting it hasn't read your code")
+- Added practical code blocks showing exactly what to say to Claude
+- Added CLAUDE.md snippet users can copy directly
+- Real-world Gemini CLI incident with root cause analysis
+- Removed "The Bottom Line" generic closing, replaced with "The Core Test"
+- Practitioner perspective throughout ("I've had plans fall apart by step three")
+
+**Avoided overlaps with:**
+- Tip 8 (when to use plan mode)
+- Tip 10 (validating against CLAUDE.md)
+- Tip 37 (Claude assuming instead of asking)
+
+Final tip is 155 lines with all URLs verified.

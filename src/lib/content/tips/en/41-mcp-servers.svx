@@ -6,112 +6,82 @@ summary: "Connect external tools - databases, browser automation, doc lookup."
 isFree: false
 ---
 
-MCP (Model Context Protocol) is an open standard that lets Claude Code connect to external tools, databases, and APIs. Think of it as a universal adapter—like USB-C for AI. Instead of building custom integrations for each service, MCP provides a standardized way to connect Claude to any data source.
+MCP gives Claude Code access to external tools, databases, and APIs through a [standardized protocol](https://modelcontextprotocol.io/). Think of it like USB-C for AI. One protocol, thousands of integrations.
 
-With MCP servers, you can query databases with natural language, automate browsers, pull live documentation, manage GitHub repos, and interact with virtually any external service.
+I use MCP daily for database queries, GitHub PR management, and pulling live documentation. The ecosystem exploded in 2025. OpenAI, Google, and Microsoft now support MCP, and the [official registry](https://registry.modelcontextprotocol.io/) hit nearly 2,000 servers by late 2025.
 
-## How It Works
+## Architecture
 
-MCP follows a client-server architecture:
+MCP follows a client-server model. Claude Code connects to MCP servers, which expose tools and resources. The server handles actual API calls, database queries, or file operations. Claude never gets direct access to your systems.
 
-1. **Claude Code** (client) connects to MCP servers
-2. **MCP servers** expose tools, resources, and prompts
-3. **Transport layer** handles communication (HTTP, stdio, or SSE)
+This architecture means you can audit every action, restrict permissions per server, and swap implementations without changing prompts.
 
-When you ask Claude about your database, it calls the appropriate MCP tool, which queries the actual database and returns results. Claude never has direct database access—the MCP server mediates everything.
+## Configuration Scopes
 
-## Configuration
+MCP servers can live at three levels:
 
-MCP servers can be configured at three scopes:
+| Scope | File | Use Case |
+|-------|------|----------|
+| **Local** | `.mcp.json` in project | Personal project tools |
+| **Project** | `.mcp.json` (committed) | Team-shared via git |
+| **User** | `~/.claude.json` | Cross-project utilities |
 
-| Scope | Location | Use Case |
-|-------|----------|----------|
-| **Local** | `~/.claude.json` | Personal, project-specific |
-| **Project** | `.mcp.json` in project root | Team-shared via git |
-| **User** | `~/.claude.json` | All your projects |
+Scope precedence: Local > Project > User. When servers share names, local wins.
 
-Project scope takes precedence over user scope. Use `/mcp` command inside Claude Code to manage servers interactively.
+Use `/mcp` inside Claude Code to view status and toggle servers on/off mid-session.
 
 ## CLI Commands
 
 ```bash
-# Add servers
+# Add remote server (HTTP transport)
 claude mcp add --transport http stripe https://mcp.stripe.com
-claude mcp add --transport stdio db -- npx -y @modelcontextprotocol/server-postgres postgresql://...
+
+# Add local server (stdio transport)
+claude mcp add --transport stdio memory -- npx -y @modelcontextprotocol/server-memory
 
 # Manage servers
-claude mcp list                        # List all servers
-claude mcp get <name>                  # Get server details
-claude mcp remove <name>               # Remove server
+claude mcp list                        # List all configured servers
+claude mcp get <name>                  # Check server status and details
+claude mcp remove <name>               # Remove a server
 
-# Advanced
+# Import and advanced
 claude mcp add-json <name> '<json>'    # Add from JSON config
-claude mcp add-from-claude-desktop     # Import from Claude Desktop
-claude mcp reset-project-choices       # Reset approval prompts
+claude mcp add-from-claude-desktop     # Import existing Claude Desktop servers
 ```
 
-Add `--scope user` for all projects, `--scope project` for team sharing.
+Add `--scope user` for cross-project tools, `--scope project` to commit config for your team.
 
 ## Transport Types
 
-### HTTP (Recommended for Remote)
+### Streamable HTTP (Remote Servers)
+
+The [March 2025 MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports) introduced Streamable HTTP as the standard for remote servers. Most hosted MCP servers use this.
 
 ```bash
 claude mcp add --transport http notion https://mcp.notion.com/mcp
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
 claude mcp add --transport http api https://api.example.com/mcp \
   --header "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Stdio (Local Processes)
 
+For servers running on your machine. The most common transport for CLI tools.
+
 ```bash
 claude mcp add --transport stdio memory -- npx -y @modelcontextprotocol/server-memory
-claude mcp add --transport stdio db --env DB_PASSWORD=secret -- npx server
+claude mcp add --transport stdio custom --env API_KEY=secret -- npx my-server
 ```
 
-The `--` separates Claude CLI flags from the server command. On Windows, prefix with `cmd /c`.
+The `--` separates Claude CLI flags from the server command. On Windows, wrap with `cmd /c npx ...` or you'll get "Connection closed" errors.
 
 ### SSE (Deprecated)
 
-Use HTTP instead. SSE is maintained only for backward compatibility.
+SSE transport was deprecated in the March 2025 spec. Existing SSE servers still work, but new servers should use Streamable HTTP.
 
 ## Popular MCP Servers
 
-### Databases
-
-```json
-{
-  "mcpServers": {
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@host:5432/db"]
-    },
-    "sqlite": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sqlite", "/path/to/database.db"]
-    }
-  }
-}
-```
-
-### Browser Automation
-
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@executeautomation/playwright-mcp-server"]
-    },
-    "puppeteer": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
-    }
-  }
-}
-```
-
-### Productivity
+### Remote Services
 
 ```json
 {
@@ -124,18 +94,17 @@ Use HTTP instead. SSE is maintained only for backward compatibility.
       "type": "http",
       "url": "https://mcp.notion.com/mcp"
     },
-    "slack": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/slack-mcp-server"],
-      "env": {
-        "SLACK_TOKEN": "${SLACK_TOKEN}"
-      }
+    "stripe": {
+      "type": "http",
+      "url": "https://mcp.stripe.com/"
     }
   }
 }
 ```
 
-### Knowledge and Memory
+These [remote MCP servers](https://docs.stripe.com/mcp) handle OAuth automatically. First connection opens a browser for authentication.
+
+### Local Tools
 
 ```json
 {
@@ -156,20 +125,24 @@ Use HTTP instead. SSE is maintained only for backward compatibility.
 }
 ```
 
-### Directory
+**Warning about database servers**: Anthropic's reference Postgres MCP server was [archived in May 2025](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres) due to a SQL injection vulnerability. If you need database access, use containerized alternatives from the Docker MCP Catalog or build your own with proper input sanitization.
 
-Find more at PulseMCP (7,000+ servers) or awesome-mcp-servers on GitHub.
+### Finding Servers
+
+- [PulseMCP](https://www.pulsemcp.com/servers): 7,500+ servers, updated daily
+- [MCP Registry](https://registry.modelcontextprotocol.io/): Official community-driven registry
+- [awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers): Curated GitHub list with 78K stars
 
 ## Environment Variables
 
-Use `${VAR}` syntax in `.mcp.json`:
+Use `${VAR}` syntax in `.mcp.json`. Supports defaults with `${VAR:-fallback}`.
 
 ```json
 {
   "mcpServers": {
     "api": {
       "type": "http",
-      "url": "${API_URL:-https://default.com}/mcp",
+      "url": "${API_URL:-https://api.example.com}/mcp",
       "headers": {
         "Authorization": "Bearer ${API_KEY}"
       }
@@ -178,71 +151,64 @@ Use `${VAR}` syntax in `.mcp.json`:
 }
 ```
 
-Never hardcode secrets. Use environment variables or a secrets manager.
+Never commit secrets. Use environment variables or inject them at runtime.
 
 ## Token Usage
 
-**Each MCP server consumes context tokens**—even when idle. Tool definitions load at session start. A server with 20 tools might use 10,000+ tokens just sitting there.
+MCP servers consume context tokens before you even start working. Tool definitions load at session start. I've seen setups where MCP tools ate 66,000+ tokens just loading, which is a third of the 200K context window gone.
 
-Check usage with `/context`. The MCP tools section shows per-server consumption.
+Run `/context` to see the breakdown. The MCP tools section shows per-server consumption.
 
-**Optimization strategies:**
+**Managing token bloat:**
 
-- **Disable unused servers**: Use `/mcp` or `@mention` to toggle servers on/off mid-session
-- **Choose lightweight servers**: Prefer servers with fewer, focused tools
-- **Use when needed**: Enable heavy servers only for relevant tasks
+- Use `/mcp` to toggle servers on/off mid-session
+- Prefer servers with fewer, focused tools
+- Only enable heavy servers when you actually need them
 
-Note: Claude Code's `/context` may overcount MCP tokens due to shared overhead being counted per-tool. Real usage is typically lower than reported.
+MCP outputs have limits too. Warning at 10,000 tokens, hard cap at 25,000. Override with `MAX_MCP_OUTPUT_TOKENS=50000` if needed.
 
 ## Security Considerations
 
-MCP servers are powerful—and risky. They can execute code, access files, and make network requests.
+MCP servers can execute code, access files, and make network requests. Treat them like npm packages from unknown authors.
 
-**Key risks:**
+[Docker's security research](https://www.docker.com/blog/mcp-security-issues-threatening-ai-infrastructure/) found 43% of analyzed servers had command injection flaws. 33% allowed unrestricted network access. 66% showed poor security practices overall.
 
-- **Prompt injection**: Malicious data from external sources can manipulate Claude
-- **Tool poisoning**: Servers can mutate tool definitions after installation
-- **Data exfiltration**: Combining tools (e.g., read file + send HTTP) enables leaks
-- **Command injection**: 43% of analyzed servers had injection vulnerabilities (Datadog research)
+**Real attack vectors:**
 
-**Mitigations:**
+- **Prompt injection**: Malicious data from external sources manipulates Claude into unintended actions
+- **Tool poisoning**: Server mutates tool definitions after installation to expand permissions
+- **Data exfiltration**: Combining tools (read file + HTTP request) enables silent data leaks
+- **Rug pulls**: Server update introduces malicious behavior after you've trusted it
 
-1. **Use trusted sources only**: Stick to official Anthropic servers or verified publishers
-2. **Containerize with Docker**: Run servers in isolated containers with resource limits
-3. **Review tool definitions**: Check what permissions each tool requests
-4. **Keep human-in-the-loop**: Don't auto-approve MCP tool calls for sensitive operations
-5. **Pin versions**: Lock server versions to prevent rug-pull attacks
-6. **Network isolation**: Restrict server network access where possible
+**Protect yourself:**
 
-Docker MCP Toolkit provides containerized servers with built-in security controls (CPU/memory limits, secret management, network isolation).
+1. Use [Docker MCP Toolkit](https://www.docker.com/blog/mcp-toolkit-mcp-servers-that-just-work/) to containerize servers (200+ pre-built, sandboxed, signed images)
+2. Stick to official servers from known vendors (GitHub, Stripe, Notion)
+3. Pin versions. Don't auto-update MCP packages.
+4. Keep human-in-the-loop for anything touching sensitive data
+5. Review tool definitions before enabling. Check what permissions each tool requests.
 
 ## Troubleshooting
 
 ### Common Errors
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `-32000 Connection Closed` | Transport layer issue | Check server is running, restart Claude Code |
-| `-32001 Request Timeout` | Operation exceeded 60s | Increase timeout in config or break up request |
-| `-32601 Method Not Found` | Server doesn't implement tool | Check server version/documentation |
-| Server exits immediately | Missing args or env vars | Verify command with `npx -y <package> --help` |
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `Connection Closed` | Transport issue or server crashed | Check server is running, restart Claude Code |
+| `Request Timeout` | Operation exceeded limit | Increase timeout or break up the request |
+| `Method Not Found` | Server doesn't support that tool | Check server version and docs |
+| Server exits immediately | Missing args or env vars | Run `npx -y <package> --help` manually |
 
 ### Debugging Steps
 
-1. **List servers**: `claude mcp list` - verify server is configured
-2. **Test server**: `claude mcp get <name>` - check server responds
-3. **Check logs**: `claude --debug` for verbose output
-4. **Test manually**: Run the server command directly in terminal
-5. **Verify auth**: Use `/mcp` to re-authenticate OAuth servers
+1. Run `claude mcp list` to verify server is configured
+2. Run `claude mcp get <name>` to check if it responds
+3. Test the server command directly in terminal
+4. For OAuth servers, use `/mcp` to re-authenticate
 
 ### Timeout Configuration
 
-```bash
-# Set startup timeout (milliseconds)
-MCP_TIMEOUT=10000 claude
-```
-
-Per-server timeout in config:
+Slow servers can be configured with custom timeouts:
 
 ```json
 {
@@ -256,11 +222,14 @@ Per-server timeout in config:
 }
 ```
 
-## Best Practices
+Or set startup timeout globally: `MCP_TIMEOUT=10000 claude`
 
-1. **Start small**: Add one server at a time, verify it works
-2. **Monitor context**: Check `/context` regularly for token bloat
-3. **Use project scope for teams**: Share `.mcp.json` via git
-4. **Document server purpose**: Comment your configs
-5. **Disable when done**: Toggle off servers you're not actively using
-6. **Review security**: Treat MCP servers like npm packages—audit before installing
+## Practical Tips
+
+Start with one server. Verify it works. Then add more. I've wasted hours debugging a broken setup only to find the issue was a conflicting server I added weeks ago.
+
+Check `/context` after adding servers. If MCP tools are eating more than 20% of your context, you have too many enabled.
+
+For teams, commit `.mcp.json` to git so everyone uses the same setup. But keep secrets in environment variables, not the config file.
+
+When a server misbehaves, test it outside Claude first. Run the npx command directly. If it fails there, the issue isn't Claude Code.

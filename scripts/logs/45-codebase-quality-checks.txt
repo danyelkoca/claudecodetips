@@ -1,0 +1,23 @@
+The tip is now updated. Here's a summary of changes made:
+
+**Added:**
+- New section on the built-in `/security-review` command with link to [official documentation](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code)
+- Link to the [GitHub Action for automated PR security reviews](https://github.com/anthropics/claude-code-security-review)
+- Real performance data from [Semgrep's security research](https://semgrep.dev/blog/2025/finding-vulnerabilities-in-modern-web-apps-using-claude-code-and-openai-codex/): 14% true positive rate, 86% false positives, with breakdown by vulnerability type
+- Honest limitations about multi-file taint tracking
+- Advice to pair with traditional SAST tools (Semgrep, SonarQube)
+- Practitioner insights throughout sections (i18n costs, dead code verification caveats, test audit limitations)
+- Renamed security section to "Beyond /security-review: Custom Security Scans" to complement the new section
+- Added authentication flow audit prompt
+
+**Removed:**
+- "The Golden Rule: One Query = One Session" section (overlapped with Tip 18)
+- "Session hygiene" recommendation (overlapped with Tip 18)
+- OWASP pattern check prompt (redundant with /security-review)
+
+**Improved:**
+- Opening paragraph sets realistic expectations upfront
+- Final section renamed to "Making Quality Checks Stick" with practical guidance
+- Added context about when Claude's analysis works vs. when it fails
+
+The tip is now 286 lines with 3 verified inline links, all fetched and confirmed working.

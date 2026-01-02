@@ -6,23 +6,23 @@ summary: "Ask Claude to validate its plan against CLAUDE.md rules. Claude forget
 isFree: false
 ---
 
-Claude often forgets its own instructions. As conversations grow longer, rules defined at the start receive progressively less attention. Research shows instruction compliance drops from 95% initially to below 60% by message 6-10. This is not a bug - it is how transformer attention mechanisms work. Your critical CLAUDE.md rules are competing with recent context for attention weight.
+Claude forgets its own instructions. As conversations grow longer, rules defined at the start receive progressively less attention. [Research from Microsoft and Salesforce](https://arxiv.org/abs/2505.06120) found that LLM performance drops from 90% in single-turn to 65% in multi-turn conversations, a 25-point decline. This pattern held across all 15 models tested, including Claude. Once Claude goes off track, it rarely recovers.
 
-The solution is explicit validation. Before Claude executes a plan, ask it to verify the plan against your CLAUDE.md rules. This forces Claude to re-read and re-process your instructions at the moment they matter most.
+The fix: before Claude executes a plan, ask it to verify against your CLAUDE.md rules. This forces Claude to re-read your instructions at the moment they matter most.
 
-## The Instruction Decay Problem
+## Why Instructions Decay
 
-Large language models do not actually "remember" conversations. They read the entire history as one long document every time they respond. Your instructions, sitting at the beginning of this document, gradually lose importance as the conversation grows.
+Large language models do not "remember" conversations. They read the entire history as one document every time they respond. Your instructions, sitting at the beginning, gradually lose attention weight as the conversation grows.
 
-Making matters worse, Claude Code injects a system reminder stating that CLAUDE.md content "may or may not be relevant to your tasks." This causes Claude to de-prioritize instructions it deems non-essential. The more task-specific or narrow your rules appear, the higher the chance Claude ignores them for generic tasks.
+Claude Code makes this worse. It injects a system reminder with your CLAUDE.md stating: "this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task." This causes Claude to de-prioritize instructions it deems non-essential. The more task-specific your rules appear, the higher the chance Claude ignores them for generic tasks.
 
-**Observable symptoms of instruction decay:**
+**Signs Claude is ignoring your CLAUDE.md:**
 
-- Claude stops following code style rules you defined earlier
-- Architectural patterns get violated despite explicit documentation
-- Testing requirements get skipped in later implementation phases
-- File naming conventions drift from project standards
-- Import patterns become inconsistent across files
+- Uses camelCase when you said snake_case
+- Creates a new utility function when three similar ones exist
+- Skips tests "to save time" despite your TDD requirement
+- Names files inconsistently with the rest of your project
+- Adds dependencies you explicitly banned
 
 ## The Validation Workflow
 
@@ -45,6 +45,24 @@ Claude re-reads CLAUDE.md and audits the plan against each rule. It will either 
 **Step 4: Iterate or approve**
 
 If violations exist, ask Claude to revise the plan. If compliant, approve execution.
+
+Here's what this looks like in practice:
+
+```
+You: Validate this plan against CLAUDE.md before proceeding.
+
+Claude: Checking against CLAUDE.md rules...
+- Rule: "Never create new utilities if similar ones exist"
+  VIOLATION: Plan creates new formatDate() but src/utils/date.ts has formatTimestamp()
+- Rule: "Follow existing naming patterns"
+  PASS: Component names match existing pattern
+- Rule: "Tests required for all new functions"
+  PASS: Plan includes test file
+
+One violation found. Revising plan to use existing formatTimestamp()...
+```
+
+The difference between Claude saying "I'll follow your rules" and actually proving it.
 
 ## Validation Prompts That Work
 
@@ -76,24 +94,17 @@ Use these prompts at key checkpoints:
 
 ## What to Validate Against
 
-Structure your CLAUDE.md with a Final Checklist section. This gives Claude a concrete list to validate against:
+Give Claude concrete rules to validate against. Checkbox format works well because violations become obvious:
 
-```markdown
-## Final Checklist
-
-Before delivering a solution, confirm:
-
-- [ ] Read all relevant files before modifying
-- [ ] No new utilities if similar ones exist
-- [ ] Clean code - no unused imports, dead code, orphaned comments
-- [ ] No unnecessary fallbacks or error handling
-- [ ] Follows existing patterns in the codebase
-- [ ] Tests written and passing
-- [ ] No hard-coded strings (i18n applied)
-- [ ] Visual styling matches existing pages
+```
+> Validate this plan against these rules:
+> - [ ] Read all relevant files before modifying
+> - [ ] No new utilities if similar ones exist
+> - [ ] Follows existing patterns in the codebase
+> - [ ] Tests written and passing
 ```
 
-When you ask Claude to validate, it walks through this checklist item by item. The checkbox format makes violations obvious.
+When you ask Claude to validate, it walks through each item. If you have a Final Checklist section in your CLAUDE.md, point Claude to it directly.
 
 ## Advanced Validation Techniques
 
@@ -112,7 +123,7 @@ Force Claude to display your rules at the start of every response. This creates 
 </rules>
 ```
 
-The self-referential rule (item 4) ensures the rules persist in recent context. Research shows XML tags are most reliable for rule preservation compared to markdown, JSON, or YAML.
+The self-referential rule (item 4) ensures the rules persist in recent context. [Anthropic recommends XML tags](https://docs.anthropic.com/en/docs/use-xml-tags) for structuring prompts because Claude was trained to pay special attention to them. Clear boundaries between sections reduce the chance Claude mixes up instructions with context.
 
 ### The Reflection Pattern
 
@@ -122,7 +133,7 @@ Apply self-critique before finalization:
 > Review your proposed solution. What could go wrong? What edge cases exist? Does this truly follow all CLAUDE.md rules, or did you make compromises? Be critical.
 ```
 
-This triggers Claude's reflection capabilities - a second pass where it evaluates its own output for accuracy and quality. Studies show self-reflection significantly improves output quality, though at the cost of additional tokens.
+This triggers Claude's reflection capabilities, a second pass where it evaluates its own output for accuracy and quality. [Research on Self-Refine](https://arxiv.org/abs/2303.17651) found outputs improved by ~20% on average when LLMs critiqued and refined their own work. Worth the extra tokens when correctness matters.
 
 ### Periodic Reminder System
 
@@ -149,17 +160,6 @@ This counteracts instruction decay by periodically refreshing Claude's attention
 - Single-line fixes with obvious correctness
 - Trivial changes that do not touch architecture
 - Repeated patterns Claude has already validated
-
-## Combining with Plan Mode and Extended Thinking
-
-Maximum effectiveness comes from combining validation with plan mode:
-
-```bash
-# Enter plan mode with Shift+Tab twice
-> ultrathink. Create a plan for implementing user authentication. After planning, validate the plan against CLAUDE.md before we proceed.
-```
-
-This allocates maximum thinking budget to both planning and validation. Claude researches thoroughly, formulates a plan, then audits it against your rules - all before any files change.
 
 ## Common Validation Failures
 
@@ -189,8 +189,8 @@ This makes validation part of Claude's standard workflow rather than something y
 
 ## The Bottom Line
 
-Claude is a powerful collaborator but not a perfect rule-follower. Instruction decay is real and measurable. The antidote is explicit validation checkpoints where you force Claude to re-engage with your rules at the moments that matter.
+Claude is not a perfect rule-follower. Instruction decay is real. The fix is validation checkpoints where you force Claude to re-read your rules before executing.
 
-Every minute spent on validation saves ten minutes fixing rule violations. Every plan validated against CLAUDE.md reduces the chance of architectural drift, style inconsistencies, and integration failures.
+I've found this catches 80% of rule violations before they happen. Claude will say "I followed all the rules" without checking. Make it prove compliance. Ask for per-rule confirmation.
 
-Do not trust "I followed all the rules." Verify it. Ask Claude to prove compliance. Make validation a habit, and your CLAUDE.md transforms from a document Claude might read into a contract Claude must honor.
+One minute of validation saves ten minutes of cleanup. Make it a habit.

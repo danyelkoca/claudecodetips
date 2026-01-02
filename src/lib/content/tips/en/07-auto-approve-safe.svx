@@ -6,13 +6,9 @@ summary: "Speed up your workflow by auto-approving low-risk actions like reads a
 isFree: false
 ---
 
-Claude asks permission for every action by default. This kills momentum. Security researchers call it "approval fatigue" - a psychological state where users stop evaluating individual permissions and start clicking through them automatically. Anthropic found that sandboxing alone reduces permission prompts by 84%. But even without sandboxing, you can dramatically speed up your workflow by auto-approving genuinely safe operations.
+Claude asks permission for every action by default. This kills momentum. You ask Claude to refactor a component, check email, grab coffee, and return to find Claude sitting idle, waiting to ask if it can read the exact file you told it to analyze.
 
-## The Approval Fatigue Problem
-
-Picture this: You ask Claude to refactor a component. You switch to check email, grab coffee, and return to find Claude sitting idle, waiting to ask if it can read the exact file you told it to analyze. This happens dozens of times daily with default settings.
-
-The constant interruption does more than annoy you - it trains you to click "approve" without looking. That's when accidents happen. The solution is not to approve everything, but to strategically pre-approve the operations that genuinely cannot cause harm.
+The constant interruption does more than annoy you. It trains you to click "approve" without looking. [Anthropic's engineering team](https://www.anthropic.com/engineering/claude-code-sandboxing) calls this "approval fatigue" and found that sandboxing alone reduces permission prompts by 84%. But even without sandboxing, you can dramatically speed up your workflow by auto-approving genuinely safe operations.
 
 ## How Claude Code Permissions Work
 
@@ -41,7 +37,7 @@ When Claude asks for permission, you can select "Always allow" to add the action
 
 ## Configuration File Hierarchy
 
-Settings are applied in this order (highest to lowest priority):
+[Settings are applied](https://code.claude.com/docs/en/settings) in this order (highest to lowest priority):
 
 1. **Enterprise policies** (`managed-settings.json`) - Cannot be overridden
 2. **Command line arguments** - Temporary session overrides
@@ -49,7 +45,7 @@ Settings are applied in this order (highest to lowest priority):
 4. **Shared project settings** (`.claude/settings.json`) - Team-shared, version controlled
 5. **User settings** (`~/.claude/settings.json`) - Global defaults
 
-Local settings are automatically gitignored, making them perfect for personal preferences and experimentation without affecting your team.
+Local settings are automatically gitignored. Use them for personal preferences without affecting your team.
 
 ## Safe to Auto-Approve
 
@@ -57,12 +53,12 @@ These operations are read-only and cannot modify your system:
 
 ### Read Operations
 
-- `Read` - File reading poses no risk to your system (assuming you've denied sensitive files like `.env`)
+- `Read` - File reading poses no risk to your system
 - `Glob` - Pattern matching to find files by name
 - `Grep` - Searching file contents for patterns
 - `LS` - Listing directory contents
 
-Claude Code's Explore subagent operates in strict read-only mode using only these tools. If it's safe enough for autonomous exploration, it's safe for auto-approval.
+[Claude Code's Explore subagent](https://code.claude.com/docs/en/sub-agents) operates in strict read-only mode using only these tools. If it's safe enough for autonomous exploration, it's safe for auto-approval.
 
 ### Web Operations
 
@@ -84,7 +80,7 @@ For WebFetch, scope to specific trusted domains:
 }
 ```
 
-Note: `WebFetch(domain:example.com)` matches `https://example.com/` but not `www.example.com`. Add both if needed.
+Domain matching is exact. `WebFetch(domain:example.com)` won't match `www.example.com`. Add both if the site uses both.
 
 ### Read-Only Bash Commands
 
@@ -110,48 +106,36 @@ Bash permissions use prefix matching, not regex. `Bash(git diff:*)` matches `git
 
 ## Never Auto-Approve
 
-### Bash Commands (Most of Them)
+### Bash Commands
 
-The `Bash` tool can execute anything with your full user permissions. Even seemingly innocent commands can be weaponized through prompt injection. A single auto-approved `curl` or `wget` can exfiltrate your credentials. See Tip 6 for the full risk breakdown.
+The `Bash` tool can execute anything with your full user permissions. A single auto-approved `curl` or `wget` can exfiltrate credentials via prompt injection. Stick to the read-only commands listed above.
 
 ### Write Operations
 
-- `Write` - Creates or overwrites entire files without review
+- `Write` - Creates or overwrites entire files
 - `Edit` - Makes targeted edits to existing files
-- `MultiEdit` - Batch edits across multiple files
+- `MultiEdit` - Batch edits across files
 - `NotebookEdit` - Modifies Jupyter notebooks
 
-These tools modify your codebase. Always review the diff before approving.
+Review the diff before approving. Every time.
 
 ### MCP Tools
 
-MCP (Model Context Protocol) servers give Claude access to external tools and services. Only explicitly enable MCP servers you trust and understand. If you don't know what an MCP server does, don't enable it.
+MCP servers give Claude access to external services. Only enable servers you understand. If you don't know what an MCP server does, don't enable it.
 
-## Achieving Hands-Off Agentic Workflows
+## Hands-Off Research Workflows
 
-With safe operations pre-approved, Claude researches, reads, and searches without stopping to ask. You only intervene for actual changes. This transforms development from constant approval clicking to reviewing meaningful decisions.
+With read operations pre-approved, Claude researches without stopping to ask. You only intervene for actual changes.
 
-### The Three Permission Modes
-
-Press `Shift+Tab` (Mac) or `Alt+M` (Windows) to cycle through modes:
-
-1. **Normal mode** - Standard permission prompts for all operations
-2. **Auto-accept edits** - Auto-approves file modifications; still prompts for bash
-3. **Plan mode** - Read-only research mode; blocks all modifications
-
-For maximum velocity on a well-defined task, use auto-accept mode. For exploring unfamiliar code, use plan mode. For everything else, use normal mode with strategic pre-approvals.
-
-### Example: Research Workflow
-
-With read operations pre-approved, you can tell Claude:
+Press `Shift+Tab` to cycle through [permission modes](https://code.claude.com/docs/en/interactive-mode). The cycle goes: Normal > Auto-accept edits > Plan mode > back to Normal. Here's what hands-off research looks like:
 
 > "Research how authentication works in this codebase. Read all relevant files, search for patterns, trace the flow from login to session creation."
 
 Claude will autonomously read dozens of files, grep for patterns, and explore the codebase without a single permission prompt. When it's ready to propose changes, only then do you review.
 
-## Advanced: Custom Approval Logic with Hooks
+## Custom Approval Logic with Hooks
 
-For fine-grained control, use `PreToolUse` hooks to implement custom approval logic:
+For dynamic control beyond static rules, use [PreToolUse hooks](https://code.claude.com/docs/en/hooks):
 
 ```json
 {
@@ -159,33 +143,24 @@ For fine-grained control, use `PreToolUse` hooks to implement custom approval lo
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "./validate-bash-command.sh"
-          }
-        ]
+        "hooks": [{ "type": "command", "command": "./validate-bash.sh" }]
       }
     ]
   }
 }
 ```
 
-Your script receives the full tool call context as JSON and can:
-- Exit 0 to allow the command
-- Exit 2 to block it
-- Output JSON with `"decision": "allow"` or `"decision": "deny"`
+Your script receives the full tool call as JSON via stdin. Exit 0 to allow, exit 2 to block (with stderr message shown to Claude). Or return JSON with `"permissionDecision": "allow"`, `"deny"`, or `"ask"`.
 
-This lets you build custom security firewalls. For example, auto-approve `npm run` but block any command containing `rm` or `curl`.
+Example: auto-approve `npm run` but block any command containing `rm` or `curl`. The hook runs before Claude executes, so you can enforce rules that static patterns can't express.
 
-## The Balance: Speed vs. Safety
+## The Balance
 
 The goal is not to approve everything. It's to approve the operations that genuinely cannot cause harm, so you can focus your attention on the ones that can.
 
 A well-configured permission setup:
 - Pre-approves all read operations
 - Pre-approves web fetches from trusted documentation sites
-- Blocks access to sensitive files (`.env`, `secrets/`)
 - Requires review for all file modifications
 - Requires review for all bash commands except known-safe ones
 
@@ -193,7 +168,7 @@ This gives you the speed of agentic workflows with the safety of human oversight
 
 ## Quick Setup
 
-Add this to your `~/.claude/settings.json` for a balanced starting point:
+Add this to your `~/.claude/settings.json` as a starting point:
 
 ```json
 {
@@ -202,6 +177,7 @@ Add this to your `~/.claude/settings.json` for a balanced starting point:
       "Read",
       "Glob",
       "Grep",
+      "LS",
       "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:developer.mozilla.org)",
@@ -212,9 +188,6 @@ Add this to your `~/.claude/settings.json` for a balanced starting point:
       "Bash(npm run test:*)"
     ],
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
       "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(rm:*)",
@@ -224,4 +197,10 @@ Add this to your `~/.claude/settings.json` for a balanced starting point:
 }
 ```
 
-Then use `/permissions` in Claude Code to review and refine as you work. The interactive UI makes it easy to add or remove tools from your allowlist dynamically.
+Use `/permissions` in Claude Code to review and refine as you work. The interactive UI makes it easy to add or remove tools from your allowlist without editing JSON.
+
+## Sandboxing: The Next Level
+
+If pre-approvals aren't enough, [sandboxing](https://code.claude.com/docs/en/sandboxing) takes it further. Run `/sandbox` in Claude Code to enable filesystem and network isolation at the OS level. Claude can then run bash commands freely within defined boundaries. No permission prompts, no risk of escaping the sandbox.
+
+Sandboxing uses Linux bubblewrap or macOS seatbelt to enforce restrictions. Even if Claude gets prompt-injected, it can't modify files outside your working directory or connect to unauthorized servers. The 84% reduction in permission prompts comes from this approach.

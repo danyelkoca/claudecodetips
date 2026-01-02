@@ -6,22 +6,21 @@ summary: "Your project's instruction manual for Claude. The single most importan
 isFree: true
 ---
 
-Your project's instruction manual for Claude. Put it at project root. This is the single most important file in your codebase for effective Claude Code usage - your agent's "constitution."
+CLAUDE.md is Claude Code's constitution. Put it at project root. Every session starts with this file loaded into context, so you never re-explain your project's basics.
 
 ## The Framework: WHAT / WHY / HOW
 
-Structure your CLAUDE.md around three dimensions:
+Structure your file around three dimensions:
 
-- **WHAT**: Your tech stack, project structure, key files. Give Claude a map of the codebase. Critical in monorepos - identify apps, shared packages, and what everything is for.
+- **WHAT**: Tech stack, project structure, key files. Give Claude a map. In monorepos, identify apps, shared packages, and their purposes.
 - **WHY**: Purpose of components, architectural decisions. Help Claude understand intent, not just structure.
-- **HOW**: Build commands, test procedures, verification steps. How Claude should actually work on the project. Use bun instead of node? Say so here.
+- **HOW**: Build commands, test procedures, verification steps. Use bun instead of npm? Say so here.
 
 ## What to Document
 
 ### Essential
 
 - **Build commands**: `npm run dev`, `npm run build`, `npm test`
-- **Today's date**: So Claude researches current info, not outdated docs
 - **Core files**: Key utilities, entry points, and their purposes
 - **Code style**: Patterns to follow, patterns to avoid
 
@@ -40,73 +39,83 @@ Structure your CLAUDE.md around three dimensions:
 - Not reading files before modifying them
 - Creating new utilities when similar ones exist
 
-## Critical Constraint: The 150-200 Rule
+## Keep It Short: The 150-200 Threshold
 
-Research shows frontier LLMs follow ~150-200 instructions with reasonable consistency. Performance degrades as instruction count increases.
+[Research on LLM instruction following](https://arxiv.org/html/2507.11538v1) shows models begin to struggle around 150-200 instructions. Beyond this, they start ignoring later instructions in favor of earlier ones. At 300+ instructions, performance degrades uniformly.
 
-Claude Code's system prompt already has ~50 instructions. Your CLAUDE.md should contain as few instructions as possible - ideally only universally applicable ones.
+Claude Code's system prompt already consumes significant capacity. Your CLAUDE.md competes for attention. The more instructions you add, the less reliably any single one gets followed.
 
-**Key insight**: Claude receives a system reminder that CLAUDE.md content "may or may not be relevant to your task." The more non-universal content you include, the higher the chance Claude ignores your instructions entirely.
+**The catch**: Claude Code [wraps CLAUDE.md with a system reminder](https://github.com/anthropics/claude-code/issues/7571) stating this content "may or may not be relevant to your task." The more task-specific content you include, the more likely Claude ignores everything.
 
-Keep it under 200 lines. Some teams keep their root file under 60 lines.
+Keep your root file under 200 lines. Some teams stay under 60 lines. Only include universally applicable instructions.
 
-## Best Practices
+## Make Instructions Stick
 
-### Make Instructions Stick
+**Use emphasis markers** for rules that matter. [Anthropic's engineering team](https://www.anthropic.com/engineering/claude-code-best-practices) uses the [prompt improver](https://claude.com/blog/prompt-improver) and adds markers like "IMPORTANT", "YOU MUST", "NEVER", "ALWAYS" to boost adherence.
 
-- **Use emphasis markers** for critical rules: "IMPORTANT", "YOU MUST", "NEVER", "ALWAYS"
-- **Run through prompt improvers** - Anthropic teams do this to tune instruction-following
-- **Test effectiveness** - A common mistake is adding extensive content without testing if Claude follows it
+```markdown
+# Rules
+- IMPORTANT: Always run tests before committing
+- YOU MUST read existing implementations before creating new ones
+- NEVER commit .env files
+```
 
-### Structure for Maintainability
+**Test that Claude follows your rules**. A common mistake is adding content without verifying it works. If Claude ignores an instruction repeatedly, reword it or move it higher in the file.
+
+## Structure for Maintainability
 
 - **Prefer pointers over copies**: Use `file:line` references instead of code snippets. Snippets become outdated quickly.
 - **Provide alternatives**: "Use Y instead of X" works better than just "Never use X"
 - **Start with guardrails, not manuals**: Document based on observed errors, not comprehensive coverage
 
-### What NOT to Put Here
+## What NOT to Put Here
 
 - **Linting rules**: Never send an LLM to do a linter's job. Use hooks instead (see Tip 40).
 - **Task-specific guidance**: Database schema details distract when Claude works on unrelated tasks
-- **Full documentation embeds**: Don't `@` mention extensive files. Instead, tell Claude when to read supplementary docs: "For advanced troubleshooting, see path/to/docs.md"
+- **Huge documentation embeds**: Don't dump entire files. Instead, tell Claude when to read docs: "For authentication issues, see docs/auth.md first"
+
+## Import Files with @ Syntax
+
+CLAUDE.md can import other files using `@path/to/file` syntax:
+
+```markdown
+# Project Overview
+See @README for project summary.
+See @package.json for available commands.
+
+# Guidelines
+- API patterns: @docs/api-conventions.md
+- Personal overrides: @~/.claude/my-preferences.md
+```
+
+Imports work recursively up to 5 levels deep. This keeps your root file lean while making detailed docs accessible when needed. Home directory imports (`@~/...`) let team members add personal preferences without touching version control.
 
 ## Quick Setup
 
-### Getting Started
+**Generate a starter file:**
 
 ```bash
-# Auto-generate initial CLAUDE.md
 /init
 ```
 
-### Building Over Time
+This scans your project and creates an initial CLAUDE.md. Treat it as a starting point, not a finished product. Review and refine based on how you actually work.
 
-- Press `#` during sessions to add instructions you find yourself repeating
-- These additions accumulate into a CLAUDE.md that reflects how you actually work
-- Include updates in your commits for team benefit
+**Add instructions during sessions:**
 
-### Progressive Disclosure Pattern
-
-For larger projects, create separate doc files instead of stuffing everything into CLAUDE.md:
+Type `#` followed by any instruction to save it to memory. Claude prompts you to choose project-level or user-level storage:
 
 ```
-agent_docs/
-  |- building_the_project.md
-  |- running_tests.md
-  |- code_conventions.md
-  |- service_architecture.md
+# Always use TypeScript strict mode
+# Prefer functional components over class components
 ```
 
-Reference these from CLAUDE.md and instruct Claude to read relevant files for specific tasks.
+Over a few weeks, your CLAUDE.md becomes a living document of lessons learned.
 
-## Placement Options
+**Use `/memory`** to see what files are currently loaded or to open them in your editor.
 
-- `CLAUDE.md` at project root (shared with team)
-- `CLAUDE.local.md` (personal, add to .gitignore)
-- `~/.claude/CLAUDE.md` (global, applies to all projects)
-- `.claude/rules/` folder (modular rules in separate files)
+## Placement
 
-See Tip 29 for hierarchical CLAUDE.md strategies across directories.
+Put `CLAUDE.md` at project root for team-shared instructions. Use `CLAUDE.local.md` (add to .gitignore) for personal preferences. See Tip 29 for hierarchical strategies across directories and the `.claude/rules/` folder for modular organization.
 
 ## Example Structure
 
@@ -119,16 +128,16 @@ npm run build    # Production build
 npm test         # Run tests
 
 ## Architecture
-[Brief description of project structure]
+SvelteKit app with Stripe payments and Firebase auth.
 
 ## Key Patterns
-- [Pattern 1]
-- [Pattern 2]
+- All API routes use Zod validation
+- Error responses follow RFC 7807 format
 
 ## Rules
-- IMPORTANT: Always [X] before [Y]
-- NEVER [Z]
-- For [complex task], read path/to/docs.md first
+- IMPORTANT: Always run lint before committing
+- NEVER commit credentials or .env files
+- For payment issues, read @docs/stripe.md first
 ```
 
 See Tip 51 for a full battle-tested CLAUDE.md example.

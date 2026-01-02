@@ -6,31 +6,31 @@ summary: "Auto-triggered behaviors that load automatically when relevant."
 isFree: false
 ---
 
-Skills are folders containing instructions, scripts, and resources that Claude discovers and loads automatically when relevant to your task. Unlike slash commands (you type `/command`) or CLAUDE.md (always loaded), Skills activate only when Claude determines they match what you're doing.
+Skills are folders containing instructions, scripts, and resources that Claude discovers and loads automatically when relevant. Unlike slash commands (you type `/command`) or CLAUDE.md (always loaded), Skills activate only when Claude decides they match your task.
 
 ## Why Skills Matter
 
-Skills solve the context efficiency problem. Your CLAUDE.md loads every conversation. MCP servers consume tokens just by being connected. But Skills use progressive disclosure - Claude only sees the name and description at startup (~100 tokens per Skill), then loads full content only when needed.
+Your CLAUDE.md loads every conversation. MCP servers consume tokens just by being connected. Skills use [progressive disclosure](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#progressive-disclosure-patterns): Claude sees only the name and description at startup (30-50 tokens per Skill), then loads full content when needed.
 
 Think of Skills as modular chunks of expertise. Instead of stuffing everything into CLAUDE.md, you package specialized knowledge into Skills that Claude accesses on-demand.
 
 ## How Skills Work
 
 **Step 1: Discovery**
-At startup, Claude scans available Skills and loads only their frontmatter (name + description). This is cheap - dozens of tokens per Skill.
+At startup, Claude scans available Skills and loads only their frontmatter (name + description). Dozens of tokens per Skill, not thousands.
 
 **Step 2: Matching**
-When you make a request, Claude reads the Skill descriptions and uses language understanding to match your intent. No regex, no keyword matching - pure reasoning.
+When you make a request, Claude reads the Skill descriptions and matches your intent semantically. No regex, no keyword matching.
 
 **Step 3: Activation**
 When Claude finds a match, it asks permission to load the Skill. You see a confirmation prompt before the full `SKILL.md` enters context.
 
 **Step 4: Execution**
-Claude follows the Skill's instructions, loading referenced files or running bundled scripts as needed.
+Claude follows the Skill's instructions, reading referenced files or running bundled scripts as needed. Scripts execute via Bash; only their output enters context, not the script code itself.
 
 ## Directory Structure
 
-Skills live in specific locations:
+Skills live in two locations according to [the official docs](https://code.claude.com/docs/en/skills):
 
 ```
 ~/.claude/skills/          # Personal - available in all projects
@@ -78,10 +78,10 @@ allowed-tools: Read, Grep, Glob
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `name` | Yes | Lowercase, numbers, hyphens only. Max 64 chars. |
-| `description` | Yes | What it does + when to use. Max 1024 chars. Claude uses this for matching. |
+| `name` | Yes | Lowercase letters, numbers, hyphens only. Max 64 chars. Must match directory name. |
+| `description` | Yes | What it does + when to use. Max 1024 chars. Claude uses this for semantic matching. |
 | `allowed-tools` | No | Tools Claude can use without permission (e.g., `Read, Grep, Glob, Bash(python:*)`) |
-| `model` | No | Override model for this Skill (e.g., `claude-sonnet-4-20250514`) |
+| `model` | No | Override model for this Skill (e.g., `claude-sonnet-4-5-20250929`) |
 
 ## Writing Effective Descriptions
 
@@ -103,7 +103,7 @@ Include:
 
 ## Progressive Disclosure
 
-Keep `SKILL.md` under 500 lines. For larger Skills, split content:
+Keep `SKILL.md` under 500 lines for [optimal performance](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#progressive-disclosure-patterns). For larger Skills, split content:
 
 ```markdown
 ## Quick start
@@ -116,13 +116,13 @@ See [reference.md](reference.md) for complete API docs.
 See [examples.md](examples.md) for common patterns.
 ```
 
-Claude only reads referenced files when needed. This keeps token usage minimal.
+Claude only reads referenced files when needed. Files on disk consume zero context until accessed.
 
-**Key rule:** Keep references one level deep. Don't chain links (A references B references C). Claude may partially read nested files.
+**Keep references one level deep.** Don't chain links (A references B references C). Claude may use `head -100` to preview deeply nested files, missing critical content.
 
 ## Bundling Scripts
 
-Skills can include executable code that runs without loading into context:
+Skills can include executable code. The script code stays on disk; only output enters context:
 
 ```
 pdf-skill/
@@ -143,7 +143,7 @@ Run: `python scripts/extract_text.py input.pdf > output.txt`
 Run: `python scripts/fill_form.py template.pdf data.json output.pdf`
 ```
 
-Scripts execute via Bash. Only the output enters context - the script code itself stays on disk.
+Use scripts for deterministic operations: PDF parsing, data transformation, file manipulation. Code is more reliable than asking Claude to generate the same logic repeatedly.
 
 ## Skills vs. Alternatives
 
@@ -227,33 +227,40 @@ For OpenAPI specs, see [openapi-template.md](openapi-template.md).
 
 ## Installing Community Skills
 
-Anthropic maintains official Skills at `github.com/anthropics/skills`:
+Anthropic maintains [official Skills on GitHub](https://github.com/anthropics/skills):
 - `pdf` - Extract, fill forms, merge PDFs
 - `docx` - Create/edit Word documents
 - `xlsx` - Spreadsheet manipulation
 - `pptx` - Presentation creation
 
-Install via plugin system:
+Install via the plugin system:
 
 ```bash
 /plugin marketplace add anthropics/skills
 /plugin install document-skills@anthropic-agent-skills
 ```
 
-Then just mention the capability: "Extract form fields from invoice.pdf" - Claude loads the Skill automatically.
+Then just mention the capability: "Extract form fields from invoice.pdf" and Claude loads the Skill automatically. You can also manually copy skill folders to `~/.claude/skills/`.
 
 ## Debugging Skills
 
+**Skill not appearing in `/skills` command?**
+- Check YAML frontmatter starts on line 1 with `---` (no blank lines before it).
+- Use single-line descriptions. Prettier can reformat multi-line YAML and break parsing.
+- Add `# prettier-ignore` above frontmatter if needed.
+
 **Skill not triggering?**
-- Description too vague. Add specific trigger words.
-- Check file path: must be `SKILL.md` (case-sensitive on some systems).
+- Description too vague. "Helps with documents" won't trigger reliably. Add specific keywords users would say.
+- Character budget issue: Skill descriptions [default to 15,000 chars total](https://code.claude.com/docs/en/slash-commands). Too many skills or long descriptions means some get silently dropped. Check `/context` for "M of N commands" warnings.
+- Workaround: `SLASH_COMMAND_TOOL_CHAR_BUDGET=30000 claude` doubles the headroom.
 
 **Skill not loading?**
-- Verify YAML syntax (no tabs, `---` on line 1).
+- Verify YAML syntax (no tabs, `---` on line 1 and after frontmatter).
 - Run `claude --debug` to see Skill discovery logs.
+- Check script permissions: `chmod +x scripts/*.py`
 
 **Multiple Skills conflicting?**
-- Make descriptions more distinct with specific trigger terms.
+- Make descriptions distinct with specific trigger terms. "Sales data in Excel files" vs "log files and system metrics."
 - Claude chooses based on best semantic match.
 
 ## Skills with Subagents
@@ -268,18 +275,20 @@ skills: code-review, security-check
 ---
 ```
 
-**Note:** Built-in agents (Explore, Plan, Verify) and the Task tool cannot use Skills. Only custom subagents with explicit `skills` field.
+The `skills` field is a comma-separated list. Subagents don't inherit Skills from the parent conversation; you must specify them explicitly.
+
+**Note:** Built-in agents (general-purpose, Explore, Plan) and the Task tool cannot use Skills. Only custom subagents with an explicit `skills` field.
 
 ## Best Practices
 
-1. **Write in third person.** Descriptions inject into system prompt. "Processes PDFs" not "I can process PDFs."
+1. **Write in third person.** Descriptions inject into the system prompt. "Processes PDFs" not "I can process PDFs."
 
-2. **Test with all models.** What works for Opus may need more detail for Haiku.
+2. **Test with Opus, Sonnet, and Haiku.** What works for Opus may need more detail for Haiku. If you plan to use a Skill across models, target the least capable one.
 
-3. **Assume Claude is smart.** Don't over-explain. Only add context Claude doesn't already have.
+3. **Assume Claude is smart.** Don't explain what PDFs are or how libraries work. Only add context Claude doesn't already have.
 
-4. **Include feedback loops.** For complex tasks, add validation steps: run, validate, fix, repeat.
+4. **Include feedback loops.** For complex tasks, add validation steps: run, validate, fix, repeat. This catches errors early.
 
-5. **Use scripts for deterministic work.** PDF parsing, data transformation, file manipulation - code is more reliable than generation.
+5. **Use scripts for deterministic work.** PDF parsing, data transformation, file manipulation. Code is more reliable than asking Claude to generate the same logic repeatedly.
 
-6. **Version your Skills.** Commit `.claude/skills/` to git. They evolve with your project.
+6. **Version your Skills.** Commit `.claude/skills/` to git. Skills evolve with your project, and teammates should get them automatically.

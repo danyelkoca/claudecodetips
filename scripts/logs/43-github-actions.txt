@@ -1,0 +1,24 @@
+The tip has been updated successfully. Here's a summary of the changes made:
+
+**Factual corrections:**
+- Fixed Haiku model ID from `claude-haiku-4-5-20251101` to `claude-haiku-4-5-20251001`
+- Fixed Vertex AI model from `claude-sonnet-4@20250514` (Sonnet 4.0) to `claude-sonnet-4-5@20250929` (Sonnet 4.5)
+
+**Added verified inline links:**
+- [Claude Code GitHub Actions](https://github.com/anthropics/claude-code-action) repository
+- [Claude GitHub App](https://github.com/apps/claude) installation page
+- [Anthropic's security review blog post](https://claude.com/blog/automate-security-reviews-with-claude-code) documenting the DNS rebinding and SSRF catches
+- [Security documentation](https://github.com/anthropics/claude-code-action/blob/main/docs/security.md) for prompt injection warning
+
+**Structural improvements:**
+- Condensed the opener into a strong statement instead of bullet points
+- Tightened "Core Features" into "What It Does" with a more practical description
+- Made "Common Pitfalls" more practitioner-focused with explanations instead of one-liners
+- Improved prompt injection warning with specific attack vectors (HTML comments, invisible characters, markdown alt text)
+
+**Maintained:**
+- Frontmatter is untouched
+- No "Related Tips" section
+- 250+ lines of content (well over the 100-line minimum)
+- No banned words or phrases
+- No em dashes

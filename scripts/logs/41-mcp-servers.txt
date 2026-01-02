@@ -1,0 +1,23 @@
+The tip has been updated successfully. Here's a summary of the changes:
+
+**Key Updates:**
+1. **Opener strengthened** - Now starts with a direct statement and practitioner perspective ("I use MCP daily...")
+2. **Architecture section simplified** - Removed numbered list, made it more conversational
+3. **SSE deprecated** - Added note about March 2025 spec deprecating SSE in favor of Streamable HTTP
+4. **Postgres server warning** - Added note about Anthropic's reference Postgres server being archived in May 2025 due to SQL injection vulnerability
+5. **Updated server URLs** - Corrected GitHub MCP URL to `https://api.githubcopilot.com/mcp/`, added Stripe
+6. **Removed incorrect package** - Removed non-existent `@anthropic/slack-mcp-server`
+7. **Updated ecosystem stats** - PulseMCP now 7,500+ servers, added official MCP Registry link (launched Sept 2025)
+8. **Security section improved** - Cited Docker's security research with proper link, listed real attack vectors
+9. **Added Docker MCP Toolkit** - 200+ containerized, sandboxed servers
+10. **Practical tips section** - Replaced generic "Best Practices" with real practitioner experience
+11. **All links verified** - Every URL fetched and confirmed working
+
+**Voice improvements:**
+- Removed banned words and phrases
+- No em dashes (using commas and periods)
+- Mixed sentence lengths
+- Practitioner perspective throughout
+- Direct, specific statements
+
+**Final line count:** 236 lines total (229 lines of content after frontmatter)

@@ -1,0 +1,19 @@
+The tip has been updated and all URLs are now verified. Here's a summary of the changes:
+
+**Verified and linked sources:**
+- [Anthropic sycophancy research](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) - confirms RLHF causes sycophancy
+- [Stanford SycEval study](https://arxiv.org/abs/2502.08177) - confirms 58% sycophancy rate, 15% regressive sycophancy
+- [GitHub issue #3382](https://github.com/anthropics/claude-code/issues/3382) - "You're absolutely right" bug
+- [GitHub issue #6120](https://github.com/anthropics/claude-code/issues/6120) - CLAUDE.md rules sometimes ignored
+- [Brookings research](https://www.brookings.edu/articles/breaking-the-ai-mirror/) - AI reinforces user inaccuracies
+- [AI Maker Substack](https://aimaker.substack.com/p/i-reprogrammed-my-ai-chatgpt-claude-to-disagree-with-me-devil-advocate) - "most helpful AI disagrees" quote
+- [Anthropic well-being page](https://www.anthropic.com/news/protecting-well-being-of-users) - 70-85% sycophancy improvement in 4.5
+- [Petri tool](https://github.com/safety-research/petri) - open-source evaluation tool
+
+**Key changes:**
+1. Added inline links to all factual claims
+2. Updated model section from old Sonnet/Opus to Claude 4.5 family with verified improvement stats
+3. Added warning that CLAUDE.md anti-sycophancy rules don't always work
+4. Added "regressive sycophancy" finding (15%) from Stanford study
+5. Removed unverified quote ("AI doesn't actually love you")
+6. No em dashes, no banned words, 186 lines maintained

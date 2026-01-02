@@ -1,0 +1,24 @@
+Tip updated successfully. Here's a summary of changes:
+
+**Removed (unverifiable/overlap/banned):**
+- Microsoft 68% statistic (couldn't verify)
+- "Tell Claude What to Do, Not What to Avoid" section (overlaps with Tip 14)
+- "lazy prompt = lazy output" and "effort you put into your prompt" (banned per guide philosophy)
+- "comprehensive" → "thorough"
+- Em dash replaced with comma
+- Generic Key Takeaways section
+
+**Added:**
+- Verified inline link to [Anthropic's prompting documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices)
+- Verified inline link to [Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) with the exact quote
+- Updated model names: Opus 4.5, Sonnet 4.5, Haiku 4.5
+- Real-world example: Stripe webhook debugging
+- Practitioner-focused closing section
+- CLAUDE.md reference for anti-truncation phrases
+
+**Final stats:**
+- 189 lines (above 100 minimum)
+- 2 verified inline links
+- No banned words/phrases
+- No overlap with other tips
+- Strong opener and closing

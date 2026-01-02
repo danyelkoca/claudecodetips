@@ -6,34 +6,38 @@ summary: "Shell commands that run at specific events like edits, tool use, or se
 isFree: false
 ---
 
-Hooks are shell commands triggered at specific points in Claude Code's lifecycle. They provide **deterministic control**—ensuring certain actions always happen rather than relying on Claude to remember.
+Hooks are shell commands that run at specific points during Claude's operation. They guarantee certain actions happen every time, rather than hoping Claude remembers to do something.
+
+I use hooks for three things: auto-formatting after every edit, blocking dangerous commands, and getting desktop notifications when Claude needs input. The first two alone have saved me countless annoyances.
 
 ## Configuration
 
-Hooks live in JSON settings files at three levels:
+[Hooks](https://code.claude.com/docs/en/hooks) live in JSON settings files at three levels:
 
 - `~/.claude/settings.json` - User-level (all projects)
 - `.claude/settings.json` - Project-level (team-shared)
-- `.claude/settings.local.json` - Local project (not committed)
+- `.claude/settings.local.json` - Local project (gitignored)
 
-Project-level takes precedence over user-level. Use `/hooks` command to manage interactively.
+Project-level takes precedence over user-level. Run `/hooks` to manage them through Claude's interactive menu.
 
 ## The Ten Hook Events
 
-| Event | Trigger | Use Cases |
-|-------|---------|-----------|
-| **PreToolUse** | Before tool executes | Block dangerous commands, validate inputs, auto-approve safe ops |
+| Event | Trigger | Best Use Cases |
+|-------|---------|----------------|
+| **PreToolUse** | Before tool executes | Block dangerous commands, validate paths, auto-approve safe ops |
 | **PostToolUse** | After tool completes | Auto-format code, run linters, log changes |
 | **PermissionRequest** | Before permission dialog | Auto-approve test commands, deny sensitive access |
-| **Notification** | Claude sends alerts | Custom desktop/Slack notifications |
-| **UserPromptSubmit** | Before prompt processing | Inject context, validate prompts |
-| **Stop** | Claude finishes responding | Quality gates, verify task completion |
+| **Notification** | Claude sends alerts | Desktop notifications, Slack/ntfy integration |
+| **UserPromptSubmit** | Before prompt processing | Inject context, validate prompts, add sprint info |
+| **Stop** | Claude finishes responding | Quality gates, force continuation until tests pass |
 | **SubagentStop** | Subagent finishes | Validate subagent output |
-| **PreCompact** | Before context compaction | Backup transcripts |
-| **SessionStart** | Session begins/resumes | Load git status, set environment |
-| **SessionEnd** | Session ends | Cleanup, logging |
+| **PreCompact** | Before context compaction | Backup transcripts, log decisions |
+| **SessionStart** | Session begins/resumes | Load git status, set environment vars |
+| **SessionEnd** | Session ends | Cleanup, final logging |
 
 ## Basic Configuration
+
+The hook structure: event > matchers > commands.
 
 ```json
 {
@@ -44,7 +48,7 @@ Project-level takes precedence over user-level. Use `/hooks` command to manage i
         "hooks": [
           {
             "type": "command",
-            "command": "prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\"",
+            "command": "prettier --write \"$CLAUDE_FILE_PATHS\"",
             "timeout": 30
           }
         ]
@@ -54,15 +58,23 @@ Project-level takes precedence over user-level. Use `/hooks` command to manage i
 }
 ```
 
+Hooks receive input as JSON via stdin, not just environment variables. Parse it with `jq`:
+
+```bash
+#!/bin/bash
+INPUT=$(cat)
+FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+```
+
 ## Matcher Patterns
 
 - **Exact**: `"Write"` - matches only Write tool
 - **Multiple**: `"Write|Edit"` - matches either (regex OR)
-- **Wildcard**: `"*"` - matches all tools
+- **Wildcard**: `"*"` or `""` - matches all tools
 - **With arguments**: `"Bash(npm test*)"` - matches specific commands
 - **MCP tools**: `"mcp__memory__.*"` - matches Model Context Protocol tools
 
-Note: Matchers are case-sensitive.
+Matchers are case-sensitive. `write` won't match `Write`.
 
 ## Exit Codes and Control Flow
 
@@ -70,17 +82,19 @@ Your hook scripts control execution via exit codes:
 
 | Exit Code | Behavior |
 |-----------|----------|
-| **0** | Success - stdout processed as JSON or added to context |
-| **2** | **Blocking error** - action prevented, stderr fed back to Claude |
-| Other | Non-blocking error - stderr shown to user, execution continues |
+| **0** | Success. stdout processed as JSON or added to context |
+| **2** | Blocking error. Action prevented, stderr fed back to Claude |
+| Other | Non-blocking error. stderr shown in verbose mode, execution continues |
 
-**Critical**: For exit code 2, write error messages to **stderr**, not stdout. Claude reads stderr to understand what went wrong.
+Exit code 2 is the key. Write error messages to **stderr**, not stdout. Claude reads stderr to understand what went wrong and adjust.
 
 ```bash
 #!/bin/bash
-# Example: Block dangerous rm commands
-if [[ "$CLAUDE_TOOL_INPUT" == *"rm -rf"* ]]; then
-  echo "Dangerous command blocked: rm -rf" >&2
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+if [[ "$COMMAND" == *"rm -rf"* ]]; then
+  echo "Blocked dangerous command: rm -rf" >&2
   exit 2
 fi
 exit 0
@@ -88,20 +102,19 @@ exit 0
 
 ## JSON Output for Fine Control
 
-Return structured JSON for granular control:
+Return structured JSON to stdout for granular control:
 
 ```json
 {
-  "decision": "block",
-  "reason": "Explanation for Claude",
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
-    "permissionDecision": "deny"
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Production file access blocked"
   }
 }
 ```
 
-For PreToolUse, you can modify inputs before execution (v2.0.10+):
+Since v2.0.10, PreToolUse hooks can modify inputs before execution. This lets you add safety flags without blocking Claude:
 
 ```json
 {
@@ -109,7 +122,7 @@ For PreToolUse, you can modify inputs before execution (v2.0.10+):
     "hookEventName": "PreToolUse",
     "permissionDecision": "allow",
     "updatedInput": {
-      "command": "npm test --dry-run"
+      "command": "rm -i test.txt"
     }
   }
 }
@@ -117,7 +130,9 @@ For PreToolUse, you can modify inputs before execution (v2.0.10+):
 
 ## Practical Examples
 
-### 1. Auto-Format After Edits (PostToolUse)
+### 1. Auto-Format After Edits
+
+The most useful hook. Run your formatter after every Write or Edit:
 
 ```json
 {
@@ -128,7 +143,7 @@ For PreToolUse, you can modify inputs before execution (v2.0.10+):
         "hooks": [
           {
             "type": "command",
-            "command": "prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\""
+            "command": "npx prettier --write \"$(cat | jq -r '.tool_input.file_path')\""
           }
         ]
       }
@@ -137,7 +152,23 @@ For PreToolUse, you can modify inputs before execution (v2.0.10+):
 }
 ```
 
-### 2. Block Dangerous Commands (PreToolUse)
+### 2. Block Dangerous Commands
+
+Create a validation script and wire it to PreToolUse:
+
+```bash
+#!/bin/bash
+# validate-bash.sh
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# Block dangerous patterns
+if echo "$COMMAND" | grep -qE '(rm -rf /|chmod 777|> /dev/)'; then
+  echo "Blocked: $COMMAND" >&2
+  exit 2
+fi
+exit 0
+```
 
 ```json
 {
@@ -145,55 +176,34 @@ For PreToolUse, you can modify inputs before execution (v2.0.10+):
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/path/to/validate-bash.sh"
-          }
-        ]
+        "hooks": [{ "type": "command", "command": "/path/to/validate-bash.sh" }]
       }
     ]
   }
 }
 ```
 
-validate-bash.sh:
+### 3. Quality Gate on Stop
 
-```bash
-#!/bin/bash
-INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
-
-# Block dangerous patterns
-if echo "$COMMAND" | grep -qE '(rm -rf|chmod 777|sudo rm)'; then
-  echo "Blocked: $COMMAND" >&2
-  exit 2
-fi
-exit 0
-```
-
-### 3. Quality Gate (Stop Hook)
+Force Claude to keep working until tests pass:
 
 ```json
 {
   "hooks": {
     "Stop": [
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "npm run lint && npm run test"
-          }
-        ]
+        "hooks": [{ "type": "command", "command": "npm run lint && npm test" }]
       }
     ]
   }
 }
 ```
 
-If lint or tests fail (exit code 2), Claude is blocked from stopping and receives the error feedback to fix issues.
+If the command exits with code 2, Claude can't stop. The stderr becomes feedback, and Claude attempts to fix the issues. Be careful with this one. It can create infinite loops if Claude can't fix the problem.
 
-### 4. Desktop Notifications (Notification)
+### 4. Desktop Notifications
+
+Get notified when Claude needs input instead of silently waiting:
 
 ```json
 {
@@ -204,7 +214,7 @@ If lint or tests fail (exit code 2), Claude is blocked from stopping and receive
         "hooks": [
           {
             "type": "command",
-            "command": "terminal-notifier -title 'Claude Code' -message 'Permission needed' -sound Glass"
+            "command": "terminal-notifier -title 'Claude Code' -message 'Awaiting input' -sound Glass"
           }
         ]
       }
@@ -216,6 +226,8 @@ If lint or tests fail (exit code 2), Claude is blocked from stopping and receive
 Notification matchers: `permission_prompt`, `idle_prompt`, `auth_success`, `elicitation_dialog`.
 
 ### 5. Inject Context at Session Start
+
+Load project state automatically when starting:
 
 ```json
 {
@@ -234,52 +246,60 @@ Notification matchers: `permission_prompt`, `idle_prompt`, `auth_success`, `elic
 }
 ```
 
-Output becomes part of Claude's starting context automatically.
+SessionStart hooks have access to `CLAUDE_ENV_FILE`. Write to this file to persist environment variables for the session:
+
+```bash
+echo 'export NODE_ENV=production' >> "$CLAUDE_ENV_FILE"
+```
 
 ## Environment Variables
 
 | Variable | Description | Availability |
 |----------|-------------|--------------|
 | `CLAUDE_PROJECT_DIR` | Absolute path to project root | All hooks |
-| `CLAUDE_CODE_REMOTE` | "true" in web environments | All hooks |
+| `CLAUDE_CODE_REMOTE` | `"true"` in web environments | All hooks |
 | `CLAUDE_ENV_FILE` | File path for persisting env vars | SessionStart only |
-| `CLAUDE_TOOL_INPUT_FILE_PATH` | File path from tool input | File-related tools |
+| `CLAUDE_FILE_PATHS` | Space-separated file paths from tool | File-related tools |
+
+Input data comes via stdin as JSON. Don't rely solely on environment variables. Some have had reliability issues. Parse stdin with `jq` for consistent results.
 
 ## Debugging
 
 1. **Verify registration**: Run `/hooks` to see active hooks
-2. **Debug mode**: `claude --debug` for verbose output
-3. **Test manually**: Run your hook script directly first
+2. **Debug mode**: `claude --debug` shows verbose hook execution
+3. **Test manually**: Run your script directly with sample JSON piped to stdin
 4. **Check permissions**: `chmod +x your-script.sh`
-5. **Disable temporarily**: `claude --no-hooks` if hooks break things
+5. **Disable hooks**: Create a `no-hooks.json` with `{"disableAllHooks": true}` and run `claude --settings no-hooks.json`
 
-Debug logs show:
+Debug output shows the full execution flow:
 
 ```
 [DEBUG] Executing hooks for PostToolUse:Write
-[DEBUG] Found 1 hook matchers
+[DEBUG] Found 1 hook matchers in settings
+[DEBUG] Matched 1 hooks for query "Write"
 [DEBUG] Hook command completed with status 0
 ```
 
 ## Security Considerations
 
-Hooks execute with your user permissions—treat them as executable code.
+Hooks execute with your user permissions. Treat them as code that runs automatically with full access.
 
-**Best practices:**
+**Do this:**
 
-- Validate and sanitize all inputs
+- Validate and sanitize all inputs from stdin
 - Always quote shell variables: `"$VAR"` not `$VAR`
 - Check for path traversal (`..` in paths)
 - Use absolute paths for scripts
-- Avoid processing `.env`, `.git/`, or key files
-- Test in safe environment before production
+- Skip `.env`, `.git/`, and key files
+- Set `set -euo pipefail` at the top of bash scripts
 
-**Protection**: Claude Code captures hook config at startup. Changes to settings files require review in `/hooks` menu before taking effect—preventing malicious injection during a session.
+**Protection built in**: Claude Code captures hook config at startup. Direct edits to settings files during a session require review in the `/hooks` menu before taking effect.
 
 ## Common Pitfalls
 
-1. **Exit code confusion**: Exit 2 blocks, other non-zero codes do not
-2. **stdout vs stderr**: Blocking errors must go to stderr
-3. **Hook not firing**: Check matcher is exact (case-sensitive)
-4. **Timeouts**: Default 60s, configurable per hook
-5. **Script permissions**: Must be executable (`chmod +x`)
+1. **Exit code confusion**: Only exit 2 blocks. Other non-zero codes just log warnings.
+2. **stdout vs stderr**: Blocking errors must go to stderr, not stdout.
+3. **Hook not firing**: Matchers are case-sensitive. `bash` won't match `Bash`.
+4. **Timeouts**: Default is 60 seconds. Set `"timeout": 120` for slow operations.
+5. **Stop hook loops**: If your Stop hook always fails, Claude keeps retrying forever.
+6. **Parsing JSON**: Use `cat | jq`, not environment variables, for reliable input.

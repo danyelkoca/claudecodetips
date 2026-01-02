@@ -1,0 +1,26 @@
+Done. Here's a summary of the changes made to Tip 37:
+
+**Verified facts and added inline links:**
+- [Qodo 2025 State of AI Code Quality report](https://www.qodo.ai/reports/state-of-ai-code-quality/) - 65% of developers report AI misses context during refactoring
+- [ICLR 2025 paper from NYU/UT Austin](https://arxiv.org/abs/2410.13788) - explains RLHF preference labeling bias
+- [AbstentionBench research](https://arxiv.org/abs/2506.09038) - scaling doesn't help abstention, reasoning models 24% worse
+- [Claude Code v2.0.21 changelog](https://claudelog.com/claude-code-changelog/) - AskUserQuestion tool release date
+- [Lewis C. Lin article](https://www.lewis-lin.com/blog/the-secret-weapon-for-better-ai-responses-ask-until-youre-95-sure) - confidence threshold technique
+- [Anthropic's official prompting guide](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices) - direct prompting for this behavior
+
+**Removed overlaps:**
+- Removed "Use Plan Mode to Force Questions" section entirely (covered in Tip 8)
+
+**Improved content:**
+- Added new section "The Anthropic Docs Perspective" with official guidance
+- Added AbstentionBench insight about scaling and reasoning models
+- Added practitioner observation about training Claude within a session
+- Tightened the RLHF explanation with specific research quotes
+- Renamed "95% Certainty Technique" to "Confidence Threshold Technique"
+
+**Quality checks passed:**
+- 219 lines (above 100 minimum)
+- No banned words
+- No em dashes
+- Frontmatter unchanged
+- All URLs verified working

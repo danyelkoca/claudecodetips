@@ -1,0 +1,33 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Factual Corrections:**
+- Fixed Windows enterprise location to `C:\Program Files\ClaudeCode\` (verified from official docs)
+- Added proper quoting requirement for YAML glob patterns with link to GitHub issue
+- Clarified that imports don't reduce context size (important misconception)
+- Added info about user-level rules at `~/.claude/rules/`
+- Verified 47k to 9k reduction story and linked to source
+
+**Structure Improvements:**
+- Simplified the priority hierarchy table for clarity
+- Renamed "Checking What's Loaded" to "Debugging" and added practical troubleshooting
+- Consolidated repetitive sections
+- Removed "priority saturation" term (not in official docs)
+
+**Voice/Style Fixes:**
+- Removed "transformational" and "power feature" (banned words)
+- Stronger opening that gets to the point
+- Replaced generic phrases with specific statements
+- Varied sentence lengths
+
+**Links Added (all verified):**
+- [Official memory docs](https://code.claude.com/docs/en/memory)
+- [Changelog for v2.0.64](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [YAML quoting issue](https://github.com/anthropics/claude-code/issues/13905)
+- [Monorepo reduction example](https://dev.to/anvodev/how-i-organized-my-claudemd-in-a-monorepo-with-too-many-contexts-37k7)
+- [Instruction-following research](https://www.humanlayer.dev/blog/writing-a-good-claude-md)
+
+**Preserved:**
+- All frontmatter untouched
+- Core content about hierarchy, rules directory, imports, enterprise deployment
+- 203 lines (above 100 minimum)
+- No "Related Tips" section

@@ -12,25 +12,13 @@ Once task ends, close it down. Use `/clear` to wipe context and start fresh. You
 
 LLMs are stateless. They reprocess the entire conversation history with every message. As your session grows, several problems emerge:
 
-1. **Token consumption accelerates** - A fresh monorepo session costs ~20k tokens baseline. The remaining 180k fills faster than you think.
+1. **Token consumption accelerates** - A fresh session with MCP tools can eat 30-60k tokens before you type anything. System prompts, tool definitions, and memory files all count. The remaining context fills faster than you expect.
 
-2. **Attention degrades** - Research shows LLMs exhibit U-shaped attention bias. Information in the middle of long contexts gets ignored, even in explicitly long-context models. MIT researchers in 2025 discovered this stems from causal masking in transformer architecture.
+2. **Attention degrades** - [Stanford's "Lost in the Middle" research](https://arxiv.org/abs/2307.03172) found that LLMs exhibit U-shaped attention patterns. Information in the middle of long contexts gets ignored, even in explicitly long-context models. [MIT researchers in 2025](https://arxiv.org/abs/2502.01951) showed this stems from causal masking in transformer architecture. The effect amplifies with more attention layers.
 
 3. **Errors accumulate** - Old instructions, failed attempts, and correction history pile up. Important grounding information gets pushed out while noise remains.
 
 4. **Performance tanks** - Claude gets slower. Responses become generic. Previous decisions get forgotten. Code quality degrades noticeably.
-
-## The Science Behind Context Degradation
-
-The "Lost in the Middle" phenomenon (documented by Stanford researchers) shows that LLM performance drops significantly when relevant information sits in the middle of long contexts. In Anthropic's own testing, Claude 2.1's accuracy on middle-positioned information dropped to 27%.
-
-As conversations grow:
-- Critical instructions from early in the session lose influence
-- Claude starts making mistakes you specifically corrected earlier
-- It forgets which files it was working on
-- Hallucination rates increase
-
-Studies show hallucination rates fall to 16% when context is persistently stored and reused across sessions rather than accumulated in one long conversation.
 
 ## The `/clear` Command
 
@@ -39,15 +27,17 @@ Studies show hallucination rates fall to 16% when context is persistently stored
 ```
 
 This wipes the conversation history clean. What persists:
-- Your CLAUDE.md instructions
-- Memory files (if configured)
-- Project structure knowledge
+- Your CLAUDE.md instructions (project and user level)
+- CLAUDE.local.md (personal project preferences)
+- .claude/rules/*.md (modular rule files)
+- Git state and file system
 
 What gets wiped:
 - All conversation history
 - File contents Claude read
 - Commands and their outputs
 - Error messages and corrections
+- The internal todo list
 
 ## When to Use `/clear`
 
@@ -107,8 +97,9 @@ Run `/context` mid-session to see where tokens are going:
 - Memory files (CLAUDE.md)
 - Conversation messages
 - File contents read
+- MCP tool definitions (often the biggest surprise)
 
-When you hit ~80% capacity, auto-compaction triggers. Don't wait for this. Clear proactively at logical breakpoints.
+Auto-compaction triggers around 95% capacity. Don't wait for this. Clear proactively at logical breakpoints. Once auto-compaction kicks in, you've already lost detail you might need.
 
 ## Signs Your Session Needs Clearing
 
@@ -133,31 +124,34 @@ Watch for these warning signs:
 
 ## What Survives Sessions
 
-**CLAUDE.md is your persistent memory.** Use it for:
-- Project-specific rules
-- Common commands
-- Architecture overview
-- Code style guidelines
+**Memory files are your persistent memory.** Claude Code supports a hierarchy:
 
-Don't put session-specific context in CLAUDE.md. It's read at every session start.
+- **~/.claude/CLAUDE.md** - User-level preferences (applies to all projects)
+- **./CLAUDE.md** - Project-level instructions (shared with team via git)
+- **./CLAUDE.local.md** - Personal project preferences (auto-added to .gitignore)
+- **./.claude/rules/*.md** - Modular rule files with optional path-scoping
 
-## Parallel Isolated Sessions
+Use these for project-specific rules, common commands, architecture overview, and style guidelines. Memory files also support `@path/to/file` imports to reference other files.
 
-For truly parallel work, use git worktrees:
+Don't put session-specific context in memory files. They're read at every session start.
 
-```bash
-git worktree add ../my-project-feature feature-branch
-```
+## The `/catchup` Pattern
 
-Now you have isolated directories. Run separate Claude sessions in each. No context pollution between tasks.
+Some developers create a custom `/catchup` command that reads all uncommitted git changes into context. The workflow:
 
-## Key Takeaways
+1. `/clear` when context gets full
+2. `/catchup` to reload work-in-progress
+3. Continue working with fresh context
+
+This works well for straightforward tasks. For complex multi-step work, the document-then-clear approach is safer because it preserves your reasoning, not just the code state.
+
+## Summary
 
 - **One task = one session.** Clear between tasks.
 - **Don't trust auto-compact.** It's a fallback, not a strategy.
 - **Externalize state** for multi-session work.
 - **Monitor context usage** with `/context`.
 - **Clear at logical breakpoints** before performance degrades.
-- **CLAUDE.md persists.** Everything else doesn't.
+- **Memory files persist.** CLAUDE.md, CLAUDE.local.md, and .claude/rules/*.md survive clears. Everything else doesn't.
 
-The context window is a resource. Use it wisely, clear it regularly, and leverage persistent memory for anything you'll need again.
+The context window is a finite resource. Clear it often. Your memory files carry forward what matters.

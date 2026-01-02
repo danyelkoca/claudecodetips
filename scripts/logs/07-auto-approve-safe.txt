@@ -1,0 +1,33 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified and linked claims:**
+- 84% permission prompt reduction → linked to [Anthropic's engineering blog](https://www.anthropic.com/engineering/claude-code-sandboxing)
+- Settings hierarchy → linked to [official settings docs](https://code.claude.com/docs/en/settings)
+- Explore subagent read-only mode → linked to [subagents docs](https://code.claude.com/docs/en/sub-agents)
+- Permission modes → linked to [interactive mode docs](https://code.claude.com/docs/en/interactive-mode)
+- PreToolUse hooks → linked to [hooks docs](https://code.claude.com/docs/en/hooks)
+- Sandboxing → linked to [sandboxing docs](https://code.claude.com/docs/en/sandboxing)
+
+**Reduced overlaps:**
+- Removed `.env` deny rules (covered in Tip 5: Protect Sensitive Files)
+- Shortened bash command warnings (covered in Tip 6: Never Auto-Approve Bash)
+- Shortened permission modes section (covered in Tip 8: Plan Mode)
+- Shortened hooks section (covered in Tip 40: Hooks)
+
+**Technical corrections:**
+- Updated hooks exit codes: changed deprecated `"decision"` to `"permissionDecision"`
+- Added `LS` to the allowed tools list
+- Clarified WebFetch domain matching behavior
+
+**Structure improvements:**
+- Consolidated intro (removed redundant "Approval Fatigue Problem" section)
+- Added new "Sandboxing: The Next Level" section explaining the source of the 84% stat
+- Fixed minor repetition in research workflows section
+
+**Quality checks passed:**
+- 206 lines (above 100 minimum)
+- No banned words or phrases
+- No em dashes
+- Frontmatter untouched
+- No Related Tips section
+- All URLs fetched and verified

@@ -1,0 +1,29 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified and linked sources:**
+- Added inline link to [Liu et al. "Lost in the Middle" paper](https://arxiv.org/abs/2307.03172) (Stanford, 2023) - verified author affiliation and findings
+- Added inline link to [Chroma's context rot research](https://research.trychroma.com/context-rot) - verified findings on performance degradation
+- Added inline link to [Claude Code headless mode docs](https://code.claude.com/docs/en/headless) for batch processing
+
+**Removed unverified claims:**
+- Removed Microsoft 68% claim (no verifiable source found)
+
+**Removed overlaps with other tips:**
+- Removed detailed Git Worktrees section (Tip 27 covers this)
+- Removed Subagents section entirely (Tip 28 covers this)
+- Removed detailed `/clear` cadence section (Tip 18 covers session management)
+- Reduced context degradation details (Tip 19 covers quality degradation)
+
+**Improved content:**
+- Stronger opener ("It's how the architecture works")
+- Added new "Decomposition Mindset" section with contractor analogy
+- Tightened Key Takeaways section
+- Better flow through decomposition strategies
+
+**Quality checks passed:**
+- Frontmatter untouched
+- No "Related Tips" section
+- No banned words/phrases
+- No em dashes
+- 247 lines (well over 100 minimum)
+- All URLs verified working

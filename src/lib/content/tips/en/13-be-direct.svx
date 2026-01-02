@@ -6,13 +6,13 @@ summary: "Be explicit about quantity - Claude tends to choose the easy way out."
 isFree: false
 ---
 
-Claude Code takes you literally. Earlier model versions would infer your intent and expand on vague requests. Claude 4.x does exactly what you ask for—nothing more. This is a feature, not a bug, but it means you must be explicit.
+Claude Code takes you literally. [Anthropic's prompting documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices) states that Claude 4.x models are "trained for more precise instruction following than previous generations." Earlier versions would infer intent and expand on vague requests. Opus 4.5, Sonnet 4.5, and Haiku 4.5 do exactly what you ask, nothing more. This is a feature, not a bug, but it requires you to be explicit.
 
 ## The Core Problem
 
-AI models tend to behave like humans: they often go for the easiest answer rather than the best one. If you ask Claude to "research this topic," it might read 2 files and call it done. Ask it to "look into the bug," and it might glance at one function and propose a fix.
+Claude takes the path of least resistance. If you ask it to "research this topic," it might read 2 files and call it done. Ask it to "look into the bug," and it might glance at one function and propose a fix.
 
-Research from Microsoft's Developer Tools team found that explicit prompts reduced the need for back-and-forth refinements by 68%. The granularity of your input is directly proportional to the utility of your output.
+I've seen this pattern hundreds of times: vague prompt, minimal output, frustrated developer. The fix isn't a better model. It's telling Claude exactly what you want.
 
 ## Specify Quantities
 
@@ -48,7 +48,7 @@ Frame instructions as commands, not suggestions. Claude responds to directive la
 - "REWRITE the error handling to cover all cases"
 - "RESEARCH this thoroughly, then IMPLEMENT"
 
-When you say "can you suggest some changes," Claude might only provide suggestions rather than implementing them—even if implementation is what you intended. For Claude to take action, be explicit: "Make these edits" rather than "Can you suggest edits?"
+When you say "can you suggest some changes," Claude might only provide suggestions rather than implementing them, even if implementation is what you intended. For Claude to take action, be explicit: "Make these edits" rather than "Can you suggest edits?"
 
 ## Add Explicit Constraints
 
@@ -72,20 +72,24 @@ Good: "Refactor this code with these constraints:
 4. Do NOT add new dependencies
 5. Add JSDoc comments for all public functions"
 
-## Prevent Lazy Behavior
+## Prevent Incomplete Output
 
-Claude can exhibit "lazy" behavior—providing truncated snippets, using placeholders like `// rest of code here`, or omitting crucial details. Counter this explicitly:
+Claude sometimes provides truncated snippets, placeholders like `// rest of code here`, or summaries instead of implementations. I've had Claude return a 20-line skeleton for a 200-line refactor. Counter this explicitly:
 
-**Anti-laziness phrases:**
+**Anti-truncation phrases:**
 - "You MUST provide a complete, end-to-end implementation"
 - "Do NOT use ellipses, comments, or pseudocode as placeholders"
 - "Do NOT truncate or provide partial implementations"
-- "Your output should be ready to deploy without modifications"
+- "Your output should be ready to run without modifications"
 - "I want the COMPLETE solution, not a summary"
+
+Add these to your CLAUDE.md file so you don't repeat them every session.
 
 ## Research Before Coding
 
-Claude tends to jump straight to coding. Force it to research first:
+Claude wants to write code immediately. [Anthropic's best practices](https://www.anthropic.com/engineering/claude-code-best-practices) note: "Steps #1-#2 are crucial, without them, Claude tends to jump straight to coding a solution. While sometimes that's what you want, asking Claude to research and plan first significantly improves performance."
+
+Force research before implementation:
 
 **Bad:** "Fix the authentication bug"
 
@@ -96,21 +100,7 @@ Claude tends to jump straight to coding. Force it to research first:
 4. LIST 3 potential root causes
 THEN propose a fix"
 
-The Anthropic engineering team explicitly states: "Steps #1-#2 are crucial—without them, Claude tends to jump straight to coding a solution."
-
-## Tell Claude What to Do, Not What to Avoid
-
-Framing prompts around desired behaviors works better than listing prohibitions. When you emphasize what to avoid, models sometimes do exactly that.
-
-**Negative framing (less effective):**
-- "Don't use any external libraries"
-- "Don't make the function too long"
-- "Don't forget error handling"
-
-**Positive framing (more effective):**
-- "Use only built-in language features"
-- "Keep each function under 40 lines"
-- "Include error handling for all edge cases"
+The phrase "before writing any code" is the key. Without it, Claude starts typing solutions before understanding the problem.
 
 ## The Role-Goal-Constraints Framework
 
@@ -124,12 +114,12 @@ GOAL: Refactor the authentication module to use JWT tokens instead of session co
 CONSTRAINTS:
 - Read ALL existing auth files before making changes (minimum 8 files)
 - Preserve backwards compatibility with existing API consumers
-- Add comprehensive tests (minimum 15 test cases)
+- Add thorough test coverage (minimum 15 test cases)
 - No new dependencies except jsonwebtoken
 - Complete within the src/auth/ directory only
 ```
 
-This framework transforms Claude from a "guess-machine" into a reliable coding partner.
+This structure works because Claude can't shortcut any step. Each constraint is measurable.
 
 ## Quantified Task Examples
 
@@ -154,21 +144,46 @@ Ask Claude to verify its own work:
 
 ## When Claude Still Takes Shortcuts
 
-If Claude continues minimal-effort responses despite explicit instructions:
+Sometimes explicit instructions aren't enough. Claude still returns minimal output. Escalation tactics:
 
-1. **Use thinking triggers:** Add "ultrathink" to force deeper reasoning
+1. **Use thinking triggers:** Add "ultrathink" to allocate more reasoning budget
 2. **Break into steps:** "FIRST do X. WAIT. THEN do Y. WAIT. FINALLY do Z."
-3. **Add emphasis:** Use CAPS, "IMPORTANT:", or "CRITICAL:" for key requirements
-4. **Request confirmation:** "Before proceeding, LIST what you will do"
+3. **Request confirmation:** "Before proceeding, LIST what you will do"
+4. **Start fresh:** Long sessions degrade quality. Use `/clear` and try again.
 
-Remember: a lazy prompt gets you lazy output. The effort you put into your prompt directly determines the quality of Claude's response.
+If you're constantly fighting for complete output, the issue might be context pollution from earlier in the session. Fresh context often fixes what no amount of emphasis can.
 
-## Key Takeaways
+## Real Example: Debugging a Payment Flow
 
-1. **Specify quantities:** Always include numbers (files to read, tests to write, examples to find)
-2. **Use imperatives:** "CHANGE this" not "Can you change this?"
-3. **Add constraints:** Length, format, scope, exclusions, quality requirements
-4. **Prevent shortcuts:** Explicitly forbid placeholders and truncation
-5. **Research first:** Force reading before coding
-6. **Frame positively:** State what to do, not what to avoid
-7. **Verify output:** Ask Claude to check its own work
+Here's how directness changes outcomes. I was debugging a Stripe webhook that silently failed.
+
+**First attempt (vague):**
+```
+The webhook isn't working. Can you take a look?
+```
+
+Claude glanced at one file, proposed a generic error handler, and moved on. Useless.
+
+**Second attempt (direct):**
+```
+Debug the Stripe webhook failure. Before writing any code:
+1. READ src/routes/api/webhooks/stripe/+server.js
+2. READ src/lib/server/firebase-admin.js
+3. TRACE the data flow from webhook receipt to database write
+4. IDENTIFY where the silent failure occurs
+5. LIST all error conditions that could cause silent failures
+
+Then propose a fix with proper error logging.
+```
+
+Claude found the actual bug: a missing `await` on a Firestore write that caused the function to return before the write completed. The webhook reported success while data was lost.
+
+Same problem. Same model. Different prompt. One produced a fix-nothing suggestion, the other found the root cause.
+
+## The Cost of Vagueness
+
+Vague prompts feel faster. You type less. But you pay for it in iterations.
+
+A direct prompt with constraints takes maybe 30 seconds longer to write. A vague prompt that produces wrong output costs you 5 minutes of back-and-forth, or worse, bugs you don't catch until production.
+
+Directness is not about perfect prompts. It's about saying what you actually want. Numbers. Constraints. Actions. That's it.

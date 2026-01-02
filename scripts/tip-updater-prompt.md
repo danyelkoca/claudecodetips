@@ -42,6 +42,19 @@ BANNED PHRASES:
 - "at its core"
 - "when it comes to"
 
+GUIDE PHILOSOPHY:
+This guide values ACTION over PERFECTION. Opus 4.5 handles casual prompts fine.
+
+NEVER suggest:
+- Spending time/effort on prompts ("lazy prompt = lazy output", "effort you put into your prompt")
+- Crafting/engineering prompts ("well-engineered", "well-crafted", "perfect prompt")
+- Laboring over wording
+
+INSTEAD:
+- Being direct takes 2 seconds, not 20 minutes
+- Clarity, not polish
+- Say what you want plainly, move on
+
 BANNED PATTERNS:
 - Absolute predictions: "will always", "will never", "is the future"
 - Dramatic declarations: "This changes everything", "The hard truth is"

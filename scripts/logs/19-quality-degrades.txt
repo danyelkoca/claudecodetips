@@ -1,0 +1,35 @@
+The tip has been updated successfully. Here's a summary of the changes:
+
+## Changes Made
+
+**Factual corrections with verified links:**
+- Added inline link to [Claude's context window documentation](https://platform.claude.com/docs/en/build-with-claude/context-windows)
+- Corrected the "Lost in the Middle" research attribution to Stanford, UC Berkeley, and Samaya AI with [arxiv link](https://arxiv.org/abs/2307.03172)
+- Added link to [attention mechanism research](https://medium.com/foundation-models-deep-dive/attention-part-2-of-5-the-scaling-challenge-why-standard-attention-hits-a-wall-12212ecaa404)
+- Added link to [context rot research](https://research.trychroma.com/context-rot)
+- Added [changelog link](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) for v2.0.64 auto-compact changes
+- Added verified GitHub issue links for known auto-compact bugs
+- Added link to [official subagents documentation](https://code.claude.com/docs/en/sub-agents)
+- Added link to [/context command documentation](https://claudelog.com/faqs/what-is-context-command-in-claude-code/)
+
+**Removed overlaps with other tips:**
+- Removed detailed /clear section (covered in Tip 18)
+- Removed --resume flag details (covered in Tip 20)
+- Removed CLAUDE.md persistent memory section (covered in Tip 2)
+- Simplified subagent section with reference to Tip 28
+- Removed /clear + /catchup workflow (overlaps with Tip 18)
+- Removed "End Session Entirely" section
+
+**Improved focus:**
+- Tightened the science section, removing the "Context Degradation Syndrome" term (blog term, not academic)
+- Updated auto-compact thresholds with current evidence (64-75% vs historical 90%+)
+- Made the symptoms section more practitioner-focused
+- Simplified the quick reference table
+
+**Style improvements:**
+- Removed "fundamental" (banned word) → "constraint"
+- Removed redundant "Sudden Confusion" symptom (merged with "File and Context Confusion")
+- Tightened the conclusion section
+- All contractions removed as per style guide
+
+The tip is now 151 lines, focused on its core premise (why quality degrades and how to use /compact), with all claims verified and properly sourced.

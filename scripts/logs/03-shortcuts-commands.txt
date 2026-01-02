@@ -1,0 +1,41 @@
+The tip has been updated successfully. Here's a summary of the changes:
+
+**Key improvements:**
+
+1. **Strong opening** - Replaced table-only format with a direct statement: "These shortcuts live in muscle memory after a week."
+
+2. **Added missing shortcuts:**
+   - `Ctrl+G` - Open prompt in system text editor
+   - `Alt+M` - Alternative to Shift+Tab for mode switching
+   - `Ctrl+J` - Line feed for multiline input
+   - `Tab` for thinking toggle (with note about version differences)
+   - Windows `Alt+V` for image paste
+
+3. **Added missing commands:**
+   - `/ide` - Manage IDE integrations
+   - `/plugin` - Manage plugins
+   - `/usage` - Plan limits and rate limits
+   - `/stats` - Usage analytics
+   - `/statusline`, `/theme`, `/output-style`, `/vim`
+   - `/privacy-settings`, `/release-notes`
+   - `/todos` - Track TODO items
+
+4. **Added practitioner insights:**
+   - "Ctrl+O is gold for debugging"
+   - Tmux users need double Ctrl+B
+   - Rewind resets messages only, not files
+   - Model switching mid-prompt use case
+
+5. **Added inline links** to official documentation (all verified):
+   - Rewind menu, verbose output, terminal setup, context visualization, security review, MCP
+
+6. **Removed overlaps:**
+   - Removed "See Tip #30 for details" reference
+   - Kept custom commands section brief since Tip #30 covers it in depth
+
+7. **Updated information:**
+   - Added terminals supported by /terminal-setup (Kitty, Alacritty, Zed, Warp)
+   - Added subdirectory namespace syntax for custom commands
+   - Noted Tab toggle may require /config on some versions (recent bugs)
+
+8. **180 lines** - Well above the 100-line minimum

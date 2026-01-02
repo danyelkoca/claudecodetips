@@ -6,226 +6,205 @@ summary: "Paste screenshots directly with Ctrl+V for visual bugs. A picture is w
 isFree: false
 ---
 
-Claude is multimodal. One of the most underutilized features in Claude Code is visual input. Stop describing bugs in text when you can just show them. A screenshot often conveys in milliseconds what takes paragraphs to describe.
+Claude is multimodal. Visual input is one of the most underutilized features in Claude Code. Stop describing bugs in text when you can show them. A screenshot conveys in seconds what takes paragraphs to describe.
 
 ## Three Ways to Add Images
 
-Claude Code accepts images through three methods:
-
 ### 1. Clipboard Paste
 
-Copy an image to your clipboard, then paste with `Ctrl+V`. On macOS, this is Control+V, not Command+V - a common gotcha that trips up many users.
+Copy an image to your clipboard, then paste. The keyboard shortcut varies by platform:
 
-For the fastest workflow on macOS:
+| Platform | Shortcut |
+|----------|----------|
+| macOS | `Ctrl+V` (not Cmd+V) |
+| Windows | `Alt+V` (as of v1.0.93) |
+| Linux | Often unsupported, use alternatives below |
+
+The macOS shortcut trips up everyone. Muscle memory says Cmd+V, but Claude Code uses Ctrl+V for image paste.
+
+**Fastest macOS workflow:**
 
 ```bash
-# Screenshot to clipboard (no file created)
+# Screenshot to clipboard (no file saved)
 Cmd+Ctrl+Shift+4
 
-# Then in Claude Code terminal
+# Then in Claude Code
 Ctrl+V
 ```
 
-This captures a selection directly to your clipboard without saving a file, then pastes it straight into Claude Code.
+You'll see `[Image]` appear in your prompt, confirming the paste worked.
 
 ### 2. Drag and Drop
 
-Drag image files directly into the Claude Code terminal window. Hold `Shift` while dragging to ensure Claude properly references the file in the prompt rather than just opening it.
+Drag image files directly into the Claude Code terminal. Hold `Shift` while dragging to ensure Claude references the file in your prompt rather than just opening it.
+
+This is the most reliable method across all platforms. When clipboard paste fails, drag and drop usually works.
 
 ### 3. File Path Reference
 
-Provide a path to any image on your filesystem:
+Reference any image on your filesystem:
 
 ```
-Analyze this screenshot: /Users/me/Desktop/bug-screenshot.png
+Analyze this screenshot: /Users/me/Desktop/bug.png
 ```
 
-Claude will read and analyze the image at that path.
+Claude reads and analyzes the image at that path. This is the only option that works reliably on remote servers via SSH.
 
-## Supported Formats and Limits
+## Formats and Limits
 
-Claude Code accepts four image formats:
+According to [Anthropic's vision documentation](https://platform.claude.com/docs/en/build-with-claude/vision), Claude accepts four image formats:
 
 | Format | Best For | Notes |
 |--------|----------|-------|
-| PNG | Screenshots, UI elements, text | Crisp rendering, supports transparency |
-| JPEG | Photographs, complex images | Good compression for photos |
-| GIF | Animated content | Only first frame analyzed |
-| WebP | Modern alternative | Superior compression |
+| PNG | Screenshots, UI, text | Crisp rendering, supports transparency |
+| JPEG | Photographs | Good compression |
+| GIF | Simple graphics | Only first frame analyzed |
+| WebP | Modern alternative | Best compression |
 
 **Size Limits:**
-- Maximum file size: 5MB per image (API), 10MB (claude.ai)
-- Maximum resolution: 8000x8000 pixels
-- Multiple images: Up to 100 per API request, 20 per claude.ai turn
 
-**Optimal Sizing:**
-- Aim for 1000x1000 pixels or larger for detailed analysis
-- Images over 1568 pixels on the long edge are automatically downscaled
-- Images under 200 pixels may degrade performance
+| Context | Max File Size | Max Resolution | Max Images |
+|---------|---------------|----------------|------------|
+| API | 5MB per image | 8000x8000 px | 100 per request |
+| claude.ai | 30MB per image | 8000x8000 px | 20 per turn |
 
-## Token Cost Calculation
+**Resolution Behavior:**
+- Images over 1568 pixels on the long edge get auto-downscaled
+- [Anthropic recommends](https://platform.claude.com/docs/en/build-with-claude/vision) resizing to 1.15 megapixels or less for best time-to-first-token
+- Images under 200 pixels may produce inaccurate analysis
 
-Images consume tokens. Calculate approximate cost with:
+## Token Cost
+
+Images consume tokens. The formula from [Anthropic's docs](https://platform.claude.com/docs/en/build-with-claude/vision):
 
 ```
 tokens = (width * height) / 750
 ```
 
-| Image Size | Approximate Tokens | Cost per 1K images (Sonnet 4.5) |
-|------------|-------------------|--------------------------------|
+| Image Size | Tokens | Cost per 1K images (Sonnet 4.5) |
+|------------|--------|--------------------------------|
 | 200x200 px | ~54 | ~$0.16 |
 | 1000x1000 px | ~1,334 | ~$4.00 |
 | 1092x1092 px | ~1,590 | ~$4.80 |
 
-**Cost Optimization:** Crop images to the relevant area before sending. A full-screen screenshot costs more tokens than a cropped section showing just the bug.
+Crop to the relevant area before sending. A full-screen screenshot costs more than a cropped section showing just the problem.
 
-## Use Case: Visual Bug Debugging
+## Visual Bug Debugging
 
-The most common use case. See a visual bug? Screenshot it and paste.
+See a visual bug? Screenshot and paste.
 
 ```
 [paste screenshot of misaligned button]
 
-Fix this button alignment issue.
+Fix this button alignment.
 ```
 
-Claude will:
-1. Identify the CSS/layout problem
-2. Locate the relevant code
-3. Suggest specific fixes
-4. Explain why the bug occurs
+Claude identifies the CSS problem, locates the code, and suggests fixes. This takes 30 seconds versus 5 minutes explaining "the button on the right side of the header is 3 pixels too low."
 
-This workflow is dramatically faster than describing "the button on the right side of the header is 3 pixels too low and doesn't align with the navigation items."
+**What works well:**
+- Layout issues (flexbox, grid, spacing)
+- Color and styling problems
+- Responsive breakpoint bugs
+- Z-index and overlap issues
 
-## Use Case: Design-to-Code Implementation
+## Design-to-Code
 
-Claude excels at translating visual designs into code. Screenshot a Figma mockup, Dribbble design, or any UI reference:
+Screenshot a Figma mockup, Dribbble design, or any UI reference:
 
 ```
 [paste design mockup]
 
-Implement this card component using React and Tailwind CSS.
-Match the spacing and typography exactly.
+Implement this card component in React + Tailwind.
+Match spacing and typography.
 ```
 
-**Iterative Refinement Workflow:**
+**Iterative refinement:**
 
 1. Provide the design mockup
 2. Claude implements the component
 3. Screenshot Claude's rendered output
 4. Paste both images: "Compare these. Fix the differences."
-5. Repeat until pixel-perfect
+5. Repeat until accurate
 
-After 2-3 iterations, you typically achieve accurate visual matching.
+Two or three iterations usually gets you there. First pass is rarely pixel-perfect.
 
-## Use Case: Error Screenshots
+If you're doing heavy design-to-code work, consider connecting [Figma's MCP server](https://help.figma.com/hc/en-us/articles/35281350665623-Figma-MCP-collection-How-to-set-up-the-Figma-remote-MCP-server). It extracts design tokens, component specs, and exact values directly from your Figma files:
 
-Terminal errors, browser console messages, and stack traces are often easier to screenshot than copy-paste (especially when formatting gets mangled):
-
-```
-[paste screenshot of browser console error]
-
-What's causing this error and how do I fix it?
+```bash
+claude mcp add --transport http figma https://mcp.figma.com/mcp
 ```
 
-Claude performs OCR on the screenshot, extracts the error text, and provides debugging steps. This is particularly useful for:
-- Browser DevTools errors with complex formatting
-- Terminal output with color codes
-- IDE error panels
-- Mobile device error screens
+See Tip 41 for more on MCP servers.
 
-## Use Case: Architecture Diagrams
+## Architecture Diagrams
 
-Feed Claude your architecture diagrams, flowcharts, sequence diagrams, or system documentation:
+Feed Claude your architecture diagrams, flowcharts, or system documentation:
 
 ```
 [paste architecture diagram]
 
-Generate the TypeScript interfaces and API scaffolding
-for this microservices architecture.
+Generate TypeScript interfaces for this microservices architecture.
 ```
 
-Claude can interpret:
+Claude handles:
 - Flowcharts and process diagrams
 - Database schema diagrams
-- API endpoint documentation images
 - Whiteboard sketches and hand-drawn diagrams
-- UML diagrams
+- UML and sequence diagrams
+- API documentation screenshots
 
-## Advanced: MCP Servers for Automated Screenshots
+The output quality depends on image clarity. Clean diagrams with readable text work best.
 
-For automated workflows, MCP servers can capture screenshots programmatically:
-
-### Puppeteer MCP (Browser Automation)
-
-```bash
-claude mcp add puppeteer-mcp-claude
-```
-
-Enables Claude to launch browsers, navigate pages, and capture screenshots automatically. Powerful for:
-- Visual regression testing
-- Automated UI verification
-- Screenshot comparison workflows
-
-### iOS Simulator MCP (Mobile Development)
-
-```bash
-claude mcp add ios-simulator npx ios-simulator-mcp
-```
-
-Captures screenshots from the iOS Simulator, enabling Claude to:
-- See mobile app state directly
-- Debug visual issues on iOS
-- Verify UI implementations
-
-### Figma MCP (Design Integration)
-
-Configure Figma Desktop with MCP enabled, and Claude can:
-- Extract design tokens directly
-- Access component specifications
-- Pull exact colors, spacing, and typography
-- Generate code matching Figma designs precisely
-
-## Platform-Specific Considerations
+## Platform Quirks
 
 ### macOS
-Full clipboard support. Use `Cmd+Ctrl+Shift+4` for screenshot-to-clipboard, then `Ctrl+V` to paste.
+Full clipboard support. Use `Cmd+Ctrl+Shift+4` for screenshot-to-clipboard, then `Ctrl+V` to paste. Remember: Control, not Command.
+
+### Windows Native
+Use `Alt+V` to paste from clipboard. This was added in Claude Code v1.0.93. Drag and drop also works.
 
 ### Linux
-Clipboard paste may not work in all terminals. Workarounds:
-- Use Flameshot: configure to save screenshots and copy file path to clipboard
-- Use file path references instead of direct paste
+Clipboard paste is [unreliable across terminal emulators](https://github.com/anthropics/claude-code/issues/834). Workarounds:
+- Drag and drop image files
+- Save screenshots to a known location and reference by path
+- Kitty terminal users can configure custom clipboard handling
 
-### Windows/WSL
-Running Claude Code in WSL? Clipboard is on your local Windows machine, not accessible from WSL. Use file paths or configure a screenshot tool to save to a WSL-accessible location.
+### WSL
+The clipboard lives on your Windows host, not in WSL. Claude Code running in WSL can't access it. Options:
+- Use a [VS Code extension](https://github.com/aggroot/claude-image-paste) that bridges Windows clipboard to WSL
+- Save screenshots to a WSL-accessible path
+- Drag files from Windows Explorer into WSL terminal
 
-### Remote Servers
-Clipboard paste does not work when running Claude Code on remote servers via SSH. The clipboard exists on your local machine. Use file paths or transfer images to the server first.
+### Remote/SSH
+Clipboard paste doesn't work over SSH. The clipboard is on your local machine. Transfer images to the server and use file path references.
 
 ## Limitations
 
-- **Cannot identify people**: Claude will refuse to name individuals in photos
-- **Low resolution issues**: Images under 200 pixels may produce inaccurate analysis
-- **Rotation/clarity**: Rotated or blurry images increase hallucination risk
-- **Medical imaging**: Not designed for diagnostic interpretation of CT/MRI scans
-- **AI-generated images**: Cannot reliably detect if images are AI-generated
+[Anthropic's documentation](https://platform.claude.com/docs/en/build-with-claude/vision) lists these vision limitations:
+
+- **People identification**: Claude refuses to name individuals in photos. This is policy, not a bug.
+- **Spatial reasoning**: Struggles with precise localization, like reading analog clocks or exact positions of chess pieces.
+- **Counting**: Approximate counts work, but don't expect precision with many small objects.
+- **AI-generated detection**: Claude can't reliably detect if an image is AI-generated.
+- **Medical imaging**: Not designed for diagnostic interpretation of CT/MRI scans.
+- **Quality sensitivity**: Blurry, rotated, or low-resolution images increase errors.
 
 ## Best Practices
 
-1. **Crop to the relevant area** - don't send full screenshots when a cropped section suffices
-2. **Use PNG for UI and JPEG for photos** - match format to content type
-3. **Place images before text** - Claude processes image-then-text more effectively
-4. **Provide context** - "This button should be blue" helps more than just the screenshot
-5. **Iterate 2-3 times** - first implementation is rarely pixel-perfect
-6. **Check token costs** - large images add up; resize when quality permits
+1. **Crop aggressively.** Show the problem, not the entire screen.
+2. **Match format to content.** PNG for UI and text. JPEG for photos.
+3. **Image before text.** Claude processes image-then-text more effectively.
+4. **Add context.** "This button should be blue" helps more than the screenshot alone.
+5. **Expect iteration.** First attempt is rarely perfect. Two or three rounds is normal.
+6. **Watch token costs.** Large images add up. Resize when quality permits.
 
-## Real-World Example
+## Workflow Example
 
-A CSS layout breaking only on mobile viewport:
+A CSS layout breaking on mobile:
 
-1. Open DevTools, switch to mobile view
+1. Open DevTools, switch to mobile viewport
 2. `Cmd+Ctrl+Shift+4` to screenshot the broken layout
 3. `Ctrl+V` in Claude Code
-4. Type: "The card grid should be single column on mobile. Fix this."
+4. "The card grid should be single column on mobile. Fix this."
 
-Claude sees exactly what you see, identifies the missing media query or flexbox issue, and provides the fix. Total time: 30 seconds instead of 5 minutes describing the problem.
+Claude sees what you see, identifies the missing media query, and provides the fix. Done in 30 seconds.

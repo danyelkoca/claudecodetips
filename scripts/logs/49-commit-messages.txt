@@ -1,0 +1,19 @@
+**Quality check complete:**
+
+- Frontmatter: Untouched
+- No "Related Tips" section
+- No banned words or phrases
+- No em dashes (using regular dashes/hyphens only)
+- 220 lines (above 100 minimum)
+- All 8 URLs fetched and verified working
+- No overlaps with other tips (Tip 4 covers general git usage, Tip 30 covers custom commands in general)
+- Opens with strong statement, not preamble
+
+**Key changes made:**
+
+1. **Fixed factual error**: `/commit` is NOT built-in. Corrected to show it's a custom command users create, with a working example
+2. **Corrected Conventional Commits table**: Only `feat` (MINOR) and `fix` (PATCH) have explicit semantic versioning rules in the spec. Other types don't mandate version bumps.
+3. **Added inline links** to all sources: Conventional Commits spec, cbea.ms 50/72 rule, Anthropic's best practices, semantic-release, atomic commits article, thoughtbot git blame article
+4. **Consolidated redundant sections**: Merged "The 11pm Rule" into "Capturing the Why" since they covered the same concept
+5. **Tightened prose**: Removed repetitive bullet points, converted some lists to flowing prose where appropriate
+6. **Added practical value**: Included a complete working custom command example instead of just mentioning the command exists

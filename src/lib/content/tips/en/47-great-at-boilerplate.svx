@@ -6,87 +6,39 @@ summary: "CRUD operations, forms, config files, repetitive patterns. Let Claude 
 isFree: false
 ---
 
-CRUD operations, forms, config files, repetitive patterns. Developers spend up to 40% of their time on repetitive coding tasks. Don't waste your brain cycles on boring code - let Claude grind through the tedious stuff.
+Boilerplate is the best use case for Claude Code. CRUD endpoints, form components, config files, test scaffolding. Code you've written a hundred times that requires no creativity. Hand it off.
 
-## What is Boilerplate?
+I've found that the less thinking a task requires, the better Claude performs. A REST endpoint with standard validation? Near-perfect output. A complex caching strategy? You'll spend more time fixing it than writing it yourself.
 
-Boilerplate code is repetitive, standardized code that appears in many projects with minimal variation. It's necessary but tedious: class declarations, getter/setters, file headers, config files, CRUD operations, form validation, test scaffolding.
+## Where Claude Excels
 
-The problem? Boilerplate fatigue is real. Copying and pasting the same patterns kills momentum and leads to burnout. This is exactly where Claude excels.
+Claude handles predictable, structured code well:
 
-## Categories of Boilerplate
+**API scaffolding**: REST endpoints, GraphQL resolvers, Express/Fastify middleware, request/response DTOs. Give it an existing route file and tell it to follow the pattern.
 
-Claude handles these categories well:
+**Forms**: React Hook Form with Zod, validation schemas, error handling, accessibility attributes. Forms are formulaic. That's the point.
 
-### API & Backend
+**Database models**: Prisma schemas, TypeORM entities, migrations. The structure follows conventions. Claude knows these conventions.
 
-- REST endpoint CRUD operations
-- GraphQL type definitions and resolvers
-- Express/Koa/Fastify middleware chains
-- Error handling wrappers
-- Request/response DTOs
+**Config files**: GitHub Actions workflows, Docker Compose, ESLint/Prettier setups, tsconfig.json. These are documented, standardized formats.
 
-### Frontend
+**Test scaffolding**: Describe blocks, mock setup, fixture generation, happy path stubs. The structure is predictable even when the assertions aren't.
 
-- Form components with validation
-- State management setup (Redux slices, Zustand stores, Pinia stores)
-- Component scaffolding with props/types
-- API client functions
-- Loading/error state handling
+## The Critical Rule: Reference Existing Code
 
-### Database
-
-- Prisma/TypeORM/Sequelize models
-- Migration files
-- Seed data scripts
-- Repository patterns
-
-### Configuration
-
-- ESLint/Prettier configs
-- TypeScript tsconfig.json
-- Webpack/Vite configs
-- Docker/Docker Compose files
-- CI/CD pipelines (GitHub Actions, GitLab CI)
-
-### Testing
-
-- Jest/Vitest/Pytest test file structure
-- Mock factories
-- Test fixtures
-- E2E test scaffolding
-
-### Authentication
-
-- JWT token handling
-- OAuth flow boilerplate
-- Session management
-- Protected route wrappers
-
-## How to Prompt for Boilerplate
-
-Use the **Role + Goal + Constraints** pattern:
+Never let Claude invent patterns. The single most effective technique for boilerplate generation:
 
 ```
-You are a TypeScript API developer.
-Generate a CRUD REST API for a "products" resource.
-Constraints:
-- Use Express with async/await
-- Include input validation with Zod
-- Follow existing patterns in src/routes/users.ts
-- Include error handling
+Read src/routes/users.ts first.
+Generate src/routes/products.ts following the exact same patterns.
+Same validation approach, same error handling, same response format.
 ```
 
-**Key techniques:**
+Claude Code can read your codebase. Use that. When you reference existing files, it copies your project's conventions instead of inventing generic ones. I've seen the difference between "generate a CRUD endpoint" (mediocre) and "follow the pattern in users.ts" (nearly production-ready).
 
-1. **Reference existing code**: "Follow the pattern in `src/routes/users.ts`"
-2. **Specify the stack**: "Use Prisma, not raw SQL"
-3. **Set boundaries**: "Just the boilerplate, I'll add business logic"
-4. **Request types**: "Include full TypeScript types"
+## Prompt Structure That Works
 
-## Example Prompts
-
-### CRUD API Endpoint
+Skip vague requests. Be explicit:
 
 ```
 Generate Express CRUD routes for a "comments" resource:
@@ -96,122 +48,95 @@ Generate Express CRUD routes for a "comments" resource:
 - PUT /comments/:id
 - DELETE /comments/:id
 
-Use async/await, Zod validation, and Prisma. Follow patterns in src/routes/posts.ts.
+Use async/await, Zod validation, and Prisma.
+Follow patterns in src/routes/posts.ts exactly.
 ```
 
-### Form with Validation
+For forms:
 
 ```
-Create a React form component for user registration:
+Create a React registration form:
 - Fields: email, password, confirmPassword, name
-- Use react-hook-form with Zod validation
-- Show inline error messages
-- Match styling in src/components/LoginForm.tsx
+- Use react-hook-form with Zod
+- Match validation patterns in src/components/LoginForm.tsx
+- Same error message styling
 ```
 
-### Database Migration
-
-```
-Generate a Prisma schema for a blog system:
-- User (id, email, name, posts)
-- Post (id, title, content, author, comments, createdAt)
-- Comment (id, content, author, post, createdAt)
-
-Include proper relations and indexes.
-```
-
-### Test File Scaffolding
+For test files:
 
 ```
 Generate Jest test boilerplate for src/services/PaymentService.ts.
-Include:
 - Describe blocks for each public method
-- Mock setup for Stripe client
-- Happy path and error case stubs
-- beforeEach/afterEach hooks
+- Mock Stripe client following src/services/__tests__/OrderService.test.ts
+- Happy path and error case stubs only. I'll fill in assertions.
 ```
 
-### Config File
+The pattern: specify the structure, reference existing files, set boundaries on what you'll handle yourself.
+
+## Set Clear Boundaries
+
+Tell Claude what you're delegating and what you're keeping:
 
 ```
-Generate a GitHub Actions workflow for a Node.js app:
-- Run on push to main and PRs
-- Install deps, lint, test, build
-- Cache node_modules
-- Use Node 20
+Generate the class skeleton and type definitions.
+I'll implement processPayment() myself.
+Just the structure, no business logic.
 ```
 
-## Best Practices
+This prevents Claude from generating speculative logic that you'll delete anyway. Boilerplate means structure, not implementation.
 
-### Always Review Generated Code
+## Security: Review Everything
 
-AI-generated code can contain security vulnerabilities. Research shows 45% of AI-generated code has security flaws. Common issues:
+[Veracode's 2025 research](https://www.helpnetsecurity.com/2025/08/07/create-ai-code-security-risks/) found that LLMs introduce security vulnerabilities in 45% of code samples. Java had failure rates above 70%. The common issues: missing input validation, XSS vectors, log injection, improper error exposure.
 
-- Missing input validation
-- SQL injection vectors
-- XSS vulnerabilities
-- Hardcoded credentials
-- Improper error exposure
+This doesn't mean avoid AI-generated code. It means treat it as a first draft. For boilerplate specifically:
 
-**Rule**: Treat AI boilerplate as a first draft. Review before committing.
+- Check input validation is actually present, not just mentioned
+- Verify error messages don't leak stack traces or internal paths
+- Confirm auth checks aren't stubbed out
+- Test edge cases Claude might have skipped
 
-### Match Existing Patterns
+Boilerplate feels safe because it's boring. That's exactly when you miss the SQL injection in the search endpoint.
 
-Don't let Claude invent new patterns. Point it to existing code:
+## What Doesn't Work
+
+Claude struggles when boilerplate stops being boilerplate:
+
+**Custom business logic**: "Generate a pricing calculator based on our discount rules." Claude doesn't know your rules. It'll invent plausible-looking logic that's completely wrong.
+
+**Security-critical flows**: Auth token generation, password hashing, encryption. Use battle-tested libraries and write the integration yourself.
+
+**Performance-sensitive code**: Database query optimization, caching strategies, connection pooling. These require understanding your data patterns, not just generating code.
+
+**Novel architecture**: Don't ask Claude to design your system. It'll produce something that looks reasonable but doesn't fit your constraints.
+
+The dividing line: if you've done it dozens of times, delegate it. If it requires judgment about your specific situation, keep it.
+
+## The Productivity Reality
+
+The research on AI coding productivity is mixed. [A rigorous METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers actually took 19% longer with AI tools on complex tasks, despite believing they were 24% faster. Developer perception doesn't match reality.
+
+But that study measured complex, judgment-heavy work. Boilerplate is different. According to [JetBrains' 2025 developer survey](https://blog.jetbrains.com/research/2025/10/state-of-developer-ecosystem-2025/), nearly 90% of developers save at least an hour weekly with AI tools, and the top use case is "writing boilerplate, repetitive code."
+
+The pattern: boilerplate saves time because there's nothing to get wrong. Complex logic loses time because you spend it reviewing, debugging, and rewriting. Know which task you're doing.
+
+## A Real Example
+
+Last week I needed CRUD endpoints for five new resources. Same pattern, same validation, same error handling. Without Claude, that's a half-day of copy-paste-modify tedium. With Claude:
 
 ```
-Read src/services/UserService.ts first.
-Generate ProductService.ts following the exact same patterns.
+Read src/routes/users.ts.
+Generate the same pattern for these resources:
+- products
+- orders
+- reviews
+- categories
+- inventory
+
+Each resource gets: list with pagination, get by id, create, update, delete.
+Same Zod schemas, same Prisma queries, same error responses.
 ```
 
-### Set Clear Boundaries
+Twenty minutes, five files, minimal edits. That's where Claude shines. I kept the interesting work: the complex order state machine, the inventory sync logic, the pricing calculations.
 
-Tell Claude what you'll handle:
-
-```
-Generate the boilerplate structure only.
-I'll implement the business logic in processPayment().
-Just give me the class skeleton with types.
-```
-
-### Validate Critical Sections
-
-For authentication, payments, or data handling - double-check:
-
-- Input sanitization
-- Error messages (no sensitive data leaks)
-- Proper async/await handling
-- Edge cases
-
-## What NOT to Use Boilerplate Generation For
-
-Claude excels at structured, repetitive patterns. It struggles with:
-
-- **Novel architecture decisions** - Don't ask Claude to design your system
-- **Security-critical custom logic** - Write auth/crypto logic yourself
-- **Complex business rules** - Domain-specific logic needs human judgment
-- **Performance-sensitive code** - Optimization requires understanding your data
-
-**The rule**: If it requires creativity or domain expertise, guide Claude heavily or do it yourself. If it's "I've written this 100 times before" - let Claude handle it.
-
-## Workflow Integration
-
-Combine boilerplate generation with other tips:
-
-1. **Plan Mode (Tip 8)**: Plan what boilerplate you need first
-2. **Force End-to-End (Tip 11)**: Generate all related files together
-3. **Copy Existing (Tip 34)**: Always reference existing patterns
-4. **Review Output (Tip 21)**: Don't trust "all done" - verify
-
-## The Productivity Gain
-
-Studies show AI coding assistants reduce boilerplate time by 30-60%. That's hours per week you can spend on actual problem-solving instead of typing the same patterns again.
-
-Claude Code is particularly strong here because:
-
-- It reads your existing codebase patterns
-- It generates complete, runnable code
-- It handles multiple related files together
-- It includes types, validation, error handling
-
-Save your brain for the interesting problems. Let Claude grind through the tedious stuff.
+Boilerplate is Claude's home turf. Let it grind while you focus on the problems that actually require your brain.

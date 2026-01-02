@@ -1,0 +1,28 @@
+The tip has been updated. Here's a summary of the changes made:
+
+**Key Updates:**
+
+1. **Stronger opener** - Opens with a concrete problem (mid-feature hotfix scenario) instead of a definition
+
+2. **Removed overlapping content** - Deleted the "Claude Code Parallel Workflow" section that duplicated Tip 25 extensively
+
+3. **Verified and added inline links:**
+   - [Git worktrees docs](https://git-scm.com/docs/git-worktree)
+   - [Bare repository guide](https://morgan.cugerone.com/blog/how-to-use-git-worktree-and-in-a-clean-way/)
+   - [VS Code 1.103 release notes](https://code.visualstudio.com/updates/v1_103) - confirmed July 2025
+   - [GitHub's fsmonitor research](https://github.blog/engineering/infrastructure/improve-git-monorepo-performance-with-a-file-system-monitor/)
+
+4. **Fixed inaccurate claims:**
+   - Removed vague "14x faster" claim
+   - Added actual GitHub test data: Chromium 17.6s→0.8s, 1M files 41s→0.6s
+
+5. **Added new verified content:**
+   - Git 2.52 `-t` flag for automatic remote tracking
+   - Copy-on-write (`cp -c`) for fast node_modules copying
+   - VS Code `git.detectWorktrees` setting and commands
+
+6. **Improved dependency section** with three approaches: naive (npm install), fast (npm ci), fastest (CoW copy)
+
+7. **Consolidated redundant sections** - Merged cleanup info from Best Practices into dedicated Cleanup Discipline section
+
+8. **Line count:** 219 lines (above 100 minimum)

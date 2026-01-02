@@ -6,7 +6,7 @@ summary: "Always provide an alternative when telling Claude what not to do."
 isFree: false
 ---
 
-When you tell Claude what NOT to do, you're setting it up for failure. Research consistently shows that LLMs struggle with negative instructions - and the more "DO NOTs" you add, the worse the output becomes.
+When you tell Claude what NOT to do, you're setting it up for failure. Research shows that LLMs struggle with negative instructions, and the more "DO NOTs" you add, the worse the output becomes.
 
 ## The Core Problem
 
@@ -16,38 +16,38 @@ Claude gets stuck when it thinks it must use that flag.
 **Good:** "Don't use --foo, use --bar instead"
 Always provide an alternative.
 
-This isn't just a Claude quirk - it's fundamental to how language models work.
+This isn't a Claude quirk. It's how language models work.
 
 ## Why Negative Instructions Fail
 
 ### The Pink Elephant Problem
 
-When you tell someone "don't think of a pink elephant," their brain must first process the concept of a pink elephant to know what to avoid. This is called Ironic Process Theory - trying to suppress a thought paradoxically makes it more likely to surface.
+When you tell someone "don't think of a pink elephant," their brain must first process the concept of a pink elephant to know what to avoid. Psychologist Daniel Wegner called this [Ironic Process Theory](https://en.wikipedia.org/wiki/Ironic_process_theory): trying to suppress a thought paradoxically makes it more likely to surface.
 
-LLMs exhibit the same behavior. When you write "NEVER create duplicate files" in your CLAUDE.md, Claude must first process the concept of creating duplicate files. Multiple users have reported that Claude creates files like `file-fixed.py` and `file-correct.py` despite explicit rules against this.
+LLMs exhibit the same behavior. When you write "NEVER create duplicate files" in your CLAUDE.md, Claude must first process the concept of creating duplicate files. I've seen Claude create files like `file-fixed.py` and `file-correct.py` despite explicit rules against this.
 
 ### Token Prediction vs. Understanding
 
 LLMs don't "understand" negation the way humans do. They predict the most likely next token based on training data patterns.
 
-Research on BERT showed it performed well completing "A robin is a ____" but poorly on "A robin is not a ____" - the model ranked words like "robin," "bird," and "penguin" as most likely completions for the negated sentence, prioritizing semantic associations over logical negation.
+[Allyson Ettinger's research on BERT](https://aclanthology.org/2020.tacl-1.3/) demonstrated this clearly. The model performed well completing "A robin is a ____" but failed on "A robin is not a ____." BERT ranked words like "robin," "bird," and "penguin" as most likely completions for the negated sentence, prioritizing semantic associations over logical negation. In fact, BERT preferred the true completion in 0% of negated items.
 
 ### Affirmation Bias
 
-Models trained on vast datasets contain far more positive instructions than negative ones. When encountering negation words, models often simply ignore them and focus on the objects mentioned instead - regardless of how you express the negation.
+Models trained on vast datasets contain far more positive instructions than negative ones. When encountering negation words, models often simply ignore them and focus on the objects mentioned instead.
 
-### Technical Explanation
+### Token Selection Mechanics
 
-Token generation inherently leans toward positive selection - choosing what token comes next rather than explicitly avoiding certain tokens. Negative prompts might slightly reduce probabilities of unwanted tokens, but positive prompts actively boost probabilities of desired outcomes.
+Token generation inherently leans toward positive selection: choosing what token comes next rather than explicitly avoiding certain tokens. Negative prompts might slightly reduce probabilities of unwanted tokens, but positive prompts actively boost probabilities of desired outcomes.
 
 ## Research Evidence
 
-Studies consistently demonstrate this pattern:
+Studies demonstrate this pattern across model families:
 
-- **InstructGPT** actually performs *worse* with negative prompts as models scale
-- The **NeQA benchmark** reveals that negation understanding doesn't reliably improve with larger models - bigger isn't better at handling "don't"
-- **GPT-3, GPT-Neo**, and other models consistently struggle with negation across multiple benchmarks
-- In **code generation tasks**, models like Gemini ignored negated objectives ("don't find maximum") and solved for the original goal ("find minimum") anyway
+- [The InstructGPT study](https://arxiv.org/abs/2209.12711) found that models actually perform *worse* on negated prompts as they scale. Larger models, worse negation handling.
+- [The NeQA benchmark](https://github.com/yuhui-zh15/NeQA) reveals that negation understanding doesn't reliably improve with larger models. It can show inverse scaling, U-shaped scaling, or positive scaling depending on the prompting method.
+- [A 2023 study on GPT-3, GPT-Neo, and InstructGPT](https://arxiv.org/abs/2306.08189) found models demonstrate insensitivity to the presence of negation, inability to capture the lexical semantics of negation, and failure to reason under negation.
+- In [code generation tasks](https://arxiv.org/abs/2506.06971), models like Gemini and Claude-3.7-Sonnet exhibited "archetype override behavior" when given negated objectives (e.g., "minimize instead of maximize"). Gemini's accuracy dropped from 95% to 42.6% under hard negation. The models reverted to memorized problem solutions despite contradictory instructions.
 
 ## The Conversion Table
 
@@ -108,15 +108,15 @@ Don't use any deprecated APIs
 Use the v3 API endpoints documented at /docs/api-v3
 ```
 
-## When Negative Constraints Still Apply
+## When Negative Constraints Work
 
-Negative instructions can work in specific contexts:
+Negative instructions aren't always bad. They work in specific contexts:
 
-1. **System prompts with behavioral framing**: Anthropic uses third-person descriptions like "Claude does not provide information for weapons" rather than imperative commands like "Don't provide weapon information"
+1. **Behavioral framing in system prompts**: Third-person descriptions like "Claude does not provide information for weapons" work better than imperative commands like "Don't provide weapon information."
 
-2. **Hard boundaries combined with positive guidance**: "Generate pros and cons of remote work, but exclude personal opinions" - the negative is a modifier on a clear positive task
+2. **Modifiers on positive tasks**: "Generate pros and cons of remote work, but exclude personal opinions." The negative is a modifier on a clear positive task.
 
-3. **Safety guardrails**: When establishing firm limits for harmful content or unethical behavior, negative constraints in system prompts are appropriate
+3. **When you provide context**: [Anthropic's Claude 4 best practices](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices) notes that adding motivation helps. Instead of "NEVER use ellipses," try "Your response will be read aloud by a text-to-speech engine, so never use ellipses since the text-to-speech engine will not know how to pronounce them." Claude is smart enough to generalize from the explanation.
 
 ## Applying This to Claude Code
 
@@ -148,16 +148,14 @@ Instead of listing what Claude shouldn't do, describe what it should:
 Instead of: "Refactor this code, but don't break anything"
 Say: "Refactor this code while maintaining all existing tests and API behavior"
 
-## Official Anthropic Guidance
+## The Official Recommendation
 
-Anthropic's documentation explicitly recommends: "Tell Claude what to do instead of what not to do."
+[Anthropic's Claude 4 best practices](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices) explicitly recommends: "Tell Claude what to do instead of what not to do."
 
-Their Claude 4 best practices state: "Instead of 'Do not use markdown in your response,' try 'Your response should be composed of smoothly flowing prose paragraphs.'"
+Their example: Instead of "Do not use markdown in your response," try "Your response should be composed of smoothly flowing prose paragraphs."
 
 ## The Bottom Line
 
-Every time you write "don't," "never," or "avoid," stop and ask: *what should Claude do instead?*
+Every time you write "don't," "never," or "avoid," stop and ask: what should Claude do instead?
 
-Transform your negative constraints into positive directives. This single change will dramatically improve Claude's ability to follow your instructions - because you're working with how LLMs function rather than against it.
-
-The difference between "don't uppercase names" and "always lowercase names" might seem trivial to you, but it's the difference between confusion and clarity for a language model.
+The difference between "don't uppercase names" and "always lowercase names" might seem trivial to you, but it's the difference between confusion and clarity for a language model. You're working with how LLMs function rather than against it.

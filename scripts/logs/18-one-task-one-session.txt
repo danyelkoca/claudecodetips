@@ -1,0 +1,28 @@
+The tip has been updated. Here's a summary of the changes made:
+
+**Factual corrections:**
+- Removed unverifiable "16% hallucination rate" claim (no source found)
+- Removed outdated Claude 2.1 "27% middle-positioned accuracy" claim (this was a quirk specific to that model, fixed by prompting)
+- Updated auto-compaction trigger from "~80%" to "~95%" based on current documentation
+- Updated startup token consumption from "~20k baseline" to "30-60k with MCP tools" based on verified reports
+
+**Added inline sources:**
+- [Stanford's "Lost in the Middle" research](https://arxiv.org/abs/2307.03172) for U-shaped attention patterns
+- [MIT 2025 research](https://arxiv.org/abs/2502.01951) for causal masking causing position bias
+
+**Removed overlapping content:**
+- "The Science Behind Context Degradation" section (overlaps with Tip 19: Quality Degrades in Long Sessions)
+- "Parallel Isolated Sessions" with git worktrees (overlaps with Tip 27: Git Worktrees)
+
+**Updated memory system details:**
+- Added CLAUDE.local.md (personal project preferences)
+- Added ./.claude/rules/*.md (modular rule files)
+- Added ~/.claude/CLAUDE.md (user-level)
+- Added @path/to/file import syntax
+
+**Added new practical content:**
+- The /catchup pattern as a workflow alternative
+- MCP tool definitions as a context consumer in /context output
+- Internal todo list explicitly listed as wiped on /clear
+
+Final tip is 158 lines (exceeds 100+ requirement).

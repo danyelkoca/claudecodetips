@@ -6,9 +6,9 @@ summary: "Multiple working directories from same repo. Run Claude in each."
 isFree: false
 ---
 
-Git worktrees let you check out multiple branches of the same repository into separate directories simultaneously. Unlike cloning multiple times (which duplicates the entire .git directory), worktrees share a single repository database - making them lightweight and keeping all branches in sync.
+Worktrees solve a real problem: you're deep in a feature branch, someone needs an urgent hotfix on main, and you either stash everything (risky), clone the whole repo again (wasteful), or lose your place. [Git worktrees](https://git-scm.com/docs/git-worktree) let you check out multiple branches into separate directories, all sharing one `.git` database.
 
-## Why Worktrees Beat Stashing and Cloning
+## Why Worktrees Beat the Alternatives
 
 | Approach | Disk Usage | Context Switching | Parallel Work |
 |----------|------------|-------------------|---------------|
@@ -16,7 +16,7 @@ Git worktrees let you check out multiple branches of the same repository into se
 | git clone | High (full repo copy) | Parallel | Yes, but wasteful |
 | git worktree | Low (shared .git) | Parallel | Yes, efficient |
 
-The problem with stash: stashes pile up, conflicts happen on pop, and you lose mental context. The problem with multiple clones: wasted disk space and divergent histories.
+Stashes pile up, conflicts happen on pop, and you lose mental context. Multiple clones waste disk space and create divergent histories you have to keep in sync.
 
 Worktrees give you separate folders for each branch, all sharing the same Git history. No stashing, no conflicts, no wasted space.
 
@@ -29,8 +29,8 @@ git worktree add ../feature-auth -b feature-auth
 # Create worktree from existing branch
 git worktree add ../hotfix hotfix-branch
 
-# Create worktree tracking remote branch
-git worktree add ../feature-api origin/feature-api
+# Create worktree tracking remote branch (new -t flag in Git 2.52+)
+git worktree add -t ../feature-api origin/feature-api
 
 # List all worktrees
 git worktree list
@@ -42,34 +42,11 @@ git worktree remove ../feature-auth
 git worktree prune
 ```
 
-## The Claude Code Parallel Workflow
+The `-t` flag (added in [Git 2.52](https://git-scm.com/docs/git-worktree)) automatically sets up tracking for remote branches, so you don't need a separate `git branch --set-upstream-to` command.
 
-This is where worktrees become powerful. Run multiple Claude Code instances simultaneously, each in its own worktree:
+## Bare Repository Setup
 
-```bash
-# Set up your worktrees
-git worktree add ../my-app-auth -b feature-auth
-git worktree add ../my-app-api -b feature-api
-git worktree add ../my-app-ui -b feature-ui
-
-# Now you have:
-# ~/projects/my-app/        (main branch - your primary work)
-# ~/projects/my-app-auth/   (auth feature - Claude instance 1)
-# ~/projects/my-app-api/    (api feature - Claude instance 2)
-# ~/projects/my-app-ui/     (ui feature - Claude instance 3)
-```
-
-Open separate terminal tabs, cd into each worktree, and run Claude Code. Each instance works independently - no file conflicts, no context bleeding.
-
-Benefits:
-- **Parallelization**: One Claude refactors auth while another builds a data visualization component
-- **Comparison**: Run the same prompt in two worktrees, compare which produces better results
-- **Long-running tasks**: Claude works in one worktree while you continue coding in another
-- **Code review**: Keep main clean, spin up a worktree to review a PR without disrupting your flow
-
-## Advanced: Bare Repository Setup
-
-For a cleaner directory structure, use a bare clone:
+For a cleaner directory structure, use a [bare clone](https://morgan.cugerone.com/blog/how-to-use-git-worktree-and-in-a-clean-way/). Instead of the repo root being your working directory, it becomes a container for all your worktrees:
 
 ```bash
 # Create project directory
@@ -78,10 +55,10 @@ mkdir my-project && cd my-project
 # Clone as bare repository
 git clone --bare git@github.com:user/repo.git .bare
 
-# Create pointer file
+# Create pointer file so git commands work in this directory
 echo "gitdir: ./.bare" > .git
 
-# Fix remote fetching
+# Fix remote fetching (bare clones don't fetch remotes by default)
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 git fetch origin
 
@@ -99,40 +76,57 @@ my-project/
 └── feature-branch/     # Worktree: feature branch
 ```
 
+This structure is cleaner because your repo root is not a working directory. All branches live as sibling folders. Some developers find this easier to manage when running multiple Claude sessions, each in its own worktree.
+
 ## Handling Dependencies
 
-Each worktree is a separate folder - dependencies are not shared:
+Each worktree is a separate folder. Dependencies are not shared, and gitignored files like `.env` don't transfer automatically. This is the biggest friction point when adopting worktrees.
+
+**The naive approach** is running `npm install` in every new worktree. On large repos, that's 2+ minutes each time. You'll stop using worktrees.
+
+**The fast approach**: use `npm ci` (clean install) which skips dependency resolution:
 
 ```bash
-# After creating a worktree, install dependencies
 cd ../my-app-feature
-npm ci  # Faster than npm install for clean installs
-
-# Or copy node_modules from another worktree
-cp -r ../my-app/node_modules .
-cp ../my-app/.env .  # Copy env files too
+npm ci
+cp ../my-app/.env .
 ```
 
-Automate this with a config file or shell alias:
+**The fastest approach**: copy node_modules directly using copy-on-write (CoW) on macOS/Linux:
+
+```bash
+cp -c -r ../my-app/node_modules .  # -c enables CoW on APFS/Btrfs
+```
+
+Copy-on-write shares the actual disk blocks until you modify them. 500MB of node_modules copies in under a second.
+
+Automate this with a shell function:
+
 ```bash
 # In ~/.zshrc or ~/.bashrc
-wt-add() {
+wt() {
   git worktree add "../$1" -b "$1"
   cd "../$1"
-  npm ci
-  cp ../my-app/.env .
+  # Copy dependencies if they exist in main worktree
+  [ -d "../main/node_modules" ] && cp -c -r ../main/node_modules .
+  [ -f "../main/.env" ] && cp ../main/.env .
 }
 ```
 
+Now `wt new-feature` creates a worktree, copies dependencies, and drops you in the new directory ready to work.
+
 ## IDE Integration
 
-VS Code has native worktree support (added July 2025):
-- Source Control > More Actions > Worktrees > Create Worktree
-- Right-click worktree > "Open Worktree in New Window"
+[VS Code 1.103](https://code.visualstudio.com/updates/v1_103) (July 2025) added native worktree support. Enable it with the `git.detectWorktrees` setting, then:
 
-Or use extensions like "Git Worktrees" for enhanced management.
+- **Create**: Command Palette → "Git: Create Worktree" or Source Control → right-click → Worktrees → Create
+- **Open**: Right-click worktree → "Open Worktree in New Window"
+- **Compare**: Right-click a changed file → "Compare with Workspace"
+- **Migrate**: Command Palette → "Migrate Worktree Changes" to merge changes back
 
-Open each worktree in a separate VS Code window - each maintains its own IDE state, breakpoints, and terminal sessions.
+The Source Control Repositories view distinguishes between repositories, submodules, and worktrees, showing their relationships visually.
+
+Open each worktree in a separate VS Code window. Each maintains its own IDE state, breakpoints, debug configurations, and terminal sessions. For Claude work, this means you can have one window open with your main branch and another where Claude is working on a feature, switching between them instantly.
 
 ## Best Practices
 
@@ -143,15 +137,9 @@ Open each worktree in a separate VS Code window - each maintains its own IDE sta
 ~/projects/my-app-hotfix/    # hotfix branch
 ```
 
-**Naming convention**: Use `repo-branchname` pattern for clarity.
+**Naming convention**: Use `repo-branchname` pattern for clarity. When you have 6 worktrees, knowing which is which matters.
 
-**Regular cleanup**: Don't accumulate worktrees. Create, work, merge, remove:
-```bash
-git worktree remove ../my-app-feature
-git branch -d feature-branch
-```
-
-**Merge frequently**: Pull updates from main into worktrees to prevent massive merge conflicts.
+**Merge frequently**: Pull updates from main into worktrees to prevent massive merge conflicts later. A worktree that diverges for 2 weeks becomes a merge nightmare.
 
 ## Troubleshooting
 
@@ -173,23 +161,58 @@ git submodule update --init
 
 ## Performance for Large Repos
 
-For monorepos, enable Git's file system monitor:
+For monorepos, enable [Git's file system monitor](https://github.blog/engineering/infrastructure/improve-git-monorepo-performance-with-a-file-system-monitor/). Instead of scanning every file on `git status`, Git asks the OS which files actually changed:
+
 ```bash
 git config core.fsmonitor true
+git config core.untrackedcache true
 ```
 
-This can make `git status` up to 14x faster in large worktrees.
+[GitHub's testing](https://github.blog/engineering/infrastructure/improve-git-monorepo-performance-with-a-file-system-monitor/) showed dramatic improvements on large repos:
+- Chromium (393K files): 17.6s → 0.8s
+- 1M file synthetic repo: 41s → 0.6s
 
-Consider combining with sparse checkout if you only need part of the repo:
+The first run after enabling may be slow (building the cache), but subsequent runs drop to under a second.
+
+If you only work in part of the repo, combine with sparse checkout:
+
 ```bash
 git sparse-checkout init --cone
 git sparse-checkout set src/my-module
 ```
 
-## When Not to Use Worktrees
+This checks out only the directories you specify. In a monorepo with 50 services, you might only need 3 of them in a given worktree.
 
-- Quick 10-minute fixes (overhead isn't worth it)
-- When features touch many shared files (merge conflicts defeat the purpose)
-- If you forget to clean up (20 stale worktrees is worse than stash chaos)
+## When Worktrees Make Sense
 
-Start small: use worktrees for your next hotfix or code review. Expand to parallel Claude sessions as you get comfortable.
+**Good use cases:**
+- Hotfix on main while you're mid-feature on another branch
+- Reviewing a PR without losing your current work
+- Running a Claude session on a feature while you continue manual work elsewhere
+- Keeping a "clean main" worktree for quick reference checks
+- Experimenting with a risky refactor without touching your stable branch
+
+**Skip worktrees for:**
+- Quick 10-minute fixes (the setup overhead isn't worth it)
+- Tightly coupled work where both branches touch the same files (merge conflicts negate the benefit)
+- Teams that don't clean up (20 stale worktrees is worse than stash chaos)
+
+## Cleanup Discipline
+
+Worktrees are meant to be ephemeral. Create, work, merge, delete. If your `git worktree list` output grows past 5 entries, you're hoarding.
+
+```bash
+# See what you have
+git worktree list
+
+# Remove a worktree (deletes the directory too)
+git worktree remove ../my-app-feature
+
+# Delete the branch if merged
+git branch -d feature-branch
+
+# Clean up stale entries (if you deleted directories manually)
+git worktree prune
+```
+
+Make worktree cleanup part of your PR merge routine. Merged the PR? Delete the worktree. Otherwise they accumulate like browser tabs you'll "get back to later."

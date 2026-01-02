@@ -6,31 +6,21 @@ summary: "Perfect for rapid prototyping. For POCs, let Claude rip."
 isFree: false
 ---
 
-Claude Code transforms how you build proof-of-concepts. What once took weeks now happens in hours. The term "vibe coding"—coined by Andrej Karpathy in February 2025—describes this perfectly: you describe what you want in natural language, Claude generates code, and you iterate conversationally until it works.
+POCs are where Claude Code shines. What took weeks now takes hours. [Andrej Karpathy coined the term "vibe coding" in February 2025](https://simonwillison.net/2025/Feb/6/andrej-karpathy/) to describe this: describe what you want in natural language, Claude generates code, you iterate conversationally until it works. The term became [Collins Dictionary's Word of the Year 2025](https://www.collinsdictionary.com/woty).
 
 For production code, follow the disciplined approach covered throughout this guide. But for POCs? Different rules apply.
 
-## When to Use Claude Code for POCs
+## When Vibe Coding Works
 
 **Meeting demos**: Someone asks "what if we added feature X?" Don't wait for design mockups. Open Claude Code and build a working prototype during the meeting. Stakeholders respond better to interactive demos than slide decks.
 
-**Idea validation**: Before investing engineering resources, prove the concept works. A POC that fails is a massive success—it saved you from a costly mistake.
+**Idea validation**: Before investing engineering resources, prove the concept works. A POC that fails early is a success. It saved you from a costly mistake.
 
 **Internal tools**: Need a quick dashboard, data transformer, or admin interface? These don't require production polish. Build them in a lunch break.
 
-**Hackathons**: Time constraints demand speed over elegance. Claude Code excels here—60% of hackathon participants using AI tools leave with working prototypes.
-
 **Customer discovery**: Build clickable demos for user interviews. Real feedback on real interactions beats hypothetical discussions every time.
 
-## The Vibe Coding Workflow
-
-1. **Describe what you want** in plain English. Start messy—perfect architecture comes later.
-2. **Accept and run**. Don't review every line. The goal is working software, fast.
-3. **Iterate on errors**. When something breaks, paste the error and let Claude fix it.
-4. **Time-box sessions**. Set 2-3 hour limits. Constraints drive creativity.
-5. **Ship something**. The best POC sessions end with deployed, shareable demos.
-
-As Karpathy himself noted: "I just see stuff, say stuff, run stuff, and copy paste stuff, and it mostly works." That's the vibe.
+As [Karpathy described it](https://simonwillison.net/2025/Feb/6/andrej-karpathy/): "I just see stuff, say stuff, run stuff, and copy paste stuff, and it mostly works." That's the vibe.
 
 ## POC vs Prototype vs MVP
 
@@ -38,30 +28,32 @@ Understanding what you're building changes how you build it:
 
 | Type | Purpose | Audience | Polish Level |
 |------|---------|----------|--------------|
-| **POC** | Prove technical feasibility | Internal team | Rough—just needs to work |
-| **Prototype** | Validate UX and design | Stakeholders, users | Visual—should feel real |
-| **MVP** | Test market demand | Real customers | Functional—minimum shippable |
+| **POC** | Prove technical feasibility | Internal team | Rough, just needs to work |
+| **Prototype** | Validate UX and design | Stakeholders, users | Visual, should feel real |
+| **MVP** | Test market demand | Real customers | Functional, minimum shippable |
 
 Claude Code is ideal for POCs and prototypes. For MVPs heading to production, add the guardrails from other sections of this guide.
 
+## Speed Is Real
+
+This isn't hype. [Perplexity's CEO Aravind Srinivas reported](https://www.businessinsider.nl/perplexitys-engineers-use-2-ai-coding-tools-and-theyve-cut-development-time-from-days-to-hours/) that AI coding tools reduced "the experimentation time from three, four days to literally one hour."
+
+[According to TechCrunch](https://techcrunch.com/2025/03/06/a-quarter-of-startups-in-ycs-current-cohort-have-codebases-that-are-almost-entirely-ai-generated/), 25% of Y Combinator's Winter 2025 batch had 95% AI-generated codebases. YC managing partner Jared Friedman clarified these founders are "highly technical, completely capable of building their own products from scratch." They just chose to let AI do the heavy lifting.
+
+Anthropic's own teams operate similarly. [According to their internal case study](https://claude.com/blog/how-anthropic-teams-use-claude-code), product designers feed Figma files to Claude Code and run autonomous loops: write code, run tests, iterate. Data scientists without TypeScript experience build complete React visualizations for RL model performance. The Claude Code team [built 20+ prototypes of the todo list feature](https://newsletter.pragmaticengineer.com/p/how-claude-code-is-built) in just two days.
+
 ## Practical POC Workflow
 
-### Step 1: Ground Your Idea
+### Ground Your Idea First
 
 Before touching Claude Code, spend 5 minutes on a one-pager:
 - What problem does this solve?
 - What's the happy path (golden flow)?
 - What are 2-3 edge cases?
 
-This tiny upfront investment massively improves Claude's output quality.
+This tiny upfront investment significantly improves Claude's output quality.
 
-### Step 2: Choose Your Tool
-
-- **Claude Code (terminal)**: Best for developers who want full control
-- **Claude Code + Cursor**: For rapid UI iteration with AI assistance
-- **Browser tools (Bolt, Lovable, Replit)**: For non-technical stakeholders who want to participate
-
-### Step 3: Build in Vertical Slices
+### Build in Vertical Slices
 
 Don't try to build everything at once. Work end-to-end on one small feature:
 
@@ -69,15 +61,19 @@ Database → API → UI → Integration
 
 Then add the next slice. This keeps the POC functional at every stage.
 
-### Step 4: Use Realistic Data
+### Use Realistic Data
 
-Connect actual CSV files or sample datasets. Believable prototypes generate truer feedback than placeholder text.
+Connect actual CSV files or sample datasets. Believable prototypes generate truer feedback than placeholder text. If you're building a dashboard, feed it real numbers. If you're showing a workflow, use realistic scenarios.
+
+### Time-Box Your Sessions
+
+Set 2-3 hour limits. Constraints drive creativity. If you haven't shipped something by the end of your time box, you're over-engineering.
 
 ## Managing Stakeholder Expectations
 
 Polished-looking prototypes create problems. Stakeholders see working software and ask "Why can't we ship this now?"
 
-**The fix:**
+How to handle this:
 - Always label demos: "Prototype - Non-prod - Synthetic data"
 - Narrate what's stubbed vs. real
 - Record 90-second video walkthroughs instead of live demos when needed
@@ -95,11 +91,13 @@ Be honest about trade-offs. POCs built this way typically lack:
 
 This is fine for a POC. It's not fine for production. Know the difference.
 
+Karpathy himself hit this wall. When building [nanochat](https://gizmodo.com/even-the-inventor-of-vibe-coding-says-vibe-coding-cant-cut-it-2000672821), his open-source LLM training pipeline, he wrote all 8,000 lines by hand. "I tried to use claude/codex agents a few times but they just didn't work well enough at all and net unhelpful." Vibe coding works for throwaway projects. Serious infrastructure requires traditional craftsmanship.
+
 ## From POC to Production
 
 The transition is where teams stumble. A POC proves feasibility but creates technical debt by design.
 
-**The hard truth**: Most successful POCs require 70-80% rewrite for production. Don't try to incrementally polish vibe-coded work into production quality. Plan for a clean implementation using the POC as a specification.
+Most successful POCs require 70-80% rewrite for production. Don't try to incrementally polish vibe-coded work into production quality. Plan for a clean implementation using the POC as a specification.
 
 **What transfers well:**
 - Validated user flows and interactions
@@ -112,34 +110,11 @@ The transition is where teams stumble. A POC proves feasibility but creates tech
 - Database schema and migrations
 - Test coverage
 
-## Anthropic's Internal Approach
-
-Anthropic's own teams use Claude Code for POCs extensively:
-
-- Product designers feed Figma files to Claude Code and run autonomous loops—write code, run tests, iterate
-- Data scientists without TypeScript experience build complete React visualizations
-- The Claude Code team itself built 20+ prototypes of the todo list feature in two days
-
-Their pattern: let Claude do 80-90% of the first pass, humans focus on decisions and review.
-
-## Speed Benchmarks
-
-What's realistic?
-
-| Task | Traditional | With Claude Code |
-|------|-------------|------------------|
-| Simple dashboard | 2-3 days | 2-3 hours |
-| CRUD app | 1 week | 1 day |
-| Full-stack prototype | 2+ weeks | 48 hours |
-| Feature variation testing | Days per variant | Hours per variant |
-
-One Y Combinator batch (Winter 2025) reported 25% of startups had 95% AI-generated codebases. The prototyping phase that once took weeks now happens in hours.
-
 ## Common Pitfalls
 
 **Over-engineering the POC**: It's a proof of concept. Stop adding features. Ship something.
 
-**Skipping the idea grounding**: Garbage prompts yield garbage code. Spend 5 minutes defining the problem.
+**Skipping the idea grounding**: Unclear prompts yield confused code. Spend 5 minutes defining the problem.
 
 **Forgetting it's not production**: Don't ship a POC. Rewrite it properly.
 
@@ -154,7 +129,6 @@ Claude Code turns POCs from multi-week projects into same-day deliverables. Use 
 - Validate more ideas before committing resources
 - Kill bad ideas cheaply
 - Demo concepts in stakeholder meetings
-- Win hackathons
 - Build internal tools without the overhead
 
 For POCs, let Claude rip. Just know when to shift gears for production.

@@ -6,56 +6,56 @@ summary: "Hallucinates URLs that don't exist. Always verify before trusting exte
 isFree: false
 ---
 
-Claude and other LLMs routinely fabricate URLs, documentation links, package names, and API endpoints that do not exist. This is not a bug - it is an inherent behavior of language models that predict plausible text. Always verify any external reference before clicking, installing, or trusting it.
+Claude fabricates URLs, documentation links, package names, and API endpoints that do not exist. This is not a bug. Language models predict plausible text, and a plausible-looking URL is trivially easy to generate. Always verify any external reference before clicking, installing, or trusting it.
 
 ## The Scale of the Problem
 
-A 2025 Ahrefs study analyzed 16 million unique URLs cited by ChatGPT, Perplexity, Copilot, Gemini, Claude, and Mistral. The findings: AI assistants send users to 404 pages 2.87x more often than Google Search.
+[An Ahrefs study](https://ahrefs.com/blog/how-often-do-ai-assistants-hallucinate-links/) analyzed 16 million unique URLs cited by ChatGPT, Perplexity, Copilot, Gemini, Claude, and Mistral. AI assistants send users to 404 pages 2.87x more often than Google Search.
 
-ChatGPT leads with 2.38% of all cited URLs returning 404 errors. Claude follows at 0.58%. Even this "better" rate means roughly 1 in 170 links Claude provides leads nowhere.
+ChatGPT leads with 2.38% of all cited URLs returning 404 errors. Claude sits at 0.58% for clicked URLs. Even this "better" rate means roughly 1 in 170 links leads nowhere.
 
-The URLs are not random garbage. They are semantically plausible - correct domain, realistic path structure, believable slugs. The AI constructs what a URL "should" look like based on patterns, without verifying it exists.
+The URLs are not random garbage. They have correct domains, realistic path structures, believable slugs. Claude constructs what a URL "should" look like based on patterns, without checking if it exists.
 
 ## Why Claude Hallucinates URLs
 
-Anthropic's 2025 interpretability research revealed the mechanism. Claude's default behavior is to decline answering when uncertain. Hallucinations occur when this inhibition fires incorrectly.
+[Anthropic's interpretability research](https://www.anthropic.com/research/tracing-thoughts-language-model) traced the mechanism. Claude's default behavior is to refuse answering when uncertain. Hallucinations occur when this inhibition fires incorrectly.
 
-When Claude recognizes a topic but lacks specific knowledge, the "known entity" feature activates and suppresses the "don't know" response. Claude then confabulates - generating plausible but untrue information to fulfill the request.
+When Claude recognizes a topic but lacks specific knowledge, the "known entity" feature activates and suppresses the "don't know" response. Claude then confabulates, generating plausible but untrue information to fulfill the request.
 
-As Anthropic researcher Josh Batson notes: "Hallucination is the most natural thing in the world for these models, given how they're just trained to give possible completions."
+As Anthropic researcher Josh Batson [told MIT Technology Review](https://www.technologyreview.com/2025/03/27/1113916/anthropic-can-now-track-the-bizarre-inner-workings-of-a-large-language-model): "Hallucination is the most natural thing in the world for these models, given how they're just trained to give possible completions."
 
-Claude sometimes even fabricates reasoning steps to reach its answers. The chain-of-thought can be entirely made up, designed to appear logical while being completely disconnected from facts.
+Claude sometimes fabricates reasoning steps too. The chain-of-thought can be entirely made up, designed to appear logical while disconnected from facts.
 
 ## The Real Dangers
 
 ### Phishing and Malicious Sites
 
-Security researchers found that when asking LLMs for login URLs to well-known brands, 34% of URLs returned were not owned by those brands. One led directly to an active phishing site.
+[Netcraft researchers](https://www.csoonline.com/article/4015404/llms-are-guessing-login-urls-and-its-a-cybersecurity-time-bomb.html) asked LLMs for login URLs to well-known brands. 34% of URLs returned were not owned by those brands. One led directly to an active phishing site. Perplexity recommended a Google Sites page impersonating Wells Fargo's login.
 
-Attackers exploit this through "slopsquatting" - registering domains that LLMs commonly hallucinate. When users click AI-generated links, they land on attacker-controlled sites.
+Attackers exploit this through "slopsquatting," a term [coined by Python Software Foundation developer Seth Larson](https://en.wikipedia.org/wiki/Slopsquatting). They register domains that LLMs commonly hallucinate. When users click AI-generated links, they land on attacker-controlled sites.
 
-As security researcher J Stephen Kowski warns: "When AI models hallucinate URLs pointing to unregistered domains, attackers can simply register those exact domains and wait for victims to arrive."
+As J Stephen Kowski, Field CTO at SlashNext, [warned](https://www.csoonline.com/article/4015404/llms-are-guessing-login-urls-and-its-a-cybersecurity-time-bomb.html): "When AI models hallucinate URLs pointing to unregistered domains, attackers can simply register those exact domains and wait for victims to arrive."
 
 ### Malicious Package Installation
 
-The "slopsquatting" attack extends to package managers. Research on 16 code-generation models found roughly 20% of recommended packages do not exist. Attackers register these hallucinated package names with malware.
+Slopsquatting extends to package managers. [Research on 16 code-generation models](https://arxiv.org/abs/2406.10279) found roughly 20% of recommended packages do not exist. Attackers register these hallucinated names with malware inside.
 
-Real example: A researcher uploaded an empty package named "huggingface-cli" (a name Claude hallucinates). In three months, it received 30,000+ downloads. Alibaba's GraphTranslator installation instructions still reference this fake package.
+Real example: Security researcher Bar Lanyado [uploaded an empty package](https://www.lasso.security/blog/ai-package-hallucinations) named "huggingface-cli" (a name LLMs consistently hallucinate). In three months, it received 30,000+ downloads. Alibaba's GraphTranslator installation instructions referenced this fake package.
 
 When you run `npm install` or `pip install` on an AI-suggested package without verification, you may be installing malware.
 
 ### Fake API Endpoints and Documentation
 
-Claude invents API endpoints, function signatures, and documentation links. Research shows GPT-4o achieves only 38.58% accuracy on low-frequency API invocations. The other 61%+ are hallucinated.
+Claude invents API endpoints, function signatures, and documentation links. [Research on CloudAPIBench](https://arxiv.org/html/2407.09726v1) shows GPT-4o achieves only 38.58% accuracy on low-frequency API invocations. The other 61%+ are fabricated.
 
 This leads to:
 - Code that calls non-existent endpoints
 - Authentication flows that do not match the actual API
-- Hours debugging "bugs" that are actually fabricated APIs
+- Hours debugging "bugs" that are actually invented APIs
 
 ### Supply Chain Attacks
 
-The pattern is repeatable. Researchers found 43% of hallucinated packages appeared in all 10 repeated queries - making them predictable targets.
+The pattern is repeatable. Researchers found [43% of hallucinated packages appeared in all 10 repeated queries](https://arxiv.org/html/2406.10279v3), making them predictable targets.
 
 Attackers do not need massive datasets. They prompt LLMs, identify consistently hallucinated names, and register them. The malicious package then spreads through every developer who trusts AI suggestions.
 
@@ -75,9 +75,9 @@ Claude fabricates:
 
 Before clicking any Claude-provided link:
 
-1. **Check the domain** - Is this the official domain for this product/service?
-2. **Use curl to verify** - Run `curl -I <url>` to check the HTTP status code
-3. **Search directly** - Go to the official site and find the page yourself
+1. **Check the domain**: Is this the official domain for this product/service?
+2. **Use curl to verify**: Run `curl -I <url>` to check the HTTP status code
+3. **Search directly**: Go to the official site and find the page yourself
 
 Quick verification command:
 ```bash
@@ -90,27 +90,25 @@ A 200 means the page exists. A 404 means Claude made it up.
 
 Before running `npm install` or `pip install` on AI-suggested packages:
 
-1. **Search the registry directly** - Go to npmjs.com or pypi.org and search
-2. **Check package age** - Was it created recently? New packages matching hallucinated names are suspicious
-3. **Verify download counts** - Legitimate packages have download history
-4. **Inspect the repository** - Does it link to a real GitHub repo with actual code and history?
-5. **Read the source** - Open the package and read what it actually does
-
-For Python, use tools like `pipask` which checks packages before installation.
+1. **Search the registry directly**: Go to npmjs.com or pypi.org and search
+2. **Check package age**: Was it created recently? New packages matching hallucinated names are suspicious
+3. **Verify download counts**: Legitimate packages have download history
+4. **Inspect the repository**: Does it link to a real GitHub repo with actual code and history?
+5. **Read the source**: Open the package and read what it actually does
 
 ### For API Endpoints
 
 Before using any API endpoint Claude suggests:
 
-1. **Read the official documentation** - Navigate to the actual docs, do not trust Claude's links
-2. **Check the OpenAPI/Swagger spec** - If available, verify the endpoint exists in the spec
-3. **Test with minimal impact** - Use `curl` or Postman to hit the endpoint before writing code around it
+1. **Read the official documentation**: Navigate to the actual docs, do not trust Claude's links
+2. **Check the OpenAPI/Swagger spec**: If available, verify the endpoint exists in the spec
+3. **Test with minimal impact**: Use `curl` or Postman to hit the endpoint before writing code around it
 
 ### For GitHub Repositories
 
-1. **Visit the URL directly** - See if the repo exists
-2. **Check the stars and activity** - Real repos have history
-3. **Verify the organization** - Is this the real org for this project?
+1. **Visit the URL directly**: See if the repo exists
+2. **Check the stars and activity**: Real repos have history
+3. **Verify the organization**: Is this the real org for this project?
 
 ## Claude Code-Specific Mitigations
 
@@ -146,9 +144,11 @@ Add explicit instructions to your project's `CLAUDE.md`:
 
 ### Ask Claude to Verify
 
-When Claude provides a link, immediately ask:
+When Claude provides a link, ask it to verify:
 
-> "Can you verify that URL actually exists? Try to fetch it."
+```
+Can you verify that URL actually exists? Try to fetch it.
+```
 
 This forces Claude to attempt validation rather than assuming.
 

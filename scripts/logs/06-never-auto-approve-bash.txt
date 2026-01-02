@@ -1,0 +1,34 @@
+The tip has been updated successfully. Here's a summary of changes:
+
+**Factual corrections:**
+- Changed "9 CVEs" to "over 10 high-severity security advisories" (verified via GitHub)
+- Added that the Nx attack affected "over 400 users" and leaked "over a thousand valid GitHub tokens"
+- Clarified Amazon Q attack: "A syntax error in the payload prevented actual execution"
+- Updated attack success rate to "ranging from 41% to 84%" (from AIShellJack study)
+- Fixed settings.json syntax to use proper prefix matching (`:*` suffix)
+
+**Added inline links to sources:**
+- Stack Overflow 2025 survey (84% adoption stat)
+- Hacker News IDEsaster research (30+ vulnerabilities)
+- GitHub security advisories (Claude Code CVEs)
+- OWASP LLM Top 10 (prompt injection #1)
+- Individual incident reports (home directory wipe, Replit, Amazon Q, Nx)
+- AIShellJack arXiv paper (attack success rates)
+- Inc.com article (hidden code in headshot photo)
+- Anthropic engineering blog (sandboxing 84% reduction)
+- Claude Code settings docs (prefix matching)
+- Anthropic devcontainer-features (Docker configs)
+
+**Style improvements:**
+- Removed em dashes (replaced with periods)
+- Added OS-level primitives detail for sandboxing
+- Added Shift+Tab shortcut for Accept Edits mode
+- Added explicit warning quote for --dangerously-skip-permissions
+- Added explanation of prefix matching syntax
+
+**Maintained:**
+- Frontmatter unchanged
+- 164 lines total (exceeds 100+ requirement)
+- No banned words or phrases
+- No overlaps with other tips
+- No "Related Tips" section

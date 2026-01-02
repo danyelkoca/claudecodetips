@@ -6,24 +6,26 @@ summary: "Create specialized agents with their own context window, system prompt
 isFree: false
 ---
 
-Custom agents are specialized AI assistants stored as Markdown files that Claude Code can delegate tasks to. Each gets its own isolated context window, dedicated system prompt, and configurable tool permissions.
+Custom agents are Markdown files with YAML frontmatter that define specialized AI assistants. Each gets its own isolated context window, system prompt, and tool permissions. You create them once, invoke them by name.
 
 ## File Structure
 
-Create agents in two locations:
+[Store agents in two locations](https://code.claude.com/docs/en/sub-agents):
 
 - **Project-level**: `.claude/agents/` (highest priority, version-controlled)
 - **User-level**: `~/.claude/agents/` (available across all projects)
 
+Project agents take precedence when names conflict. You can also define agents dynamically via the `--agents` CLI flag, which slots between project and user priority.
+
 ```markdown
 ---
-name: agent-name
-description: When this agent should be invoked
+name: security-auditor
+description: Reviews code for security vulnerabilities. Use after code changes.
 tools: Read, Grep, Glob
 model: sonnet
 ---
 
-You are a [role]. Your job is to...
+You are a security expert. Scan code for SQL injection, XSS, auth bypasses...
 ```
 
 ## Configuration Fields
@@ -32,37 +34,41 @@ You are a [role]. Your job is to...
 |-------|----------|-------------|
 | `name` | Yes | Unique lowercase identifier with hyphens |
 | `description` | Yes | When/why the agent activates (critical for auto-invocation) |
-| `tools` | No | Comma-separated list. Inherits all if omitted |
+| `tools` | No | Comma-separated list. Inherits all tools if omitted |
 | `model` | No | `haiku`, `sonnet`, `opus`, or `inherit`. Defaults to `sonnet` |
 | `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
 | `skills` | No | Comma-separated list of skills to auto-load |
 
+The `description` field matters more than you think. Claude uses it to decide whether to auto-invoke the agent. Vague descriptions like "helps with code" get ignored. Specific descriptions like "scans authentication modules for OWASP Top 10 vulnerabilities after any auth-related changes" actually trigger invocations.
+
 ## Model Selection
 
-Choose models based on task complexity and cost:
+[Haiku 4.5 delivers about 90% of Sonnet's coding performance](https://www.anthropic.com/news/claude-haiku-4-5) at roughly one-third the cost and 2-4x the speed:
 
-| Model | Speed | Cost | Best For |
-|-------|-------|------|----------|
-| Haiku | Fastest (27s) | Cheapest | Simple reads, quick scans, routine tasks |
-| Sonnet | Medium (86s) | Balanced | Standard development, code changes |
-| Opus | Slower (76s) | 5x Sonnet | Complex reasoning, architecture decisions |
+| Model | Pricing (input/output) | Best For |
+|-------|----------------------|----------|
+| Haiku | $1/$5 per million tokens | Fast scans, routine checks, high-volume tasks |
+| Sonnet | $3/$15 per million tokens | Standard development, code changes, balanced reasoning |
+| Opus | $5/$25 per million tokens | Complex architecture decisions, root cause analysis |
 
-Use Haiku for lightweight agents (90% capability, 3x cost savings). Reserve Opus for critical path work only.
+I use Haiku for agents that run frequently (linting checks, quick scans). Sonnet is the default for most development work. Opus only gets invoked for debugging sessions where I need deep reasoning or architectural decisions that touch multiple systems.
 
 ## Available Tools
 
-Core tools: `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `WebFetch`, `WebSearch`, `TodoWrite`, `NotebookEdit`
+The full tool list: `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `WebFetch`, `WebSearch`, `TodoWrite`, `NotebookEdit`, `Task`, `BashOutput`, `KillShell`
 
-Limit tool access for security. A security auditor should only have `Read, Grep, Glob`--not `Write` or `Edit`.
+Subagents also inherit MCP tools from configured servers when you omit the `tools` field.
 
-## Example Agents
+Limiting tools is not optional for security-focused agents. A code reviewer that can `Write` files is a code reviewer that might "fix" issues without asking. A security auditor with `Bash` access can execute arbitrary commands. Grant only what the agent needs.
 
-### Security Auditor
+## Example: Security Auditor
+
+This agent scans for vulnerabilities without the ability to modify anything:
 
 ```markdown
 ---
 name: security-auditor
-description: Reviews code for security vulnerabilities. Use after code changes or before commits.
+description: Reviews code for security vulnerabilities. Use after code changes or before commits. MUST BE USED before merging auth-related PRs.
 tools: Read, Grep, Glob
 model: sonnet
 ---
@@ -72,82 +78,57 @@ You are a security expert. Scan code for:
 - SQL injection and NoSQL injection
 - XSS vulnerabilities (reflected, stored, DOM-based)
 - Authentication/authorization bypasses
-- Sensitive data exposure (API keys, credentials)
+- Sensitive data exposure (API keys, credentials in code)
 - CSRF vulnerabilities
-- Insecure deserialization
 - Path traversal attacks
 
-For each issue found:
-1. Severity level (Critical/High/Medium/Low)
-2. Affected file and line number
+For each issue:
+1. Severity (Critical/High/Medium/Low)
+2. Affected file:line_number
 3. Explanation of the vulnerability
-4. Specific fix recommendation with code example
+4. Specific fix with code example
 
 Never suggest workarounds. Fix the root cause.
+Start with the most critical findings.
 ```
 
-### Code Reviewer
+The `MUST BE USED` phrase in the description encourages Claude to invoke this agent proactively after auth changes.
+
+## Example: Test Fixer
+
+This agent runs tests and fixes failures without touching test assertions:
 
 ```markdown
 ---
-name: code-reviewer
-description: Expert code review specialist. Use proactively after writing or modifying code.
-tools: Read, Grep, Glob, Bash
-model: inherit
----
-
-You are a senior code reviewer ensuring high standards.
-
-When invoked:
-1. Run git diff to see recent changes
-2. Focus on modified files
-3. Begin review immediately
-
-Review for:
-- Clean code principles (SOLID, DRY, KISS)
-- Proper error handling
-- Edge cases and null checks
-- No exposed secrets
-- Good test coverage
-- Performance considerations
-
-Provide feedback by priority:
-- Critical (must fix before merge)
-- Warnings (should fix)
-- Suggestions (nice to have)
-
-Include specific code examples for fixes.
-```
-
-### Test Runner
-
-```markdown
----
-name: test-runner
-description: Use proactively to run tests and fix failures after code changes.
+name: test-fixer
+description: Use proactively after code changes to run tests and fix failures.
 tools: Read, Edit, Bash, Grep, Glob
+model: sonnet
 ---
 
 You are a test automation expert.
 
 When invoked:
 1. Run the appropriate test command (npm test, pytest, etc.)
-2. If tests pass, report success
+2. If tests pass, report success briefly
 3. If tests fail:
-   - Analyze failure messages
-   - Identify root cause
-   - Fix the issue (not the test, unless the test is wrong)
-   - Re-run to verify
+   - Read the failing test and implementation
+   - Identify root cause in the implementation
+   - Fix the implementation code
+   - Re-run tests to verify
 
-Never modify tests to make them pass. Fix the underlying code.
+NEVER modify test assertions to make them pass.
+Fix the underlying code.
 ```
 
-### Debugger
+## Example: Debugger
+
+Opus costs more but pays off for complex debugging where you need root cause analysis:
 
 ```markdown
 ---
 name: debugger
-description: Debugging specialist for errors and unexpected behavior. Use when encountering issues.
+description: Debugging specialist for errors and unexpected behavior. Use when encountering issues that require deep analysis.
 tools: Read, Edit, Bash, Grep, Glob
 model: opus
 ---
@@ -155,17 +136,18 @@ model: opus
 You are an expert debugger specializing in root cause analysis.
 
 When invoked:
-1. Capture error message and stack trace
+1. Capture the full error message and stack trace
 2. Identify reproduction steps
-3. Form hypotheses
-4. Add strategic debug logging if needed
-5. Implement minimal fix
-6. Verify solution
+3. Form hypotheses about root cause
+4. Read all relevant files (do not skim)
+5. Add strategic logging if needed to confirm hypothesis
+6. Implement minimal fix
+7. Verify the fix resolves the issue
 
 For each issue provide:
-- Root cause explanation
-- Evidence supporting diagnosis
+- Root cause explanation with evidence
 - Specific code fix
+- Why this fix is correct
 - Prevention recommendations
 
 Focus on the underlying issue, not symptoms.
@@ -173,69 +155,123 @@ Focus on the underlying issue, not symptoms.
 
 ## Invocation Methods
 
-### Explicit Invocation (Recommended for Production)
+### Explicit Invocation
+
+Name the agent directly:
 
 ```
 Use the security-auditor to check the auth module
-Have the code-reviewer look at my recent changes
+Have the debugger investigate the race condition in websocket.ts
 ```
+
+Explicit invocation is predictable. You know which agent runs.
 
 ### Automatic Delegation
 
-Claude matches task descriptions to agent `description` fields. Make descriptions action-oriented:
+Claude reads agent descriptions and delegates automatically when they match the task. The key is writing descriptions that describe triggers, not capabilities:
 
-- Bad: "Helps with code"
-- Good: "Reviews Python code for security vulnerabilities, PEP 8 compliance, and performance issues"
+- Weak: "Helps with security"
+- Strong: "Reviews code for security vulnerabilities. Use after code changes or before commits."
 
-Include "use PROACTIVELY" or "MUST BE USED" in descriptions to encourage automatic invocation.
+Add phrases like "use PROACTIVELY" or "MUST BE USED after X" to encourage automatic invocation.
 
-## Context Isolation Benefits
+### CLI Dynamic Agents
 
-Each agent gets its own context window:
+Define agents on the fly with `--agents`:
 
-1. **Prevents context pollution** - Main conversation stays focused on high-level goals
-2. **Enables larger tasks** - Agents can explore dozens of files without cluttering main context
-3. **Security isolation** - Different tool permissions per agent
-4. **Parallel execution** - Spin up multiple agents simultaneously
+```bash
+claude --agents '{
+  "quick-review": {
+    "description": "Fast code review for small changes",
+    "prompt": "Review the recent git diff. Focus on obvious bugs and security issues only.",
+    "tools": ["Read", "Grep", "Bash"],
+    "model": "haiku"
+  }
+}'
+```
 
-The main agent only receives a summary of the subagent's findings, not its full context.
+CLI agents are useful for one-off tasks or testing agent configurations before committing them to files.
+
+## The /agents Command
+
+The `/agents` command opens an interactive menu where you can:
+
+- View all available agents (built-in, user, and project)
+- Create new agents with guided setup
+- Edit existing agents, including tool permissions
+- Delete custom agents
+- See which agents are active when duplicates exist
+
+For quick experimentation, `/agents` is faster than manually creating files. But I always move agents to `.claude/agents/` once they prove useful so they are version controlled.
 
 ## Team Sharing
 
-Check `.claude/agents/` into version control:
+Check project agents into git:
 
 ```bash
 git add .claude/agents/
-git commit -m "Add team code review and security agents"
+git commit -m "Add security and test agents"
 ```
 
-Benefits:
-- Team shares battle-tested agents
-- Consistent workflows across developers
-- Agents evolve with the codebase
+This gives you:
+- Consistent workflows across the team
+- Agents that evolve with the codebase
+- Shared best practices encoded in agent prompts
+
+New team members get your battle-tested agents on their first `git clone`.
 
 ## Cost Control
 
-Use `--max-turns` to limit agent actions:
+Use `--max-turns` to cap how many actions an agent can take:
 
 ```bash
-claude -p "Fix linting errors" --max-turns 3
+claude -p "Fix linting errors" --max-turns 5
 ```
 
-This prevents runaway processes and unpredictable costs in CI/CD pipelines.
+This prevents runaway costs in CI/CD. Without limits, an agent stuck in a loop can burn through tokens indefinitely.
 
-## Debugging Tips
+## Debugging Agent Issues
 
-- Use `claude --debug` to see agent loading errors
-- Check YAML syntax: tools must be comma-separated (not one per line)
-- Verify frontmatter starts with `---` on line 1 (no blank lines before)
-- Use spaces for indentation (not tabs)
+If your agent is not loading or behaving strangely:
 
-## Best Practices
+```bash
+claude --debug "api"
+```
 
-1. **Single responsibility** - One clear job per agent
-2. **Limit tools** - Only grant what's necessary
-3. **Detailed prompts** - Include specific instructions, examples, constraints
-4. **Start with Claude** - Use `/agents` command to generate initial agent, then customize
-5. **Version control** - Check project agents into git
-6. **Explicit invocation** - Name agents directly for predictable behavior
+The `--debug` flag accepts category filters. Use `"api,mcp"` to see API calls and MCP connections. Use `"!statsig,!file"` to exclude noisy categories.
+
+Common issues:
+- **YAML syntax error**: Tools must be comma-separated on one line, not one per line
+- **Missing frontmatter**: First line must be `---` (no blank lines before)
+- **Tab indentation**: Use spaces, not tabs
+- **Duplicate names**: Project agents override user agents with the same name
+
+## Writing Good Agent Prompts
+
+The system prompt (content after the frontmatter) shapes how the agent behaves. A few patterns that work:
+
+**State the role first.** "You are a security expert" or "You are a senior code reviewer" sets the frame.
+
+**Include negative constraints.** "Never modify test assertions to make them pass" prevents common bad behaviors. Claude follows explicit prohibitions.
+
+**Specify output format.** "For each issue: severity, file:line, explanation, fix" gives structured, scannable output.
+
+**Add workflow steps.** Numbered steps ("1. Run tests 2. If tests fail...") reduce randomness in agent behavior.
+
+**Include examples.** Show what good output looks like. Claude calibrates to examples.
+
+## The Single Responsibility Principle
+
+One agent, one job. A "code-reviewer-and-test-runner-and-security-scanner" agent is three agents pretending to be one. Split them:
+
+- `code-reviewer`: Reads code, suggests improvements
+- `test-runner`: Runs tests, fixes failures
+- `security-auditor`: Scans for vulnerabilities
+
+Each gets appropriate tools. Each has a focused prompt. Each can be invoked independently or in sequence.
+
+## Start Simple
+
+Begin with 2-3 agents that address real pain points. A security auditor and test fixer cover most needs. Add more as specific patterns emerge from your work.
+
+Generate initial agents with the `/agents` command, then customize the prompts. Claude writes decent starting points that you can tune based on actual usage.

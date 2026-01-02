@@ -1,0 +1,29 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Factual Fixes:**
+- Fixed "University of Kansas" → Singapore Management University (the venting study)
+- Fixed "IEEE researcher" → Rick Battle from VMware (with proper link)
+- Fixed "Claude 4.x" → Opus 4.5
+- Removed unverified 5% claim from MBZUAI study (used direct quote instead)
+- All 9 URLs verified and confirmed working
+
+**Overlaps Removed:**
+- Removed detailed "Be Direct and Explicit" section (covered in Tip 13)
+- Removed "Use Affirmative Commands" section (covered in Tip 14)
+- Removed EmotionPrompt/emotional stimuli section entirely (covered in Tip 15)
+- Trimmed sycophancy discussion to focus on tool mindset, not the full behavior (Tip 36 covers this)
+
+**Structure Improvements:**
+- Stronger opener (pattern matching, not lengthy explanation)
+- Combined practical guidelines into tighter sections
+- Removed redundant "Key Takeaways" section
+- Better flow from research → application → nuance
+
+**Voice Improvements:**
+- No banned words
+- No em dashes
+- Varied sentence lengths
+- Practitioner perspective with inline links
+- Removed "Key Takeaways" list format
+
+**Line Count:** 121 lines (meets 100+ requirement)

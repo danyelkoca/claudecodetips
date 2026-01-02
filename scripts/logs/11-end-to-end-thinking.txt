@@ -1,0 +1,29 @@
+Done. Here's what I changed:
+
+**Verified and Updated Sources:**
+- Replaced unverified "41% specification problems" with [CodeRabbit's verified stat](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report): 75% more logic/correctness errors
+- Updated developer comprehension stat to verified range: 58-70% with [ResearchGate source](https://www.researchgate.net/publication/293813040)
+- Added [Veracode's 45% security flaws stat](https://www.veracode.com/blog/genai-code-security-report/) with proper context
+- Fixed Leslie Lamport quote to the verified one: "Coding is to programming what typing is to writing"
+- Added [Anthropic best practices link](https://www.anthropic.com/engineering/claude-code-best-practices) for the "read but don't write" recommendation
+
+**Structural Changes:**
+- Removed "Why This Works: Systems Thinking" section (generic, not action-oriented)
+- Added new "Why Context Limits Make This Worse" section with [verified research on context degradation](https://aclanthology.org/2025.findings-emnlp.1264.pdf) and [multi-file refactoring failures](https://www.augmentcode.com/guides/enterprise-multi-file-refactoring-why-ai-breaks-at-scale)
+- Added practical example: stuffing context manually before changes
+- Replaced "The Broken Adjacent Feature" with "The Circular Dependency" (backed by [source on LLM linear generation](https://dev.to/leena_malhotra/why-ai-code-suggestions-fail-in-multi-file-projects-49j9))
+- Added practitioner anecdote: `isLoading` vs `loadingState` example
+
+**Removed:**
+- Unverified statistics (41-86% failure rate, 30% longer debugging, 15% fewer defects)
+- Generic "systems thinking" philosophy section
+- Overly broad cost claims, replaced with verified CodeRabbit stats (1.7x issues, 2.74x security issues, 8x I/O problems)
+
+**Quality Checks Passed:**
+- Frontmatter untouched
+- No banned words/phrases
+- No em dashes
+- 191 lines (above 100 minimum)
+- All 8 URLs fetched and verified
+- Strong opener with concrete scenario
+- No overlap with Tips 8, 9, 10, or 12

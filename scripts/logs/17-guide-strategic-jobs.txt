@@ -1,0 +1,32 @@
+I've updated the tip. Here's a summary of the changes:
+
+**Key improvements:**
+
+1. **Added verified inline links** to all major research claims:
+   - MIT CSAIL research on LLM reasoning limitations
+   - Apple's "The Illusion of Thinking" paper from NeurIPS 2025
+   - Harvard Business School study on AI and human judgment
+   - Wharton research in Nature Human Behaviour on idea homogenization
+   - McKinsey strategy research on AI as "building blocks"
+   - JMIR Mental Health study on citation fabrication (19.9% rate)
+   - Nature Human Behaviour meta-analysis on human-AI underperformance
+   - Plan-and-Solve prompting paper from ACL 2023
+   - TechCrunch article confirming Brave Search backend
+
+2. **Removed unverified claims:**
+   - The "68% FDA accuracy" and "72% ChatGPT accuracy" claims (couldn't find source)
+   - The Perplexity comparison claim (not well-sourced)
+
+3. **Replaced banned words:**
+   - "leveraging" → "using"
+   - "Navigating ambiguity" → "Judgment under uncertainty and ambiguity"
+
+4. **Tightened the opening** to be more direct (no preamble)
+
+5. **Added specific statistics** from verified sources:
+   - 94% overlap in ChatGPT-assisted toy designs
+   - -0.23 Hedges' g performance gap for human-AI decisions
+   - 19.9% fabrication rate, 45.4% bibliographic errors
+   - 10-15% profit increase for high performers, 8% decrease for low performers
+
+6. **Maintained 100+ lines** (229 lines) with focused, specific content

@@ -6,17 +6,27 @@ summary: "Each query = 1 session. Check for hardcoded texts, design consistency,
 isFree: false
 ---
 
-Codebases rot. Without regular maintenance, inconsistencies creep in, technical debt compounds, and what was once clean architecture becomes a tangled mess. Claude Code is perfect for periodic quality audits.
+Codebases rot. Inconsistencies creep in, technical debt compounds, and what was once clean architecture becomes a tangled mess. Claude Code is perfect for periodic quality audits, but you need realistic expectations about what it catches and what slips through.
 
-**The Golden Rule: One Query = One Session**
+## The Built-in Security Review
 
-Each quality check should be a fresh session. Don't pile multiple audits into one conversation. Context pollution leads to shallow analysis. Start clean, go deep.
+Claude Code ships with a [`/security-review` command](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code) that scans your codebase for common vulnerabilities. Run it before major commits:
+
+```
+/security-review
+```
+
+It checks for SQL injection, XSS, authentication flaws, insecure data handling, and dependency vulnerabilities. For teams, there's a [GitHub Action](https://github.com/anthropics/claude-code-security-review) that triggers on every PR.
+
+But here's the reality: [Semgrep's security research](https://semgrep.dev/blog/2025/finding-vulnerabilities-in-modern-web-apps-using-claude-code-and-openai-codex/) found Claude Code achieves about 14% true positive rate on security scans, with 86% false positives. Performance varies wildly by vulnerability type: 22% for IDOR bugs, but just 5% for SQL injection. The model struggles to trace data across multiple files.
+
+This means: use `/security-review` as a first pass, not your only defense. Pair it with traditional SAST tools like Semgrep or SonarQube for production code. Human review remains non-negotiable for anything touching authentication, payments, or user data.
 
 ---
 
 ## Code Consistency Checks
 
-Inconsistent code creates cognitive load. Every time a developer encounters a different pattern for the same thing, they waste mental energy.
+Inconsistent code creates cognitive load. Every time a developer encounters a different pattern for the same thing, they waste mental energy. These checks are where Claude shines: pattern matching across files is tedious for humans, trivial for an LLM.
 
 **Naming conventions:**
 
@@ -79,6 +89,8 @@ Find all translation keys that are defined but never used in the
 codebase. Check the translation files against actual usage in
 components and pages. List orphaned keys that can be removed.
 ```
+
+I run these i18n checks after every major feature ships. Translations are expensive. Finding 50 orphaned keys before sending to translators saves real money.
 
 ---
 
@@ -157,23 +169,13 @@ Check all dependencies for:
 Run npm audit (or equivalent) and explain findings.
 ```
 
+For dead code and duplication, Claude's analysis is directional, not definitive. It might flag a function as unused when it's called dynamically. Always verify before deleting. But even with false positives, these scans surface candidates you'd never find manually.
+
 ---
 
-## Security Vulnerability Scanning
+## Beyond /security-review: Custom Security Scans
 
-Security issues hide in plain sight. Regular scanning catches problems before attackers do.
-
-**OWASP pattern check:**
-
-```
-Audit this codebase for OWASP Top 10 vulnerabilities:
-- SQL injection risks (unsanitized inputs in queries)
-- XSS vulnerabilities (unescaped user content in HTML)
-- Insecure authentication patterns
-- Sensitive data exposure
-- Security misconfigurations
-Check every endpoint and data flow. List findings by severity.
-```
+The built-in `/security-review` covers common patterns, but custom prompts catch project-specific issues. These are useful for periodic deep dives rather than every commit.
 
 **Secrets and credentials scan:**
 
@@ -185,6 +187,21 @@ Search for accidentally committed secrets:
 - Environment variables with default secrets
 Check .env.example files for sensitive defaults too.
 ```
+
+This catches what automated tools miss: secrets disguised as config values, hardcoded test credentials that made it to production, API keys in comments.
+
+**Authentication flow audit:**
+
+```
+Trace all authentication and authorization code paths. Check:
+- Token validation consistency across endpoints
+- Session handling edge cases (expiry, refresh, revocation)
+- Permission checks on every protected route
+- Rate limiting on auth endpoints
+Flag any endpoint that touches user identity.
+```
+
+Authentication bugs are high-severity but hard to spot in code review. Claude can trace flows across files, though you'll need to verify findings manually.
 
 ---
 
@@ -233,6 +250,8 @@ Find testing anti-patterns:
 List problematic tests and suggest fixes.
 ```
 
+A warning on test audits: Claude can identify structural anti-patterns, but it can't tell you if a test is actually valuable. A test with 100% coverage of meaningless assertions looks fine to an LLM. Use these scans to find obvious problems, not to validate your test strategy.
+
 ---
 
 ## API Consistency
@@ -253,14 +272,14 @@ List all violations of the established patterns.
 
 ---
 
-## Workflow Recommendations
+## Making Quality Checks Stick
 
-**Frequency:** Run these checks monthly for active projects. Weekly during heavy development phases.
+**When to run them:** Monthly for stable projects. Weekly during heavy development. After major refactors or dependency updates.
 
-**Documentation:** Keep a log of findings. Track recurring issues to identify systemic problems.
+**What to track:** Keep a log of findings. When the same issue type keeps appearing (inconsistent error handling, missing i18n keys), that's a systemic problem worth fixing at the root.
 
-**Prioritization:** Security and data integrity issues first. Consistency improvements second. Minor style issues last.
+**Priority order:** Security and data integrity first. Then API consistency. Then code duplication. Style issues last, if ever.
 
-**Session hygiene:** Start each check with `/clear`. Don't let previous context pollute the analysis.
+**Set realistic expectations:** Claude excels at finding surface-level issues: naming inconsistencies, obvious duplication, missing translation keys. It struggles with deep semantic analysis across many files. The 86% false positive rate on security scans means you'll triage noise. That's still faster than manual review for initial passes.
 
-The goal isn't perfection. It's preventing the slow decay that turns maintainable code into legacy nightmares. Regular quality checks with Claude Code catch problems while they're still small.
+The goal isn't a perfect codebase. It's catching decay before it compounds. A monthly check that surfaces 3 real issues pays for itself.

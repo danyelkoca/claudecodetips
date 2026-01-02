@@ -1,0 +1,32 @@
+I've updated the tip with the following changes:
+
+**Key improvements:**
+
+1. **Verified and linked all sources:**
+   - [v1.0.53 changelog](https://claudelog.com/claude-code-changelog/) for the 100→2000 line expansion
+   - [Lost in the Middle paper](https://arxiv.org/abs/2307.03172) (Stanford/UC Berkeley, not "Stanford, Google, Anthropic, and Meta" as originally claimed)
+   - [RoPE embeddings](https://blog.eleuther.ai/rotary-embeddings/) for attention decay
+   - [GitHub issue #7533](https://github.com/anthropics/claude-code/issues/7533) for context compaction behavior
+   - [Anthropic's long-context tips](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/long-context-tips) for prompting techniques
+   - [Context Length Alone Hurts LLM Performance](https://arxiv.org/abs/2510.05381) (October 2025) for the 13.9%-85% statistic
+
+2. **Removed outdated/inaccurate claims:**
+   - Removed the "27% to 98%" statistic (specific to Claude 2.1, old model)
+   - Fixed attribution of Lost in the Middle research (was incorrectly attributed to Anthropic and Meta)
+   - Removed vague "128K tokens" claim without source
+
+3. **Added missing context:**
+   - The 25,000 token hard limit that can truncate files further
+   - Clarified the October 2025 research source for the 13.9%-85% stat
+
+4. **Improved technique naming:**
+   - "Find the Sentence" → "grounding responses in quotes" (Anthropic's actual terminology)
+
+5. **Tightened focus:**
+   - Removed overlap with Tip 19 (quality degradation in long sessions)
+   - Streamlined "What Claude Code Does Right" section (not central to the tip's premise)
+
+6. **Writing quality:**
+   - No banned words or em dashes
+   - Stronger opener
+   - 162 lines (above 100 minimum)

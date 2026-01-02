@@ -18,7 +18,7 @@ The training data reinforces this. Production codebases rarely show deletion com
 
 Context window limitations compound the problem. Claude cannot always see the full impact of removing code. It cannot trace every function call across a large codebase to verify nothing depends on the code being deleted. When in doubt, it preserves.
 
-There is also the "lost in the middle" problem. Research from Stanford demonstrated that language models perform best when relevant information appears at the very beginning or very end of context, with significant degradation for information in the middle. If the reason to delete code was established 50 messages ago, Claude may no longer weigh it appropriately.
+There is also the ["lost in the middle" problem](https://arxiv.org/abs/2307.03172). Research by Liu et al. demonstrated that language models perform best when relevant information appears at the very beginning or very end of context, with significant degradation for information in the middle. If the reason to delete code was established 50 messages ago, Claude may no longer weigh it appropriately.
 
 ## The Symptoms
 
@@ -44,19 +44,19 @@ When asked to rewrite a function, Claude sometimes creates a new version alongsi
 
 **Accumulated Legacy Cruft**
 
-As one engineering team reported: "Claude Code will decide to rewrite something and leave the old stuff around." Over time, this accumulation creates a codebase filled with dead ends, abandoned approaches, and code nobody remembers writing.
+Over time, this accumulation creates a codebase filled with dead ends, abandoned approaches, and code nobody remembers writing. Each session adds more layers. The original implementation? Still there. The refactored version? Also there. The third attempt? You guessed it.
 
 ## The Cost
 
-Commented-out code is a recognized code smell. Kent Beck and Martin Fowler popularized this concept in the 1990s, and it remains foundational to clean code practices. Dead code adds noise, increases cognitive load, and signals deeper design problems.
+Commented-out code is a recognized code smell. [Kent Beck coined the term](https://martinfowler.com/bliki/CodeSmell.html) while helping Martin Fowler write his 1999 book *Refactoring*, and it remains foundational to clean code practices. Dead code adds noise, increases cognitive load, and signals deeper design problems.
 
-The technical debt compounds. GitClear's analysis of 211 million lines of code found an 8-fold increase in code duplication during 2024, coinciding with widespread AI coding tool adoption. One API evangelist with 35 years of experience reported never seeing "so much technical debt being created in such a short period of time."
+The technical debt compounds. [GitClear's analysis of 211 million lines of code](https://www.gitclear.com/ai_assistant_code_quality_2025_research) found an 8-fold increase in duplicated code blocks (5+ lines) during 2024, coinciding with widespread AI coding tool adoption. API evangelist Kin Lane put it bluntly: "I don't think I have ever seen so much technical debt being created in such a short period of time during my 35-year career in technology."
 
-Dead code creates confusion. Other developers see commented-out code and wonder: Is this important? Should I uncomment it? Was it disabled for a reason? This uncertainty derails focus and wastes time.
+Dead code creates confusion. As [Kent C. Dodds writes](https://kentcdodds.com/blog/please-dont-commit-commented-out-code): when developers encounter commented-out code, they pause to read it, wondering if it is important. Their workflow is derailed by code that does nothing.
 
 There are security implications too. Unreviewed dead code can contain vulnerabilities, hardcoded credentials, or deprecated patterns. Security scanners may flag it. Code reviewers must spend time determining if it matters.
 
-Perhaps most critically: accumulated garbage confuses Claude itself. If the codebase is littered with dead code from previous sessions, Claude may reference it, copy its patterns, or fail to understand what the "real" implementation is. The mess feeds back into worse outputs.
+Perhaps worst: accumulated garbage confuses Claude itself. If the codebase is littered with dead code from previous sessions, Claude may reference it, copy its patterns, or fail to understand what the "real" implementation is. The mess feeds back into worse outputs.
 
 ## The Fix: CLAUDE.md Rules
 
@@ -108,7 +108,7 @@ Before every commit, run `git diff --cached` and check for:
 - **Functions/classes no longer called** - Dead code that should be removed?
 - **Duplicate implementations** - Old and new versions both present?
 
-This manual review catches what Claude misses. As one developer noted: "Re-reading the diff finds countless bugs."
+This manual review catches what Claude misses. I have caught more issues in `git diff` than in the actual coding process.
 
 ## Detection Tools
 
@@ -116,12 +116,12 @@ Automated tools provide a safety net:
 
 **JavaScript/TypeScript:**
 - ESLint with `no-unused-vars` and `@typescript-eslint/no-unused-vars` rules
-- Knip for project-wide dead code detection (helped Vercel delete ~300k lines of unused code)
+- [Knip](https://knip.dev) for project-wide dead code detection (Gary Tyr from Vercel: "Knip helped us delete ~300k lines of unused code at Vercel")
 - TypeScript compiler with `--noUnusedLocals` and `--noUnusedParameters`
 
 **Python:**
-- Vulture for AST-based dead code detection, including unreachable code after return statements
-- Autoflake removes unused imports and variables automatically
+- [Vulture](https://github.com/jendrikseipp/vulture) for AST-based dead code detection, including unreachable code after return statements
+- [Autoflake](https://pypi.org/project/autoflake/) removes unused imports and variables automatically
 - Pylint with unused-import and unused-variable checks
 
 **Pre-commit Integration:**

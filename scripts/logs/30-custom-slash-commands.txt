@@ -1,0 +1,28 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Factual Corrections:**
+- Updated model IDs from legacy `claude-3-5-haiku-20241022` to current `claude-haiku-4-5-20251001`, `claude-sonnet-4-5-20250929`, and `claude-opus-4-5-20251101` (verified against [Anthropic's model documentation](https://platform.claude.com/docs/en/about-claude/models/overview))
+- Fixed subdirectory namespacing claim: Added caveat with [link to GitHub issue #2422](https://github.com/anthropics/claude-code/issues/2422) noting the documented `/project:git:branch` syntax doesn't work reliably
+- Added missing `disable-model-invocation` frontmatter option
+- Corrected "Shell Aliases" section to "Non-Interactive Execution" with accurate info about `-p` flag limitations
+
+**Removed Overlapping Sections:**
+- Removed "Skills vs Slash Commands" section (covered in Tip 42)
+- Removed "MCP Integration" section (covered in Tip 41)
+
+**Improvements:**
+- Added [inline link to official docs](https://code.claude.com/docs/en/slash-commands)
+- More specific code examples (security checklist items, error handling patterns)
+- Added `@$ARGUMENTS` pattern for dynamic file references
+- Clearer explanation of `allowed-tools` permission syntax
+- Practical "compare-branches" example for positional arguments
+- Reorganized "Common Mistakes" with more specific guidance
+
+**Quality checks passed:**
+- Frontmatter untouched
+- No "Related Tips" section
+- No banned words
+- All URLs fetched and verified
+- 317 lines (well over 100 minimum)
+- No em dashes
+- Opens with direct statement

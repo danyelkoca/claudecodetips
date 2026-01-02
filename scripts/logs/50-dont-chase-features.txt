@@ -1,0 +1,34 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified and Updated Claims:**
+- Changed "175+ version entries" to "150+" (verified via GitHub changelog)
+- All research citations now have inline links to verified sources:
+  - Thompson, Hamilton, Rust 2005 (feature fatigue)
+  - METR July 2025 study (19% slower, 24% perceived faster)
+  - Gloria Mark UC Irvine research (23 min 15 sec recovery)
+  - HBR study (1,200 app toggles/day)
+  - Duke University (40% habits research)
+  - Microsoft 80/20 bugs
+  - Doug McIlroy Unix philosophy
+  - Automation bias research
+
+**Removed Overlaps:**
+- Removed detailed references to hooks, MCP servers, skills, custom agents (covered in tips 40-42, 31)
+- Removed redundant "never trust all done" detail (covered in tip 21)
+- Trimmed context management details (covered in tip 19)
+- Kept brief mentions of these as examples of "optional" features without explaining them
+
+**Structural Improvements:**
+- Stronger opener, no preamble
+- Removed banned phrase "The implication for new features is clear"
+- Removed "Shiny Object Trap" section (generic, not Claude-specific)
+- Consolidated research into more focused sections
+- Added practitioner observation about multi-agent orchestration
+- No em dashes
+- Tighter writing throughout
+
+**Final Stats:**
+- 131 lines (maintained 100+ requirement)
+- 9 verified external links with inline citations
+- No Related Tips section
+- Frontmatter unchanged

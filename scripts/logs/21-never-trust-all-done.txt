@@ -1,0 +1,25 @@
+The tip has been updated. Here's a summary of the changes:
+
+**Verified and updated:**
+- 1.7x issues stat linked to [CodeRabbit December 2025 report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
+- CMU overconfidence study linked to [original source](https://www.cmu.edu/news/stories/archives/2025/july/ai-chatbots-remain-confident-even-when-theyre-wrong) (researchers Cash and Oppenheimer)
+- Partial completion documented with [GitHub issue #6159](https://github.com/anthropics/claude-code/issues/6159) (55% completion) and [#8970](https://github.com/anthropics/claude-code/issues/8970) (20% incomplete)
+- Package hallucinations updated to [UTSA study](https://www.utsa.edu/today/2025/04/story/utsa-researchers-investigate-AI-threats.html) (19.7%) and [Stanford CodeHallucinate](https://www.webpronews.com/ais-hidden-code-traps-stanford-benchmark-reveals-42-silent-failures/) (42% silent failures)
+- Replit incident linked to [The Register article](https://www.theregister.com/2025/07/21/replit_saastr_vibe_coding_incident/)
+- METR study linked showing [19% slowdown](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)
+- Developer time waste linked to [Stack Overflow 2025 survey](https://stackoverflow.blog/2025/12/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/) (66% spend more time fixing)
+
+**Removed (overlaps/unverified):**
+- Entire sycophancy section (covered in Tip 36 "Claude is a YES MAN")
+- Unverified "21% codebase analysis" claim (replaced with verified GitHub issues)
+- Unverified "33%/23%" correction stats
+- Unverified "20-40% of AI usage for verification" claim
+- RAG system developer anecdote (couldn't verify source)
+
+**Improved:**
+- Strong opener retained
+- Practitioner voice throughout ("I've caught missing steps this way dozens of times")
+- No banned words/phrases
+- No em dashes
+- 145 lines (above 100 minimum)
+- All URLs fetched and verified

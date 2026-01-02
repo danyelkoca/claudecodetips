@@ -1,0 +1,21 @@
+Done. I updated the tip with the following changes:
+
+**Verified and linked sources:**
+- [GitClear study](https://www.gitclear.com/ai_assistant_code_quality_2025_research) for the 211M lines analysis, 4x code cloning, and refactoring decline stats
+- [CodeRabbit study](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) for naming inconsistencies (2x) and formatting problems (2.66x)
+- [ACM research](https://dl.acm.org/doi/10.1145/3607181) for the 57.1% co-changed clones involved in bugs
+- [LeadDev article](https://leaddev.com/software-quality/how-ai-generated-code-accelerates-technical-debt) for Kin Lane quote
+- Direct links for all tools (jscpd, SonarQube, PMD CPD, CodeAnt AI)
+
+**Improvements made:**
+- Stronger opener (no preamble)
+- Removed unverified 18.5% statistic
+- Removed weak anonymous developer quotes
+- Reduced CLAUDE.md examples to avoid overlap with Tip 2
+- Tightened language throughout (229 lines → 170 lines, denser content)
+- Used practitioner voice ("I've seen these in codebases...")
+- No banned words/phrases
+- No em dashes
+- All claims verified with inline links
+
+**Line count:** 170 lines (above 100 minimum)
