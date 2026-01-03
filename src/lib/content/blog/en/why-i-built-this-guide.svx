@@ -1,7 +1,7 @@
 ---
 slug: "why-i-built-this-guide"
 title: "Why I Built Claude Code Tips"
-date: "2024-12-30"
+date: "2026-01-03"
 summary: "The story behind 6 months of daily Claude Code usage and what I learned along the way."
 ---
 
@@ -26,10 +26,10 @@ Over months of daily use, I discovered patterns that dramatically improved my pr
 
 I could have written blog posts. But a comprehensive, organized guide serves you better. It's structured for learning, not for SEO. Every tip builds on the previous ones.
 
-The $29 price keeps me motivated to maintain and update it. When Claude Code changes, the guide changes with it.
+The $29 price reflects the value of 6 months of daily learning compressed into a structured guide.
 
-## What's Next
+## What's Inside
 
-I'm continuously using Claude Code and discovering new patterns. Every significant discovery gets added to the guide. Your purchase includes all future updates.
+51 tips organized into 13 sections, covering everything from initial setup to advanced automation. This guide reflects the latest Claude Code features and best practices as of January 2026.
 
 If you're serious about mastering Claude Code, this guide will save you months of trial and error.

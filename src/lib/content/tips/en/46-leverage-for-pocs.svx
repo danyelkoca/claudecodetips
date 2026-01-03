@@ -1,10 +1,3 @@
----
-id: 46
-title: "Leverage Claude Code for POCs"
-section: use-cases
-summary: "Perfect for rapid prototyping. For POCs, let Claude rip."
-isFree: false
----
 
 POCs are where Claude Code shines. What took weeks now takes hours. [Andrej Karpathy coined the term "vibe coding" in February 2025](https://simonwillison.net/2025/Feb/6/andrej-karpathy/) to describe this: describe what you want in natural language, Claude generates code, you iterate conversationally until it works. The term became [Collins Dictionary's Word of the Year 2025](https://www.collinsdictionary.com/woty).
 

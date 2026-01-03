@@ -1,10 +1,3 @@
----
-id: 32
-title: "Claude Makes Up URLs"
-section: pitfalls
-summary: "Hallucinates URLs that don't exist. Always verify before trusting external links."
-isFree: false
----
 
 Claude fabricates URLs, documentation links, package names, and API endpoints that do not exist. This is not a bug. Language models predict plausible text, and a plausible-looking URL is trivially easy to generate. Always verify any external reference before clicking, installing, or trusting it.
 

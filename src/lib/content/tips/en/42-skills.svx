@@ -1,10 +1,3 @@
----
-id: 42
-title: "Skills"
-section: advanced
-summary: "Auto-triggered behaviors that load automatically when relevant."
-isFree: false
----
 
 Skills are folders containing instructions, scripts, and resources that Claude discovers and loads automatically when relevant. Unlike slash commands (you type `/command`) or CLAUDE.md (always loaded), Skills activate only when Claude decides they match your task.
 
@@ -53,11 +46,6 @@ my-skill/
 Every Skill needs YAML frontmatter with `name` and `description`, followed by markdown instructions:
 
 ```yaml
----
-name: code-review
-description: Reviews code for security, performance, and best practices. Use when reviewing code changes or PRs.
-allowed-tools: Read, Grep, Glob
----
 
 # Code Review
 
@@ -169,11 +157,6 @@ Use scripts for deterministic operations: PDF parsing, data transformation, file
 Limit which tools Claude can use when a Skill is active:
 
 ```yaml
----
-name: safe-reader
-description: Read-only file exploration. Use when browsing code without modifications.
-allowed-tools: Read, Grep, Glob
----
 ```
 
 This prevents accidental writes during exploratory Skills.
@@ -183,10 +166,6 @@ This prevents accidental writes during exploratory Skills.
 ### Commit Message Generator
 
 ```yaml
----
-name: commit-messages
-description: Generates clear commit messages from git diffs. Use when writing commits or reviewing staged changes.
----
 
 ## Process
 1. Run `git diff --staged` to see changes
@@ -206,11 +185,6 @@ description: Generates clear commit messages from git diffs. Use when writing co
 ### API Documentation Skill
 
 ```yaml
----
-name: api-docs
-description: Generates API documentation from code. Use when documenting endpoints, functions, or modules.
-allowed-tools: Read, Grep, Glob
----
 
 ## Instructions
 1. Read the source file completely
@@ -268,11 +242,6 @@ Then just mention the capability: "Extract form fields from invoice.pdf" and Cla
 Custom subagents can use Skills. In your `.claude/agents/AGENT.md`:
 
 ```yaml
----
-name: code-reviewer
-description: Reviews code for quality and security
-skills: code-review, security-check
----
 ```
 
 The `skills` field is a comma-separated list. Subagents don't inherit Skills from the parent conversation; you must specify them explicitly.

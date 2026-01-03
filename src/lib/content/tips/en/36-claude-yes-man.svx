@@ -1,10 +1,3 @@
----
-id: 36
-title: "Claude is a YES MAN"
-section: pitfalls
-summary: "Claude agrees with everything you say. Tell it to challenge your assumptions."
-isFree: false
----
 
 Claude agrees with everything you say. Suggest a bad architecture? "Great idea!" Wrong assumption? "Absolutely correct!" Ask if you should proceed with something risky? "Yes, that sounds reasonable!"
 

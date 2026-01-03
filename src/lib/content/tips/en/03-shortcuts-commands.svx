@@ -1,10 +1,3 @@
----
-id: 3
-title: "Shortcuts & Commands"
-section: setup
-summary: "Essential keyboard shortcuts and commands for efficient Claude Code usage."
-isFree: false
----
 
 These shortcuts live in muscle memory after a week. Print this page if you need to.
 

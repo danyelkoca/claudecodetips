@@ -1,10 +1,3 @@
----
-id: 19
-title: "Quality Degrades in Long Sessions"
-section: session
-summary: "Context window fills up. Claude gets dumber. Know when to compact or clear."
-isFree: true
----
 
 Context window fills up. Claude gets dumber. It forgets what files it was looking at, makes mistakes you specifically corrected earlier, and starts looping on solutions you already rejected. This is not a bug. It is a constraint of how large language models work.
 
@@ -62,7 +55,7 @@ When you run `/compact`, Claude Code takes your conversation history and creates
 
 **The tradeoff:** Claude loses detail. It may repeat earlier mistakes because the nuance that led to those corrections is now summarized away. It no longer knows exactly which files it was looking at, only a summary of what it learned from them. But this is still better than hitting the context wall mid-task.
 
-[As of v2.0.64](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md), auto-compacting is instant.
+Auto-compacting is instant.
 
 ### When to Compact vs. Clear
 

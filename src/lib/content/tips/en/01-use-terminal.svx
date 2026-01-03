@@ -1,10 +1,3 @@
----
-id: 1
-title: "Use Terminal"
-section: setup
-summary: "Use Claude Code in terminal - it's the most flexible way to interact with it."
-isFree: false
----
 
 Claude Code was built terminal-first. The [official docs](https://code.claude.com/docs/en/overview) say it directly: "Not another chat window. Not another IDE. Claude Code meets you where you already work."
 

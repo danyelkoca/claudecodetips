@@ -1,10 +1,3 @@
----
-id: 22
-title: "Use Images/Screenshots"
-section: input
-summary: "Paste screenshots directly with Ctrl+V for visual bugs. A picture is worth a thousand tokens."
-isFree: false
----
 
 Claude is multimodal. Visual input is one of the most underutilized features in Claude Code. Stop describing bugs in text when you can show them. A screenshot conveys in seconds what takes paragraphs to describe.
 
@@ -17,7 +10,7 @@ Copy an image to your clipboard, then paste. The keyboard shortcut varies by pla
 | Platform | Shortcut |
 |----------|----------|
 | macOS | `Ctrl+V` (not Cmd+V) |
-| Windows | `Alt+V` (as of v1.0.93) |
+| Windows | `Alt+V` |
 | Linux | Often unsupported, use alternatives below |
 
 The macOS shortcut trips up everyone. Muscle memory says Cmd+V, but Claude Code uses Ctrl+V for image paste.

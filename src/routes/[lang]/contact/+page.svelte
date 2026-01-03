@@ -70,13 +70,13 @@
 
 <div class="max-w-md mx-auto px-4 py-12 space-y-8">
 	<div class="text-center space-y-2">
-		<h1 class="text-3xl font-bold text-slate-900">{t.contact.title}</h1>
-		<p class="text-slate-500">{t.contact.description}</p>
+		<h1 class="text-3xl font-bold text-foreground">{t.contact.title}</h1>
+		<p class="text-muted-foreground">{t.contact.description}</p>
 	</div>
 
 	<form on:submit|preventDefault={handleSubmit} class="space-y-4">
 		<div class="space-y-2">
-			<label for="name" class="block text-sm font-medium text-slate-900">
+			<label for="name" class="block text-sm font-medium text-foreground">
 				{t.contact.nameLabel}
 			</label>
 			<input
@@ -86,12 +86,12 @@
 				required
 				disabled={loading || success}
 				placeholder={t.contact.namePlaceholder}
-				class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50"
+				class="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground disabled:opacity-50"
 			/>
 		</div>
 
 		<div class="space-y-2">
-			<label for="email" class="block text-sm font-medium text-slate-900">
+			<label for="email" class="block text-sm font-medium text-foreground">
 				{t.contact.emailLabel}
 			</label>
 			<input
@@ -101,12 +101,12 @@
 				required
 				disabled={loading || success}
 				placeholder={t.contact.emailPlaceholder}
-				class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50"
+				class="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground disabled:opacity-50"
 			/>
 		</div>
 
 		<div class="space-y-2">
-			<label for="message" class="block text-sm font-medium text-slate-900">
+			<label for="message" class="block text-sm font-medium text-foreground">
 				{t.contact.messageLabel}
 			</label>
 			<textarea
@@ -116,19 +116,19 @@
 				rows="5"
 				disabled={loading || success}
 				placeholder={t.contact.messagePlaceholder}
-				class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 resize-none"
+				class="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground disabled:opacity-50 resize-none"
 			></textarea>
 		</div>
 
 		{#if errorKey}
-			<div class="flex items-center gap-2 text-red-600 text-sm">
+			<div class="flex items-center gap-2 text-error text-sm">
 				<AlertCircle class="w-4 h-4 flex-shrink-0" />
 				<span>{t.contact.errors[errorKey]}</span>
 			</div>
 		{/if}
 
 		{#if success}
-			<div class="flex items-center justify-center gap-2 text-green-600 text-sm">
+			<div class="flex items-center justify-center gap-2 text-success text-sm">
 				<Check class="w-4 h-4 flex-shrink-0" />
 				<span>{t.contact.successMessage}</span>
 			</div>
@@ -137,7 +137,7 @@
 		<button
 			type="submit"
 			disabled={loading || success}
-			class="w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+			class="w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 		>
 			{#if loading}
 				<Loader2 class="w-5 h-5 animate-spin" />

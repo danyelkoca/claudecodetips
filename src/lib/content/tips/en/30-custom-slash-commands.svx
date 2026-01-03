@@ -1,10 +1,3 @@
----
-id: 30
-title: "Custom Slash Commands"
-section: customization
-summary: "Create reusable workflows in .claude/commands/ folder."
-isFree: false
----
 
 Custom slash commands encode repeatable workflows as Markdown files. Drop a `.md` file in the right folder, and it becomes a command you invoke with `/command_name`. No typing detailed instructions each time.
 
@@ -67,10 +60,6 @@ For commands that need discrete values, use `$1`, `$2`, `$3`:
 
 ```markdown
 <!-- .claude/commands/compare-branches.md -->
----
-argument-hint: [base-branch] [feature-branch]
-description: Compare two branches and summarize differences
----
 
 Compare $1 with $2.
 
@@ -86,12 +75,6 @@ Compare $1 with $2.
 Optional YAML frontmatter controls behavior:
 
 ```markdown
----
-allowed-tools: Bash(git:*), Read, Edit
-argument-hint: [message]
-description: Create a conventional commit
-model: claude-haiku-4-5-20251001
----
 
 Create a git commit with message: $ARGUMENTS
 ```
@@ -111,10 +94,6 @@ For `allowed-tools`, you can specify exact commands: `Bash(git add:*)` allows on
 Prefix shell commands with `!` to run them before Claude sees the prompt. The output gets injected into the prompt:
 
 ```markdown
----
-allowed-tools: Bash(git:*)
-description: Create commit from staged changes
----
 
 ## Current State
 
@@ -160,11 +139,6 @@ Review @$ARGUMENTS and explain:
 
 **Branch creation** (`.claude/commands/branch.md`):
 ```markdown
----
-allowed-tools: Bash(git:*)
-argument-hint: [description]
-model: claude-haiku-4-5-20251001
----
 
 !`git status --short`
 !`git branch --show-current`
@@ -180,10 +154,6 @@ Create a feature branch for: $ARGUMENTS
 
 **Smart commit** (`.claude/commands/commit.md`):
 ```markdown
----
-allowed-tools: Bash(git:*)
-model: claude-haiku-4-5-20251001
----
 
 !`git diff --staged`
 !`git log --oneline -5`
@@ -196,9 +166,6 @@ Stage, commit, but don't push.
 
 **Test runner** (`.claude/commands/test.md`):
 ```markdown
----
-allowed-tools: Bash(npm:*), Read, Edit
----
 
 !`npm test 2>&1 | head -100`
 
@@ -208,10 +175,6 @@ Tests define expected behavior. If a test fails, the code is wrong.
 
 **Lint and fix** (`.claude/commands/lint.md`):
 ```markdown
----
-allowed-tools: Bash(npm:*), Read, Edit
-model: claude-haiku-4-5-20251001
----
 
 !`npm run lint 2>&1`
 
@@ -223,10 +186,6 @@ If a rule seems wrong, fix the code to comply anyway.
 
 ```markdown
 <!-- ~/.claude/commands/security.md -->
----
-allowed-tools: Read, Grep, Glob
-description: Security vulnerability scan
----
 
 Scan the codebase for:
 - SQL injection (string concatenation in queries)
@@ -247,9 +206,6 @@ For each finding:
 Haiku runs fast and cheap. For simple, mechanical tasks, there's no reason to burn tokens on Sonnet:
 
 ```markdown
----
-model: claude-haiku-4-5-20251001
----
 ```
 
 Use Haiku for:

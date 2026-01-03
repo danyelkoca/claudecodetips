@@ -116,20 +116,20 @@
 
 <div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
 	<!-- Breadcrumb -->
-	<nav class="flex items-center gap-2 text-sm text-slate-500">
-		<a href="/{lang}" class="hover:text-primary transition-colors">
+	<nav class="flex items-center gap-2 text-sm text-muted-foreground">
+		<a href="/{lang}" class="hover:underline transition-colors">
 			<Home class="w-4 h-4" />
 		</a>
 		<span>/</span>
-		<a href="/{lang}/guide" class="hover:text-primary transition-colors">
+		<a href="/{lang}/guide" class="hover:underline transition-colors">
 			{t.guide.title}
 		</a>
 		<span>/</span>
-		<a href="/{lang}/guide/{section.id}" class="hover:text-primary transition-colors">
+		<a href="/{lang}/guide/{section.id}" class="hover:underline transition-colors">
 			{sectionTitle}
 		</a>
 		<span>/</span>
-		<span class="text-slate-900 font-medium">{t.common.tipPrefix} {tipId}</span>
+		<span class="text-foreground font-medium">{t.common.tipPrefix} {tipId}</span>
 	</nav>
 
 	<!-- Hero Image -->
@@ -145,19 +145,19 @@
 	<!-- Tip Header -->
 	<header class="space-y-4">
 		<div class="flex items-center gap-4">
-			<span class="px-4 py-1 bg-primary/10 text-primary text-sm font-bold rounded-full">
+			<span class="text-foreground text-sm font-bold">
 				{t.common.tipPrefix} {tipId}
 			</span>
 			{#if !hasAccess && tip.isFree}
-				<span class="px-2 py-1 bg-slate-50 text-slate-500 text-xs rounded-full">
+				<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
 					{t.guide.freePreview}
 				</span>
 			{/if}
 		</div>
-		<h1 class="text-3xl font-bold text-slate-900">
+		<h1 class="text-3xl font-bold text-foreground">
 			{tip.title}
 		</h1>
-		<p class="text-lg text-slate-900">
+		<p class="text-lg text-foreground">
 			{tip.summary}
 		</p>
 	</header>
@@ -167,13 +167,13 @@
 		{#if contentIsFallback && !loading}
 			<TranslationDisclaimer {t} />
 		{/if}
-		<article class="prose prose-slate max-w-none">
+		<article class="prose max-w-none">
 			{#if loading}
 				<div class="animate-pulse space-y-4">
-					<div class="h-4 bg-slate-50 rounded-xl w-3/4"></div>
-					<div class="h-4 bg-slate-50 rounded-xl w-full"></div>
-					<div class="h-4 bg-slate-50 rounded-xl w-5/6"></div>
-					<div class="h-4 bg-slate-50 rounded-xl w-2/3"></div>
+					<div class="h-4 bg-border rounded-xl w-3/4"></div>
+					<div class="h-4 bg-border rounded-xl w-full"></div>
+					<div class="h-4 bg-border rounded-xl w-5/6"></div>
+					<div class="h-4 bg-border rounded-xl w-2/3"></div>
 				</div>
 			{:else if component}
 				<svelte:component this={component} />
@@ -181,28 +181,28 @@
 		</article>
 	{:else}
 		<!-- Locked Content -->
-		<div class="bg-slate-50 rounded-xl p-6 text-center space-y-4">
-			<Lock class="w-8 h-8 text-slate-500 mx-auto" />
-			<h2 class="text-2xl font-bold text-slate-900">
+		<div class="bg-card rounded-xl border border-border p-6 text-center space-y-4">
+			<Lock class="w-8 h-8 text-muted-foreground mx-auto" />
+			<h2 class="text-2xl font-bold text-foreground">
 				{t.guide.lockedTitle}
 			</h2>
-			<p class="text-slate-900">
+			<p class="text-foreground">
 				{t.guide.lockedDescription}
 			</p>
-			<a href="/{lang}/pricing" class="inline-block px-6 py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
+			<a href="/{lang}/pricing" class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
 				{t.guide.unlockCta}
 			</a>
 		</div>
 	{/if}
 
 	<!-- Navigation -->
-	<nav class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 border-t border-slate-200">
+	<nav class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 border-t border-border">
 		{#if prevTip && prevSection}
 			<a
 				href="/{lang}/guide/{prevSection.id}/{prevTipId}"
-				class="group block p-4 bg-white rounded-xl border border-slate-200 hover:border-primary hover:shadow-sm transition-colors cursor-pointer space-y-2"
+				class="group block p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer space-y-2"
 			>
-				<div class="flex items-center gap-1 text-xs text-slate-500">
+				<div class="flex items-center gap-1 text-xs text-muted-foreground">
 					<ChevronLeft class="w-4 h-4" />
 					<span>{t.common.previous}</span>
 				</div>
@@ -211,8 +211,8 @@
 						<TipImage tipId={prevTipId} alt={prevTip.title} className="w-full h-full object-cover" />
 					</div>
 					<div class="min-w-0 space-y-2">
-						<span class="text-xs text-primary font-bold block">{t.common.tipPrefix} {prevTipId}</span>
-						<p class="text-sm font-medium text-slate-900 group-hover:text-primary transition-colors line-clamp-2">{prevTip.title}</p>
+						<span class="text-xs text-foreground font-bold block">{t.common.tipPrefix} {prevTipId}</span>
+						<p class="text-sm font-medium text-foreground group-hover:underline transition-colors line-clamp-2">{prevTip.title}</p>
 					</div>
 				</div>
 			</a>
@@ -223,9 +223,9 @@
 		{#if nextTip && nextSection}
 			<a
 				href="/{lang}/guide/{nextSection.id}/{nextTipId}"
-				class="group block p-4 bg-white rounded-xl border border-slate-200 hover:border-primary hover:shadow-sm transition-colors cursor-pointer space-y-2"
+				class="group block p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer space-y-2"
 			>
-				<div class="flex items-center gap-1 text-xs text-slate-500 md:justify-end">
+				<div class="flex items-center gap-1 text-xs text-muted-foreground md:justify-end">
 					<span>{t.common.next}</span>
 					<ChevronRight class="w-4 h-4" />
 				</div>
@@ -234,8 +234,8 @@
 						<TipImage tipId={nextTipId} alt={nextTip.title} className="w-full h-full object-cover" />
 					</div>
 					<div class="min-w-0 md:text-right space-y-2">
-						<span class="text-xs text-primary font-bold block">{t.common.tipPrefix} {nextTipId}</span>
-						<p class="text-sm font-medium text-slate-900 group-hover:text-primary transition-colors line-clamp-2">{nextTip.title}</p>
+						<span class="text-xs text-foreground font-bold block">{t.common.tipPrefix} {nextTipId}</span>
+						<p class="text-sm font-medium text-foreground group-hover:underline transition-colors line-clamp-2">{nextTip.title}</p>
 					</div>
 				</div>
 			</a>

@@ -1,10 +1,3 @@
----
-id: 11
-title: "Force End-to-End Thinking"
-section: planning
-summary: "Make Claude trace the full path from action to outcome."
-isFree: false
----
 
 Claude fixes the button but breaks the navbar. Creates a component but forgets to add it to navigation. Updates the API but leaves the frontend calling the old endpoint.
 

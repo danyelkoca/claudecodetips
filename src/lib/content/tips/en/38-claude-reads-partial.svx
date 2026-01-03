@@ -1,10 +1,3 @@
----
-id: 38
-title: "Claude Reads Files Partially"
-section: pitfalls
-summary: "Claude reads the first chunk and starts working. Critical function at line 400? Missed."
-isFree: false
----
 
 Claude reads the first chunk of a file and starts working. Critical function at line 400? Missed. Important context at the bottom? Never saw it.
 
@@ -12,9 +5,7 @@ This happens for two reasons: file truncation and attention bias. Both are baked
 
 ## File Truncation
 
-Claude Code's Read tool defaults to 2,000 lines. Files exceeding this get truncated silently. The tool has `offset` and `limit` parameters for reading specific portions, but Claude doesn't always use them proactively.
-
-As of [v1.0.53](https://claudelog.com/claude-code-changelog/) (July 2025), Claude Code expanded from 100-line previews to 2,000-line reads. Better, but still not enough for large codebases.
+Claude Code's Read tool defaults to 2,000 lines (expanded from the original 100-line previews). Files exceeding this get truncated silently. The tool has `offset` and `limit` parameters for reading specific portions, but Claude doesn't always use them proactively.
 
 There's also a 25,000 token hard limit. A 2,000-line file with long lines can hit this cap and get truncated further.
 

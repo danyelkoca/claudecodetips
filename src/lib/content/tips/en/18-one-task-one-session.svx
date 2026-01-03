@@ -1,10 +1,3 @@
----
-id: 18
-title: "One Task = One Session"
-section: session
-summary: "Once task ends, close it down. Use /clear to wipe context and start fresh."
-isFree: false
----
 
 Once task ends, close it down. Use `/clear` to wipe context and start fresh. Your CLAUDE.md persists, everything else gets wiped.
 

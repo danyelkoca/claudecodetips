@@ -1,10 +1,3 @@
----
-id: 35
-title: "Claude is Additive, Never Subtractive"
-section: pitfalls
-summary: "Claude only adds code. It never removes. You have to explicitly force deletion."
-isFree: false
----
 
 Claude only adds code. It never removes. Ask it to delete a feature? It comments it out. Refactor a function? Old imports stay. Remove dead code? Gets wrapped in `if (false)`.
 

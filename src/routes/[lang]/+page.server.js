@@ -12,8 +12,8 @@ const carouselTipIds = [
 export async function load({ parent }) {
 	const { lang, t, hasAccess } = await parent();
 
-	// Load all tips metadata
-	const { tips: allTips } = await loadTipsMeta(lang);
+	// Load all tips metadata with translations
+	const { tips: allTips } = await loadTipsMeta(lang, t);
 
 	// Load all 4 free tips with section info
 	const freeTips = freeTipIds.map((id) => {
@@ -52,10 +52,19 @@ export async function load({ parent }) {
 		};
 	});
 
+	// All tip titles for hero flowing text
+	const allTipTitles = allTips
+		.sort((a, b) => a.id - b.id)
+		.map(tip => ({
+			id: tip.id,
+			title: tip.title
+		}));
+
 	return {
 		freeTips,
 		curriculum,
 		carouselTips,
+		allTipTitles,
 		hasAccess
 	};
 }

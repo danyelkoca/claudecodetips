@@ -1,10 +1,3 @@
----
-id: 6
-title: "Never Auto-Approve Bash Commands"
-section: safety
-summary: "Auto-approving bash commands is the single most dangerous thing you can do with Claude Code."
-isFree: false
----
 
 Auto-approving bash commands is the single most dangerous thing you can do with Claude Code. One click of "Always allow Bash" can result in deleted files, wiped databases, leaked credentials, or unexpected bills. Always review what Claude wants to execute.
 

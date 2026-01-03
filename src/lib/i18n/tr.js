@@ -45,6 +45,12 @@ export default {
     toggleMenu: "Menüyü aç/kapat",
   },
 
+  // Theme toggle
+  theme: {
+    light: "Açık mod",
+    dark: "Koyu mod",
+  },
+
   // Landing page
   landing: {
     hero: {
@@ -53,11 +59,13 @@ export default {
       subtitle: "Yeni başlayanlarla uzman kullanıcıları ayıran iş akışları, kısayollar ve yapılandırmalar.",
       cta: "Rehberi Al - $29",
       guarantee: "7 gün para iade garantisi",
+      seeAll: "Tüm {count} İpucunu Gör",
     },
     social: {
       quote: "Claude Code'un dik bir öğrenme eğrisi var. Neyin işe yaradığını ve yaramadığını anlamak için yüzlerce saat harcadım. Bu rehber, ilk günden beri sahip olmak istediğim her şey.",
       author: "Danyel Koca",
-      role: "Sakana AI'da Yapay Zeka Mühendisi | Önceden McKinsey & Company'de Kıdemli Veri Bilimci",
+      roleTitle: "Sakana AI'da Uygulamalı Araştırma Mühendisi",
+      roleSubtitle: "Önceden McKinsey & Company'de Kıdemli Veri Bilimci",
     },
     caseStudy: {
       title: "Claude Code ile İnşa Edildi",
@@ -73,10 +81,12 @@ export default {
       title: "İçinde Neler Var",
       subtitle: "13 bölümde 51 ipucu",
       viewAll: "Tüm {count} ipucunu gör",
+      sections: "bölüm",
     },
     sample: {
       title: "Almadan Once Deneyin",
       subtitle: "Bu 4 ipucunu ucretsiz okuyun. Yardimci olurlarsa, 47 tane daha hayal edin.",
+      readFree: "Ucretsiz Oku",
     },
     pricing: {
       title: "Tek Seferlik Satın Alma",
@@ -86,7 +96,7 @@ export default {
         "Kod örnekleriyle 51 detaylı ipucu",
         "Kopyala-yapıştır CLAUDE.md yapılandırmaları",
         "13 düzenlenmiş bölüm",
-        "Gelecek güncellemeler dahil",
+        "Ocak 2026 itibariyla guncel",
       ],
       cta: "Anında Erişim Al",
       guarantee: "7 gün para iade garantisi. Soru sorulmaz.",
@@ -299,7 +309,7 @@ export default {
     heroSubtitle: "Bu rehber, gerçek ürünler inşa etmek için her gün Claude Code kullanan biri tarafından oluşturuldu.",
     storyTitle: "Hikaye",
     storyPara1:
-      "Ben Danyel Koca, Tokyo'daki Sakana AI'da Uygulamalı Araştırma Mühendisiyim. Öncesinde, McKinsey & Company'de 3 yıl Kıdemli Veri Bilimci olarak kurumsal müşteriler için AI/ML çözümleri inşa ettim.",
+      "Ben Danyel Koca, Tokyo'daki Sakana AI'da Uygulamalı Araştırma Mühendisi olarak finansal hizmetler için yapay zeka çözümleri üzerinde çalışıyorum. Öncesinde, McKinsey & Company'de 3 yıl Kıdemli Veri Bilimci olarak kurumsal müşteriler için AI/ML çözümleri inşa ettim.",
     storyPara2:
       "Claude Code'u piyasaya sürüldüğünden beri her gün kullanıyorum. Merak olarak başlayan şey saplantıya dönüştü - iş akışımı önemli ölçüde iyileştiren yeni kalıplar, kısayollar ve yapılandırmalar keşfettim.",
     storyPara3:
@@ -312,6 +322,7 @@ export default {
     credentialsTitle: "Yeterlilikler",
     credentialsList: [
       "Sakana AI'da Uygulamalı Araştırma Mühendisi",
+      "Finansal hizmetler icin yapay zeka cozumleri gelistirme",
       "Eski McKinsey & Company Kıdemli Veri Bilimci",
       "Kyoto Üniversitesi mezunu (GNO 3.76/4)",
       "IEEE'de yayınlanmış araştırmacı",
@@ -409,7 +420,8 @@ export default {
 
   // Disclaimer for untranslated content
   disclaimer: {
-    notTranslated: "Bu içerik henüz dilinizde mevcut değil. İngilizce sürüm gösteriliyor.",
+    notTranslated: "Bu içeriğin çevirisi üzerinde çalışıyoruz. Şu anda İngilizce sürüm gösteriliyor.",
+    translationInProgress: "Rehber içeriği şu anda İngilizce'dir. Çeviriler üzerinde aktif olarak çalışıyoruz.",
   },
 
   // FAQ page
@@ -427,9 +439,64 @@ export default {
         a: "Temel aşinalık yardımcı olur, ancak rehber ilk kurulumdan ileri tekniklere kadar her şeyi kapsar.",
       },
       {
-        q: "Claude Code güncellenirse ne olur?",
-        a: "Rehber, sabit kalan iş akışları ve kalıplara odaklanır. Büyük özellikler değiştiğinde, rehber de güncellenir.",
+        q: "Bu rehber ne kadar güncel?",
+        a: "Bu rehber, Ocak 2026 itibarıyla en son Claude Code özelliklerini ve en iyi uygulamaları yansıtmaktadır.",
       },
     ],
+  },
+
+  // Tip titles and summaries
+  tips: {
+    "1": { title: "Terminal Kullan", summary: "Claude Code'u terminalde kullan - onunla etkileşim kurmanın en esnek yolu." },
+    "2": { title: "CLAUDE.md Oluştur", summary: "Projenizin Claude için kullanım kılavuzu. Etkili Claude Code kullanımı için en önemli dosya." },
+    "3": { title: "Kısayollar ve Komutlar", summary: "Verimli Claude Code kullanımı için temel klavye kısayolları ve komutlar." },
+    "4": { title: "Git'i Yoğun Kullan", summary: "Claude kapsamlı değişiklikler yaptığında Git güvenlik ağınızdır. Sık commit yapın, diff'leri inceleyin ve kurtarma komutlarını bilin." },
+    "5": { title: "Hassas Dosyaları Koru", summary: "Claude Code .env dosyalarını sormadan otomatik okur. Sırları korumak için reddetme kuralları ekleyin." },
+    "6": { title: "Bash Komutlarını Asla Otomatik Onaylama", summary: "Bash komutlarını otomatik onaylamak Claude Code ile yapabileceğiniz en tehlikeli şey." },
+    "7": { title: "Güvenli Eylemleri Otomatik Onayla", summary: "Okuma ve arama gibi düşük riskli eylemleri otomatik onaylayarak iş akışınızı hızlandırın." },
+    "8": { title: "Her Zaman Plan Modu Kullan", summary: "Karmaşık görevlerden önce plan moduna girmek için Shift+Tab'a iki kez basın. Claude kodlamadan önce düşünür." },
+    "9": { title: "Genel Planları Asla Kabul Etme", summary: "Planın her zaman kod seviyesinde detaylı ve olgusal olduğundan emin olun." },
+    "10": { title: "CLAUDE.md'ye Karşı Doğrula", summary: "Claude'dan planını CLAUDE.md kurallarına karşı doğrulamasını isteyin. Claude konuşmalar uzadıkça talimatları unutur - açık doğrulama zorlayın." },
+    "11": { title: "Uçtan Uca Düşünmeye Zorla", summary: "Claude'un eylemden sonuca tam yolu izlemesini sağlayın." },
+    "12": { title: "Ultrathink Her Zaman Açık", summary: "Claude'un aklına ilk geleni söylemesine izin vermeyin. Düşünmesine izin verin. HER ZAMAN." },
+    "13": { title: "Doğrudan Ol", summary: "Miktar konusunda açık olun - Claude kolay yolu seçme eğilimindedir." },
+    "14": { title: "Ne Yapılacağını Söyle, Ne Yapılmayacağını Değil", summary: "Claude'a ne yapmaması gerektiğini söylerken her zaman bir alternatif sunun." },
+    "15": { title: "Önemi Abartın", summary: "Claude çabasını algılanan risklere göre ayarlar. Yüksek risk = kapsamlı çalışma." },
+    "16": { title: "Claude'a Araç Olarak Davran - İnsan Değil", summary: "Kibar olmak konusunda endişelenmeyin. Doğrudan olduğunuzda Claude daha iyi davranır." },
+    "17": { title: "Claude Asistan Görevlerinde Başarılı - Stratejik İşler İçin Yönlendir", summary: "Claude'u önce araştırmaya yönlendirerek stratejik görevleri asistan işlerine dönüştürün." },
+    "18": { title: "Bir Görev = Bir Oturum", summary: "Görev bittiğinde kapatın. Bağlamı silmek ve yeniden başlamak için /clear kullanın." },
+    "19": { title: "Uzun Oturumlarda Kalite Düşer", summary: "Bağlam penceresi dolar. Claude aptallaşır. Ne zaman sıkıştırıp temizleyeceğinizi bilin." },
+    "20": { title: "Oturumları Sürdürmek İçin /resume Kullan", summary: "Claude çöktü mü? Terminal kapandı mı? Kaldığınız yerden devam etmek için /resume kullanın." },
+    "21": { title: "'Hepsi Tamam'a Güvenme", summary: "Claude genellikle uç durumları kaçırır veya adımları sessizce atlar. Her zaman doğrulayın." },
+    "22": { title: "Görsel/Ekran Görüntüsü Kullan", summary: "Görsel hatalar için ekran görüntülerini Ctrl+V ile doğrudan yapıştırın. Bir resim bin token değerinde." },
+    "23": { title: "Hata Mesajlarını Aynen Kopyala", summary: "Başka kelimelerle ifade etmeyin. Satır numaralarıyla tam yığın izi." },
+    "24": { title: "İlk Denemede Mükemmel Bekleme", summary: "Bir ajanın kodlamasına izin verin, kodu kontrol etmek için başka bir ajan kullanın." },
+    "25": { title: "Büyük İşler İçin Çoklu Ajan", summary: "Aynı promptla birden fazla ajan başlatın. Büyük görevlerde nadiren 1 ajan başarılı olur." },
+    "26": { title: "Karmaşık Sorunları Adımlara Böl", summary: "Devasa bir oturum yerine alt görev başına 1 oturum daha iyidir." },
+    "27": { title: "Git Worktree'leri", summary: "Aynı repodan birden fazla çalışma dizini. Her birinde Claude çalıştırın." },
+    "28": { title: "Alt Ajanlar - Dikkatli Kullan", summary: "Alt ajan özetleri detay kaybeder. Kritik kod için ana ajanın dosyaları doğrudan okumasını sağlayın." },
+    "29": { title: "Hiyerarşik CLAUDE.md", summary: "Proje kökünde + alt dizinlerde + global CLAUDE.md. Claude en spesifik olanı önceliklendirir." },
+    "30": { title: "Özel Slash Komutları", summary: ".claude/commands/ klasöründe yeniden kullanılabilir iş akışları oluşturun." },
+    "31": { title: "Özel Ajanlar", summary: "Kendi bağlam penceresi, sistem promptu ve araç kısıtlamalarına sahip özelleşmiş ajanlar oluşturun." },
+    "32": { title: "Claude URL Uydurur", summary: "Var olmayan URL'ler halüsine eder. Harici bağlantılara güvenmeden önce her zaman doğrulayın." },
+    "33": { title: "Claude Aşırı Mühendislik Yapar", summary: "Basit bir fonksiyon isteyin, fabrika deseniyle soyut sınıf alın." },
+    "34": { title: "Claude Duplikat Oluşturur", summary: "Claude kod tabanınızı aramaz. Sadece yeni kod yazar." },
+    "35": { title: "Claude Ekler, Asla Çıkarmaz", summary: "Claude sadece kod ekler. Asla silmez. Silmeyi açıkça zorlamanız gerekir." },
+    "36": { title: "Claude EVET ADAM'dır", summary: "Claude söylediğiniz her şeye katılır. Varsayımlarınızı sorgulamasını söyleyin." },
+    "37": { title: "Claude Sormak Yerine Varsayar", summary: "Belirsiz gereksinim mi? Claude bir yorum seçer ve onunla devam eder." },
+    "38": { title: "Claude Dosyaları Kısmen Okur", summary: "Claude ilk parçayı okur ve çalışmaya başlar. 400. satırdaki kritik fonksiyon? Kaçırıldı." },
+    "39": { title: "Claude Kodu Düzeltmek Yerine Testleri Değiştirir", summary: "Kod yanlış olduğunda, Claude test iddialarını kötü koda uyacak şekilde değiştirir." },
+    "40": { title: "Hook'lar", summary: "Düzenleme, araç kullanımı veya oturum başlangıcı gibi belirli olaylarda çalışan shell komutları." },
+    "41": { title: "MCP Sunucuları", summary: "Harici araçları bağlayın - veritabanları, tarayıcı otomasyonu, belge arama." },
+    "42": { title: "Beceriler", summary: "İlgili olduğunda otomatik olarak yüklenen otomatik tetiklenen davranışlar." },
+    "43": { title: "GitHub Actions", summary: "Repolarınız için Claude'u kurmak üzere /install-github-app çalıştırın." },
+    "44": { title: "Başlıksız Mod", summary: "Claude'u etkileşimli oturum olmadan çalıştırın. Otomasyon ve betikler için." },
+    "45": { title: "Kod Tabanı Kalite Kontrollerini Periyodik Çalıştır", summary: "Her sorgu = 1 oturum. Sabit kodlanmış metinleri, tasarım tutarlılığını vb. kontrol edin." },
+    "46": { title: "POC'ler İçin Claude Code'u Kullan", summary: "Hızlı prototipleme için mükemmel. POC'ler için Claude'a izin verin." },
+    "47": { title: "Claude Şablon Kodda Harika", summary: "CRUD işlemleri, formlar, yapılandırma dosyaları, tekrarlayan desenler. Claude'un çalışmasına izin verin." },
+    "48": { title: "Öğrenmek İçin Claude Kullan", summary: "Claude'un sadece kod yazmasına izin vermeyin. Açıklamasını sağlayın." },
+    "49": { title: "Commit Mesajları İçin Claude", summary: "Claude'un diff'inizden commit yazmasına izin verin. Tutarlı format, 'neden'i yakalar." },
+    "50": { title: "Her Yeni Özelliğin Peşinden Koşma", summary: "Claude Code her hafta yeni özellikler alır. İşe yarayan şeylere odaklanın." },
+    "51": { title: "Savaş Meydanında Test Edilmiş CLAUDE.md", summary: "6 aylık dersler, başarısızlıklar ve düzeltmelerden damıtılmış gerçek dünya CLAUDE.md örneği." },
   },
 };

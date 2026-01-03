@@ -1,10 +1,3 @@
----
-id: 16
-title: "Treat Claude as Tool - Not Person"
-section: prompting
-summary: "Don't worry about being polite. Claude behaves better when you're direct."
-isFree: false
----
 
 Claude Code runs on Opus 4.5, a neural network that does pattern matching on text. It has no feelings, no preferences, no ego. Skip the pleasantries and get to the point.
 

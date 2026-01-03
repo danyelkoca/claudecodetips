@@ -1,10 +1,3 @@
----
-id: 49
-title: "Claude for Commit Messages"
-section: use-cases
-summary: "Let Claude write commits from your diff. Consistent format, captures the 'why'."
-isFree: false
----
 
 Your diff shows what changed. Your commit message explains why. At 11pm after hours of debugging, that context slips away. Let Claude capture it while the reasoning is fresh.
 
@@ -27,10 +20,6 @@ Claude examines staged changes, understands the nature of the modification, and 
 For faster workflows, you can [create a custom `/commit` command](https://code.claude.com/docs/en/slash-commands) by adding a `commit.md` file to your `.claude/commands/` folder:
 
 ```markdown
----
-allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
-description: Create a git commit
----
 ## Context
 - Current diff: !`git diff HEAD`
 - Recent commits: !`git log --oneline -5`

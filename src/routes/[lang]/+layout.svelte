@@ -44,7 +44,7 @@
 		'@type': 'Organization',
 		name: 'Claude Code Tips',
 		url: PUBLIC_SITE_URL,
-		logo: `${PUBLIC_SITE_URL}/images/logo.webp`
+		logo: `${PUBLIC_SITE_URL}/images/logo-og.webp`
 	};
 
 	// WebSite schema

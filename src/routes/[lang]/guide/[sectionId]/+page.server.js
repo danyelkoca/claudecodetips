@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import { sections, loadTipsMeta } from '$lib/content/tips.js';
 
 export async function load({ params, parent }) {
-	const { lang, hasAccess } = await parent();
+	const { lang, hasAccess, t } = await parent();
 	const sectionId = params.sectionId;
 
 	const section = sections.find((s) => s.id === sectionId);
@@ -10,7 +10,7 @@ export async function load({ params, parent }) {
 		throw error(404, 'sectionNotFound');
 	}
 
-	const { tips: allTips } = await loadTipsMeta(lang);
+	const { tips: allTips } = await loadTipsMeta(lang, t);
 	const sectionTips = allTips.filter((t) => section.tips.includes(t.id));
 
 	// Find prev/next sections for navigation

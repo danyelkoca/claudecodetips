@@ -1,10 +1,3 @@
----
-id: 10
-title: "Validate Against CLAUDE.md"
-section: planning
-summary: "Ask Claude to validate its plan against CLAUDE.md rules. Claude forgets instructions as conversations grow - force explicit verification."
-isFree: false
----
 
 Claude forgets its own instructions. As conversations grow longer, rules defined at the start receive progressively less attention. [Research from Microsoft and Salesforce](https://arxiv.org/abs/2505.06120) found that LLM performance drops from 90% in single-turn to 65% in multi-turn conversations, a 25-point decline. This pattern held across all 15 models tested, including Claude. Once Claude goes off track, it rarely recovers.
 

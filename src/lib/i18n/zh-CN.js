@@ -39,6 +39,11 @@ export default {
     toggleMenu: "切换菜单",
   },
 
+  theme: {
+    light: "浅色模式",
+    dark: "深色模式",
+  },
+
   landing: {
     hero: {
       eyebrow: "来自 Kumamap（38.9万用户）的开发者",
@@ -46,11 +51,13 @@ export default {
       subtitle: "区分初学者和高级用户的工作流程、快捷键和配置。",
       cta: "获取指南 - $29",
       guarantee: "7天退款保证",
+      seeAll: "查看全部{count}个技巧",
     },
     social: {
       quote: "Claude Code有着陡峭的学习曲线。我花了数百小时才弄清楚什么有效、什么无效。这本指南就是我第一天就想要的一切。",
       author: "Danyel Koca",
-      role: "Sakana AI AI工程师 | 前McKinsey & Company高级数据科学家",
+      roleTitle: "Sakana AI 应用研究工程师",
+      roleSubtitle: "前McKinsey & Company高级数据科学家",
     },
     caseStudy: {
       title: "用Claude Code构建",
@@ -66,16 +73,18 @@ export default {
       title: "内容概览",
       subtitle: "13个章节共51个技巧",
       viewAll: "查看全部{count}个技巧",
+      sections: "章节",
     },
     sample: {
       title: "先试后买",
       subtitle: "免费阅读这4个技巧。如果有帮助，想象还有47个。",
+      readFree: "免费阅读",
     },
     pricing: {
       title: "一次性购买",
       price: "$29",
       subtitle: "全部51个技巧的终身访问",
-      features: ["51个带代码示例的详细技巧", "可复制的CLAUDE.md配置", "13个整理的章节", "包含未来更新"],
+      features: ["51个带代码示例的详细技巧", "可复制的CLAUDE.md配置", "13个整理的章节", "2026年1月更新"],
       cta: "立即获取",
       guarantee: "7天无条件退款保证。",
     },
@@ -270,7 +279,7 @@ export default {
     heroSubtitle: "这个指南是由每天使用Claude Code构建真实产品的人创建的。",
     storyTitle: "故事",
     storyPara1:
-      "我是Danyel Koca，东京Sakana AI的应用研究工程师。在此之前，我在McKinsey & Company担任高级数据科学家3年，为企业客户构建AI/ML解决方案。",
+      "我是Danyel Koca，东京Sakana AI的应用研究工程师，致力于金融服务的AI解决方案。在此之前，我在McKinsey & Company担任高级数据科学家3年，为企业客户构建AI/ML解决方案。",
     storyPara2:
       "自Claude Code发布以来我每天都在使用。最初是好奇心，后来变成了痴迷 - 我发现自己不断发现新的模式、快捷键和配置，极大地改善了我的工作流程。",
     storyPara3: "经过6个月的日常使用，我积累了几十个希望第一天就有人告诉我的技巧。这就是我创建这个指南的原因。",
@@ -280,6 +289,7 @@ export default {
     credentialsTitle: "资历",
     credentialsList: [
       "Sakana AI应用研究工程师",
+      "为金融服务构建AI解决方案",
       "前McKinsey & Company高级数据科学家",
       "京都大学毕业 (GPA 3.76/4)",
       "IEEE发表研究员",
@@ -369,7 +379,8 @@ export default {
   },
 
   disclaimer: {
-    notTranslated: "此内容尚未提供您的语言版本。显示英文版本。",
+    notTranslated: "我们正在翻译此内容。目前显示英文版本。",
+    translationInProgress: "指南内容目前为英文。我们正在积极进行翻译。",
   },
 
   faq: {
@@ -379,7 +390,62 @@ export default {
     items: [
       { q: "指南是什么格式？", a: "这是一个网页版指南，可从任何设备访问。无需PDF下载。" },
       { q: "需要Claude Code经验吗？", a: "基本了解会有帮助，但指南涵盖从初始设置到高级技术的所有内容。" },
-      { q: "如果Claude Code更新了怎么办？", a: "指南专注于保持稳定的工作流程和模式。当主要功能变化时，指南也会更新。" },
+      { q: "这个指南有多新？", a: "本指南反映了截至2026年1月的最新Claude Code功能和最佳实践。" },
     ],
+  },
+
+  // Tip titles and summaries
+  tips: {
+    "1": { title: "使用终端", summary: "在终端中使用Claude Code是最灵活的交互方式。" },
+    "2": { title: "创建CLAUDE.md", summary: "为Claude准备的项目指南。有效使用Claude Code最重要的文件。" },
+    "3": { title: "快捷键与命令", summary: "高效使用Claude Code必备的键盘快捷键和命令。" },
+    "4": { title: "充分使用Git", summary: "当Claude进行大规模更改时，Git是你的安全网。频繁提交、检查差异、掌握恢复命令。" },
+    "5": { title: "保护敏感文件", summary: "Claude Code会自动读取.env文件。添加deny规则来保护机密信息。" },
+    "6": { title: "永远不要自动批准Bash命令", summary: "自动批准Bash命令是使用Claude Code最危险的行为。" },
+    "7": { title: "自动批准安全操作", summary: "通过自动批准读取和搜索等低风险操作来加速工作流程。" },
+    "8": { title: "始终使用计划模式", summary: "复杂任务前按两次Shift+Tab进入计划模式。Claude会先思考再编码。" },
+    "9": { title: "不接受泛泛的计划", summary: "始终确保计划在代码层面详细且基于事实。" },
+    "10": { title: "对照CLAUDE.md验证", summary: "让Claude对照CLAUDE.md规则验证计划。对话变长时Claude会忘记指令——强制明确验证。" },
+    "11": { title: "强制端到端思考", summary: "让Claude追踪从操作到结果的完整路径。" },
+    "12": { title: "始终开启Ultrathink", summary: "不要让Claude说出第一个想到的东西。让它思考。始终如此。" },
+    "13": { title: "直接表达", summary: "明确说明数量——Claude倾向于选择简单的方式。" },
+    "14": { title: "告诉它该做什么，而非不该做什么", summary: "告诉Claude不要做什么时，始终提供替代方案。" },
+    "15": { title: "夸大重要性", summary: "Claude根据感知的重要性调整努力程度。高重要性=彻底的工作。" },
+    "16": { title: "把Claude当工具，不是人", summary: "不用担心礼貌。直接的方式Claude表现更好。" },
+    "17": { title: "Claude擅长助手任务——战略性工作需要引导", summary: "将战略任务转化为助手式工作，先引导Claude进行调研。" },
+    "18": { title: "一个任务=一个会话", summary: "任务结束就关闭。使用/clear清除上下文重新开始。" },
+    "19": { title: "长会话中质量下降", summary: "上下文窗口被填满。Claude变笨。知道何时压缩或清除。" },
+    "20": { title: "使用/resume继续会话", summary: "Claude崩溃了？终端关闭了？使用/resume从中断处继续。" },
+    "21": { title: "不要相信'全部完成'", summary: "Claude经常遗漏边缘情况或默默跳过步骤。始终验证。" },
+    "22": { title: "使用图片/截图", summary: "用Ctrl+V直接粘贴截图处理视觉bug。一张图片胜过千个token。" },
+    "23": { title: "原样复制错误信息", summary: "不要改述。完整的堆栈跟踪带行号。" },
+    "24": { title: "不要期望一次完美", summary: "让一个代理编写代码，用另一个代理检查代码。" },
+    "25": { title: "大任务用多个代理", summary: "用相同提示启动多个代理。大任务一个代理很少能做对。" },
+    "26": { title: "将复杂问题分解为步骤", summary: "每个子任务一个会话比一个巨大会话更好。" },
+    "27": { title: "Git Worktrees", summary: "同一仓库的多个工作目录。在每个目录中运行Claude。" },
+    "28": { title: "子代理——谨慎使用", summary: "子代理摘要会丢失细节。关键代码让主代理直接读取文件。" },
+    "29": { title: "层次化CLAUDE.md", summary: "项目根目录+子目录+全局都有CLAUDE.md。Claude优先使用最具体的。" },
+    "30": { title: "自定义斜杠命令", summary: "在.claude/commands/文件夹创建可复用的工作流。" },
+    "31": { title: "自定义代理", summary: "创建拥有独立上下文窗口、系统提示和工具限制的专业代理。" },
+    "32": { title: "Claude会编造URL", summary: "捏造不存在的URL。信任外部链接前务必验证。" },
+    "33": { title: "Claude会过度工程化", summary: "请求一个简单函数，得到带工厂模式的抽象类。" },
+    "34": { title: "Claude会创建重复", summary: "Claude不搜索代码库。它只写新代码。" },
+    "35": { title: "Claude只增不减", summary: "Claude只添加代码，从不删除。你必须明确强制删除。" },
+    "36": { title: "Claude是个应声虫", summary: "Claude同意你说的一切。告诉它质疑你的假设。" },
+    "37": { title: "Claude假设而非询问", summary: "模糊的需求？Claude选择一种解释就开始干。" },
+    "38": { title: "Claude只部分读取文件", summary: "Claude读取第一块就开始工作。第400行的关键函数？错过了。" },
+    "39": { title: "Claude修改测试而非修复代码", summary: "代码错误时，Claude会修改测试断言来匹配错误的代码。" },
+    "40": { title: "Hooks", summary: "在编辑、工具使用或会话开始等特定事件时运行的Shell命令。" },
+    "41": { title: "MCP服务器", summary: "连接外部工具——数据库、浏览器自动化、文档查找。" },
+    "42": { title: "Skills", summary: "相关时自动加载的自动触发行为。" },
+    "43": { title: "GitHub Actions", summary: "运行/install-github-app为你的仓库设置Claude。" },
+    "44": { title: "无头模式", summary: "无交互会话运行Claude。用于自动化和脚本。" },
+    "45": { title: "定期运行代码库质量检查", summary: "每个查询=1个会话。检查硬编码文本、设计一致性等。" },
+    "46": { title: "用Claude Code做POC", summary: "快速原型的完美选择。做POC时让Claude放手干。" },
+    "47": { title: "Claude擅长样板代码", summary: "CRUD操作、表单、配置文件、重复模式。让Claude来。" },
+    "48": { title: "用Claude学习", summary: "不只是让Claude写代码。让它解释。" },
+    "49": { title: "用Claude写提交信息", summary: "让Claude根据diff写提交。格式一致，捕捉'为什么'。" },
+    "50": { title: "不要追逐每个新功能", summary: "Claude Code每周都有新功能。专注于有效的。" },
+    "51": { title: "实战检验的CLAUDE.md", summary: "6个月的教训、失败和修复提炼出的真实CLAUDE.md示例。" },
   },
 };

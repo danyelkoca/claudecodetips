@@ -5,7 +5,7 @@
 	export let description;
 	export let path;
 	export let lang;
-	export let image = '/images/logo.webp';
+	export let image = '/images/logo-og.webp';
 	export let type = 'website';
 	export let noindex = false;
 	export let article = null;

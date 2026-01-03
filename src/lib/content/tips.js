@@ -25,45 +25,43 @@ export const sectionFirstTip = Object.fromEntries(
 
 /**
  * Load all tips metadata for a language (server-safe, no components)
- * Falls back to English if no tips exist for the requested language
+ * Uses i18n translations for title/summary
+ * Derives ID from filename, section from sections array, isFree from freeTipIds
  * Returns { tips, isFallback }
  */
-export async function loadTipsMeta(lang) {
+export async function loadTipsMeta(lang, translations = null) {
 	const modules = import.meta.glob('/src/lib/content/tips/**/*.svx');
 	const tips = [];
 
+	// Always load from English SVX (source of truth for structure)
 	for (const [path, resolver] of Object.entries(modules)) {
-		if (!path.includes(`/tips/${lang}/`)) continue;
+		if (!path.includes(`/tips/${DEFAULT_LANG}/`)) continue;
 
-		const tip = await resolver();
+		// Extract ID from filename: /tips/en/01-use-terminal.svx → 1
+		const filename = path.split('/').pop();
+		const id = parseInt(filename.split('-')[0], 10);
+
+		// Get section from sections array
+		const section = sections.find(s => s.tips.includes(id))?.id || null;
+
+		// Get title/summary from i18n
+		const translated = translations?.tips?.[String(id)];
+
 		tips.push({
-			...tip.metadata
+			id,
+			section,
+			title: translated?.title || `Tip ${id}`,
+			summary: translated?.summary || '',
+			isFree: freeTipIds.includes(id)
 		});
 	}
 
-	if (tips.length > 0) {
-		return { tips: tips.sort((a, b) => a.id - b.id), isFallback: false };
-	}
-
-	// Fall back to English
-	if (lang !== DEFAULT_LANG) {
-		const fallbackTips = [];
-		for (const [path, resolver] of Object.entries(modules)) {
-			if (!path.includes(`/tips/${DEFAULT_LANG}/`)) continue;
-
-			const tip = await resolver();
-			fallbackTips.push({
-				...tip.metadata
-			});
-		}
-		return { tips: fallbackTips.sort((a, b) => a.id - b.id), isFallback: true };
-	}
-
-	return { tips: [], isFallback: false };
+	return { tips: tips.sort((a, b) => a.id - b.id), isFallback: false };
 }
 
 /**
  * Load all tips with components for a language (client-side only)
+ * Derives ID from filename, section from sections array, isFree from freeTipIds
  */
 export async function loadTips(lang) {
 	const modules = import.meta.glob('/src/lib/content/tips/**/*.svx');
@@ -73,8 +71,18 @@ export async function loadTips(lang) {
 		if (!path.includes(`/tips/${lang}/`)) continue;
 
 		const tip = await resolver();
+
+		// Extract ID from filename: /tips/en/01-use-terminal.svx → 1
+		const filename = path.split('/').pop();
+		const id = parseInt(filename.split('-')[0], 10);
+
+		// Get section from sections array
+		const section = sections.find(s => s.tips.includes(id))?.id || null;
+
 		tips.push({
-			...tip.metadata,
+			id,
+			section,
+			isFree: freeTipIds.includes(id),
 			component: tip.default
 		});
 	}

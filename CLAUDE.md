@@ -59,7 +59,7 @@
 
 ## Design System
 
-### CORE RULES (NON-NEGOTIABLE)
+### CORE RULES
 
 **1. NO MARGIN CLASSES**
 Never use: `m-*`, `mt-*`, `mr-*`, `mb-*`, `ml-*`, `mx-*`, `my-*`
@@ -73,174 +73,204 @@ Use instead:
 | `mt-8` after section | Parent with `space-y-8` or section with `pt-8` |
 | `mr-2` on icon | Parent with `flex gap-2` |
 
-**2. ONE VALUE PER PROPERTY**
-No variations. No "it depends." One value per design property.
+**2. ONE HOVER PRINCIPLE**
+| Element | Hover |
+|---------|-------|
+| Cards | `hover:shadow-md transition-shadow` |
+| Everything else | `hover:opacity-80` or `hover:underline` |
 
-### Token
+No `hover:border-*`. No `hover:bg-*`. No `hover:text-*` color changes.
 
-```css
-@theme {
-  --color-primary: #b88f4a;
-}
-```
+### Color System (Monochrome)
 
-### Colors
+10 CSS variables defined in `src/app.css`. Dark mode is default.
 
-| Element          | Class                           |
-| ---------------- | ------------------------------- |
-| Body text        | `text-slate-900`                |
-| Muted text       | `text-slate-500`                |
-| Light background | `bg-slate-50`                   |
-| Borders          | `border-slate-200`              |
-| Primary CTA      | `bg-primary text-white`         |
-| Primary text     | `text-primary`                  |
-| Primary light    | `bg-primary/10`                 |
-| Success          | `text-green-600`, `bg-green-50` |
-| Error            | `text-red-600`, `bg-red-50`     |
+**Dark Mode (default):**
+| Variable | Value |
+|----------|-------|
+| `--background` | `#0a0a0a` |
+| `--foreground` | `#fafafa` |
+| `--card` | `#0a0a0a` |
+| `--muted-foreground` | `#a1a1a1` |
+| `--border` | `#262626` |
+| `--primary` | `#fafafa` |
+| `--primary-foreground` | `#0a0a0a` |
+| `--success` | `#22c55e` |
+| `--success-foreground` | `#052e16` |
+| `--error` | `#ef4444` |
+
+**Light Mode (.light class on html):**
+| Variable | Value |
+|----------|-------|
+| `--background` | `#ffffff` |
+| `--foreground` | `#0a0a0a` |
+| `--card` | `#ffffff` |
+| `--muted-foreground` | `#737373` |
+| `--border` | `#e5e5e5` |
+| `--primary` | `#171717` |
+| `--primary-foreground` | `#fafafa` |
+| `--success` | `#16a34a` |
+| `--success-foreground` | `#f0fdf4` |
+| `--error` | `#dc2626` |
+
+### Color Classes
+
+| Element | Class |
+|---------|-------|
+| Page background | `bg-background` |
+| Text (primary) | `text-foreground` |
+| Text (secondary) | `text-muted-foreground` |
+| Card background | `bg-card` |
+| Borders | `border-border` |
+| Primary button | `bg-primary text-primary-foreground` |
+| Success badge | `bg-success-foreground text-success` |
+| Error text | `text-error` |
 
 ### Typography
 
-| Element         | Class                   |
-| --------------- | ----------------------- |
-| H1 (page title) | `text-3xl font-bold`    |
-| H2 (section)    | `text-2xl font-bold`    |
-| H3 (card title) | `text-xl font-semibold` |
-| Body            | `text-base`             |
-| Small/meta      | `text-sm`               |
-| Badge           | `text-xs font-medium`   |
+| Element | Class |
+|---------|-------|
+| Hero H1 (landing) | `text-4xl md:text-5xl font-bold text-foreground leading-tight` |
+| H1 (page title) | `text-3xl font-bold text-foreground` |
+| H2 (section) | `text-2xl font-bold text-foreground` |
+| H3 (card title) | `text-xl font-semibold text-foreground` |
+| Large (subtitle) | `text-lg text-foreground` |
+| Body | `text-base text-foreground` |
+| Small/meta | `text-sm text-muted-foreground` |
+| Badge | `text-xs font-medium` |
 
-### Spacing (8px Grid) - NO MARGIN
+### Spacing (8px Grid)
 
-| Use                          | Class   | Pixels |
-| ---------------------------- | ------- | ------ |
-| Icon + text                  | `gap-2` | 8px    |
-| Inline elements              | `gap-1` | 4px    |
-| List items, form fields      | `gap-4` | 16px   |
-| Card content, after headings | `gap-6` | 24px   |
-| Content blocks, sections     | `gap-8` | 32px   |
+| Use | Class | Pixels |
+|-----|-------|--------|
+| Icon + text | `gap-2` | 8px |
+| Inline elements | `gap-1` | 4px |
+| List items, form fields | `gap-4` | 16px |
+| Card content, after headings | `gap-6` | 24px |
+| Content blocks, sections | `gap-8` | 32px |
 
 ### Padding
 
-| Use                  | Class       |
-| -------------------- | ----------- |
-| Container horizontal | `px-4`      |
-| Section vertical     | `py-12`     |
-| Card/modal           | `p-6`       |
-| Button default       | `px-4 py-2` |
-| Button large         | `px-6 py-3` |
-| Input                | `px-4 py-3` |
-| Badge                | `px-2 py-1` |
+| Use | Class |
+|-----|-------|
+| Container horizontal | `px-4` |
+| Section vertical | `py-12` |
+| Card/modal | `p-6` |
+| Button default | `px-4 py-2` |
+| Button large | `px-6 py-3` |
+| Input | `px-4 py-3` |
+| Badge | `px-2 py-1` |
 
-### Space-Y (Vertical Stacking Without Flex)
+### Space-Y (Vertical Stacking)
 
-| Use             | Class       |
-| --------------- | ----------- |
-| Tight list      | `space-y-2` |
-| Standard list   | `space-y-4` |
+| Use | Class |
+|-----|-------|
+| Tight list | `space-y-2` |
+| Standard list | `space-y-4` |
 | Section content | `space-y-6` |
-| Page sections   | `space-y-8` |
+| Page sections | `space-y-8` |
 
 Rule: Use `gap-*` with flex/grid. Use `space-y-*` for simple stacked content.
 
-**Border spacing:** When using `border-t` with `pt-*`, the parent MUST have `space-y-*` for symmetric spacing around the border.
-
 ### Border Radius
 
-| Use               | Class          |
-| ----------------- | -------------- |
-| ALL UI elements   | `rounded-xl`   |
+| Use | Class |
+|-----|-------|
+| ALL UI elements | `rounded-xl` |
 | Pills/badges only | `rounded-full` |
 
 ### Shadows
 
-| Use                      | Class       |
-| ------------------------ | ----------- |
-| Cards, elevated surfaces | `shadow-sm` |
-| Sticky headers, modals   | `shadow-lg` |
+| Use | Class |
+|-----|-------|
+| Cards at rest | None (flat) |
+| Cards on hover | `hover:shadow-md` |
+| Dropdowns/overlays | `shadow-sm` |
+| Sticky elements | `shadow-lg` |
 
 ### Layout Containers
 
-| Use                     | Class                    |
-| ----------------------- | ------------------------ |
-| Default page            | `max-w-5xl mx-auto px-4` |
-| Narrow (forms, pricing) | `max-w-md mx-auto px-4`  |
-| Prose/article           | `max-w-3xl mx-auto px-4` |
+| Use | Class |
+|-----|-------|
+| Default page | `max-w-5xl mx-auto px-4` |
+| Narrow (forms, pricing) | `max-w-md mx-auto px-4` |
+| Prose/article | `max-w-3xl mx-auto px-4` |
 
 ### Icon Sizes
 
-| Use               | Class     | Pair With           |
-| ----------------- | --------- | ------------------- |
-| Inline small text | `w-4 h-4` | text-sm, text-xs    |
-| Inline body text  | `w-5 h-5` | text-base, buttons  |
-| Standalone/nav    | `w-6 h-6` | Headers, navigation |
-| Hero/feature      | `w-8 h-8` | Large icons only    |
+| Use | Class | Pair With |
+|-----|-------|-----------|
+| Inline small text | `w-4 h-4` | text-sm, text-xs |
+| Inline body text | `w-5 h-5` | text-base, buttons |
+| Standalone/nav | `w-6 h-6` | Headers, navigation |
+| Hero/feature | `w-8 h-8` | Large icons only |
 
 ### Interactive States
 
-| State                  | Class                                                                        |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| ALL clickables         | `cursor-pointer`                                                             |
-| Hover (buttons, links) | `hover:opacity-80`                                                           |
-| Hover (cards)          | `hover:border-primary hover:shadow-sm`                                       |
-| Focus (inputs)         | `focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary` |
-| Disabled               | `disabled:opacity-50 disabled:cursor-not-allowed`                            |
+| State | Class |
+|-------|-------|
+| ALL clickables | `cursor-pointer` |
+| Hover (buttons, links) | `hover:opacity-80` |
+| Hover (text links) | `hover:underline` |
+| Hover (cards) | `hover:shadow-md` |
+| Focus (inputs) | `focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground` |
+| Disabled | `disabled:opacity-50 disabled:cursor-not-allowed` |
 
 ### Transitions
 
-| Use             | Class                  |
-| --------------- | ---------------------- |
-| Color changes   | `transition-colors`    |
+| Use | Class |
+|-----|-------|
+| Opacity/color | `transition-colors` |
+| Shadow (cards) | `transition-shadow` |
 | Transform/scale | `transition-transform` |
 
 Rule: Never use `transition-all`. Always use specific transition classes.
 
 ### Z-Index Scale
 
-| Layer               | Value      |
-| ------------------- | ---------- |
-| Dropdowns           | `z-10`     |
-| Sticky elements     | `z-20`     |
-| Modals/overlays     | `z-50`     |
+| Layer | Value |
+|-------|-------|
+| Dropdowns | `z-10` |
+| Sticky elements | `z-20` |
+| Modals/overlays | `z-50` |
 | Toast/notifications | `z-[9999]` |
 
 ### Responsive (Mobile-First)
 
-| Prefix | Use                     |
-| ------ | ----------------------- |
-| (none) | Mobile base styles      |
-| `md:`  | Tablets, layout changes |
-| `lg:`  | Desktop                 |
-
-Rule: Write mobile first, add `md:` for larger screens.
+| Prefix | Use |
+|--------|-----|
+| (none) | Mobile base styles |
+| `md:` | Tablets, layout changes |
+| `lg:` | Desktop |
 
 ### Component Patterns
 
 **Button (Default):**
-
 ```
-cursor-pointer px-4 py-2 bg-primary text-white rounded-xl font-semibold hover:opacity-80 transition-colors
+cursor-pointer px-4 py-2 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-80 transition-colors
 ```
 
 **Button (Large CTA):**
-
 ```
-cursor-pointer px-6 py-3 bg-primary text-white rounded-xl font-bold hover:opacity-80 transition-colors
+cursor-pointer px-6 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-80 transition-colors
 ```
 
-**Card:**
-
+**Card (Static):**
 ```
-p-6 bg-white rounded-xl border border-slate-200 shadow-sm
+bg-card rounded-xl border border-border p-6
+```
+
+**Card (Interactive):**
+```
+bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer
 ```
 
 **Input:**
-
 ```
-w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground
 ```
 
 **Section:**
-
 ```html
 <section class="py-12">
   <div class="max-w-5xl mx-auto px-4">
@@ -250,11 +280,6 @@ w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:rin
   </div>
 </section>
 ```
-
-### Rules
-
-- Cards on `bg-slate-50` use `bg-white`
-- Use Tailwind's shade scale (50, 200, 500, 900), not opacity hacks
 
 ## Build Commands
 

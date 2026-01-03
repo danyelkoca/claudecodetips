@@ -3,6 +3,18 @@
 	<head>
 		<meta charset="utf-8" />
 
+		<!-- Theme detection (runs before anything renders to prevent FOUC) -->
+		<script>
+			(function() {
+				var stored = localStorage.getItem('theme');
+				if (stored === 'light') {
+					document.documentElement.classList.add('light');
+				} else if (!stored && window.matchMedia('(prefers-color-scheme: light)').matches) {
+					document.documentElement.classList.add('light');
+				}
+			})();
+		</script>
+
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-9R8L96JNFT"></script>
 		<script>
@@ -21,9 +33,12 @@
 			}
 		</script>
 
-		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="theme-color" content="#b88f4a" />
+		<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 		<meta property="og:type" content="website" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<link rel="preconnect" href="https://js.stripe.com" />

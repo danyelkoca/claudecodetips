@@ -1,10 +1,3 @@
----
-id: 12
-title: "Ultrathink Always On"
-section: prompting
-summary: "Never let Claude say what comes to mind first. Let it think. ALWAYS."
-isFree: true
----
 
 Claude with thinking time is a different beast than Claude rushing to answer. This single habit will improve your results more than any other.
 

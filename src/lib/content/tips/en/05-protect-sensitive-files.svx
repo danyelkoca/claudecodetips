@@ -1,10 +1,3 @@
----
-id: 5
-title: "Protect Sensitive Files"
-section: safety
-summary: "Claude Code automatically reads .env files without asking. Add deny rules to protect secrets."
-isFree: false
----
 
 Claude Code reads `.env`, `.env.local`, and similar files without asking permission. Your API keys and database passwords get sent to Anthropic's servers before you realize it happened. This isn't a bug. It's the default behavior.
 

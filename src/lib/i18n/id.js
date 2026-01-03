@@ -45,6 +45,12 @@ export default {
     toggleMenu: "Toggle menu",
   },
 
+  // Theme toggle
+  theme: {
+    light: "Mode terang",
+    dark: "Mode gelap",
+  },
+
   // Landing page
   landing: {
     hero: {
@@ -53,11 +59,13 @@ export default {
       subtitle: "Alur kerja, shortcut, dan konfigurasi yang membedakan pemula dari pengguna mahir.",
       cta: "Dapatkan Panduan - $29",
       guarantee: "Garansi uang kembali 7 hari",
+      seeAll: "Lihat Semua {count} Tips",
     },
     social: {
       quote: "Claude Code memiliki kurva belajar yang curam. Saya menghabiskan ratusan jam untuk mencari tahu apa yang berhasil dan apa yang tidak. Panduan ini adalah semua yang saya inginkan sejak hari pertama.",
       author: "Danyel Koca",
-      role: "AI Engineer di Sakana AI | Sebelumnya Senior Data Scientist di McKinsey & Company",
+      roleTitle: "Applied Research Engineer di Sakana AI",
+      roleSubtitle: "Sebelumnya Senior Data Scientist di McKinsey & Company",
     },
     caseStudy: {
       title: "Dibangun dengan Claude Code",
@@ -73,16 +81,18 @@ export default {
       title: "Apa yang Ada di Dalamnya",
       subtitle: "51 tips dalam 13 bagian",
       viewAll: "Lihat semua {count} tips",
+      sections: "bagian",
     },
     sample: {
       title: "Coba Sebelum Membeli",
       subtitle: "Baca 4 tips ini secara gratis. Jika membantu, bayangkan 47 tips lainnya.",
+      readFree: "Baca Gratis",
     },
     pricing: {
       title: "Pembelian Sekali",
       price: "$29",
       subtitle: "Akses seumur hidup ke semua 51 tips",
-      features: ["51 tips detail dengan contoh kode", "Konfigurasi CLAUDE.md siap pakai", "13 bagian terorganisir", "Update di masa depan termasuk"],
+      features: ["51 tips detail dengan contoh kode", "Konfigurasi CLAUDE.md siap pakai", "13 bagian terorganisir", "Terbaru per Januari 2026"],
       cta: "Dapatkan Akses Instan",
       guarantee: "Garansi uang kembali 7 hari. Tanpa pertanyaan.",
     },
@@ -294,7 +304,7 @@ export default {
     heroSubtitle: "Panduan ini dibuat oleh seseorang yang menggunakan Claude Code setiap hari untuk membangun produk nyata.",
     storyTitle: "Ceritanya",
     storyPara1:
-      "Saya Danyel Koca, Applied Research Engineer di Sakana AI di Tokyo. Sebelumnya, saya menghabiskan 3 tahun sebagai Senior Data Scientist di McKinsey & Company, membangun solusi AI/ML untuk klien enterprise.",
+      "Saya Danyel Koca, Applied Research Engineer di Sakana AI di Tokyo, mengerjakan solusi AI untuk layanan keuangan. Sebelumnya, saya menghabiskan 3 tahun sebagai Senior Data Scientist di McKinsey & Company, membangun solusi AI/ML untuk klien enterprise.",
     storyPara2:
       "Saya telah menggunakan Claude Code setiap hari sejak diluncurkan. Apa yang dimulai sebagai rasa ingin tahu berubah menjadi obsesi - saya menemukan pola, shortcut, dan konfigurasi baru yang secara dramatis meningkatkan alur kerja saya.",
     storyPara3:
@@ -307,6 +317,7 @@ export default {
     credentialsTitle: "Kredensial",
     credentialsList: [
       "Applied Research Engineer di Sakana AI",
+      "Membangun solusi AI untuk layanan keuangan",
       "Mantan Senior Data Scientist di McKinsey & Company",
       "Lulusan Universitas Kyoto (IPK 3.76/4)",
       "Peneliti yang dipublikasikan di IEEE",
@@ -404,7 +415,8 @@ export default {
 
   // Disclaimer for untranslated content
   disclaimer: {
-    notTranslated: "Konten ini belum tersedia dalam bahasa Anda. Menampilkan versi bahasa Inggris.",
+    notTranslated: "Kami sedang mengerjakan terjemahan konten ini. Saat ini menampilkan versi bahasa Inggris.",
+    translationInProgress: "Konten panduan saat ini dalam bahasa Inggris. Kami sedang aktif mengerjakan terjemahan.",
   },
 
   // FAQ page
@@ -419,9 +431,64 @@ export default {
         a: "Familiar dasar membantu, tapi panduan ini mencakup semuanya dari setup awal hingga teknik lanjutan.",
       },
       {
-        q: "Bagaimana jika Claude Code diperbarui?",
-        a: "Panduan ini fokus pada alur kerja dan pola yang tetap stabil. Ketika fitur utama berubah, panduan juga diperbarui.",
+        q: "Seberapa mutakhir panduan ini?",
+        a: "Panduan ini mencerminkan fitur dan praktik terbaik Claude Code terbaru per Januari 2026.",
       },
     ],
+  },
+
+  // Tip titles and summaries
+  tips: {
+    "1": { title: "Gunakan Terminal", summary: "Gunakan Claude Code di terminal - ini cara paling fleksibel untuk berinteraksi dengannya." },
+    "2": { title: "Buat CLAUDE.md", summary: "Manual instruksi proyek Anda untuk Claude. File paling penting untuk penggunaan Claude Code yang efektif." },
+    "3": { title: "Shortcut & Perintah", summary: "Shortcut keyboard dan perintah penting untuk penggunaan Claude Code yang efisien." },
+    "4": { title: "Gunakan Git Secara Ekstensif", summary: "Git adalah jaring pengaman Anda saat Claude membuat perubahan besar. Commit sering, review diff, dan ketahui perintah recovery." },
+    "5": { title: "Lindungi File Sensitif", summary: "Claude Code otomatis membaca file .env tanpa bertanya. Tambahkan aturan deny untuk melindungi rahasia." },
+    "6": { title: "Jangan Auto-Approve Perintah Bash", summary: "Auto-approve perintah bash adalah hal paling berbahaya yang bisa Anda lakukan dengan Claude Code." },
+    "7": { title: "Auto-Approve Aksi Aman", summary: "Percepat workflow dengan auto-approve aksi berisiko rendah seperti read dan search." },
+    "8": { title: "Selalu Gunakan Plan Mode", summary: "Tekan Shift+Tab dua kali untuk masuk plan mode sebelum tugas kompleks. Claude berpikir sebelum coding." },
+    "9": { title: "Jangan Terima Rencana Generik", summary: "Selalu pastikan rencana detail di level kode dan faktual." },
+    "10": { title: "Validasi Terhadap CLAUDE.md", summary: "Minta Claude memvalidasi rencananya terhadap aturan CLAUDE.md. Claude melupakan instruksi seiring percakapan - paksa verifikasi eksplisit." },
+    "11": { title: "Paksa Pemikiran End-to-End", summary: "Buat Claude melacak jalur lengkap dari aksi ke hasil." },
+    "12": { title: "Ultrathink Selalu Aktif", summary: "Jangan biarkan Claude mengatakan apa yang terlintas pertama. Biarkan berpikir. SELALU." },
+    "13": { title: "Langsung Saja", summary: "Eksplisit soal kuantitas - Claude cenderung memilih jalan mudah." },
+    "14": { title: "Katakan Apa yang Harus Dilakukan, Bukan Tidak Dilakukan", summary: "Selalu berikan alternatif saat memberi tahu Claude apa yang tidak boleh dilakukan." },
+    "15": { title: "Lebih-lebihkan Kepentingan", summary: "Claude mengkalibrasi usaha sesuai taruhan yang dirasakan. Taruhan tinggi = kerja menyeluruh." },
+    "16": { title: "Perlakukan Claude sebagai Tool - Bukan Orang", summary: "Jangan khawatir soal sopan santun. Claude berperilaku lebih baik saat Anda langsung." },
+    "17": { title: "Claude Unggul di Tugas Asisten - Arahkan untuk Pekerjaan Strategis", summary: "Ubah tugas strategis menjadi pekerjaan asisten dengan mengarahkan Claude untuk riset dulu." },
+    "18": { title: "Satu Tugas = Satu Sesi", summary: "Begitu tugas selesai, tutup. Gunakan /clear untuk menghapus konteks dan mulai fresh." },
+    "19": { title: "Kualitas Menurun di Sesi Panjang", summary: "Context window terisi. Claude jadi kurang cerdas. Ketahui kapan compact atau clear." },
+    "20": { title: "Gunakan /resume untuk Melanjutkan Sesi", summary: "Claude crash? Terminal tertutup? Gunakan /resume untuk melanjutkan dari tempat berhenti." },
+    "21": { title: "Jangan Percaya 'Semua Selesai'", summary: "Claude sering melewatkan edge case atau diam-diam melewati langkah. Selalu verifikasi." },
+    "22": { title: "Gunakan Gambar/Screenshot", summary: "Paste screenshot langsung dengan Ctrl+V untuk bug visual. Satu gambar bernilai ribuan token." },
+    "23": { title: "Salin Pesan Error Persis", summary: "Jangan parafrase. Stack trace lengkap dengan nomor baris." },
+    "24": { title: "Jangan Harap Sempurna Pertama Kali", summary: "Biarkan 1 agent coding, gunakan agent lain untuk mengecek kode." },
+    "25": { title: "Multiple Agent untuk Pekerjaan Besar", summary: "Luncurkan beberapa agent dengan prompt sama. Untuk tugas besar jarang 1 agent berhasil." },
+    "26": { title: "Pecah Masalah Kompleks Jadi Langkah", summary: "Lebih baik 1 sesi per sub-tugas daripada satu sesi masif." },
+    "27": { title: "Git Worktrees", summary: "Beberapa direktori kerja dari repo yang sama. Jalankan Claude di masing-masing." },
+    "28": { title: "Subagent - Gunakan dengan Hati-hati", summary: "Ringkasan subagent kehilangan detail. Untuk kode kritis, biarkan agent utama membaca file langsung." },
+    "29": { title: "CLAUDE.md Hierarkis", summary: "CLAUDE.md di root proyek + subdirektori + global. Claude memprioritaskan yang paling spesifik." },
+    "30": { title: "Custom Slash Commands", summary: "Buat workflow yang dapat digunakan ulang di folder .claude/commands/." },
+    "31": { title: "Custom Agents", summary: "Buat agent khusus dengan context window sendiri, system prompt, dan batasan tool." },
+    "32": { title: "Claude Mengarang URL", summary: "Menghalusinasi URL yang tidak ada. Selalu verifikasi sebelum mempercayai link eksternal." },
+    "33": { title: "Claude Over-Engineer", summary: "Minta fungsi sederhana, dapat abstract class dengan factory pattern." },
+    "34": { title: "Claude Membuat Duplikat", summary: "Claude tidak mencari codebase Anda. Dia hanya menulis kode baru." },
+    "35": { title: "Claude Aditif, Tidak Subtraktif", summary: "Claude hanya menambah kode. Tidak pernah menghapus. Anda harus memaksa penghapusan secara eksplisit." },
+    "36": { title: "Claude adalah YES MAN", summary: "Claude setuju dengan semua yang Anda katakan. Suruh dia menantang asumsi Anda." },
+    "37": { title: "Claude Berasumsi Alih-alih Bertanya", summary: "Requirement ambigu? Claude memilih interpretasi dan menjalankannya." },
+    "38": { title: "Claude Membaca File Sebagian", summary: "Claude membaca chunk pertama dan mulai bekerja. Fungsi kritis di baris 400? Terlewat." },
+    "39": { title: "Claude Mengubah Test Alih-alih Memperbaiki Kode", summary: "Saat kode salah, Claude mengubah assertion test untuk cocok dengan kode buruk." },
+    "40": { title: "Hooks", summary: "Perintah shell yang berjalan pada event tertentu seperti edit, penggunaan tool, atau mulai sesi." },
+    "41": { title: "MCP Servers", summary: "Hubungkan tool eksternal - database, otomasi browser, pencarian dokumentasi." },
+    "42": { title: "Skills", summary: "Perilaku yang dipicu otomatis dan dimuat saat relevan." },
+    "43": { title: "GitHub Actions", summary: "Jalankan /install-github-app untuk menyiapkan Claude untuk repo Anda." },
+    "44": { title: "Headless Mode", summary: "Jalankan Claude tanpa sesi interaktif. Untuk otomasi dan skrip." },
+    "45": { title: "Jalankan Pemeriksaan Kualitas Codebase Secara Berkala", summary: "Setiap query = 1 sesi. Periksa teks hardcode, konsistensi desain, dll." },
+    "46": { title: "Manfaatkan Claude Code untuk POC", summary: "Sempurna untuk prototyping cepat. Untuk POC, biarkan Claude bebas." },
+    "47": { title: "Claude Hebat di Boilerplate", summary: "Operasi CRUD, form, file config, pola berulang. Biarkan Claude bekerja." },
+    "48": { title: "Gunakan Claude untuk Belajar", summary: "Jangan biarkan Claude hanya menulis kode. Buat dia menjelaskan." },
+    "49": { title: "Claude untuk Pesan Commit", summary: "Biarkan Claude menulis commit dari diff Anda. Format konsisten, menangkap 'mengapa'." },
+    "50": { title: "Jangan Kejar Setiap Fitur Baru", summary: "Claude Code mendapat fitur baru setiap minggu. Fokus pada apa yang berhasil." },
+    "51": { title: "CLAUDE.md Teruji", summary: "Contoh CLAUDE.md dunia nyata yang disaring dari 6 bulan pelajaran, kegagalan, dan perbaikan." },
   },
 };

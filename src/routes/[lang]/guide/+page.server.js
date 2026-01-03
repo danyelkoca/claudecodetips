@@ -1,8 +1,8 @@
 import { sections, loadTipsMeta, freeTipIds } from '$lib/content/tips.js';
 
 export async function load({ parent }) {
-	const { lang, hasAccess } = await parent();
-	const { tips: allTips } = await loadTipsMeta(lang);
+	const { lang, hasAccess, t } = await parent();
+	const { tips: allTips } = await loadTipsMeta(lang, t);
 
 	// Build sections with full tip data
 	const sectionsWithTips = sections.map((section) => ({

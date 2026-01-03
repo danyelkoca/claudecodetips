@@ -34,17 +34,17 @@
 <main class="min-h-screen">
 	<div class="max-w-3xl mx-auto px-4 py-12 space-y-8">
 		<div class="text-center">
-			<h1 class="text-3xl font-bold text-slate-900">{t.faq.title}</h1>
+			<h1 class="text-3xl font-bold text-foreground">{t.faq.title}</h1>
 		</div>
 
 		<div class="space-y-4">
 			{#each t.faq.items as item}
-				<details class="group border border-slate-200 rounded-xl">
+				<details class="group border border-border rounded-xl">
 					<summary class="p-4 cursor-pointer flex justify-between items-center">
-						<span class="font-medium text-slate-900">{item.q}</span>
-						<ChevronDown class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform flex-shrink-0" />
+						<span class="font-medium text-foreground">{item.q}</span>
+						<ChevronDown class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform flex-shrink-0" />
 					</summary>
-					<div class="px-4 pb-4 text-slate-900">{item.a}</div>
+					<div class="px-4 pb-4 text-foreground">{item.a}</div>
 				</details>
 			{/each}
 		</div>

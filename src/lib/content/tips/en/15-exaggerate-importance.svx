@@ -1,10 +1,3 @@
----
-id: 15
-title: "Exaggerate Importance"
-section: prompting
-summary: "Claude calibrates effort to perceived stakes. High stakes = thorough work."
-isFree: false
----
 
 Claude puts more effort into tasks that seem important. Tell it something matters, and it pays closer attention. This isn't psychology theater. It's a documented phenomenon with peer-reviewed research behind it.
 

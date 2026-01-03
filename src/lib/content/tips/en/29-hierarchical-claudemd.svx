@@ -1,10 +1,3 @@
----
-id: 29
-title: "Hierarchical CLAUDE.md"
-section: customization
-summary: "CLAUDE.md at project root + subdirectories + global. Claude prioritizes most specific."
-isFree: false
----
 
 One CLAUDE.md file works fine until you have a monorepo. Or a large codebase. Or a team with different preferences. That's when the [hierarchical memory system](https://code.claude.com/docs/en/memory) becomes essential.
 
@@ -63,11 +56,6 @@ You can also create personal rules at `~/.claude/rules/` that apply to all your 
 Scope rules to specific file patterns using YAML frontmatter:
 
 ```markdown
----
-paths:
-  - "src/api/**/*.ts"
-  - "src/routes/**/*.ts"
----
 
 # API Development Rules
 

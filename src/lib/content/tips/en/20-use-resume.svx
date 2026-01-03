@@ -1,10 +1,3 @@
----
-id: 20
-title: "Use /resume to Continue Sessions"
-section: session
-summary: "Claude crashes? Terminal closes? Use /resume to pick up where you left off."
-isFree: false
----
 
 Terminal crashes happen. Laptop batteries die. SSH connections drop. Claude Code doesn't care. Every session is automatically saved, and you can pick up exactly where you left off.
 

@@ -58,27 +58,27 @@
 
 <div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
 	<!-- Breadcrumb -->
-	<nav class="flex items-center gap-2 text-sm text-slate-500">
-		<a href="/{lang}" class="hover:text-primary transition-colors">
+	<nav class="flex items-center gap-2 text-sm text-muted-foreground">
+		<a href="/{lang}" class="hover:underline transition-colors">
 			<Home class="w-4 h-4" />
 		</a>
 		<span>/</span>
-		<a href="/{lang}/guide" class="hover:text-primary transition-colors">
+		<a href="/{lang}/guide" class="hover:underline transition-colors">
 			{t.guide.title}
 		</a>
 		<span>/</span>
-		<span class="text-slate-900 font-medium">{sectionTitle}</span>
+		<span class="text-foreground font-medium">{sectionTitle}</span>
 	</nav>
 
 	<!-- Header -->
 	<header class="space-y-4">
-		<h1 class="text-3xl font-bold text-slate-900">
+		<h1 class="text-3xl font-bold text-foreground">
 			{sectionTitle}
 		</h1>
-		<p class="text-lg text-slate-900">
+		<p class="text-lg text-foreground">
 			{sectionDescription}
 		</p>
-		<p class="text-sm text-slate-500">
+		<p class="text-sm text-muted-foreground">
 			{sectionTips.length} {sectionTips.length === 1 ? t.common.tip : t.common.tips}
 		</p>
 	</header>
@@ -89,7 +89,7 @@
 			{@const canAccess = hasAccess || isTipFree(tip.id)}
 			<a
 				href="/{lang}/guide/{section.id}/{tip.id}"
-				class="flex gap-4 bg-white rounded-xl border border-slate-200 hover:border-primary hover:shadow-sm transition-colors cursor-pointer group overflow-hidden"
+				class="flex gap-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer group overflow-hidden"
 			>
 				<div class="w-32 md:w-48 flex-shrink-0 aspect-[1200/630]">
 					<TipImage
@@ -100,37 +100,37 @@
 				</div>
 				<div class="flex-1 min-w-0 py-4 pr-4 flex flex-col justify-center space-y-2">
 					<div class="flex items-center gap-2">
-						<span class="px-2 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full flex-shrink-0">
+						<span class="text-foreground text-xs font-bold flex-shrink-0">
 							{tip.id}
 						</span>
 						{#if !hasAccess && tip.isFree}
-							<span class="px-2 py-1 bg-slate-50 text-slate-900 text-xs rounded-full flex-shrink-0">
+							<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full flex-shrink-0">
 								{t.guide.free}
 							</span>
 						{:else if !canAccess}
-							<Lock class="w-4 h-4 text-slate-500 flex-shrink-0" />
+							<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 						{/if}
 					</div>
-					<h3 class="font-bold text-slate-900 group-hover:text-primary transition-colors">
+					<h3 class="font-bold text-foreground group-hover:underline transition-colors">
 						{tip.title}
 					</h3>
-					<p class="text-sm text-slate-500 line-clamp-2">
+					<p class="text-sm text-muted-foreground line-clamp-2">
 						{tip.summary}
 					</p>
 				</div>
 				<div class="flex items-center pr-4">
-					<ChevronRight class="w-5 h-5 text-slate-500 group-hover:text-primary flex-shrink-0" />
+					<ChevronRight class="w-5 h-5 text-muted-foreground group-hover:underline flex-shrink-0" />
 				</div>
 			</a>
 		{/each}
 	</div>
 
 	<!-- Section Navigation -->
-	<div class="flex justify-between items-center border-t border-slate-200 pt-8">
+	<div class="flex justify-between items-center border-t border-border pt-8">
 		{#if prevSection}
 			<a
 				href="/{lang}/guide/{prevSection.id}"
-				class="flex items-center gap-2 text-slate-900 hover:text-primary transition-colors"
+				class="flex items-center gap-2 text-foreground hover:underline transition-colors"
 			>
 				<ChevronLeft class="w-5 h-5" />
 				<span>{t.sections[prevSection.id].title}</span>
@@ -142,7 +142,7 @@
 		{#if nextSection}
 			<a
 				href="/{lang}/guide/{nextSection.id}"
-				class="flex items-center gap-2 text-slate-900 hover:text-primary transition-colors"
+				class="flex items-center gap-2 text-foreground hover:underline transition-colors"
 			>
 				<span>{t.sections[nextSection.id].title}</span>
 				<ChevronRight class="w-5 h-5" />

@@ -1,10 +1,3 @@
----
-id: 17
-title: "Claude Excels at Assistant Tasks - Guide It for Strategic Jobs"
-section: prompting
-summary: "Convert strategic tasks into assistant-like jobs by guiding Claude to research first."
-isFree: false
----
 
 Claude writes functions, debugs errors, refactors code. These are well-defined problems with clear success criteria.
 

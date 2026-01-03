@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import { sections, loadTipsMeta, isTipFree } from '$lib/content/tips.js';
 
 export async function load({ params, parent }) {
-	const { lang, hasAccess } = await parent();
+	const { lang, hasAccess, t } = await parent();
 	const sectionId = params.sectionId;
 	const tipId = parseInt(params.tipId, 10);
 
@@ -17,7 +17,7 @@ export async function load({ params, parent }) {
 		throw error(404, 'tipNotInSection');
 	}
 
-	const { tips: allTips, isFallback } = await loadTipsMeta(lang);
+	const { tips: allTips, isFallback } = await loadTipsMeta(lang, t);
 	const tip = allTips.find((t) => t.id === tipId);
 
 	if (!tip) {

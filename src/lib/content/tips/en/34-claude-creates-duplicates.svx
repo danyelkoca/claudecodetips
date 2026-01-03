@@ -1,10 +1,3 @@
----
-id: 34
-title: "Claude Creates Duplicates"
-section: pitfalls
-summary: "Claude doesn't search your codebase. It just writes new code."
-isFree: false
----
 
 Claude doesn't search your codebase before writing code. It just writes. Ask for a date formatter and you'll get a new one, even if you already have three. Request a modal component and Claude builds from scratch rather than finding the one that's been working for months.
 

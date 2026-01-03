@@ -76,25 +76,25 @@
 <JsonLd schema={productSchema} />
 
 <div class="max-w-md mx-auto px-4 py-12 space-y-4">
-	<div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-6">
+	<div class="bg-card rounded-xl p-6 border border-border space-y-6">
 		<div class="text-center space-y-2">
-			<h1 class="text-3xl font-bold text-slate-900">{t.landing.pricing.title}</h1>
-			<div class="text-3xl font-bold text-slate-900">{t.landing.pricing.price}</div>
-			<p class="text-slate-500">{t.landing.pricing.subtitle}</p>
+			<h1 class="text-3xl font-bold text-foreground">{t.landing.pricing.title}</h1>
+			<div class="text-3xl font-bold text-foreground">{t.landing.pricing.price}</div>
+			<p class="text-muted-foreground">{t.landing.pricing.subtitle}</p>
 		</div>
 
 		<ul class="space-y-4">
 			{#each t.landing.pricing.features as feature}
 				<li class="flex items-start gap-4">
-					<Check class="w-5 h-5 text-green-600 flex-shrink-0" />
-					<span class="text-slate-900">{feature}</span>
+					<Check class="w-5 h-5 text-success flex-shrink-0" />
+					<span class="text-foreground">{feature}</span>
 				</li>
 			{/each}
 		</ul>
 
 		<form on:submit|preventDefault={handleSubmit} class="space-y-4">
 			<div class="space-y-2">
-				<label for="email" class="block text-sm font-medium text-slate-900">
+				<label for="email" class="block text-sm font-medium text-foreground">
 					{t.pricingPage.emailLabel}
 				</label>
 				<input
@@ -104,12 +104,12 @@
 					required
 					disabled={loading}
 					placeholder={t.pricingPage.emailPlaceholder}
-					class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50"
+					class="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground disabled:opacity-50"
 				/>
 			</div>
 
 			{#if errorKey}
-				<div class="flex items-center gap-2 text-red-600 text-sm">
+				<div class="flex items-center gap-2 text-error text-sm">
 					<AlertCircle class="w-4 h-4 flex-shrink-0" />
 					<span>{t.pricingPage.errors[errorKey]}</span>
 				</div>
@@ -118,7 +118,7 @@
 			<button
 				type="submit"
 				disabled={loading || !email}
-				class="w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+				class="w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 			>
 				{#if loading}
 					<Loader2 class="w-5 h-5 animate-spin" />
@@ -130,11 +130,15 @@
 		</form>
 	</div>
 
-	<p class="text-center text-sm text-slate-500">{t.landing.pricing.guarantee}</p>
+	<p class="text-center text-sm text-muted-foreground">{t.landing.pricing.guarantee}</p>
 
-	<p class="text-center text-sm text-slate-500">
+	{#if lang !== 'en'}
+		<p class="text-center text-sm text-muted-foreground">{t.disclaimer.translationInProgress}</p>
+	{/if}
+
+	<p class="text-center text-sm text-muted-foreground">
 		{t.paywall.alreadyPurchased}
-		<a href="/{lang}/restore" class="text-primary hover:opacity-80 font-medium">
+		<a href="/{lang}/restore" class="text-foreground underline hover:opacity-80 font-medium">
 			{t.paywall.restoreAccess}
 		</a>
 	</p>

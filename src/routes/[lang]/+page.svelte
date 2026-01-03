@@ -27,19 +27,8 @@
 		showCanceledBanner = false;
 	}
 	$: curriculum = data.curriculum;
-	$: carouselTips = data.carouselTips;
 	$: freeTips = data.freeTips;
-
-	// Carousel state
-	let currentSlide = 0;
-
-	// Auto-rotate carousel
-	onMount(() => {
-		const interval = setInterval(() => {
-			currentSlide = (currentSlide + 1) % carouselTips.length;
-		}, 4000);
-		return () => clearInterval(interval);
-	});
+	$: allTipTitles = data.allTipTitles;
 
 	// Sticky CTA visibility
 	let showStickyCta = false;
@@ -72,10 +61,10 @@
 
 <!-- Canceled Checkout Banner -->
 {#if showCanceledBanner}
-	<div class="bg-slate-50">
+	<div class="bg-card border-b border-border">
 		<div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-			<p class="text-slate-900 text-sm">{t.landing.checkoutCanceled}</p>
-			<button onclick={dismissCanceledBanner} class="text-slate-900 hover:opacity-80 cursor-pointer">
+			<p class="text-foreground text-sm">{t.landing.checkoutCanceled}</p>
+			<button onclick={dismissCanceledBanner} class="text-foreground hover:opacity-80 cursor-pointer">
 				<X class="w-5 h-5" />
 			</button>
 		</div>
@@ -89,11 +78,11 @@
 			<!-- Left: Text -->
 			<div class="space-y-6">
 				<div class="space-y-4">
-					<p class="text-slate-500">{t.landing.hero.eyebrow}</p>
-					<h1 class="text-3xl font-bold text-slate-900 leading-tight">
+					<p class="text-muted-foreground">{t.landing.hero.eyebrow}</p>
+					<h1 class="text-4xl md:text-5xl font-bold text-foreground leading-tight">
 						{t.landing.hero.title}
 					</h1>
-					<p class="text-xl text-slate-900">
+					<p class="text-lg text-muted-foreground">
 						{t.landing.hero.subtitle}
 					</p>
 				</div>
@@ -101,61 +90,25 @@
 					<a
 						id="hero-cta"
 						href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
-						class="inline-block px-6 py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
+						class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
 					>
 						{hasAccess ? t.guide.startReading : t.landing.hero.cta}
 					</a>
-					<p class="text-sm text-slate-500">{t.landing.hero.guarantee}</p>
+					<p class="text-sm text-muted-foreground">{t.landing.hero.guarantee}</p>
 				</div>
 			</div>
 
-			<!-- Right: Tip Content Carousel -->
-			<div class="hidden md:block">
-				<div class="relative">
-					{#each carouselTips as tip, i}
-						<a
-							href="/{lang}/guide/{tip.section}/{tip.id}"
-							class="block bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:border-primary hover:shadow-sm transition-colors cursor-pointer group {currentSlide === i ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none'}"
-						>
-							<!-- Tip Image -->
-							<div class="aspect-[1200/630] overflow-hidden">
-								<TipImage tipId={tip.id} alt={tip.title} className="w-full h-full object-cover" priority={true} />
-							</div>
-							<!-- Tip Content -->
-							<div class="p-6 space-y-2">
-								<div class="flex items-center gap-2 text-sm text-slate-500">
-									<span>{t.common.tipPrefix} #{tip.id}</span>
-									<span>·</span>
-									<span>{t.sections[tip.section].title}</span>
-									{#if !hasAccess && freeTipIds.includes(tip.id)}
-										<span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">{t.guide.free}</span>
-									{:else if !hasAccess}
-										<Lock class="w-4 h-4 text-slate-400" />
-									{/if}
-								</div>
-								<h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">{tip.title}</h3>
-								<p class="text-slate-900 text-sm line-clamp-2">{tip.summary}</p>
-							</div>
-						</a>
-					{/each}
-					<!-- Carousel dots -->
-					<div class="flex justify-center gap-2 pt-4">
-						{#each carouselTips as _, i}
-							<button
-								class="w-4 h-4 rounded-full transition-colors cursor-pointer {currentSlide === i ? 'bg-primary' : 'bg-slate-200'}"
-								onclick={() => currentSlide = i}
-								aria-label="{t.common.goToSlide} {i + 1}"
-							></button>
-						{/each}
-					</div>
-				</div>
+			<!-- Right: Flowing Tip Titles -->
+			<div class="hidden md:block relative">
+				<p class="text-sm leading-relaxed line-clamp-[10]">{#each allTipTitles as tip, i}<span class="text-muted-foreground/50">{String(tip.id).padStart(2, '0')}</span> <span class="text-muted-foreground">{tip.title}</span>{#if i < allTipTitles.length - 1}<span class="mx-2"> </span>{/if}{/each}</p>
+				<a href="/{lang}/guide" class="absolute bottom-0 right-0 text-foreground font-bold hover:underline text-sm pl-12 bg-gradient-to-l from-background from-80% to-transparent">{t.landing.hero.seeAll.replace('{count}', allTipTitles.length)} →</a>
 			</div>
 		</div>
 	</div>
 </section>
 
 <!-- Section 2: Social Proof -->
-<section class="py-12 bg-slate-50">
+<section class="py-12">
 	<div class="max-w-5xl mx-auto px-4">
 		<div class="grid md:grid-cols-[auto_1fr] gap-8 items-center">
 			<!-- Left: Profile Image -->
@@ -166,12 +119,13 @@
 			/>
 			<!-- Right: Quote + Info -->
 			<div class="text-center md:text-left space-y-4">
-				<blockquote class="text-xl text-slate-900 italic">
+				<blockquote class="text-xl text-foreground italic">
 					"{t.landing.social.quote}"
 				</blockquote>
 				<div>
-					<p class="font-medium text-slate-900">{t.landing.social.author}</p>
-					<p class="text-sm text-slate-500">{t.landing.social.role}</p>
+					<p class="font-medium text-foreground">{t.landing.social.author}</p>
+					<p class="text-sm text-muted-foreground">{t.landing.social.roleTitle}</p>
+					<p class="text-sm text-muted-foreground">{t.landing.social.roleSubtitle}</p>
 				</div>
 			</div>
 		</div>
@@ -182,26 +136,26 @@
 <section class="py-12">
 	<div class="max-w-3xl mx-auto px-4 space-y-8">
 		<!-- Title -->
-		<h2 class="text-2xl font-bold text-slate-900 text-center">{t.landing.caseStudy.title}</h2>
+		<h2 class="text-2xl font-bold text-foreground text-center">{t.landing.caseStudy.title}</h2>
 
 		<!-- Stats Grid - Wall of Impact -->
 		<div class="grid grid-cols-3 gap-4 text-center">
 			<div class="space-y-1">
-				<div class="text-3xl font-bold text-primary">{t.landing.caseStudy.stats.views.value}</div>
-				<div class="text-sm text-slate-500">{t.landing.caseStudy.stats.views.label}</div>
+				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.views.value}</div>
+				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.views.label}</div>
 			</div>
 			<div class="space-y-1">
-				<div class="text-3xl font-bold text-primary">{t.landing.caseStudy.stats.users.value}</div>
-				<div class="text-sm text-slate-500">{t.landing.caseStudy.stats.users.label}</div>
+				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.users.value}</div>
+				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.users.label}</div>
 			</div>
 			<div class="space-y-1">
-				<div class="text-3xl font-bold text-primary">{t.landing.caseStudy.stats.time.value}</div>
-				<div class="text-sm text-slate-500">{t.landing.caseStudy.stats.time.label}</div>
+				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.time.value}</div>
+				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.time.label}</div>
 			</div>
 		</div>
 
 		<!-- Description -->
-		<p class="text-slate-900 text-center text-lg">{t.landing.caseStudy.description}</p>
+		<p class="text-foreground text-center text-lg">{t.landing.caseStudy.description}</p>
 
 		<!-- Image -->
 		<img
@@ -216,7 +170,7 @@
 				href="https://kumamap.com"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="inline-block text-primary font-medium hover:opacity-80 transition-colors"
+				class="inline-block text-foreground underline font-medium hover:opacity-80 transition-colors"
 			>
 				{t.landing.caseStudy.cta} →
 			</a>
@@ -228,10 +182,10 @@
 <section class="py-12">
 	<div class="max-w-5xl mx-auto px-4 space-y-8">
 		<div class="text-center space-y-2">
-			<h2 class="text-2xl font-bold text-slate-900">
+			<h2 class="text-2xl font-bold text-foreground">
 				{t.landing.curriculum.title}
 			</h2>
-			<p class="text-slate-500">{t.landing.curriculum.subtitle}</p>
+			<p class="text-muted-foreground">{t.landing.curriculum.subtitle}</p>
 		</div>
 
 		<div class="space-y-4 md:space-y-8">
@@ -241,49 +195,49 @@
 
 				<!-- Mobile: Accordion -->
 				<div class="md:hidden">
-					<details class="group border border-slate-200 rounded-xl bg-white">
+					<details class="group border border-border rounded-xl bg-card">
 						<summary class="p-4 cursor-pointer flex justify-between items-center">
 							<div class="flex-1 min-w-0 space-y-1">
-								<h3 class="font-bold text-slate-900">{t.sections[section.id].title}</h3>
-								<p class="text-sm text-slate-500 truncate">
+								<h3 class="font-bold text-foreground">{t.sections[section.id].title}</h3>
+								<p class="text-sm text-muted-foreground truncate">
 									{t.sections[section.id].short} · {section.tips.length} {t.common.tips}
 								</p>
 							</div>
-							<ChevronDown class="w-5 h-5 text-slate-500 group-open:rotate-180 transition-transform flex-shrink-0" />
+							<ChevronDown class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform flex-shrink-0" />
 						</summary>
 						<div class="px-4 pb-4 space-y-2">
 							{#each previewTips as tip}
 								<a
 									href="/{lang}/guide/{section.id}/{tip.id}"
-									class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl hover:bg-primary/5 transition-colors group/tip"
+									class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow group/tip"
 								>
-									<span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-primary/10 text-primary text-sm font-bold rounded-xl">
+									<span class="flex-shrink-0 text-foreground text-sm font-bold">
 										{tip.id}
 									</span>
 									<div class="flex-1 min-w-0 space-y-1">
 										<div class="flex items-center gap-2">
-											<h4 class="font-medium text-slate-900 group-hover/tip:text-primary transition-colors truncate">
+											<h4 class="font-medium text-foreground truncate">
 												{tip.title}
 											</h4>
 											{#if !hasAccess}
 												{#if tip.isFree}
-													<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
+													<span class="flex-shrink-0 px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
 														{t.guide.free}
 													</span>
 												{:else}
-													<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+													<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 												{/if}
 											{/if}
 										</div>
-										<p class="text-sm text-slate-500 truncate">{tip.summary}</p>
+										<p class="text-sm text-muted-foreground truncate">{tip.summary}</p>
 									</div>
-									<ChevronRight class="w-4 h-4 text-slate-500 group-hover/tip:text-primary transition-colors flex-shrink-0" />
+									<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 								</a>
 							{/each}
 							{#if hasMore}
 								<a
 									href="/{lang}/guide/{section.id}"
-									class="block pt-2 text-sm text-primary font-medium hover:opacity-80 text-center"
+									class="block pt-2 text-sm text-foreground underline font-medium hover:opacity-80 text-center"
 								>
 									{t.landing.curriculum.viewAll.replace('{count}', section.tips.length)} →
 								</a>
@@ -296,44 +250,44 @@
 				<div class="hidden md:block space-y-4">
 					<div class="flex items-center justify-between">
 						<div class="space-y-1">
-							<h3 class="font-bold text-slate-900">{t.sections[section.id].title}</h3>
-							<p class="text-sm text-slate-500">{t.sections[section.id].short}</p>
+							<h3 class="font-bold text-foreground">{t.sections[section.id].title}</h3>
+							<p class="text-sm text-muted-foreground">{t.sections[section.id].short}</p>
 						</div>
-						<span class="text-sm text-slate-500">{section.tips.length} {t.common.tips}</span>
+						<span class="text-sm text-muted-foreground">{section.tips.length} {t.common.tips}</span>
 					</div>
 					<div class="space-y-2">
 						{#each previewTips as tip}
 							<a
 								href="/{lang}/guide/{section.id}/{tip.id}"
-								class="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200 hover:border-primary hover:shadow-sm transition-colors group/tip"
+								class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow group/tip"
 							>
-								<span class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-primary/10 text-primary text-sm font-bold rounded-xl">
+								<span class="flex-shrink-0 text-foreground text-sm font-bold">
 									{tip.id}
 								</span>
 								<div class="flex-1 min-w-0 space-y-1">
 									<div class="flex items-center gap-2">
-										<h4 class="font-medium text-slate-900 group-hover/tip:text-primary transition-colors truncate">
+										<h4 class="font-medium text-foreground truncate">
 											{tip.title}
 										</h4>
 										{#if !hasAccess}
 											{#if tip.isFree}
-												<span class="flex-shrink-0 px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">
+												<span class="flex-shrink-0 px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
 													{t.guide.free}
 												</span>
 											{:else}
-												<Lock class="w-4 h-4 text-slate-400 flex-shrink-0" />
+												<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 											{/if}
 										{/if}
 									</div>
-									<p class="text-sm text-slate-500 truncate">{tip.summary}</p>
+									<p class="text-sm text-muted-foreground truncate">{tip.summary}</p>
 								</div>
-								<ChevronRight class="w-4 h-4 text-slate-500 group-hover/tip:text-primary transition-colors flex-shrink-0" />
+								<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 							</a>
 						{/each}
 						{#if hasMore}
 							<a
 								href="/{lang}/guide/{section.id}"
-								class="flex items-center justify-center gap-2 p-4 border border-dashed border-slate-300 rounded-xl text-primary font-medium hover:border-primary hover:bg-primary/5 transition-colors"
+								class="flex items-center justify-center gap-2 p-4 border border-dashed border-border rounded-xl text-foreground font-medium hover:opacity-80 transition-opacity"
 							>
 								{t.landing.curriculum.viewAll.replace('{count}', section.tips.length)} →
 							</a>
@@ -346,34 +300,33 @@
 </section>
 
 <!-- Section 4: Free Tips Grid -->
-<section class="py-12 bg-slate-50">
+<section class="py-12">
 	<div class="max-w-5xl mx-auto px-4 space-y-6">
 		<div class="text-center space-y-2">
-			<h2 class="text-2xl font-bold text-slate-900">
+			<h2 class="text-2xl font-bold text-foreground">
 				{t.landing.sample.title}
 			</h2>
-			<p class="text-slate-500">{t.landing.sample.subtitle}</p>
+			<p class="text-muted-foreground">{t.landing.sample.subtitle}</p>
 		</div>
 
 		<div class="grid md:grid-cols-2 gap-4">
 			{#each freeTips as tip}
 				<a
 					href="/{lang}/guide/{tip.section}/{tip.id}"
-					class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:border-primary hover:shadow-sm transition-colors cursor-pointer group"
+					class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer group"
 				>
-					<div class="aspect-[1200/630] overflow-hidden">
+					<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
 						<TipImage tipId={tip.id} alt={tip.title} className="w-full h-full object-cover" />
 					</div>
-					<div class="p-6 space-y-2">
-						<div class="flex items-center gap-2 text-sm">
-							<span class="text-slate-500">{t.common.tipPrefix} #{tip.id}</span>
-							<span class="text-slate-500">·</span>
-							<span class="text-slate-500">{t.sections[tip.section].title}</span>
-							<span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-full">{t.guide.free}</span>
+					<div class="flex-1 min-w-0 space-y-1">
+						<div class="flex items-center gap-2">
+							<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">{t.guide.free}</span>
+							<span class="text-sm text-muted-foreground">#{tip.id}</span>
 						</div>
-						<h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors">{tip.title}</h3>
-						<p class="text-slate-900 text-sm line-clamp-2">{tip.summary}</p>
+						<h3 class="font-bold text-foreground">{tip.title}</h3>
+						<p class="text-sm text-muted-foreground line-clamp-2">{tip.summary}</p>
 					</div>
+					<ChevronRight class="w-5 h-5 text-muted-foreground flex-shrink-0" />
 				</a>
 			{/each}
 		</div>
@@ -384,30 +337,30 @@
 <!-- Section 5: Pricing -->
 <section id="pricing" class="py-12">
 	<div class="max-w-md mx-auto px-4 space-y-4">
-		<div class="bg-white rounded-xl p-6 border border-slate-200 shadow-sm text-center space-y-6">
+		<div class="bg-card rounded-xl p-6 border border-border text-center space-y-6">
 			<div class="space-y-2">
-				<h2 class="text-lg text-slate-900">{t.landing.pricing.title}</h2>
-				<div class="text-3xl font-bold text-slate-900">{t.landing.pricing.price}</div>
-				<p class="text-slate-500">{t.landing.pricing.subtitle}</p>
+				<h2 class="text-lg text-foreground">{t.landing.pricing.title}</h2>
+				<div class="text-3xl font-bold text-foreground">{t.landing.pricing.price}</div>
+				<p class="text-muted-foreground">{t.landing.pricing.subtitle}</p>
 			</div>
 
 			<ul class="text-left space-y-4">
 				{#each t.landing.pricing.features as feature}
 					<li class="flex items-start gap-4">
-						<Check class="w-5 h-5 text-green-600 flex-shrink-0" />
-						<span class="text-slate-900">{feature}</span>
+						<Check class="w-5 h-5 text-success flex-shrink-0" />
+						<span class="text-foreground">{feature}</span>
 					</li>
 				{/each}
 			</ul>
 
 			<a
 				href="/{lang}/pricing"
-				class="block w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
+				class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
 			>
 				{t.landing.pricing.cta}
 			</a>
 		</div>
-		<p class="text-center text-sm text-slate-500">{t.landing.pricing.guarantee}</p>
+		<p class="text-center text-sm text-muted-foreground">{t.landing.pricing.guarantee}</p>
 	</div>
 </section>
 {/if}
@@ -415,11 +368,11 @@
 <!-- Sticky Mobile CTA -->
 {#if showStickyCta}
 	<div
-		class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-200 shadow-lg md:hidden z-50 animate-slide-up"
+		class="fixed bottom-0 left-0 right-0 p-4 bg-card border-t border-border shadow-lg md:hidden z-50 animate-slide-up"
 	>
 		<a
 			href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
-			class="block w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold text-center cursor-pointer transition-colors"
+			class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-center cursor-pointer transition-colors"
 		>
 			{hasAccess ? t.guide.startReading : t.landing.hero.cta}
 		</a>

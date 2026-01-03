@@ -31,16 +31,16 @@
 		<!-- Hero -->
 		<div class="text-center space-y-6">
 			<img src="/images/profile.webp" alt={t.landing.social.author} class="w-48 h-48 rounded-xl mx-auto object-cover" />
-			<h1 class="text-3xl font-bold text-slate-900">{t.about.heroTitle}</h1>
-			<p class="text-lg sm:text-xl text-slate-500 max-w-3xl mx-auto">
+			<h1 class="text-3xl font-bold text-foreground">{t.about.heroTitle}</h1>
+			<p class="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
 				{t.about.heroSubtitle}
 			</p>
 		</div>
 
 		<!-- Story -->
-		<section class="border-t border-slate-200 pt-12 space-y-6">
-			<h2 class="text-2xl font-bold text-slate-900">{t.about.storyTitle}</h2>
-			<div class="space-y-4 text-slate-900 leading-relaxed">
+		<section class="border-t border-border pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-foreground">{t.about.storyTitle}</h2>
+			<div class="space-y-4 text-foreground leading-relaxed">
 				<p>{t.about.storyPara1}</p>
 				<p>{t.about.storyPara2}</p>
 				<p>{t.about.storyPara3}</p>
@@ -48,21 +48,21 @@
 		</section>
 
 		<!-- Why -->
-		<section class="border-t border-slate-200 pt-12 space-y-6">
-			<h2 class="text-2xl font-bold text-slate-900">{t.about.whyTitle}</h2>
-			<div class="space-y-4 text-slate-900 leading-relaxed">
+		<section class="border-t border-border pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-foreground">{t.about.whyTitle}</h2>
+			<div class="space-y-4 text-foreground leading-relaxed">
 				<p>{t.about.whyPara1}</p>
 				<p>{t.about.whyPara2}</p>
 			</div>
 		</section>
 
 		<!-- Credentials -->
-		<section class="border-t border-slate-200 pt-12 space-y-6">
-			<h2 class="text-2xl font-bold text-slate-900">{t.about.credentialsTitle}</h2>
-			<ul class="space-y-2 text-slate-900">
+		<section class="border-t border-border pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-foreground">{t.about.credentialsTitle}</h2>
+			<ul class="space-y-2 text-foreground">
 				{#each t.about.credentialsList as credential}
 					<li class="flex items-start gap-2">
-						<span class="text-slate-900">-</span>
+						<span class="text-foreground">-</span>
 						<span>{credential}</span>
 					</li>
 				{/each}
@@ -70,15 +70,15 @@
 		</section>
 
 		<!-- Contact -->
-		<section class="border-t border-slate-200 pt-12 space-y-6">
-			<h2 class="text-2xl font-bold text-slate-900">{t.about.contactTitle}</h2>
-			<p class="text-slate-900">{t.about.contactPara}</p>
+		<section class="border-t border-border pt-12 space-y-6">
+			<h2 class="text-2xl font-bold text-foreground">{t.about.contactTitle}</h2>
+			<p class="text-foreground">{t.about.contactPara}</p>
 			<div class="flex flex-wrap gap-4">
 				<a
 					href="https://linkedin.com/in/danyelkoca"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
+					class="cursor-pointer px-4 py-2 border border-border text-foreground rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.linkedin}
 				</a>
@@ -86,7 +86,7 @@
 					href="https://github.com/danyelkoca"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
+					class="cursor-pointer px-4 py-2 border border-border text-foreground rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.github}
 				</a>
@@ -94,7 +94,7 @@
 					href="https://danyelkoca.com"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="cursor-pointer px-4 py-2 border border-slate-200 text-slate-900 rounded-xl font-semibold hover:opacity-80 transition-colors"
+					class="cursor-pointer px-4 py-2 border border-border text-foreground rounded-xl font-semibold hover:opacity-80 transition-colors"
 				>
 					{t.about.contactLinks.website}
 				</a>

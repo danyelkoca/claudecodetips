@@ -1,10 +1,3 @@
----
-id: 44
-title: "Headless Mode"
-section: advanced
-summary: "Run Claude without interactive session. For automation and scripts."
-isFree: false
----
 
 The `-p` flag turns Claude Code into a scriptable CLI tool. Add it to any command, and Claude executes once and exits. No interactive session, no prompts, just stdin/stdout. This is how you integrate Claude into shell scripts, pre-commit hooks, and automation pipelines.
 

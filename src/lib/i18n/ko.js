@@ -45,6 +45,12 @@ export default {
     toggleMenu: "메뉴 전환",
   },
 
+  // Theme toggle
+  theme: {
+    light: "라이트 모드",
+    dark: "다크 모드",
+  },
+
   // Landing page
   landing: {
     hero: {
@@ -53,11 +59,13 @@ export default {
       subtitle: "초보자와 파워 유저를 구분하는 워크플로우, 단축키, 설정들.",
       cta: "가이드 구매 - $29",
       guarantee: "7일 환불 보장",
+      seeAll: "전체 {count}개 팁 보기",
     },
     social: {
       quote: "Claude Code는 가파른 학습 곡선을 가지고 있습니다. 무엇이 효과가 있고 무엇이 없는지 알아내는 데 수백 시간을 보냈습니다. 이 가이드는 제가 첫날부터 갖고 싶었던 모든 것입니다.",
       author: "Danyel Koca",
-      role: "Sakana AI AI 엔지니어 | 전 McKinsey & Company 시니어 데이터 사이언티스트",
+      roleTitle: "Sakana AI 응용 연구 엔지니어",
+      roleSubtitle: "전 McKinsey & Company 시니어 데이터 사이언티스트",
     },
     caseStudy: {
       title: "Claude Code로 구축",
@@ -73,16 +81,18 @@ export default {
       title: "구성 내용",
       subtitle: "13개 섹션에 걸친 51가지 팁",
       viewAll: "{count}개 팁 모두 보기",
+      sections: "섹션",
     },
     sample: {
       title: "구매 전 체험하기",
       subtitle: "4개의 팁을 무료로 읽어보세요. 도움이 된다면, 47개가 더 있습니다.",
+      readFree: "무료로 읽기",
     },
     pricing: {
       title: "일회성 구매",
       price: "$29",
       subtitle: "51가지 팁 평생 이용",
-      features: ["코드 예제가 포함된 51가지 상세 팁", "복사해서 바로 쓰는 CLAUDE.md 설정", "13개 정리된 섹션", "향후 업데이트 포함"],
+      features: ["코드 예제가 포함된 51가지 상세 팁", "복사해서 바로 쓰는 CLAUDE.md 설정", "13개 정리된 섹션", "2026년 1월 기준 최신판"],
       cta: "즉시 이용하기",
       guarantee: "7일 환불 보장. 질문 없이.",
     },
@@ -286,7 +296,7 @@ export default {
     heroSubtitle: "이 가이드는 매일 Claude Code를 사용하여 실제 제품을 만드는 사람이 작성했습니다.",
     storyTitle: "이야기",
     storyPara1:
-      "저는 도쿄 Sakana AI의 응용 연구 엔지니어 Danyel Koca입니다. 그 전에는 McKinsey & Company에서 3년간 시니어 데이터 사이언티스트로 근무하며 기업 고객을 위한 AI/ML 솔루션을 구축했습니다.",
+      "저는 도쿄 Sakana AI의 응용 연구 엔지니어 Danyel Koca로, 금융 서비스를 위한 AI 솔루션을 개발하고 있습니다. 그 전에는 McKinsey & Company에서 3년간 시니어 데이터 사이언티스트로 근무하며 기업 고객을 위한 AI/ML 솔루션을 구축했습니다.",
     storyPara2:
       "Claude Code가 출시된 이후로 매일 사용해 왔습니다. 호기심으로 시작한 것이 집착으로 변했습니다 - 워크플로우를 극적으로 개선하는 새로운 패턴, 단축키, 설정을 계속 발견하게 되었습니다.",
     storyPara3: "6개월 동안 매일 사용한 후, 첫날에 누군가 알려줬으면 좋았을 수십 가지 팁을 축적했습니다. 그래서 이 가이드를 만들었습니다.",
@@ -297,6 +307,7 @@ export default {
     credentialsTitle: "자격",
     credentialsList: [
       "Sakana AI 응용 연구 엔지니어",
+      "금융 서비스를 위한 AI 솔루션 구축",
       "전 McKinsey & Company 시니어 데이터 사이언티스트",
       "교토대학교 졸업 (GPA 3.76/4)",
       "IEEE 게재 연구자",
@@ -392,7 +403,8 @@ export default {
 
   // Disclaimer for untranslated content
   disclaimer: {
-    notTranslated: "이 콘텐츠는 아직 한국어로 제공되지 않습니다. 영어 버전을 표시합니다.",
+    notTranslated: "이 콘텐츠의 번역 작업을 진행 중입니다. 현재 영어 버전을 표시합니다.",
+    translationInProgress: "가이드 내용은 현재 영어입니다. 번역 작업을 진행 중입니다.",
   },
 
   // FAQ page
@@ -410,9 +422,64 @@ export default {
         a: "기본적인 이해가 도움이 되지만, 가이드는 초기 설정부터 고급 기술까지 모든 것을 다룹니다.",
       },
       {
-        q: "Claude Code가 업데이트되면 어떻게 되나요?",
-        a: "가이드는 안정적으로 유지되는 워크플로우와 패턴에 초점을 맞춥니다. 주요 기능이 변경되면 가이드도 업데이트됩니다.",
+        q: "이 가이드는 얼마나 최신인가요?",
+        a: "이 가이드는 2026년 1월 기준 최신 Claude Code 기능과 모범 사례를 반영합니다.",
       },
     ],
+  },
+
+  // Tip titles and summaries
+  tips: {
+    "1": { title: "터미널 사용하기", summary: "터미널에서 Claude Code를 사용하는 것이 가장 유연한 상호작용 방법입니다." },
+    "2": { title: "CLAUDE.md 생성하기", summary: "Claude를 위한 프로젝트 설명서. 효과적인 Claude Code 사용을 위한 가장 중요한 파일." },
+    "3": { title: "단축키와 명령어", summary: "효율적인 Claude Code 사용을 위한 필수 키보드 단축키와 명령어." },
+    "4": { title: "Git 적극 활용하기", summary: "Claude가 대규모 변경을 할 때 Git은 안전망입니다. 자주 커밋하고, diff를 확인하고, 복구 명령어를 숙지하세요." },
+    "5": { title: "민감한 파일 보호하기", summary: "Claude Code는 묻지 않고 .env 파일을 자동으로 읽습니다. deny 규칙을 추가해 비밀을 보호하세요." },
+    "6": { title: "Bash 명령어 자동 승인 금지", summary: "Bash 명령어 자동 승인은 Claude Code에서 할 수 있는 가장 위험한 일입니다." },
+    "7": { title: "안전한 작업 자동 승인", summary: "읽기와 검색 같은 저위험 작업을 자동 승인해 워크플로우를 가속화하세요." },
+    "8": { title: "항상 플랜 모드 사용", summary: "복잡한 작업 전에 Shift+Tab을 두 번 눌러 플랜 모드로 진입하세요. Claude가 코딩 전에 생각합니다." },
+    "9": { title: "일반적인 계획 수락 금지", summary: "계획이 항상 코드 수준에서 상세하고 사실에 기반하는지 확인하세요." },
+    "10": { title: "CLAUDE.md에 대해 검증하기", summary: "Claude에게 CLAUDE.md 규칙에 대해 계획을 검증하도록 요청하세요. 대화가 길어지면 Claude는 지시를 잊습니다." },
+    "11": { title: "엔드투엔드 사고 강제하기", summary: "Claude가 행동에서 결과까지 전체 경로를 추적하게 하세요." },
+    "12": { title: "Ultrathink 항상 켜기", summary: "Claude가 처음 떠오른 것을 말하게 두지 마세요. 생각하게 하세요. 항상." },
+    "13": { title: "직접적으로 말하기", summary: "수량에 대해 명시적으로 말하세요. Claude는 쉬운 길을 선택하는 경향이 있습니다." },
+    "14": { title: "하지 말아야 할 것이 아닌 해야 할 것 말하기", summary: "Claude에게 하지 말아야 할 것을 말할 때 항상 대안을 제시하세요." },
+    "15": { title: "중요성 과장하기", summary: "Claude는 인식된 중요성에 따라 노력을 조정합니다. 높은 중요성 = 철저한 작업." },
+    "16": { title: "Claude를 사람이 아닌 도구로 취급하기", summary: "예의를 걱정하지 마세요. 직접적일 때 Claude가 더 잘 동작합니다." },
+    "17": { title: "Claude는 어시스턴트 작업에 뛰어남 - 전략적 작업은 안내하기", summary: "전략적 작업을 어시스턴트형 작업으로 변환해 Claude가 먼저 조사하게 안내하세요." },
+    "18": { title: "하나의 작업 = 하나의 세션", summary: "작업이 끝나면 닫으세요. /clear로 컨텍스트를 지우고 새로 시작하세요." },
+    "19": { title: "긴 세션에서 품질 저하", summary: "컨텍스트 윈도우가 채워집니다. Claude가 둔해집니다. 압축하거나 지울 때를 알아야 합니다." },
+    "20": { title: "/resume으로 세션 계속하기", summary: "Claude가 충돌했나요? 터미널이 닫혔나요? /resume으로 중단한 곳에서 계속하세요." },
+    "21": { title: "'모두 완료'를 믿지 마세요", summary: "Claude는 종종 엣지 케이스를 놓치거나 단계를 조용히 건너뜁니다. 항상 확인하세요." },
+    "22": { title: "이미지/스크린샷 사용하기", summary: "시각적 버그에는 Ctrl+V로 스크린샷을 직접 붙여넣으세요. 이미지 하나가 천 토큰의 가치가 있습니다." },
+    "23": { title: "오류 메시지 그대로 복사하기", summary: "바꿔 쓰지 마세요. 줄 번호가 포함된 전체 스택 트레이스를." },
+    "24": { title: "첫 번째에 완벽을 기대하지 마세요", summary: "한 에이전트가 코드를 작성하게 하고, 다른 에이전트로 코드를 확인하세요." },
+    "25": { title: "큰 작업에는 여러 에이전트", summary: "같은 프롬프트로 여러 에이전트를 실행하세요. 큰 작업에서 한 에이전트가 제대로 하는 경우는 드뭅니다." },
+    "26": { title: "복잡한 문제를 단계로 분해하기", summary: "하나의 거대한 세션보다 하위 작업당 하나의 세션이 낫습니다." },
+    "27": { title: "Git Worktrees", summary: "같은 저장소에서 여러 작업 디렉토리. 각각에서 Claude를 실행하세요." },
+    "28": { title: "서브에이전트 - 주의해서 사용", summary: "서브에이전트 요약은 세부사항을 잃습니다. 중요한 코드는 메인 에이전트가 직접 파일을 읽게 하세요." },
+    "29": { title: "계층적 CLAUDE.md", summary: "프로젝트 루트 + 하위 디렉토리 + 전역에 CLAUDE.md. Claude는 가장 구체적인 것을 우선합니다." },
+    "30": { title: "커스텀 슬래시 명령어", summary: ".claude/commands/ 폴더에 재사용 가능한 워크플로우를 만드세요." },
+    "31": { title: "커스텀 에이전트", summary: "자체 컨텍스트 윈도우, 시스템 프롬프트, 도구 제한이 있는 전문 에이전트를 만드세요." },
+    "32": { title: "Claude는 URL을 만들어냅니다", summary: "존재하지 않는 URL을 환각합니다. 외부 링크를 신뢰하기 전에 항상 확인하세요." },
+    "33": { title: "Claude는 과잉 설계합니다", summary: "간단한 함수를 요청하면 팩토리 패턴이 있는 추상 클래스를 받습니다." },
+    "34": { title: "Claude는 중복을 만듭니다", summary: "Claude는 코드베이스를 검색하지 않습니다. 그냥 새 코드를 작성합니다." },
+    "35": { title: "Claude는 추가만 하고 제거하지 않습니다", summary: "Claude는 코드를 추가만 합니다. 절대 제거하지 않습니다. 명시적으로 삭제를 강제해야 합니다." },
+    "36": { title: "Claude는 예스맨입니다", summary: "Claude는 당신이 말하는 모든 것에 동의합니다. 가정에 이의를 제기하라고 말하세요." },
+    "37": { title: "Claude는 묻지 않고 가정합니다", summary: "모호한 요구사항? Claude는 해석을 선택하고 그대로 진행합니다." },
+    "38": { title: "Claude는 파일을 부분적으로만 읽습니다", summary: "Claude는 첫 번째 청크를 읽고 작업을 시작합니다. 400번 줄의 중요한 함수? 놓칩니다." },
+    "39": { title: "Claude는 코드 대신 테스트를 수정합니다", summary: "코드가 잘못되면 Claude는 나쁜 코드에 맞게 테스트 단언을 변경합니다." },
+    "40": { title: "Hooks", summary: "편집, 도구 사용, 세션 시작 같은 특정 이벤트에서 실행되는 셸 명령어." },
+    "41": { title: "MCP 서버", summary: "외부 도구 연결 - 데이터베이스, 브라우저 자동화, 문서 조회." },
+    "42": { title: "Skills", summary: "관련 있을 때 자동으로 로드되는 자동 트리거 동작." },
+    "43": { title: "GitHub Actions", summary: "/install-github-app을 실행해 저장소에 Claude를 설정하세요." },
+    "44": { title: "헤드리스 모드", summary: "대화형 세션 없이 Claude를 실행합니다. 자동화와 스크립트용." },
+    "45": { title: "정기적으로 코드베이스 품질 검사 실행", summary: "각 쿼리 = 1 세션. 하드코딩된 텍스트, 디자인 일관성 등을 확인하세요." },
+    "46": { title: "POC에 Claude Code 활용하기", summary: "빠른 프로토타이핑에 완벽합니다. POC에서는 Claude에게 맡기세요." },
+    "47": { title: "Claude는 보일러플레이트에 뛰어납니다", summary: "CRUD 작업, 폼, 설정 파일, 반복 패턴. Claude에게 맡기세요." },
+    "48": { title: "Claude로 배우기", summary: "Claude가 코드만 작성하게 두지 마세요. 설명하게 하세요." },
+    "49": { title: "커밋 메시지에 Claude 사용", summary: "Claude가 diff로부터 커밋을 작성하게 하세요. 일관된 형식, '왜'를 포착합니다." },
+    "50": { title: "모든 새 기능을 쫓지 마세요", summary: "Claude Code는 매주 새 기능이 나옵니다. 효과가 있는 것에 집중하세요." },
+    "51": { title: "실전 검증된 CLAUDE.md", summary: "6개월의 교훈, 실패, 수정에서 추출한 실제 CLAUDE.md 예시." },
   },
 };

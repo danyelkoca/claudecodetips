@@ -54,25 +54,25 @@
 
 <main class="min-h-screen">
 	<div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
-		<a href="/{lang}/blog" class="text-slate-900 hover:text-primary inline-block">
+		<a href="/{lang}/blog" class="text-foreground hover:underline inline-block">
 			{t.common.backArrow} {t.blog.backToBlog}
 		</a>
 
 		<article class="space-y-8">
 			<header class="space-y-4">
 				<h1 class="text-3xl font-bold">{post.title}</h1>
-				<p class="text-slate-500">{t.blog.publishedOn} {post.date}</p>
+				<p class="text-muted-foreground">{t.blog.publishedOn} {post.date}</p>
 			</header>
 
 			{#if contentIsFallback && PostComponent}
 				<TranslationDisclaimer {t} />
 			{/if}
 
-			<div class="prose prose-slate max-w-none">
+			<div class="prose max-w-none">
 				{#if PostComponent}
 					<svelte:component this={PostComponent} />
 				{:else}
-					<p class="text-slate-900">{t.common.loading}</p>
+					<p class="text-foreground">{t.common.loading}</p>
 				{/if}
 			</div>
 		</article>

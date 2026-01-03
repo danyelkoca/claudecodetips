@@ -39,6 +39,11 @@ export default {
     toggleMenu: "Alternar menú",
   },
 
+  theme: {
+    light: "Modo claro",
+    dark: "Modo oscuro",
+  },
+
   landing: {
     hero: {
       eyebrow: "Del creador de Kumamap (389K usuarios)",
@@ -46,11 +51,13 @@ export default {
       subtitle: "Los flujos de trabajo, atajos y configuraciones que separan a los principiantes de los usuarios avanzados.",
       cta: "Obtener la Guía - $29",
       guarantee: "Garantia de devolucion de 7 dias",
+      seeAll: "Ver los {count} consejos",
     },
     social: {
       quote: "Claude Code tiene una curva de aprendizaje pronunciada. Pasé cientos de horas descubriendo qué funciona y qué no. Esta guía es todo lo que deseaba tener desde el día uno.",
       author: "Danyel Koca",
-      role: "Ingeniero de IA en Sakana AI | Anteriormente Científico de Datos Senior en McKinsey & Company",
+      roleTitle: "Ingeniero de Investigación Aplicada en Sakana AI",
+      roleSubtitle: "Anteriormente Científico de Datos Senior en McKinsey & Company",
     },
     caseStudy: {
       title: "Construido con Claude Code",
@@ -66,10 +73,12 @@ export default {
       title: "Que Incluye",
       subtitle: "51 consejos en 13 secciones",
       viewAll: "Ver los {count} consejos",
+      sections: "secciones",
     },
     sample: {
       title: "Prueba Antes de Comprar",
       subtitle: "Lee estos 4 consejos gratis. Si te ayudan, imagina 47 mas.",
+      readFree: "Leer gratis",
     },
     pricing: {
       title: "Compra Única",
@@ -80,7 +89,7 @@ export default {
         "51 consejos detallados con ejemplos de código",
         "Configuraciones CLAUDE.md para copiar y pegar",
         "13 secciones organizadas",
-        "Actualizaciones futuras incluidas",
+        "Actualizado a enero 2026",
       ],
       cta: "Obtener Acceso Instantáneo",
     },
@@ -285,7 +294,7 @@ export default {
     heroSubtitle: "Esta guía fue creada por alguien que usa Claude Code todos los días para construir productos reales.",
     storyTitle: "La Historia",
     storyPara1:
-      "Soy Danyel Koca, Ingeniero de Investigación Aplicada en Sakana AI en Tokio. Antes de eso, pasé 3 años como Científico de Datos Senior en McKinsey & Company, construyendo soluciones AI/ML para clientes empresariales.",
+      "Soy Danyel Koca, Ingeniero de Investigación Aplicada en Sakana AI en Tokio, trabajando en soluciones de IA para servicios financieros. Antes de eso, pasé 3 años como Científico de Datos Senior en McKinsey & Company, construyendo soluciones AI/ML para clientes empresariales.",
     storyPara2:
       "He estado usando Claude Code diariamente desde que se lanzó. Lo que comenzó como curiosidad se convirtió en obsesión - me encontré descubriendo nuevos patrones, atajos y configuraciones que mejoraron dramáticamente mi flujo de trabajo.",
     storyPara3:
@@ -298,6 +307,7 @@ export default {
     credentialsTitle: "Credenciales",
     credentialsList: [
       "Ingeniero de Investigación Aplicada en Sakana AI",
+      "Construyendo soluciones de IA para servicios financieros",
       "Ex-Científico de Datos Senior en McKinsey & Company",
       "Graduado de la Universidad de Kioto (GPA 3.76/4)",
       "Investigador publicado en IEEE",
@@ -386,7 +396,8 @@ export default {
   },
 
   disclaimer: {
-    notTranslated: "Este contenido aún no está disponible en tu idioma. Mostrando versión en inglés.",
+    notTranslated: "Estamos trabajando en traducir este contenido. Actualmente mostrando versión en inglés.",
+    translationInProgress: "El contenido de la guía está actualmente en inglés. Estamos trabajando activamente en las traducciones.",
   },
 
   faq: {
@@ -403,10 +414,64 @@ export default {
         a: "Una familiaridad basica ayuda, pero la guia cubre todo desde la configuracion inicial hasta tecnicas avanzadas.",
       },
       {
-        q: "Que pasa si Claude Code se actualiza?",
-        a:
-          "La guia se enfoca en flujos de trabajo y patrones que permanecen estables. Cuando cambian las funciones principales, la guia tambien se actualiza.",
+        q: "Que tan actualizada esta esta guia?",
+        a: "Esta guia refleja las ultimas funciones y mejores practicas de Claude Code a enero de 2026.",
       },
     ],
+  },
+
+  // Tip titles and summaries
+  tips: {
+    "1": { title: "Usa la Terminal", summary: "Usar Claude Code en la terminal es la forma más flexible de interactuar con él." },
+    "2": { title: "Crea CLAUDE.md", summary: "El manual de instrucciones de tu proyecto para Claude. El archivo más importante para un uso efectivo de Claude Code." },
+    "3": { title: "Atajos y Comandos", summary: "Atajos de teclado y comandos esenciales para un uso eficiente de Claude Code." },
+    "4": { title: "Usa Git Extensivamente", summary: "Git es tu red de seguridad cuando Claude hace cambios amplios. Haz commits frecuentes, revisa diffs y conoce tus comandos de recuperación." },
+    "5": { title: "Protege Archivos Sensibles", summary: "Claude Code lee automáticamente archivos .env sin preguntar. Añade reglas deny para proteger secretos." },
+    "6": { title: "Nunca Auto-Apruebes Comandos Bash", summary: "Auto-aprobar comandos bash es lo más peligroso que puedes hacer con Claude Code." },
+    "7": { title: "Auto-Aprueba Acciones Seguras", summary: "Acelera tu flujo de trabajo auto-aprobando acciones de bajo riesgo como lecturas y búsquedas." },
+    "8": { title: "Siempre Usa el Modo Plan", summary: "Presiona Shift+Tab dos veces para entrar en modo plan antes de tareas complejas. Claude piensa antes de codificar." },
+    "9": { title: "Nunca Aceptes Planes Genéricos", summary: "Siempre asegúrate de que el plan sea detallado a nivel de código y factual." },
+    "10": { title: "Valida Contra CLAUDE.md", summary: "Pide a Claude que valide su plan contra las reglas de CLAUDE.md. Claude olvida instrucciones a medida que las conversaciones crecen." },
+    "11": { title: "Fuerza el Pensamiento de Extremo a Extremo", summary: "Haz que Claude trace el camino completo desde la acción hasta el resultado." },
+    "12": { title: "Ultrathink Siempre Activo", summary: "Nunca dejes que Claude diga lo primero que se le ocurra. Déjalo pensar. SIEMPRE." },
+    "13": { title: "Sé Directo", summary: "Sé explícito sobre cantidades. Claude tiende a elegir el camino fácil." },
+    "14": { title: "Di Qué Hacer, No Qué NO Hacer", summary: "Siempre proporciona una alternativa cuando le dices a Claude qué no hacer." },
+    "15": { title: "Exagera la Importancia", summary: "Claude calibra el esfuerzo según la importancia percibida. Alta importancia = trabajo exhaustivo." },
+    "16": { title: "Trata a Claude como Herramienta, No Persona", summary: "No te preocupes por ser cortés. Claude se comporta mejor cuando eres directo." },
+    "17": { title: "Claude Sobresale en Tareas de Asistente - Guíalo en Trabajos Estratégicos", summary: "Convierte tareas estratégicas en trabajos tipo asistente guiando a Claude a investigar primero." },
+    "18": { title: "Una Tarea = Una Sesión", summary: "Cuando la tarea termine, ciérrala. Usa /clear para limpiar el contexto y empezar de nuevo." },
+    "19": { title: "La Calidad Degrada en Sesiones Largas", summary: "La ventana de contexto se llena. Claude se vuelve más torpe. Sabe cuándo compactar o limpiar." },
+    "20": { title: "Usa /resume para Continuar Sesiones", summary: "¿Claude se cayó? ¿Se cerró la terminal? Usa /resume para retomar donde lo dejaste." },
+    "21": { title: "Nunca Confíes en 'Todo Listo'", summary: "Claude a menudo omite casos límite o salta pasos silenciosamente. Siempre verifica." },
+    "22": { title: "Usa Imágenes/Capturas", summary: "Pega capturas directamente con Ctrl+V para bugs visuales. Una imagen vale mil tokens." },
+    "23": { title: "Copia Mensajes de Error Textualmente", summary: "No parafrasees. Stack trace completo con números de línea." },
+    "24": { title: "No Esperes Perfecto a la Primera", summary: "Deja que un agente codifique, usa otro agente para revisar el código." },
+    "25": { title: "Múltiples Agentes para Trabajos Grandes", summary: "Lanza múltiples agentes con el mismo prompt. Para tareas grandes es raro que un agente lo haga bien." },
+    "26": { title: "Divide Problemas Complejos en Pasos", summary: "Mejor tener una sesión por sub-tarea que una sesión masiva." },
+    "27": { title: "Git Worktrees", summary: "Múltiples directorios de trabajo del mismo repo. Ejecuta Claude en cada uno." },
+    "28": { title: "Subagentes - Usa con Precaución", summary: "Los resúmenes de subagentes pierden detalle. Para código crítico, haz que el agente principal lea archivos directamente." },
+    "29": { title: "CLAUDE.md Jerárquico", summary: "CLAUDE.md en la raíz del proyecto + subdirectorios + global. Claude prioriza el más específico." },
+    "30": { title: "Comandos Slash Personalizados", summary: "Crea flujos de trabajo reutilizables en la carpeta .claude/commands/." },
+    "31": { title: "Agentes Personalizados", summary: "Crea agentes especializados con su propia ventana de contexto, prompt de sistema y restricciones de herramientas." },
+    "32": { title: "Claude Inventa URLs", summary: "Alucina URLs que no existen. Siempre verifica antes de confiar en enlaces externos." },
+    "33": { title: "Claude Sobre-Ingeniería", summary: "Pides una función simple, obtienes una clase abstracta con patrón factory." },
+    "34": { title: "Claude Crea Duplicados", summary: "Claude no busca en tu código. Solo escribe código nuevo." },
+    "35": { title: "Claude es Aditivo, Nunca Sustractivo", summary: "Claude solo añade código. Nunca elimina. Tienes que forzar la eliminación explícitamente." },
+    "36": { title: "Claude es un YES MAN", summary: "Claude está de acuerdo con todo lo que dices. Dile que cuestione tus suposiciones." },
+    "37": { title: "Claude Asume en Vez de Preguntar", summary: "¿Requisito ambiguo? Claude elige una interpretación y sigue adelante." },
+    "38": { title: "Claude Lee Archivos Parcialmente", summary: "Claude lee el primer fragmento y empieza a trabajar. ¿Función crítica en la línea 400? La perdió." },
+    "39": { title: "Claude Modifica Tests en Vez de Arreglar Código", summary: "Cuando el código está mal, Claude cambia las aserciones del test para que coincidan con el código malo." },
+    "40": { title: "Hooks", summary: "Comandos shell que se ejecutan en eventos específicos como ediciones, uso de herramientas o inicio de sesión." },
+    "41": { title: "Servidores MCP", summary: "Conecta herramientas externas - bases de datos, automatización de navegador, búsqueda de docs." },
+    "42": { title: "Skills", summary: "Comportamientos auto-activados que se cargan automáticamente cuando son relevantes." },
+    "43": { title: "GitHub Actions", summary: "Ejecuta /install-github-app para configurar Claude en tus repos." },
+    "44": { title: "Modo Headless", summary: "Ejecuta Claude sin sesión interactiva. Para automatización y scripts." },
+    "45": { title: "Ejecuta Chequeos de Calidad Periódicamente", summary: "Cada consulta = 1 sesión. Revisa textos hardcodeados, consistencia de diseño, etc." },
+    "46": { title: "Aprovecha Claude Code para POCs", summary: "Perfecto para prototipado rápido. Para POCs, deja que Claude se desate." },
+    "47": { title: "Claude es Genial para Boilerplate", summary: "Operaciones CRUD, formularios, archivos de config, patrones repetitivos. Deja que Claude trabaje." },
+    "48": { title: "Usa Claude para Aprender", summary: "No solo dejes que Claude escriba código. Haz que explique." },
+    "49": { title: "Claude para Mensajes de Commit", summary: "Deja que Claude escriba commits desde tu diff. Formato consistente, captura el 'por qué'." },
+    "50": { title: "No Persigas Cada Nueva Característica", summary: "Claude Code tiene nuevas características cada semana. Enfócate en lo que funciona." },
+    "51": { title: "CLAUDE.md Probado en Batalla", summary: "Un ejemplo real de CLAUDE.md destilado de 6 meses de lecciones, fallos y correcciones." },
   },
 };

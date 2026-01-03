@@ -1,10 +1,3 @@
----
-id: 23
-title: "Copy Error Messages Verbatim"
-section: input
-summary: "Don't paraphrase. Full stack trace with line numbers."
-isFree: false
----
 
 "It's giving some kind of null error" tells Claude nothing. The file path, line number, function name, and call chain you just stripped away? That's exactly what it needs to pinpoint the problem in seconds.
 

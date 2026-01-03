@@ -1,10 +1,3 @@
----
-id: 45
-title: "Run Codebase Quality Checks Periodically"
-section: use-cases
-summary: "Each query = 1 session. Check for hardcoded texts, design consistency, etc."
-isFree: false
----
 
 Codebases rot. Inconsistencies creep in, technical debt compounds, and what was once clean architecture becomes a tangled mess. Claude Code is perfect for periodic quality audits, but you need realistic expectations about what it catches and what slips through.
 
@@ -22,42 +15,6 @@ But here's the reality: [Semgrep's security research](https://semgrep.dev/blog/2
 
 This means: use `/security-review` as a first pass, not your only defense. Pair it with traditional SAST tools like Semgrep or SonarQube for production code. Human review remains non-negotiable for anything touching authentication, payments, or user data.
 
----
-
-## Code Consistency Checks
-
-Inconsistent code creates cognitive load. Every time a developer encounters a different pattern for the same thing, they waste mental energy. These checks are where Claude shines: pattern matching across files is tedious for humans, trivial for an LLM.
-
-**Naming conventions:**
-
-```
-Audit my codebase for naming convention violations. Check variables,
-functions, classes, and files. Flag any inconsistencies - e.g., mixing
-camelCase and snake_case, inconsistent prefixes, unclear abbreviations.
-List every violation with file and line number.
-```
-
-**Error handling patterns:**
-
-```
-Scan all error handling in this codebase. Are errors handled consistently?
-Check: error message formats, status codes returned, logging patterns,
-try/catch structures. Flag any module that handles errors differently
-from the established pattern.
-```
-
-**Logging format consistency:**
-
-```
-Review all logging statements across the codebase. Check for:
-- Consistent log levels (info, warn, error usage)
-- Structured vs unstructured logging mix
-- Missing correlation IDs in request flows
-- Inconsistent field names (req_id vs request_id vs requestId)
-List violations by file.
-```
-
----
 
 ## Internationalization (i18n) Audits
 
@@ -92,33 +49,6 @@ components and pages. List orphaned keys that can be removed.
 
 I run these i18n checks after every major feature ships. Translations are expensive. Finding 50 orphaned keys before sending to translators saves real money.
 
----
-
-## Design & UI Consistency
-
-Visual inconsistency destroys user trust. Users notice when buttons look different across pages.
-
-**Component pattern adherence:**
-
-```
-Audit the frontend for UI pattern violations. Check:
-- Form inputs: do they all use the same component or are there variants?
-- Buttons: consistent sizing, colors, hover states?
-- Modals/dialogs: same structure and behavior patterns?
-- Error displays: positioned and styled consistently?
-Flag any deviations from the established design system.
-```
-
-**Color and spacing consistency:**
-
-```
-Check for hardcoded color values and spacing instead of design tokens.
-Find instances of: raw hex codes, rgb values, magic number margins/padding.
-Everything should reference the design system variables.
-List all violations.
-```
-
----
 
 ## Technical Debt Detection
 
@@ -171,39 +101,6 @@ Run npm audit (or equivalent) and explain findings.
 
 For dead code and duplication, Claude's analysis is directional, not definitive. It might flag a function as unused when it's called dynamically. Always verify before deleting. But even with false positives, these scans surface candidates you'd never find manually.
 
----
-
-## Beyond /security-review: Custom Security Scans
-
-The built-in `/security-review` covers common patterns, but custom prompts catch project-specific issues. These are useful for periodic deep dives rather than every commit.
-
-**Secrets and credentials scan:**
-
-```
-Search for accidentally committed secrets:
-- API keys in source files
-- Hardcoded passwords or tokens
-- Private keys or certificates
-- Environment variables with default secrets
-Check .env.example files for sensitive defaults too.
-```
-
-This catches what automated tools miss: secrets disguised as config values, hardcoded test credentials that made it to production, API keys in comments.
-
-**Authentication flow audit:**
-
-```
-Trace all authentication and authorization code paths. Check:
-- Token validation consistency across endpoints
-- Session handling edge cases (expiry, refresh, revocation)
-- Permission checks on every protected route
-- Rate limiting on auth endpoints
-Flag any endpoint that touches user identity.
-```
-
-Authentication bugs are high-severity but hard to spot in code review. Claude can trace flows across files, though you'll need to verify findings manually.
-
----
 
 ## Caching Consistency
 
@@ -220,39 +117,6 @@ Review all caching implementations. Check for:
 Flag any endpoints with inconsistent caching behavior.
 ```
 
----
-
-## Testing Quality
-
-Bad tests are worse than no tests. They give false confidence while missing real bugs.
-
-**Coverage gap analysis:**
-
-```
-Analyze test coverage for critical paths:
-- Authentication and authorization flows
-- Payment and transaction handling
-- Data validation and sanitization
-- Core business logic
-Identify untested code in high-risk areas. Don't chase 100%
-coverage - focus on what matters.
-```
-
-**Testing anti-pattern detection:**
-
-```
-Find testing anti-patterns:
-- Tests that only check happy paths (no edge cases)
-- Tests so coupled to implementation they break on refactors
-- Tests with excessive mocking that don't test real behavior
-- Flaky tests with race conditions or timing issues
-- Tests that share state between runs
-List problematic tests and suggest fixes.
-```
-
-A warning on test audits: Claude can identify structural anti-patterns, but it can't tell you if a test is actually valuable. A test with 100% coverage of meaningless assertions looks fine to an LLM. Use these scans to find obvious problems, not to validate your test strategy.
-
----
 
 ## API Consistency
 
@@ -270,16 +134,3 @@ Audit REST API endpoints for consistency:
 List all violations of the established patterns.
 ```
 
----
-
-## Making Quality Checks Stick
-
-**When to run them:** Monthly for stable projects. Weekly during heavy development. After major refactors or dependency updates.
-
-**What to track:** Keep a log of findings. When the same issue type keeps appearing (inconsistent error handling, missing i18n keys), that's a systemic problem worth fixing at the root.
-
-**Priority order:** Security and data integrity first. Then API consistency. Then code duplication. Style issues last, if ever.
-
-**Set realistic expectations:** Claude excels at finding surface-level issues: naming inconsistencies, obvious duplication, missing translation keys. It struggles with deep semantic analysis across many files. The 86% false positive rate on security scans means you'll triage noise. That's still faster than manual review for initial passes.
-
-The goal isn't a perfect codebase. It's catching decay before it compounds. A monthly check that surfaces 3 real issues pays for itself.

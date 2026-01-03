@@ -1,10 +1,3 @@
----
-id: 28
-title: "Subagents - Use with Caution"
-section: multi-agent
-summary: "Subagent summaries lose detail. For critical code, have main agent read files directly."
-isFree: true
----
 
 Subagents can explore your entire codebase, research documentation, and execute multi-step tasks without polluting your main context window. But there is a fundamental tradeoff: **when a subagent reports back, you only get a summary, not the full picture.**
 

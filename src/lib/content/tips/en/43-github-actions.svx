@@ -1,10 +1,3 @@
----
-id: 43
-title: "GitHub Actions"
-section: advanced
-summary: "Run /install-github-app to set up Claude for your repos."
-isFree: false
----
 
 [Claude Code GitHub Actions](https://github.com/anthropics/claude-code-action) turns Claude into a virtual teammate. Tag `@claude` in any issue or PR, and it analyzes context, writes code, and creates pull requests while you sleep.
 

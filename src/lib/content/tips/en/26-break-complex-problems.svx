@@ -1,10 +1,3 @@
----
-id: 26
-title: "Break Complex Problems into Steps"
-section: multi-agent
-summary: "Better to have 1 session per sub-task than one massive session."
-isFree: false
----
 
 A project has 47 prefectures. Ask Claude to evaluate data sources across all 47 in one shot? It fails. It starts making assumptions, loses track of which prefecture it analyzed, confuses data from one with another, and produces an incoherent mess. But one session per prefecture? Works perfectly every time.
 

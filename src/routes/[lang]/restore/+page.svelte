@@ -63,24 +63,24 @@
 
 <div class="max-w-md mx-auto px-4 py-12 space-y-8">
 	<div class="text-center space-y-2">
-		<h1 class="text-3xl font-bold text-slate-900">
+		<h1 class="text-3xl font-bold text-foreground">
 			{t.restore.title}
 		</h1>
-		<p class="text-slate-500">
+		<p class="text-muted-foreground">
 			{t.restore.description}
 		</p>
 	</div>
 
 	{#if success}
-		<div class="bg-green-50 rounded-xl p-6 text-center space-y-2">
-			<Check class="w-8 h-8 text-green-600 mx-auto" />
-			<p class="text-green-600 font-medium">{t.restore.successMessage}</p>
-			<p class="text-green-600 text-sm">{t.restore.redirecting}</p>
+		<div class="bg-success-foreground rounded-xl p-6 text-center space-y-2">
+			<Check class="w-8 h-8 text-success mx-auto" />
+			<p class="text-success font-medium">{t.restore.successMessage}</p>
+			<p class="text-success text-sm">{t.restore.redirecting}</p>
 		</div>
 	{:else}
 		<form on:submit|preventDefault={handleSubmit} class="space-y-4">
 			<div class="space-y-2">
-				<label for="email" class="block text-sm font-medium text-slate-900">
+				<label for="email" class="block text-sm font-medium text-foreground">
 					{t.restore.emailLabel}
 				</label>
 				<input
@@ -90,12 +90,12 @@
 					required
 					disabled={loading}
 					placeholder={t.restore.emailPlaceholder}
-					class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50"
+					class="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground disabled:opacity-50"
 				/>
 			</div>
 
 			{#if errorKey}
-				<div class="flex items-center gap-2 text-red-600 text-sm">
+				<div class="flex items-center gap-2 text-error text-sm">
 					<AlertCircle class="w-4 h-4 flex-shrink-0" />
 					<span>{t.restore.errors[errorKey]}</span>
 				</div>
@@ -104,7 +104,7 @@
 			<button
 				type="submit"
 				disabled={loading || !email}
-				class="w-full py-3 bg-primary text-white rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+				class="w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 			>
 				{#if loading}
 					<Loader2 class="w-5 h-5 animate-spin" />
@@ -113,9 +113,9 @@
 			</button>
 		</form>
 
-		<p class="text-center text-sm text-slate-500">
+		<p class="text-center text-sm text-muted-foreground">
 			{t.restore.noAccount}
-			<a href="/{lang}/pricing" class="text-primary hover:opacity-80 font-medium">
+			<a href="/{lang}/pricing" class="text-foreground underline hover:opacity-80 font-medium">
 				{t.restore.buyNow}
 			</a>
 		</p>

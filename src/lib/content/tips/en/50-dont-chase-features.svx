@@ -1,10 +1,3 @@
----
-id: 50
-title: "Don't Chase Every New Feature"
-section: closing
-summary: "Claude Code gets new features every week. Double down on what works."
-isFree: false
----
 
 Claude Code ships updates weekly. Doesn't mean you should adopt them all.
 

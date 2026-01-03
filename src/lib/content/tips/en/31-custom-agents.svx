@@ -1,10 +1,3 @@
----
-id: 31
-title: "Custom Agents"
-section: customization
-summary: "Create specialized agents with their own context window, system prompt, and tool restrictions."
-isFree: false
----
 
 Custom agents are Markdown files with YAML frontmatter that define specialized AI assistants. Each gets its own isolated context window, system prompt, and tool permissions. You create them once, invoke them by name.
 
@@ -18,12 +11,6 @@ Custom agents are Markdown files with YAML frontmatter that define specialized A
 Project agents take precedence when names conflict. You can also define agents dynamically via the `--agents` CLI flag, which slots between project and user priority.
 
 ```markdown
----
-name: security-auditor
-description: Reviews code for security vulnerabilities. Use after code changes.
-tools: Read, Grep, Glob
-model: sonnet
----
 
 You are a security expert. Scan code for SQL injection, XSS, auth bypasses...
 ```
@@ -66,12 +53,6 @@ Limiting tools is not optional for security-focused agents. A code reviewer that
 This agent scans for vulnerabilities without the ability to modify anything:
 
 ```markdown
----
-name: security-auditor
-description: Reviews code for security vulnerabilities. Use after code changes or before commits. MUST BE USED before merging auth-related PRs.
-tools: Read, Grep, Glob
-model: sonnet
----
 
 You are a security expert. Scan code for:
 
@@ -99,12 +80,6 @@ The `MUST BE USED` phrase in the description encourages Claude to invoke this ag
 This agent runs tests and fixes failures without touching test assertions:
 
 ```markdown
----
-name: test-fixer
-description: Use proactively after code changes to run tests and fix failures.
-tools: Read, Edit, Bash, Grep, Glob
-model: sonnet
----
 
 You are a test automation expert.
 
@@ -126,12 +101,6 @@ Fix the underlying code.
 Opus costs more but pays off for complex debugging where you need root cause analysis:
 
 ```markdown
----
-name: debugger
-description: Debugging specialist for errors and unexpected behavior. Use when encountering issues that require deep analysis.
-tools: Read, Edit, Bash, Grep, Glob
-model: opus
----
 
 You are an expert debugger specializing in root cause analysis.
 

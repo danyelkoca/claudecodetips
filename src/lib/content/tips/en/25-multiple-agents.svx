@@ -1,10 +1,3 @@
----
-id: 25
-title: "Multiple Agents for Big Jobs"
-section: multi-agent
-summary: "Launch multiple agents with same prompt. For big tasks it's rare 1 agent gets it right."
-isFree: false
----
 
 Non-determinism is a feature, not a bug. Run the same prompt through multiple Claude Code instances and you get different solutions. One might nail the architecture but miss edge cases. Another might have clunky structure but handle errors perfectly. A third might fail completely. Your job: compare the outputs and pick the winner.
 
@@ -62,7 +55,7 @@ This works best for:
 
 ## Rate Limits Will Hit You Fast
 
-[Anthropic's rate limits](https://techcrunch.com/2025/07/28/anthropic-unveils-new-rate-limits-to-curb-claude-code-power-users/) operate on a 5-hour rolling window. Pro users get roughly 44,000 tokens per window. Max5 gets about 88,000. As of August 2025, there's also a weekly limit of approximately 40-80 Claude Code hours for Pro users.
+[Anthropic's rate limits](https://techcrunch.com/2025/07/28/anthropic-unveils-new-rate-limits-to-curb-claude-code-power-users/) operate on a 5-hour rolling window. Pro users get roughly 44,000 tokens per window. Max5 gets about 88,000. There's also a weekly limit of approximately 40-80 Claude Code hours for Pro users.
 
 Parallel sessions accelerate usage proportionally. Three agents burn tokens three times as fast. If you are running aggressive parallel work, you will hit limits. Options:
 

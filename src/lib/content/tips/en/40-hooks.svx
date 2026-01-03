@@ -1,10 +1,3 @@
----
-id: 40
-title: "Hooks"
-section: advanced
-summary: "Shell commands that run at specific events like edits, tool use, or session start."
-isFree: false
----
 
 Hooks are shell commands that run at specific points during Claude's operation. They guarantee certain actions happen every time, rather than hoping Claude remembers to do something.
 
