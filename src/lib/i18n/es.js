@@ -53,6 +53,42 @@ export default {
       guarantee: "Garantia de devolucion de 7 dias",
       seeAll: "Ver los {count} consejos",
     },
+    problem: {
+      title: "¿Te suena familiar?",
+      subtitle: "Estas frustraciones me llevaron a escribir esta guía",
+      cards: [
+        {
+          title: "Claude ignora CLAUDE.md",
+          description: "Tus instrucciones personalizadas son ignoradas u olvidadas en medio de la conversación",
+        },
+        {
+          title: "Sobre-ingeniería todo",
+          description: "Pides una función simple, obtienes 500 líneas de abstracción",
+        },
+        {
+          title: "Resultados diferentes cada vez",
+          description: "El mismo prompt, calidad de salida muy diferente",
+        },
+        {
+          title: "Dice terminado pero está roto",
+          description: "Entrega código con confianza que en realidad no funciona",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "¿Por qué confiar en esta guía?",
+      quote: "Descubrí lo que realmente funciona con Claude Code a través de cientos de horas de prueba y error. Esta guía es todo lo que aprendí.",
+    },
+    experience: {
+      title: "La Experiencia Detrás de Esta Guía",
+      subtitle: "No solo leí sobre estos problemas, los viví.",
+      conclusion: "2.7 mil millones de tokens de lecciones aprendidas, condensadas en 51 consejos prácticos.",
+      stats: {
+        tokens: "2.772.274.103",
+        cost: "$2.288,41",
+        period: "28 Nov 2025 - 5 Ene 2026",
+      },
+    },
     social: {
       quote: "Claude Code tiene una curva de aprendizaje pronunciada. Pasé cientos de horas descubriendo qué funciona y qué no. Esta guía es todo lo que deseaba tener desde el día uno.",
       author: "Danyel Koca",
@@ -60,7 +96,7 @@ export default {
       roleSubtitle: "Anteriormente Científico de Datos Senior en McKinsey & Company",
     },
     caseStudy: {
-      title: "Construido con Claude Code",
+      title: "Prueba de que Funciona",
       description: "Construí Kumamap — el rastreador de osos #1 de Japón — completamente con Claude Code. Esta guía te enseña los patrones exactos que usé.",
       cta: "Ver el producto en vivo",
       stats: {
@@ -247,10 +283,9 @@ export default {
 
   footer: {
     builtWith: "Construido con Claude Code",
-    guide: "Guía",
+    product: "Producto",
     company: "Empresa",
     legal: "Legal",
-    allTips: "Los 51 Consejos",
     faq: "Preguntas Frecuentes",
     restoreAccess: "Restaurar acceso",
     pricing: "Precios",

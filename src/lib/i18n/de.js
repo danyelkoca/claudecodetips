@@ -61,6 +61,42 @@ export default {
       guarantee: "7-Tage Geld-zuruck-Garantie",
       seeAll: "Alle {count} Tipps ansehen",
     },
+    problem: {
+      title: "Kommt dir bekannt vor?",
+      subtitle: "Diese Frustrationen haben mich dazu gebracht, diesen Leitfaden zu schreiben",
+      cards: [
+        {
+          title: "Claude ignoriert CLAUDE.md",
+          description: "Deine benutzerdefinierten Anweisungen werden übersehen oder mitten im Gespräch vergessen",
+        },
+        {
+          title: "Übertechnisiert alles",
+          description: "Du fragst nach einer einfachen Funktion, bekommst 500 Zeilen Abstraktion",
+        },
+        {
+          title: "Jedes Mal andere Ergebnisse",
+          description: "Der gleiche Prompt, sehr unterschiedliche Ausgabequalität",
+        },
+        {
+          title: "Sagt fertig aber ist kaputt",
+          description: "Liefert selbstbewusst Code, der eigentlich nicht funktioniert",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "Warum diesem Guide vertrauen?",
+      quote: "Ich habe durch Hunderte Stunden Trial-and-Error herausgefunden, was mit Claude Code wirklich funktioniert. Dieser Guide ist alles, was ich gelernt habe.",
+    },
+    experience: {
+      title: "Die Erfahrung Hinter Diesem Guide",
+      subtitle: "Ich habe diese Probleme nicht nur gelesen, ich habe sie erlebt.",
+      conclusion: "2,7 Milliarden Tokens an hart erkämpften Lektionen, verdichtet in 51 praktische Tipps.",
+      stats: {
+        tokens: "2.772.274.103",
+        cost: "2.288,41 $",
+        period: "28. Nov. 2025 - 5. Jan. 2026",
+      },
+    },
     social: {
       quote: "Claude Code hat eine steile Lernkurve. Ich habe Hunderte von Stunden damit verbracht herauszufinden, was funktioniert und was nicht. Dieser Leitfaden ist alles, was ich mir am ersten Tag gewünscht hätte.",
       author: "Danyel Koca",
@@ -68,7 +104,7 @@ export default {
       roleSubtitle: "Zuvor Senior Data Scientist bei McKinsey & Company",
     },
     caseStudy: {
-      title: "Mit Claude Code gebaut",
+      title: "Beweis, dass es Funktioniert",
       description: "Ich habe Kumamap — Japans #1 Bären-Tracker — komplett mit Claude Code gebaut. Dieser Leitfaden lehrt Sie die genauen Muster, die ich verwendet habe.",
       cta: "Live-Produkt ansehen",
       stats: {
@@ -262,10 +298,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Erstellt mit Claude Code",
-    guide: "Leitfaden",
+    product: "Produkt",
     company: "Unternehmen",
     legal: "Rechtliches",
-    allTips: "Alle 51 Tipps",
     faq: "FAQ",
     restoreAccess: "Zugang wiederherstellen",
     pricing: "Preise",

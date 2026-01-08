@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Check, X, ChevronDown, ChevronRight, Lock } from 'lucide-svelte';
+	import { Check, X, ChevronDown, ChevronRight, Lock, Layers, Shuffle, AlertCircle } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { freeTipIds } from '$lib/content/tips.js';
@@ -107,9 +107,13 @@
 	</div>
 </section>
 
-<!-- Section 2: Social Proof -->
+<!-- Section 2: Why Trust This Guide -->
 <section class="py-12">
-	<div class="max-w-5xl mx-auto px-4">
+	<div class="max-w-5xl mx-auto px-4 space-y-8">
+		<div class="text-center space-y-2">
+			<h2 class="text-2xl font-bold text-foreground">{t.landing.author.sectionTitle}</h2>
+		</div>
+
 		<div class="grid md:grid-cols-[auto_1fr] gap-8 items-center">
 			<!-- Left: Profile Image -->
 			<img
@@ -117,13 +121,13 @@
 				alt={t.landing.social.author}
 				class="w-48 h-48 rounded-xl mx-auto md:mx-0 object-cover"
 			/>
-			<!-- Right: Quote + Info -->
-			<div class="text-center md:text-left space-y-4">
+			<!-- Right: Content -->
+			<div class="space-y-4">
 				<blockquote class="text-xl text-foreground italic">
-					"{t.landing.social.quote}"
+					"{t.landing.author.quote}"
 				</blockquote>
 				<div>
-					<p class="font-medium text-foreground">{t.landing.social.author}</p>
+					<p class="font-bold text-foreground">{t.landing.social.author}</p>
 					<p class="text-sm text-muted-foreground">{t.landing.social.roleTitle}</p>
 					<p class="text-sm text-muted-foreground">{t.landing.social.roleSubtitle}</p>
 				</div>
@@ -132,53 +136,128 @@
 	</div>
 </section>
 
-<!-- Section 2.5: Case Study -->
+<!-- Section 3: Sound Familiar -->
 <section class="py-12">
-	<div class="max-w-3xl mx-auto px-4 space-y-8">
-		<!-- Title -->
-		<h2 class="text-2xl font-bold text-foreground text-center">{t.landing.caseStudy.title}</h2>
-
-		<!-- Stats Grid - Wall of Impact -->
-		<div class="grid grid-cols-3 gap-4 text-center">
-			<div class="space-y-1">
-				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.views.value}</div>
-				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.views.label}</div>
-			</div>
-			<div class="space-y-1">
-				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.users.value}</div>
-				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.users.label}</div>
-			</div>
-			<div class="space-y-1">
-				<div class="text-3xl font-bold text-foreground">{t.landing.caseStudy.stats.time.value}</div>
-				<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.time.label}</div>
-			</div>
+	<div class="max-w-5xl mx-auto px-4 space-y-8">
+		<div class="text-center space-y-2">
+			<h2 class="text-2xl font-bold text-foreground">{t.landing.problem.title}</h2>
+			<p class="text-muted-foreground">{t.landing.problem.subtitle}</p>
 		</div>
 
-		<!-- Description -->
-		<p class="text-foreground text-center text-lg">{t.landing.caseStudy.description}</p>
-
-		<!-- Image -->
-		<img
-			src="/images/kumamap.webp"
-			alt="Kumamap"
-			class="w-full max-w-md mx-auto rounded-xl shadow-sm"
-		/>
-
-		<!-- CTA -->
-		<div class="text-center">
-			<a
-				href="https://kumamap.com"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="inline-block text-foreground underline font-medium hover:opacity-80 transition-colors"
-			>
-				{t.landing.caseStudy.cta} →
-			</a>
+		<div class="grid md:grid-cols-2 gap-4">
+			{#each t.landing.problem.cards as card, i}
+				<div class="bg-card rounded-xl border border-border p-6 text-center space-y-3">
+					<div class="flex justify-center text-muted-foreground">
+						{#if i === 0}
+							<X class="w-6 h-6" />
+						{:else if i === 1}
+							<Layers class="w-6 h-6" />
+						{:else if i === 2}
+							<Shuffle class="w-6 h-6" />
+						{:else}
+							<AlertCircle class="w-6 h-6" />
+						{/if}
+					</div>
+					<h3 class="font-bold text-foreground">{card.title}</h3>
+					<p class="text-sm text-muted-foreground">{card.description}</p>
+				</div>
+			{/each}
 		</div>
 	</div>
 </section>
 
-<!-- Section 3: What's Inside -->
+<!-- Section 4: The Experience Behind This Guide -->
+<section class="py-12">
+	<div class="max-w-5xl mx-auto px-4 space-y-8">
+		<div class="text-center space-y-2">
+			<h2 class="text-2xl font-bold text-foreground">{t.landing.experience.title}</h2>
+			<p class="text-muted-foreground">{t.landing.experience.subtitle}</p>
+		</div>
+
+		<div class="max-w-xl mx-auto space-y-4">
+			<!-- Terminal with macOS-style window chrome -->
+			<div class="bg-card rounded-xl border border-border overflow-hidden">
+				<!-- Title bar -->
+				<div class="flex items-center gap-2 px-4 py-3 border-b border-border">
+					<div class="flex gap-1.5">
+						<div class="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+						<div class="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+						<div class="w-3 h-3 rounded-full bg-[#28c840]"></div>
+					</div>
+					<span class="text-xs text-muted-foreground flex-1 text-center">Terminal</span>
+				</div>
+				<!-- Terminal content -->
+				<div class="p-4 font-mono text-sm">
+					<div class="flex items-center gap-2 text-muted-foreground">
+						<span>$</span>
+						<span>ccusage --total</span>
+					</div>
+					<div class="space-y-1 pt-3">
+						<div class="flex justify-between">
+							<span class="text-muted-foreground">Total Tokens:</span>
+							<span class="text-foreground font-bold">{t.landing.experience.stats.tokens}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-muted-foreground">Total Cost:</span>
+							<span class="text-foreground font-bold">{t.landing.experience.stats.cost}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-muted-foreground">Period:</span>
+							<span class="text-foreground">{t.landing.experience.stats.period}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Conclusion -->
+			<p class="text-center text-muted-foreground">{t.landing.experience.conclusion}</p>
+		</div>
+	</div>
+</section>
+
+<!-- Section 5: Case Study -->
+<section class="py-12">
+	<div class="max-w-5xl mx-auto px-4">
+		<div class="grid md:grid-cols-2 gap-8 items-center">
+			<!-- Left: Content -->
+			<div class="space-y-6">
+				<h2 class="text-2xl font-bold text-foreground">{t.landing.caseStudy.title}</h2>
+				<p class="text-lg text-muted-foreground">{t.landing.caseStudy.description}</p>
+
+				<div class="flex flex-wrap gap-6">
+					<div>
+						<div class="text-2xl font-bold text-foreground">{t.landing.caseStudy.stats.users.value}</div>
+						<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.users.label}</div>
+					</div>
+					<div>
+						<div class="text-2xl font-bold text-foreground">{t.landing.caseStudy.stats.views.value}</div>
+						<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.views.label}</div>
+					</div>
+					<div>
+						<div class="text-2xl font-bold text-foreground">{t.landing.caseStudy.stats.time.value}</div>
+						<div class="text-sm text-muted-foreground">{t.landing.caseStudy.stats.time.label}</div>
+					</div>
+				</div>
+
+				<a
+					href="https://kumamap.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-block text-foreground underline font-medium hover:opacity-80 transition-colors cursor-pointer"
+				>
+					{t.landing.caseStudy.cta} →
+				</a>
+			</div>
+
+			<!-- Right: Image -->
+			<div class="order-first md:order-last">
+				<img src="/images/kumamap.webp" alt="Kumamap" class="w-full rounded-xl" />
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Section 6: Curriculum -->
 <section class="py-12">
 	<div class="max-w-5xl mx-auto px-4 space-y-8">
 		<div class="text-center space-y-2">
@@ -188,118 +267,56 @@
 			<p class="text-muted-foreground">{t.landing.curriculum.subtitle}</p>
 		</div>
 
-		<div class="space-y-4 md:space-y-8">
+		<div class="space-y-3">
 			{#each curriculum as section}
-				{@const previewTips = section.tips.slice(0, 2)}
-				{@const hasMore = section.tips.length > 2}
-
-				<!-- Mobile: Accordion -->
-				<div class="md:hidden">
-					<details class="group border border-border rounded-xl bg-card">
-						<summary class="p-4 cursor-pointer flex justify-between items-center">
-							<div class="flex-1 min-w-0 space-y-1">
-								<h3 class="font-bold text-foreground">{t.sections[section.id].title}</h3>
-								<p class="text-sm text-muted-foreground truncate">
-									{t.sections[section.id].short} · {section.tips.length} {t.common.tips}
-								</p>
-							</div>
-							<ChevronDown class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform flex-shrink-0" />
-						</summary>
-						<div class="px-4 pb-4 space-y-2">
-							{#each previewTips as tip}
+				<details class="group border border-border rounded-xl bg-card">
+					<summary class="p-4 cursor-pointer flex items-center gap-4">
+						<div class="flex-1 min-w-0 space-y-1">
+							<h3 class="font-bold text-foreground">{t.sections[section.id].title}</h3>
+							<p class="text-sm text-muted-foreground truncate">
+								{t.sections[section.id].short}
+							</p>
+						</div>
+						<span class="text-sm text-muted-foreground flex-shrink-0">{section.tips.length} {t.common.tips}</span>
+						<ChevronDown class="w-5 h-5 text-muted-foreground group-open:rotate-180 transition-transform flex-shrink-0" />
+					</summary>
+					<div class="px-4 pb-4">
+						<div class="divide-y divide-border">
+							{#each section.tips as tip}
 								<a
 									href="/{lang}/guide/{section.id}/{tip.id}"
-									class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow group/tip"
+									class="flex items-start gap-3 py-3 hover:opacity-80 transition-colors"
 								>
-									<span class="flex-shrink-0 text-foreground text-sm font-bold">
-										{tip.id}
-									</span>
-									<div class="flex-1 min-w-0 space-y-1">
+									<span class="text-foreground text-sm font-bold flex-shrink-0 w-6">{tip.id}</span>
+									<div class="flex-1 min-w-0">
 										<div class="flex items-center gap-2">
-											<h4 class="font-medium text-foreground truncate">
-												{tip.title}
-											</h4>
+											<h4 class="text-sm font-medium text-foreground truncate">{tip.title}</h4>
 											{#if !hasAccess}
 												{#if tip.isFree}
-													<span class="flex-shrink-0 px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
+													<span class="px-2 py-0.5 bg-success-foreground text-success text-xs font-medium rounded-full flex-shrink-0">
 														{t.guide.free}
 													</span>
-												{:else}
-													<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 												{/if}
 											{/if}
 										</div>
-										<p class="text-sm text-muted-foreground truncate">{tip.summary}</p>
+										<p class="text-xs text-muted-foreground truncate">{tip.summary}</p>
 									</div>
-									<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+									{#if !hasAccess && !tip.isFree}
+										<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+									{:else}
+										<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+									{/if}
 								</a>
 							{/each}
-							{#if hasMore}
-								<a
-									href="/{lang}/guide/{section.id}"
-									class="block pt-2 text-sm text-foreground underline font-medium hover:opacity-80 text-center"
-								>
-									{t.landing.curriculum.viewAll.replace('{count}', section.tips.length)} →
-								</a>
-							{/if}
 						</div>
-					</details>
-				</div>
-
-				<!-- Desktop: Always visible -->
-				<div class="hidden md:block space-y-4">
-					<div class="flex items-center justify-between">
-						<div class="space-y-1">
-							<h3 class="font-bold text-foreground">{t.sections[section.id].title}</h3>
-							<p class="text-sm text-muted-foreground">{t.sections[section.id].short}</p>
-						</div>
-						<span class="text-sm text-muted-foreground">{section.tips.length} {t.common.tips}</span>
 					</div>
-					<div class="space-y-2">
-						{#each previewTips as tip}
-							<a
-								href="/{lang}/guide/{section.id}/{tip.id}"
-								class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow group/tip"
-							>
-								<span class="flex-shrink-0 text-foreground text-sm font-bold">
-									{tip.id}
-								</span>
-								<div class="flex-1 min-w-0 space-y-1">
-									<div class="flex items-center gap-2">
-										<h4 class="font-medium text-foreground truncate">
-											{tip.title}
-										</h4>
-										{#if !hasAccess}
-											{#if tip.isFree}
-												<span class="flex-shrink-0 px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
-													{t.guide.free}
-												</span>
-											{:else}
-												<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
-											{/if}
-										{/if}
-									</div>
-									<p class="text-sm text-muted-foreground truncate">{tip.summary}</p>
-								</div>
-								<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
-							</a>
-						{/each}
-						{#if hasMore}
-							<a
-								href="/{lang}/guide/{section.id}"
-								class="flex items-center justify-center gap-2 p-4 border border-dashed border-border rounded-xl text-foreground font-medium hover:opacity-80 transition-opacity"
-							>
-								{t.landing.curriculum.viewAll.replace('{count}', section.tips.length)} →
-							</a>
-						{/if}
-					</div>
-				</div>
+				</details>
 			{/each}
 		</div>
 	</div>
 </section>
 
-<!-- Section 4: Free Tips Grid -->
+<!-- Section 7: Free Tips -->
 <section class="py-12">
 	<div class="max-w-5xl mx-auto px-4 space-y-6">
 		<div class="text-center space-y-2">
@@ -334,33 +351,35 @@
 </section>
 
 {#if !hasAccess}
-<!-- Section 5: Pricing -->
+<!-- Section 8: Pricing -->
 <section id="pricing" class="py-12">
-	<div class="max-w-md mx-auto px-4 space-y-4">
-		<div class="bg-card rounded-xl p-6 border border-border text-center space-y-6">
-			<div class="space-y-2">
-				<h2 class="text-lg text-foreground">{t.landing.pricing.title}</h2>
-				<div class="text-3xl font-bold text-foreground">{t.landing.pricing.price}</div>
-				<p class="text-muted-foreground">{t.landing.pricing.subtitle}</p>
+	<div class="max-w-5xl mx-auto px-4">
+		<div class="max-w-md mx-auto space-y-4">
+			<div class="bg-card rounded-xl p-6 border border-border text-center space-y-6">
+				<div class="space-y-2">
+					<h2 class="text-lg text-foreground">{t.landing.pricing.title}</h2>
+					<div class="text-3xl font-bold text-foreground">{t.landing.pricing.price}</div>
+					<p class="text-muted-foreground">{t.landing.pricing.subtitle}</p>
+				</div>
+
+				<ul class="text-left space-y-4">
+					{#each t.landing.pricing.features as feature}
+						<li class="flex items-start gap-4">
+							<Check class="w-5 h-5 text-success flex-shrink-0" />
+							<span class="text-foreground">{feature}</span>
+						</li>
+					{/each}
+				</ul>
+
+				<a
+					href="/{lang}/pricing"
+					class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
+				>
+					{t.landing.pricing.cta}
+				</a>
 			</div>
-
-			<ul class="text-left space-y-4">
-				{#each t.landing.pricing.features as feature}
-					<li class="flex items-start gap-4">
-						<Check class="w-5 h-5 text-success flex-shrink-0" />
-						<span class="text-foreground">{feature}</span>
-					</li>
-				{/each}
-			</ul>
-
-			<a
-				href="/{lang}/pricing"
-				class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
-			>
-				{t.landing.pricing.cta}
-			</a>
+			<p class="text-center text-sm text-muted-foreground">{t.landing.pricing.guarantee}</p>
 		</div>
-		<p class="text-center text-sm text-muted-foreground">{t.landing.pricing.guarantee}</p>
 	</div>
 </section>
 {/if}

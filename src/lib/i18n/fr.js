@@ -61,6 +61,42 @@ export default {
       guarantee: "Garantie satisfait ou rembourse 7 jours",
       seeAll: "Voir les {count} conseils",
     },
+    problem: {
+      title: "Ça vous dit quelque chose ?",
+      subtitle: "Ces frustrations m'ont poussé à écrire ce guide",
+      cards: [
+        {
+          title: "Claude ignore CLAUDE.md",
+          description: "Vos instructions personnalisées sont ignorées ou oubliées en cours de conversation",
+        },
+        {
+          title: "Sur-ingénierie tout",
+          description: "Vous demandez une fonction simple, vous obtenez 500 lignes d'abstraction",
+        },
+        {
+          title: "Résultats différents à chaque fois",
+          description: "Le même prompt, une qualité de sortie très différente",
+        },
+        {
+          title: "Dit terminé mais c'est cassé",
+          description: "Livre avec confiance du code qui ne fonctionne pas",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "Pourquoi faire confiance à ce guide ?",
+      quote: "J'ai découvert ce qui fonctionne vraiment avec Claude Code après des centaines d'heures d'essais et d'erreurs. Ce guide est tout ce que j'ai appris.",
+    },
+    experience: {
+      title: "L'Expérience Derrière Ce Guide",
+      subtitle: "Je n'ai pas seulement lu ces problèmes, je les ai vécus.",
+      conclusion: "2,7 milliards de tokens de leçons durement acquises, condensées en 51 conseils pratiques.",
+      stats: {
+        tokens: "2 772 274 103",
+        cost: "2 288,41 $",
+        period: "28 nov. 2025 - 5 janv. 2026",
+      },
+    },
     social: {
       quote: "Claude Code a une courbe d'apprentissage abrupte. J'ai passé des centaines d'heures à découvrir ce qui fonctionne et ce qui ne fonctionne pas. Ce guide est tout ce que j'aurais voulu avoir dès le premier jour.",
       author: "Danyel Koca",
@@ -68,7 +104,7 @@ export default {
       roleSubtitle: "Anciennement Data Scientist Senior chez McKinsey & Company",
     },
     caseStudy: {
-      title: "Construit avec Claude Code",
+      title: "La Preuve que ça Marche",
       description: "J'ai construit Kumamap — le traqueur d'ours #1 du Japon — entièrement avec Claude Code. Ce guide vous enseigne les patterns exacts que j'ai utilisés.",
       cta: "Voir le produit en ligne",
       stats: {
@@ -263,10 +299,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Construit avec Claude Code",
-    guide: "Guide",
+    product: "Produit",
     company: "Entreprise",
     legal: "Legal",
-    allTips: "Les 51 Conseils",
     faq: "FAQ",
     restoreAccess: "Restaurer l'accès",
     pricing: "Tarifs",

@@ -67,8 +67,44 @@ export default {
       roleTitle: "Applied Research Engineer di Sakana AI",
       roleSubtitle: "Sebelumnya Senior Data Scientist di McKinsey & Company",
     },
+    problem: {
+      title: "Terdengar familiar?",
+      subtitle: "Frustrasi-frustrasi ini mendorong saya menulis panduan ini",
+      cards: [
+        {
+          title: "Claude mengabaikan CLAUDE.md",
+          description: "Instruksi kustom Anda diabaikan atau dilupakan di tengah percakapan",
+        },
+        {
+          title: "Over-engineering segalanya",
+          description: "Anda minta fungsi sederhana, dapat 500 baris abstraksi",
+        },
+        {
+          title: "Hasil berbeda setiap kali",
+          description: "Prompt sama, kualitas output sangat berbeda",
+        },
+        {
+          title: "Bilang selesai tapi rusak",
+          description: "Dengan percaya diri memberikan kode yang sebenarnya tidak berfungsi",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "Mengapa Mempercayai Panduan Ini?",
+      quote: "Saya menemukan apa yang benar-benar berhasil dengan Claude Code melalui ratusan jam coba-coba. Panduan ini adalah semua yang saya pelajari.",
+    },
+    experience: {
+      title: "Pengalaman di Balik Panduan Ini",
+      subtitle: "Saya tidak hanya membaca tentang masalah ini, saya mengalaminya.",
+      conclusion: "2,7 miliar token pengalaman, dipadatkan menjadi 51 tips praktis.",
+      stats: {
+        tokens: "2.772.274.103",
+        cost: "$2.288,41",
+        period: "28 Nov 2025 - 5 Jan 2026",
+      },
+    },
     caseStudy: {
-      title: "Dibangun dengan Claude Code",
+      title: "Bukti Ini Berhasil",
       description: "Saya membangun Kumamap — pelacak beruang #1 Jepang — sepenuhnya dengan Claude Code. Panduan ini mengajarkan pola-pola persis yang saya gunakan.",
       cta: "Lihat produk langsung",
       stats: {
@@ -256,10 +292,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Dibangun dengan Claude Code",
-    guide: "Panduan",
+    product: "Produk",
     company: "Perusahaan",
     legal: "Legal",
-    allTips: "Semua 51 Tips",
     faq: "FAQ",
     restoreAccess: "Pulihkan akses",
     pricing: "Harga",

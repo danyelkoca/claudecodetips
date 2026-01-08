@@ -24,9 +24,9 @@
 			<div class="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
 				<!-- Guide -->
 				<div class="space-y-4">
-					<h4 class="font-semibold text-foreground">{t.footer.guide}</h4>
+					<h4 class="font-semibold text-foreground">{t.footer.product}</h4>
 					<div class="space-y-2">
-						<a href="/{lang}/guide" class="block text-foreground hover:opacity-80">{t.footer.allTips}</a>
+						<a href="/{lang}/guide" class="block text-foreground hover:opacity-80">{t.nav.guide}</a>
 						<a href="/{lang}/faq" class="block text-foreground hover:opacity-80">{t.footer.faq}</a>
 						{#if !hasAccess}
 							<a href="/{lang}/restore" class="block text-foreground hover:opacity-80">{t.footer.restoreAccess}</a>

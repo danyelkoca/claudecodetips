@@ -67,8 +67,44 @@ export default {
       roleTitle: "Sakana AI'da Uygulamalı Araştırma Mühendisi",
       roleSubtitle: "Önceden McKinsey & Company'de Kıdemli Veri Bilimci",
     },
+    problem: {
+      title: "Tanidik geliyor mu?",
+      subtitle: "Bu hayal kirikliklarini bu rehberi yazmama neden oldu",
+      cards: [
+        {
+          title: "Claude CLAUDE.md'yi görmezden geliyor",
+          description: "Özel talimatlarınız göz ardı ediliyor veya konuşmanın ortasında unutuluyor",
+        },
+        {
+          title: "Her şeyi aşırı mühendislik yapıyor",
+          description: "Basit bir fonksiyon istiyorsunuz, 500 satır soyutlama alıyorsunuz",
+        },
+        {
+          title: "Her seferinde farklı sonuçlar",
+          description: "Aynı prompt, çok farklı çıktı kalitesi",
+        },
+        {
+          title: "Bitti diyor ama bozuk",
+          description: "Güvenle aslında çalışmayan kod sunuyor",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "Bu Rehbere Neden Güvenmelisiniz?",
+      quote: "Yüzlerce saatlik deneme yanılma sonucunda Claude Code'da gerçekten işe yarayan şeyleri keşfettim. Bu rehber öğrendiğim her şey.",
+    },
+    experience: {
+      title: "Bu Rehberin Arkasındaki Deneyim",
+      subtitle: "Bu sorunları sadece okumadım, yaşadım.",
+      conclusion: "2,7 milyar token deneyim, 51 pratik ipucuna sıkıştırıldı.",
+      stats: {
+        tokens: "2.772.274.103",
+        cost: "$2.288,41",
+        period: "28 Kas 2025 - 5 Oca 2026",
+      },
+    },
     caseStudy: {
-      title: "Claude Code ile İnşa Edildi",
+      title: "İşe Yaradığının Kanıtı",
       description: "Kumamap'i — Japonya'nın 1 numaralı ayı takipçisini — tamamen Claude Code ile inşa ettim. Bu rehber size kullandığım tam kalıpları öğretiyor.",
       cta: "Canlı ürünü gör",
       stats: {
@@ -261,10 +297,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Claude Code ile inşa edildi",
-    guide: "Rehber",
+    product: "Ürün",
     company: "Şirket",
     legal: "Yasal",
-    allTips: "51 İpucunun Tamamı",
     faq: "SSS",
     restoreAccess: "Erişimi geri yükle",
     pricing: "Fiyatlandırma",

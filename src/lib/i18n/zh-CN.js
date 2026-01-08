@@ -53,6 +53,42 @@ export default {
       guarantee: "7天退款保证",
       seeAll: "查看全部{count}个技巧",
     },
+    problem: {
+      title: "听起来很熟悉？",
+      subtitle: "这些挫折促使我写了这本指南",
+      cards: [
+        {
+          title: "Claude忽略CLAUDE.md",
+          description: "你的自定义指令被忽视或在对话中途被遗忘",
+        },
+        {
+          title: "过度工程化一切",
+          description: "你要求一个简单的函数，却得到500行抽象代码",
+        },
+        {
+          title: "每次结果都不同",
+          description: "同样的提示词，输出质量天差地别",
+        },
+        {
+          title: "说完成了但是是坏的",
+          description: "自信满满地交付根本不能运行的代码",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "为什么信任这份指南？",
+      quote: "经过数百小时的反复试验，我找到了Claude Code真正有效的方法。这份指南是我学到的一切。",
+    },
+    experience: {
+      title: "这份指南背后的经验",
+      subtitle: "我不只是读到这些问题，我亲身经历过。",
+      conclusion: "27亿token的实战经验，浓缩成51条实用技巧。",
+      stats: {
+        tokens: "2,772,274,103",
+        cost: "$2,288.41",
+        period: "2025年11月28日 - 2026年1月5日",
+      },
+    },
     social: {
       quote: "Claude Code有着陡峭的学习曲线。我花了数百小时才弄清楚什么有效、什么无效。这本指南就是我第一天就想要的一切。",
       author: "Danyel Koca",
@@ -60,7 +96,7 @@ export default {
       roleSubtitle: "前McKinsey & Company高级数据科学家",
     },
     caseStudy: {
-      title: "用Claude Code构建",
+      title: "效果验证",
       description: "我用Claude Code完全构建了Kumamap——日本第一的熊出没追踪器。本指南教你我使用的确切模式。",
       cta: "查看线上产品",
       stats: {
@@ -232,10 +268,9 @@ export default {
 
   footer: {
     builtWith: "使用Claude Code构建",
-    guide: "指南",
+    product: "产品",
     company: "公司",
     legal: "法律",
-    allTips: "全部51个技巧",
     faq: "常见问题",
     restoreAccess: "恢复访问",
     pricing: "价格",

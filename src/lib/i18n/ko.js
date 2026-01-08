@@ -61,6 +61,42 @@ export default {
       guarantee: "7일 환불 보장",
       seeAll: "전체 {count}개 팁 보기",
     },
+    problem: {
+      title: "익숙한가요?",
+      subtitle: "이러한 불만이 이 가이드를 쓰게 만들었습니다",
+      cards: [
+        {
+          title: "Claude가 CLAUDE.md를 무시함",
+          description: "사용자 지정 지시가 무시되거나 대화 중간에 잊혀짐",
+        },
+        {
+          title: "모든 것을 과잉 설계함",
+          description: "간단한 함수를 요청하면 500줄의 추상화가 돌아옴",
+        },
+        {
+          title: "매번 다른 결과",
+          description: "같은 프롬프트, 매우 다른 출력 품질",
+        },
+        {
+          title: "완료라고 하지만 망가져 있음",
+          description: "자신있게 실제로 작동하지 않는 코드를 제공함",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "왜 이 가이드를 신뢰해야 할까요?",
+      quote: "수백 시간의 시행착오를 통해 Claude Code에서 실제로 효과가 있는 것을 알아냈습니다. 이 가이드는 제가 배운 모든 것입니다.",
+    },
+    experience: {
+      title: "이 가이드 뒤의 경험",
+      subtitle: "이 문제들을 읽기만 한 게 아니라, 직접 겪었습니다.",
+      conclusion: "27억 토큰의 경험을 51개의 실용적인 팁으로 압축했습니다.",
+      stats: {
+        tokens: "2,772,274,103",
+        cost: "$2,288.41",
+        period: "2025년 11월 28일 - 2026년 1월 5일",
+      },
+    },
     social: {
       quote: "Claude Code는 가파른 학습 곡선을 가지고 있습니다. 무엇이 효과가 있고 무엇이 없는지 알아내는 데 수백 시간을 보냈습니다. 이 가이드는 제가 첫날부터 갖고 싶었던 모든 것입니다.",
       author: "Danyel Koca",
@@ -68,7 +104,7 @@ export default {
       roleSubtitle: "전 McKinsey & Company 시니어 데이터 사이언티스트",
     },
     caseStudy: {
-      title: "Claude Code로 구축",
+      title: "효과의 증거",
       description: "저는 Kumamap — 일본 1위 곰 출몰 추적기 — 를 전적으로 Claude Code로 만들었습니다. 이 가이드는 제가 사용한 정확한 패턴을 가르쳐 드립니다.",
       cta: "라이브 제품 보기",
       stats: {
@@ -248,10 +284,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Claude Code로 제작",
-    guide: "가이드",
+    product: "제품",
     company: "회사",
     legal: "법적 고지",
-    allTips: "51가지 팁 전체",
     faq: "FAQ",
     restoreAccess: "액세스 복원",
     pricing: "가격",

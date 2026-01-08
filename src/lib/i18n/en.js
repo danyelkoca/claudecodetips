@@ -61,6 +61,42 @@ export default {
       guarantee: "7-day money-back guarantee",
       seeAll: "See All {count} Tips",
     },
+    problem: {
+      title: "Sound familiar?",
+      subtitle: "These frustrations led me to write this guide",
+      cards: [
+        {
+          title: "Claude ignores CLAUDE.md",
+          description: "Your custom instructions get overlooked or forgotten mid-conversation",
+        },
+        {
+          title: "Over-engineers everything",
+          description: "You ask for a simple function, get 500 lines of abstraction",
+        },
+        {
+          title: "Different results every time",
+          description: "Same prompt, wildly different output quality",
+        },
+        {
+          title: "Says done but broken",
+          description: "Confidently delivers code that doesn't actually work",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "Why Trust This Guide?",
+      quote: "I figured out what actually works with Claude Code through hundreds of hours of trial and error. This guide is everything I learned.",
+    },
+    experience: {
+      title: "The Experience Behind This Guide",
+      subtitle: "I didn't just read about these problems - I lived them.",
+      conclusion: "2.7 billion tokens of hard-won lessons, condensed into 51 actionable tips.",
+      stats: {
+        tokens: "2,772,274,103",
+        cost: "$2,288.41",
+        period: "Nov 28, 2025 - Jan 5, 2026",
+      },
+    },
     social: {
       quote: "Claude Code has a steep learning curve. I burned through hundreds of hours figuring out what works and what doesn't. This guide is everything I wish I had on day one.",
       author: "Danyel Koca",
@@ -68,7 +104,7 @@ export default {
       roleSubtitle: "Previously Senior Data Scientist at McKinsey & Company",
     },
     caseStudy: {
-      title: "Built With Claude Code",
+      title: "Proof It Works",
       description: "I built Kumamap — Japan's #1 bear tracker — entirely with Claude Code. This guide teaches you the exact patterns I used.",
       cta: "See the live product",
       stats: {
@@ -251,10 +287,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Built with Claude Code",
-    guide: "Guide",
+    product: "Product",
     company: "Company",
     legal: "Legal",
-    allTips: "All 51 Tips",
     faq: "FAQ",
     restoreAccess: "Restore Access",
     pricing: "Pricing",

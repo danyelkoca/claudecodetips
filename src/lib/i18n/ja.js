@@ -60,6 +60,42 @@ export default {
       guarantee: "7日間返金保証",
       seeAll: "全{count}件のヒントを見る",
     },
+    problem: {
+      title: "こんな経験ありませんか？",
+      subtitle: "これらの不満がこのガイドを書くきっかけになりました",
+      cards: [
+        {
+          title: "ClaudeがCLAUDE.mdを無視する",
+          description: "カスタム指示が見落とされたり、会話の途中で忘れられる",
+        },
+        {
+          title: "すべてを過剰設計する",
+          description: "シンプルな関数を頼んだのに、500行の抽象化が返ってくる",
+        },
+        {
+          title: "毎回違う結果が出る",
+          description: "同じプロンプトなのに、出力の品質がまちまち",
+        },
+        {
+          title: "「完了」と言うが壊れている",
+          description: "自信満々で動かないコードを提供する",
+        },
+      ],
+    },
+    author: {
+      sectionTitle: "なぜこのガイドを信頼できるのか？",
+      quote: "何百時間もの試行錯誤を通じて、Claude Codeで本当に効果があることを見つけました。このガイドは私が学んだすべてです。",
+    },
+    experience: {
+      title: "このガイドの背景にある経験",
+      subtitle: "これらの問題を読んだだけではない。実際に体験した。",
+      conclusion: "27億トークン分の実体験を、51の実践的なヒントに凝縮。",
+      stats: {
+        tokens: "2,772,274,103",
+        cost: "$2,288.41",
+        period: "2025年11月28日 - 2026年1月5日",
+      },
+    },
     social: {
       quote: "Claude Codeには急な学習曲線があります。何が効いて何が効かないかを理解するために何百時間も費やしました。このガイドは初日に欲しかったすべてです。",
       author: "Danyel Koca",
@@ -67,7 +103,7 @@ export default {
       roleSubtitle: "元McKinsey & Company シニアデータサイエンティスト",
     },
     caseStudy: {
-      title: "Claude Codeで構築",
+      title: "実績の証明",
       description: "くまマップ（日本一の熊出没トラッカー）をClaude Codeだけで構築しました。このガイドでは、私が使用したパターンを正確にお教えします。",
       cta: "ライブ製品を見る",
       stats: {
@@ -248,10 +284,9 @@ export default {
   // Footer
   footer: {
     builtWith: "Claude Codeで構築",
-    guide: "ガイド",
+    product: "製品",
     company: "会社",
     legal: "法的情報",
-    allTips: "全51ヒント",
     faq: "よくある質問",
     restoreAccess: "アクセス復元",
     pricing: "料金",
