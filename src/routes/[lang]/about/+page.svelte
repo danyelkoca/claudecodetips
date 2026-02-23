@@ -1,7 +1,7 @@
 <script>
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import JsonLd from '$lib/components/JsonLd.svelte';
-	import { PUBLIC_SITE_URL } from '$env/static/public';
+	import { SITE_URL as PUBLIC_SITE_URL } from '$lib/config.js';
 
 	export let data;
 	$: t = data.t;

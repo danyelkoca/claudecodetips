@@ -1,13 +1,10 @@
 import Stripe from 'stripe';
-import { STRIPE_SECRET_KEY } from '$env/static/private';
-import { PUBLIC_SITE_URL } from '$env/static/public';
 import { json } from '@sveltejs/kit';
 import { loadTranslations, DEFAULT_LANG } from '$lib/i18n/loader.js';
 import { checkRateLimit } from '$lib/server/rateLimit.js';
 
-const stripe = new Stripe(STRIPE_SECRET_KEY);
-
 export async function POST({ request, platform, getClientAddress }) {
+	const stripe = new Stripe(platform.env.STRIPE_SECRET_KEY);
 	try {
 		const ip = getClientAddress();
 		try {
@@ -49,8 +46,8 @@ export async function POST({ request, platform, getClientAddress }) {
 				quantity: 1
 			}],
 			customer_email: normalizedEmail,
-			success_url: `${PUBLIC_SITE_URL}/${effectiveLang}/success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${PUBLIC_SITE_URL}/${effectiveLang}?canceled=true`,
+			success_url: `${platform.env.PUBLIC_SITE_URL}/${effectiveLang}/success?session_id={CHECKOUT_SESSION_ID}`,
+			cancel_url: `${platform.env.PUBLIC_SITE_URL}/${effectiveLang}?canceled=true`,
 			metadata: { lang: effectiveLang }
 		});
 

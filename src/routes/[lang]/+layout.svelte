@@ -4,7 +4,7 @@
 	import JsonLd from '$lib/components/JsonLd.svelte';
 	import { languages } from '$lib/i18n/loader.js';
 	import { page } from '$app/stores';
-	import { PUBLIC_SITE_URL } from '$env/static/public';
+	import { SITE_URL as PUBLIC_SITE_URL } from '$lib/config.js';
 	import { browser } from '$app/environment';
 
 	export let data;

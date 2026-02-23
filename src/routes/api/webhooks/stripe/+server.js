@@ -1,11 +1,9 @@
 import Stripe from 'stripe';
-import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from '$env/static/private';
 import { getDb } from '$lib/server/db.js';
 import { DEFAULT_LANG } from '$lib/i18n/loader.js';
 
-const stripe = new Stripe(STRIPE_SECRET_KEY);
-
 export async function POST({ request, platform }) {
+	const stripe = new Stripe(platform.env.STRIPE_SECRET_KEY);
 	const contentLength = request.headers.get('content-length');
 	if (contentLength && parseInt(contentLength) > 1048576) {
 		return new Response('Payload too large', { status: 413 });
@@ -16,7 +14,7 @@ export async function POST({ request, platform }) {
 
 	let event;
 	try {
-		event = stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
+		event = stripe.webhooks.constructEvent(body, signature, platform.env.STRIPE_WEBHOOK_SECRET);
 	} catch (err) {
 		console.error('Webhook signature verification failed:', err.message);
 		return new Response('Invalid signature', { status: 400 });

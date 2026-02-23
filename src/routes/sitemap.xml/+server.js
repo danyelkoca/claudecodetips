@@ -1,7 +1,7 @@
 import { supportedLangs } from '$lib/i18n/loader.js';
 import { sections } from '$lib/content/tips.js';
 import { loadBlogPostsMeta } from '$lib/content/blog.js';
-import { PUBLIC_SITE_URL } from '$env/static/public';
+import { SITE_URL as PUBLIC_SITE_URL } from '$lib/config.js';
 
 export async function GET() {
 	const { posts: blogPosts } = await loadBlogPostsMeta('en');

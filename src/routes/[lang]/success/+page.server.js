@@ -1,11 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import Stripe from 'stripe';
-import { STRIPE_SECRET_KEY } from '$env/static/private';
 import { dev } from '$app/environment';
 
-const stripe = new Stripe(STRIPE_SECRET_KEY);
-
-export async function load({ url, cookies, params }) {
+export async function load({ url, cookies, params, platform }) {
+	const stripe = new Stripe(platform.env.STRIPE_SECRET_KEY);
 	const sessionId = url.searchParams.get('session_id');
 
 	if (!sessionId) {
