@@ -291,7 +291,7 @@ npm run preview  # Preview production build
 
 ## Architecture
 
-SvelteKit application with Netlify adapter, selling access to "50 Tips to Master Claude Code" guide. Content is written in MDSvex (.svx files) with a paywall system.
+SvelteKit application with Cloudflare Pages adapter, selling access to "51 Tips to Master Claude Code" guide. Content is written in MDSvex (.svx files) with a paywall system.
 
 ### Key Patterns
 
@@ -301,13 +301,13 @@ SvelteKit application with Netlify adapter, selling access to "50 Tips to Master
 
 **i18n**: Translations in `src/lib/i18n/{lang}.js` files. Layout loads translations via `loadTranslations()` and passes `t` object down through `data`.
 
-**Paywall**: Access controlled via `hasAccess` prop passed through layouts. Checks Firestore for valid purchase via `purchase_session` cookie in `src/routes/[lang]/+layout.server.js`.
+**Paywall**: Access controlled via `hasAccess` prop passed through layouts. Checks D1 database for valid purchase via `purchase_session` cookie in `src/routes/[lang]/+layout.server.js`.
 
 **Backend**:
 
 - Stripe checkout: `src/routes/api/checkout/+server.js`
 - Stripe webhooks: `src/routes/api/webhooks/stripe/+server.js`
-- Firebase Admin: `src/lib/server/firebase-admin.js` for storing purchases
+- D1 Database: `src/lib/server/db.js` helper + `platform.env.DB` binding
 
 ## Full-Stack File Reference
 
@@ -315,7 +315,10 @@ Before proposing any solution, review all relevant areas:
 
 ### Deployment & Caching
 
-- `netlify.toml`, `src/hooks.server.js`
+- `wrangler.jsonc` - Cloudflare Pages/D1 configuration
+- `static/_headers` - Cache and security headers
+- `src/hooks.server.js` - Language detection, security headers (dev)
+- `.github/workflows/deploy.yml` - GitHub Actions deployment
 
 ### Build & Tooling
 
@@ -333,13 +336,15 @@ Before proposing any solution, review all relevant areas:
 
 - `src/routes/[lang]/**/+page.server.js`, `+layout.server.js`
 - `src/routes/+page.server.js`
-- `src/lib/server/firebase-admin.js`
+- `src/lib/server/db.js` - D1 database helper
+- `src/lib/server/rateLimit.js` - Rate limiting (D1-based)
 
-### Firebase/Firestore
+### Database (D1)
 
-- `src/lib/server/firebase-admin.js` - Admin SDK initialization
+- `wrangler.jsonc` - D1 binding configuration
+- `src/lib/server/db.js` - D1 helper function
 - `src/lib/server/rateLimit.js` - Rate limiting utility
-- Firestore for storing purchases and user data
+- `migrations/*.sql` - Database schema migrations
 
 ### Frontend
 
@@ -374,11 +379,13 @@ Before proposing any solution, review all relevant areas:
 
 ## Environment Variables
 
-Required in `.env`:
+Required in Cloudflare Pages dashboard:
 
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` - Stripe API
 - `PUBLIC_SITE_URL` - Site base URL
-- `SERVICE_ACCOUNT_*` - Firebase service account credentials (multiple fields)
+
+Local development (`.dev.vars`):
+- Same variables as above
 
 ## Adding Content
 

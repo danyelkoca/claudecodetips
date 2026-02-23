@@ -7,11 +7,11 @@ import { checkRateLimit } from '$lib/server/rateLimit.js';
 
 const stripe = new Stripe(STRIPE_SECRET_KEY);
 
-export async function POST({ request, getClientAddress }) {
+export async function POST({ request, platform, getClientAddress }) {
 	try {
 		const ip = getClientAddress();
 		try {
-			await checkRateLimit(`checkout_${ip}`, 5, 60);
+			await checkRateLimit(platform, `checkout_${ip}`, 5, 60);
 		} catch (err) {
 			if (err.message === 'rateLimitExceeded') {
 				return json({ error: 'rateLimitExceeded' }, { status: 429 });
@@ -31,9 +31,7 @@ export async function POST({ request, getClientAddress }) {
 			return json({ error: 'invalidEmail' }, { status: 400 });
 		}
 
-		// Normalize email to match webhook and restore
 		const normalizedEmail = email.toLowerCase().trim();
-
 		const t = await loadTranslations(effectiveLang);
 
 		const session = await stripe.checkout.sessions.create({
@@ -46,7 +44,7 @@ export async function POST({ request, getClientAddress }) {
 						name: t.checkout.productName,
 						description: t.checkout.productDescription
 					},
-					unit_amount: 2900 // $29.00
+					unit_amount: 2900
 				},
 				quantity: 1
 			}],

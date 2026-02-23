@@ -1,8 +1,8 @@
 import { loadTranslations, isValidLang } from '$lib/i18n/loader.js';
 import { error } from '@sveltejs/kit';
-import { db } from '$lib/server/firebase-admin.js';
+import { getDb } from '$lib/server/db.js';
 
-export async function load({ params, cookies }) {
+export async function load({ params, cookies, platform }) {
 	const { lang } = params;
 
 	if (!isValidLang(lang)) {
@@ -11,19 +11,21 @@ export async function load({ params, cookies }) {
 
 	const t = await loadTranslations(lang);
 
-	// Check if user has purchased via cookie
 	const sessionId = cookies.get('purchase_session');
 	let hasAccess = false;
 
 	if (sessionId) {
 		try {
-			const purchaseDoc = await db.collection('purchases').doc(sessionId).get();
-			if (purchaseDoc.exists && purchaseDoc.data()?.status === 'paid') {
+			const db = getDb(platform);
+			const purchase = await db.prepare(`
+				SELECT id FROM purchases WHERE id = ?1 AND status = 'paid'
+			`).bind(sessionId).first();
+
+			if (purchase) {
 				hasAccess = true;
 			}
 		} catch (err) {
 			console.error('Failed to verify purchase:', err);
-			// Fail closed - no access on error
 		}
 	}
 

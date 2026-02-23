@@ -119,6 +119,8 @@
 			<img
 				src="/images/profile.webp"
 				alt={t.landing.social.author}
+				width="192"
+				height="192"
 				class="w-48 h-48 rounded-xl mx-auto md:mx-0 object-cover"
 			/>
 			<!-- Right: Content -->
@@ -251,7 +253,7 @@
 
 			<!-- Right: Image -->
 			<div class="order-first md:order-last">
-				<img src="/images/kumamap.webp" alt="Kumamap" class="w-full rounded-xl" />
+				<img src="/images/kumamap.webp" alt="Kumamap" width="700" height="700" class="w-full rounded-xl" />
 			</div>
 		</div>
 	</div>

@@ -1,12 +1,12 @@
 import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/firebase-admin.js';
+import { getDb } from '$lib/server/db.js';
 import { checkRateLimit } from '$lib/server/rateLimit.js';
 
-export async function POST({ request, getClientAddress }) {
+export async function POST({ request, platform, getClientAddress }) {
 	try {
 		const ip = getClientAddress();
 		try {
-			await checkRateLimit(`contact_${ip}`, 5, 60);
+			await checkRateLimit(platform, `contact_${ip}`, 5, 60);
 		} catch (err) {
 			if (err.message === 'rateLimitExceeded') {
 				return json({ success: false, error: 'rateLimitExceeded' });
@@ -30,15 +30,18 @@ export async function POST({ request, getClientAddress }) {
 			return json({ success: false, error: 'messageRequired' });
 		}
 
-		await db.collection('contacts').add({
-			name: name.trim(),
-			email: email.toLowerCase().trim(),
-			message: message.trim(),
-			lang,
+		const db = getDb(platform);
+		await db.prepare(`
+			INSERT INTO contacts (name, email, message, lang, ip, created_at, status)
+			VALUES (?1, ?2, ?3, ?4, ?5, ?6, 'new')
+		`).bind(
+			name.trim(),
+			email.toLowerCase().trim(),
+			message.trim(),
+			lang || null,
 			ip,
-			createdAt: new Date(),
-			status: 'new'
-		});
+			new Date().toISOString()
+		).run();
 
 		return json({ success: true });
 	} catch (err) {

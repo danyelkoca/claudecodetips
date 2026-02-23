@@ -24,7 +24,7 @@
 			<div class="grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
 				<!-- Guide -->
 				<div class="space-y-4">
-					<h4 class="font-semibold text-foreground">{t.footer.product}</h4>
+					<p class="font-semibold text-foreground">{t.footer.product}</p>
 					<div class="space-y-2">
 						<a href="/{lang}/guide" class="block text-foreground hover:opacity-80">{t.nav.guide}</a>
 						<a href="/{lang}/faq" class="block text-foreground hover:opacity-80">{t.footer.faq}</a>
@@ -37,7 +37,7 @@
 
 				<!-- Company -->
 				<div class="space-y-4">
-					<h4 class="font-semibold text-foreground">{t.footer.company}</h4>
+					<p class="font-semibold text-foreground">{t.footer.company}</p>
 					<div class="space-y-2">
 						<a href="/{lang}/blog" class="block text-foreground hover:opacity-80">{t.footer.blog}</a>
 						<a href="/{lang}/about" class="block text-foreground hover:opacity-80">{t.footer.about}</a>
@@ -47,7 +47,7 @@
 
 				<!-- Legal -->
 				<div class="space-y-4">
-					<h4 class="font-semibold text-foreground">{t.footer.legal}</h4>
+					<p class="font-semibold text-foreground">{t.footer.legal}</p>
 					<div class="space-y-2">
 						<a href="/{lang}/privacy" class="block text-foreground hover:opacity-80">{t.footer.privacy}</a>
 						<a href="/{lang}/terms" class="block text-foreground hover:opacity-80">{t.footer.terms}</a>

@@ -30,7 +30,7 @@
 	<div class="max-w-5xl mx-auto px-4 py-12 space-y-8">
 		<!-- Hero -->
 		<div class="text-center space-y-6">
-			<img src="/images/profile.webp" alt={t.landing.social.author} class="w-48 h-48 rounded-xl mx-auto object-cover" />
+			<img src="/images/profile.webp" alt={t.landing.social.author} width="192" height="192" class="w-48 h-48 rounded-xl mx-auto object-cover" />
 			<h1 class="text-3xl font-bold text-foreground">{t.about.heroTitle}</h1>
 			<p class="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
 				{t.about.heroSubtitle}

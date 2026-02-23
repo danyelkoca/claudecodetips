@@ -1,25 +1,29 @@
-// Uses Firestore because Netlify serverless functions don't persist in-memory state across cold starts
-import { db } from '$lib/server/firebase-admin.js';
+import { getDb } from './db.js';
 
-export async function checkRateLimit(key, maxAttempts, windowMinutes = 60) {
+/**
+ * Check and increment rate limit
+ * @param {App.Platform} platform
+ * @param {string} key
+ * @param {number} maxAttempts
+ * @param {number} windowMinutes
+ */
+export async function checkRateLimit(platform, key, maxAttempts, windowMinutes = 60) {
 	if (!key) throw new Error('rateLimitKeyRequired');
 
-	const windowStart = Math.floor(Date.now() / (windowMinutes * 60 * 1000));
-	const docId = `${key}_${windowStart}`;
+	const db = getDb(platform);
+	const windowMs = windowMinutes * 60 * 1000;
+	const windowStart = new Date(Math.floor(Date.now() / windowMs) * windowMs).toISOString();
+	const id = `${key}_${windowStart}`;
 
-	await db.runTransaction(async (transaction) => {
-		const docRef = db.collection('rate_limits').doc(docId);
-		const doc = await transaction.get(docRef);
-		const currentCount = doc.exists ? doc.data().count || 0 : 0;
+	// Atomic upsert: INSERT or UPDATE and return count
+	const result = await db.prepare(`
+		INSERT INTO rate_limits (id, count, window_start)
+		VALUES (?1, 1, ?2)
+		ON CONFLICT(id) DO UPDATE SET count = count + 1
+		RETURNING count
+	`).bind(id, windowStart).first();
 
-		if (currentCount >= maxAttempts) {
-			throw new Error('rateLimitExceeded');
-		}
-
-		transaction.set(docRef, {
-			count: currentCount + 1,
-			key: key,
-			createdAt: Date.now(),
-		}, { merge: true });
-	});
+	if (result && result.count > maxAttempts) {
+		throw new Error('rateLimitExceeded');
+	}
 }

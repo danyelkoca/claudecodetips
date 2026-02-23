@@ -1,14 +1,13 @@
 import { json } from '@sveltejs/kit';
-import { db } from '$lib/server/firebase-admin.js';
+import { getDb } from '$lib/server/db.js';
 import { dev } from '$app/environment';
 import { checkRateLimit } from '$lib/server/rateLimit.js';
 
-export async function POST({ request, cookies, getClientAddress }) {
+export async function POST({ request, cookies, platform, getClientAddress }) {
 	try {
-		// Rate limit: 3 attempts per IP per hour
 		const ip = getClientAddress();
 		try {
-			await checkRateLimit(`restore_${ip}`, 3, 60);
+			await checkRateLimit(platform, `restore_${ip}`, 3, 60);
 		} catch (err) {
 			if (err.message === 'rateLimitExceeded') {
 				return json({ success: false, error: 'rateLimitExceeded' });
@@ -27,25 +26,23 @@ export async function POST({ request, cookies, getClientAddress }) {
 			return json({ success: false, error: 'invalidEmail' });
 		}
 
-		const normalizedEmail = email.toLowerCase().trim();
-		const snapshot = await db.collection('purchases')
-			.where('email', '==', normalizedEmail)
-			.where('status', '==', 'paid')
-			.limit(1)
-			.get();
+		const db = getDb(platform);
+		const purchase = await db.prepare(`
+			SELECT id FROM purchases
+			WHERE email = ?1 AND status = 'paid'
+			LIMIT 1
+		`).bind(email.toLowerCase().trim()).first();
 
-		if (snapshot.empty) {
+		if (!purchase) {
 			return json({ success: false, error: 'restoreFailed' });
 		}
 
-		const sessionId = snapshot.docs[0].id;
-
-		cookies.set('purchase_session', sessionId, {
+		cookies.set('purchase_session', purchase.id, {
 			path: '/',
 			httpOnly: true,
 			secure: !dev,
 			sameSite: 'strict',
-			maxAge: 60 * 60 * 24 * 365 // 1 year
+			maxAge: 60 * 60 * 24 * 365
 		});
 
 		return json({ success: true });

@@ -42,7 +42,7 @@ export async function handle({ event, resolve }) {
 		response.headers.set('content-type', 'text/html; charset=utf-8');
 	}
 
-	// Security headers (also in netlify.toml for production, here for dev)
+	// Security headers (also in _headers for production, here for dev)
 	response.headers.set('X-Content-Type-Options', 'nosniff');
 	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 	response.headers.set('X-Frame-Options', 'DENY');

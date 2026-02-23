@@ -5,6 +5,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+.dev.vars
+!.dev.vars.example
 
 # SvelteKit
 .svelte-kit/
@@ -28,12 +30,8 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Netlify
-.netlify/
-
-# Firebase
-.firebase/
-firebase-debug.log
+# Cloudflare
+.wrangler/
 
 # Cache
 .cache/

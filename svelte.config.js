@@ -1,12 +1,18 @@
-import adapter from '@sveltejs/adapter-netlify';
+import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
 
 export default {
 	kit: {
 		adapter: adapter({
-			edge: false,
-			split: false
+			routes: {
+				include: ['/*'],
+				exclude: ['<all>']
+			},
+			platformProxy: {
+				configPath: 'wrangler.jsonc',
+				persist: true
+			}
 		})
 	},
 	extensions: ['.svelte', '.svx'],
