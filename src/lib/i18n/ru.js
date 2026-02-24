@@ -33,12 +33,6 @@ export default {
     tipNotFound: "Совет не найден",
   },
 
-  // Checkout
-  checkout: {
-    productName: "51 совет по освоению Claude Code",
-    productDescription: "Полное руководство со всеми 51 советами - пожизненный доступ",
-  },
-
   // Navigation
   nav: {
     guide: "Руководство",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "От создателя Kumamap (389 тыс. пользователей)",
       title: "Освойте Claude Code за дни, а не месяцы",
       subtitle: "Рабочие процессы, горячие клавиши и конфигурации, которые отличают новичков от продвинутых пользователей.",
-      cta: "Получить руководство - $29",
-      guarantee: "7-дневная гарантия возврата денег",
       seeAll: "Смотреть все {count} советов",
     },
     social: {
@@ -120,34 +112,9 @@ export default {
       sections: "разделов",
     },
     sample: {
-      title: "Попробуйте Перед Покупкой",
-      subtitle: "Читайте эти 4 совета бесплатно. Если они помогут, представьте еще 47.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "Читать бесплатно",
-    },
-    pricing: {
-      title: "Единоразовая покупка",
-      price: "$29",
-      subtitle: "Пожизненный доступ ко всем 51 советам",
-      features: ["51 детальный совет с примерами кода", "Готовые конфиги CLAUDE.md", "13 организованных разделов", "Актуально на январь 2026"],
-      cta: "Получить мгновенный доступ",
-      guarantee: "7-дневная гарантия возврата денег. Без вопросов.",
-    },
-    checkoutCanceled: "Оплата отменена. Готовы когда вы.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "Оплата - Claude Code Tips",
-    pageDescription: "Мгновенный доступ ко всем 51 совету за $29",
-    emailLabel: "Электронная почта",
-    emailPlaceholder: "you@example.com",
-    cta: "Перейти к оплате",
-    processing: "Обработка...",
-    errors: {
-      emailRequired: "Пожалуйста, введите email.",
-      invalidEmail: "Пожалуйста, введите действительный email.",
-      checkoutFailed: "Что-то пошло не так. Попробуйте снова.",
-      rateLimitExceeded: "Слишком много попыток. Повторите через час.",
     },
   },
 
@@ -157,19 +124,10 @@ export default {
     overview: "Все 51 совет",
     overviewDescription: "Освойте Claude Code с этими проверенными советами из 6 месяцев ежедневного использования.",
     backToGuide: "Назад к руководству",
-    free: "Бесплатно",
-    freePreview: "Бесплатный просмотр",
-    locked: "Разблокировать для чтения",
-    lockedTitle: "Этот совет заблокирован",
-    lockedDescription: "Получите полный доступ ко всем 51 советам с единоразовой покупкой.",
-    unlockCta: "Разблокировать полное руководство - $29",
-    unlockAll: "Разблокировать все 51 совет",
     sections: "разделов",
-    freeLabel: "бесплатных превью",
     whatsIncluded: "Что включено",
     detailedTips: "детальных советов",
     organizedSections: "организованных разделов",
-    freePreviews: "бесплатных превью",
     startReading: "Начать чтение",
     jumpTo: "Перейти к разделу",
   },
@@ -252,42 +210,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "Разблокируйте полное руководство",
-    description: "Получите доступ ко всем 51 советам всего за $29",
-    cta: "Получить полный доступ",
-    alreadyPurchased: "Уже купили?",
-    restoreAccess: "Восстановить доступ",
-  },
-
-  // Success page
-  success: {
-    title: "Спасибо!",
-    description: "Ваша покупка успешна. Теперь у вас есть полный доступ ко всем 51 советам.",
-    cta: "Начать читать",
-  },
-
-  // Restore page
-  restore: {
-    pageTitle: "Восстановить доступ - Claude Code Tips",
-    title: "Восстановите доступ",
-    description: "Введите email, использованный при покупке, чтобы восстановить доступ на этом устройстве.",
-    emailLabel: "Email покупки",
-    emailPlaceholder: "you@example.com",
-    cta: "Восстановить доступ",
-    successMessage: "Доступ успешно восстановлен!",
-    redirecting: "Перенаправление к руководству...",
-    noAccount: "Ещё не купили?",
-    buyNow: "Купить сейчас",
-    errors: {
-      restoreFailed: "Не удалось восстановить доступ. Попробуйте снова.",
-      emailRequired: "Требуется email.",
-      invalidEmail: "Пожалуйста, введите действительный email.",
-      rateLimitExceeded: "Слишком много попыток. Повторите через час.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Создано с Claude Code",
@@ -295,8 +217,6 @@ export default {
     company: "Компания",
     legal: "Юридическое",
     faq: "FAQ",
-    restoreAccess: "Восстановить доступ",
-    pricing: "Цены",
     blog: "Блог",
     about: "О нас",
     contact: "Контакты",
@@ -372,10 +292,7 @@ export default {
     pageDescription: "Узнайте как Claude Code Tips обрабатывает ваши данные.",
     title: "Политика конфиденциальности",
     dataCollectedTitle: "Данные, которые мы собираем",
-    dataCollectedDescription: "При покупке руководства:",
-    dataEmail: "Email (для доставки и доступа)",
-    paymentTitle: "Обработка платежей",
-    paymentDescription: "Все платежи безопасно обрабатываются Stripe. Мы не храним вашу платежную информацию.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "Контакты",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -388,13 +305,7 @@ export default {
     title: "Условия использования",
     serviceTitle: "Сервис",
     serviceDescription:
-      "Claude Code Tips предоставляет цифровое руководство с 51 советом по освоению Claude Code. При покупке вы получаете пожизненный доступ.",
-    paymentTitle: "Оплата",
-    paymentDescription: "Вы можете приобрести доступ к руководству:",
-    paymentOneTime: "Единоразовый платеж $29 USD",
-    paymentStripe: "Все платежи безопасно обрабатываются через Stripe",
-    refundTitle: "Возврат",
-    refundDescription: "7-дневная гарантия возврата денег. Если вы не удовлетворены, свяжитесь с нами в течение 7 дней для полного возврата.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "Контакты",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -415,24 +326,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "Руководитель операций",
     headOfOperationsValue: "Предоставляется по запросу",
-    additionalFees: "Дополнительные сборы",
-    additionalFeesValue: "Нет",
-    refundPolicy: "Политика возврата",
-    refundServiceIssues: "Проблемы с сервисом",
-    refundServiceIssuesValue:
-      "Если услуга не предоставлена из-за системных проблем, свяжитесь с hello@claudecodetips.com. Мы рассмотрим и произведем полный возврат.",
-    refundCustomer: "Отмена клиентом",
-    refundCustomerValue:
-      "7-дневная гарантия возврата денег. Если вы не удовлетворены покупкой, свяжитесь с нами в течение 7 дней для полного возврата, без лишних вопросов.",
-    deliveryTime: "Время доставки",
-    deliveryTimeValue: "Мгновенный доступ после оплаты",
-    paymentMethods: "Способы оплаты",
-    paymentMethodsValue: "Кредитные карты (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "Период оплаты",
-    paymentPeriodValue: "Обрабатывается немедленно при оплате кредитной картой",
-    price: "Цена",
-    priceValue: "$29 USD",
-    priceTaxNote: "*Цена включает все применимые налоги",
   },
 
   // Blog (UI strings only - post content in .svx files)

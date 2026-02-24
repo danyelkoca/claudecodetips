@@ -1,7 +1,6 @@
 <script>
-	import { ChevronLeft, ChevronRight, Lock, Home } from 'lucide-svelte';
+	import { ChevronLeft, ChevronRight, Home } from 'lucide-svelte';
 	import { loadTipComponent } from '$lib/content/tips.js';
-	import PaywallBanner from '$lib/components/PaywallBanner.svelte';
 	import TipImage from '$lib/components/TipImage.svelte';
 	import TranslationDisclaimer from '$lib/components/TranslationDisclaimer.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
@@ -15,8 +14,6 @@
 	$: section = data.section;
 	$: tip = data.tip;
 	$: tipId = data.tipId;
-	$: canAccess = data.canAccess;
-	$: hasAccess = data.hasAccess;
 	$: prevTipId = data.prevTipId;
 	$: nextTipId = data.nextTipId;
 	$: prevTip = data.prevTip;
@@ -39,20 +36,16 @@
 
 	// Reactive statement to load content when tipId or lang changes
 	$: if (tipId && lang) {
-		if (canAccess) {
-			loading = true;
-			component = null;
-			loadTipComponent(tipId, lang).then(result => {
-				component = result.component;
-				contentIsFallback = result.isFallback;
-				loading = false;
-			}).catch(err => {
-				console.error('Failed to load tip:', err);
-				loading = false;
-			});
-		} else {
+		loading = true;
+		component = null;
+		loadTipComponent(tipId, lang).then(result => {
+			component = result.component;
+			contentIsFallback = result.isFallback;
 			loading = false;
-		}
+		}).catch(err => {
+			console.error('Failed to load tip:', err);
+			loading = false;
+		});
 	}
 
 	// Article schema
@@ -144,16 +137,9 @@
 
 	<!-- Tip Header -->
 	<header class="space-y-4">
-		<div class="flex items-center gap-4">
-			<span class="text-foreground text-sm font-bold">
-				{t.common.tipPrefix} {tipId}
-			</span>
-			{#if !hasAccess && tip.isFree}
-				<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
-					{t.guide.freePreview}
-				</span>
-			{/if}
-		</div>
+		<span class="text-foreground text-sm font-bold">
+			{t.common.tipPrefix} {tipId}
+		</span>
 		<h1 class="text-3xl font-bold text-foreground">
 			{tip.title}
 		</h1>
@@ -163,37 +149,21 @@
 	</header>
 
 	<!-- Tip Content -->
-	{#if canAccess}
-		{#if contentIsFallback && !loading}
-			<TranslationDisclaimer {t} />
-		{/if}
-		<article class="prose max-w-none">
-			{#if loading}
-				<div class="animate-pulse space-y-4">
-					<div class="h-4 bg-border rounded-xl w-3/4"></div>
-					<div class="h-4 bg-border rounded-xl w-full"></div>
-					<div class="h-4 bg-border rounded-xl w-5/6"></div>
-					<div class="h-4 bg-border rounded-xl w-2/3"></div>
-				</div>
-			{:else if component}
-				<svelte:component this={component} />
-			{/if}
-		</article>
-	{:else}
-		<!-- Locked Content -->
-		<div class="bg-card rounded-xl border border-border p-6 text-center space-y-4">
-			<Lock class="w-8 h-8 text-muted-foreground mx-auto" />
-			<h2 class="text-2xl font-bold text-foreground">
-				{t.guide.lockedTitle}
-			</h2>
-			<p class="text-foreground">
-				{t.guide.lockedDescription}
-			</p>
-			<a href="/{lang}/pricing" class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors">
-				{t.guide.unlockCta}
-			</a>
-		</div>
+	{#if contentIsFallback && !loading}
+		<TranslationDisclaimer {t} />
 	{/if}
+	<article class="prose max-w-none">
+		{#if loading}
+			<div class="animate-pulse space-y-4">
+				<div class="h-4 bg-border rounded-xl w-3/4"></div>
+				<div class="h-4 bg-border rounded-xl w-full"></div>
+				<div class="h-4 bg-border rounded-xl w-5/6"></div>
+				<div class="h-4 bg-border rounded-xl w-2/3"></div>
+			</div>
+		{:else if component}
+			<svelte:component this={component} />
+		{/if}
+	</article>
 
 	<!-- Navigation -->
 	<nav class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-8 border-t border-border">
@@ -241,9 +211,4 @@
 			</a>
 		{/if}
 	</nav>
-
-	<!-- Paywall Banner for locked tips -->
-	{#if !canAccess}
-		<PaywallBanner {t} {lang} />
-	{/if}
 </div>

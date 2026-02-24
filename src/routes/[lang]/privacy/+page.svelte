@@ -23,14 +23,6 @@
 			<section class="space-y-4">
 				<h2 class="text-2xl font-bold text-foreground">{t.privacy.dataCollectedTitle}</h2>
 				<p>{t.privacy.dataCollectedDescription}</p>
-				<ul class="list-disc pl-6 space-y-2">
-					<li>{t.privacy.dataEmail}</li>
-				</ul>
-			</section>
-
-			<section class="space-y-4">
-				<h2 class="text-2xl font-bold text-foreground">{t.privacy.paymentTitle}</h2>
-				<p>{t.privacy.paymentDescription}</p>
 			</section>
 
 			<section class="space-y-4">

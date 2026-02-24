@@ -32,12 +32,6 @@ export default {
     tipNotFound: "ヒントが見つかりません",
   },
 
-  // Checkout
-  checkout: {
-    productName: "Claude Codeマスター51のヒント",
-    productDescription: "全51ヒントの完全ガイド - 永久アクセス",
-  },
-
   // Navigation
   nav: {
     guide: "ガイド",
@@ -56,8 +50,6 @@ export default {
       eyebrow: "くまマップ（38.9万ユーザー）の開発者より",
       title: "Claude Codeは難しい。このガイドで簡単に。",
       subtitle: "6ヶ月の毎日の実践を51の実用的なヒントに凝縮。理論なし。手取り足取りなし。本番アプリを作りながら学んだことだけ。",
-      cta: "ガイドを購入 - $29",
-      guarantee: "7日間返金保証",
       seeAll: "全{count}件のヒントを見る",
     },
     problem: {
@@ -119,34 +111,9 @@ export default {
       sections: "セクション",
     },
     sample: {
-      title: "購入前にお試し",
-      subtitle: "4つのヒントを無料でお読みください。役立てば、残り47個をご想像ください。",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "無料で読む",
-    },
-    pricing: {
-      title: "一度きりの購入",
-      price: "$29",
-      subtitle: "全51ヒントへの永久アクセス",
-      features: ["コード例付きの51の詳細なヒント", "コピペできるCLAUDE.md設定", "13の整理されたセクション", "2026年1月時点の最新版"],
-      cta: "今すぐアクセス",
-      guarantee: "7日間返金保証。質問なし。",
-    },
-    checkoutCanceled: "チェックアウトがキャンセルされました。準備ができたらどうぞ。",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "チェックアウト - Claude Code Tips",
-    pageDescription: "全51ヒントに$29で即座にアクセス",
-    emailLabel: "メールアドレス",
-    emailPlaceholder: "you@example.com",
-    cta: "支払いに進む",
-    processing: "処理中...",
-    errors: {
-      emailRequired: "メールアドレスを入力してください。",
-      invalidEmail: "有効なメールアドレスを入力してください。",
-      checkoutFailed: "問題が発生しました。もう一度お試しください。",
-      rateLimitExceeded: "試行回数が多すぎます。1時間後にお試しください。",
     },
   },
 
@@ -156,19 +123,10 @@ export default {
     overview: "全51ヒント",
     overviewDescription: "6ヶ月の実践から生まれた実戦テスト済みのヒントでClaude Codeをマスター。",
     backToGuide: "ガイドに戻る",
-    free: "無料",
-    freePreview: "無料プレビュー",
-    locked: "ロック解除して読む",
-    lockedTitle: "このヒントはロックされています",
-    lockedDescription: "一度きりの購入で全51ヒントへのフルアクセスを取得。",
-    unlockCta: "全ガイドをアンロック - $29",
-    unlockAll: "全51ヒントをアンロック",
     sections: "セクション",
-    freeLabel: "無料プレビュー",
     whatsIncluded: "含まれる内容",
     detailedTips: "詳細なヒント",
     organizedSections: "整理されたセクション",
-    freePreviews: "無料プレビュー",
     startReading: "読み始める",
     jumpTo: "セクションへジャンプ",
   },
@@ -245,42 +203,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "完全ガイドをアンロック",
-    description: "わずか$29で全51ヒントにアクセス",
-    cta: "フルアクセスを取得",
-    alreadyPurchased: "購入済みですか？",
-    restoreAccess: "アクセスを復元",
-  },
-
-  // Success page
-  success: {
-    title: "ありがとうございます！",
-    description: "ご購入が完了しました。全51ヒントへのフルアクセスが可能になりました。",
-    cta: "読み始める",
-  },
-
-  // Restore access page
-  restore: {
-    pageTitle: "アクセス復元 - Claude Code Tips",
-    title: "アクセスを復元",
-    description: "購入時に使用したメールアドレスを入力して、このデバイスでのアクセスを復元してください。",
-    emailLabel: "購入時のメールアドレス",
-    emailPlaceholder: "you@example.com",
-    cta: "アクセスを復元",
-    successMessage: "アクセスが復元されました！",
-    redirecting: "ガイドにリダイレクト中...",
-    noAccount: "まだ購入していませんか？",
-    buyNow: "今すぐ購入",
-    errors: {
-      restoreFailed: "アクセスの復元に失敗しました。もう一度お試しください。",
-      emailRequired: "メールアドレスが必要です。",
-      invalidEmail: "有効なメールアドレスを入力してください。",
-      rateLimitExceeded: "試行回数が多すぎます。1時間後にお試しください。",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Claude Codeで構築",
@@ -288,8 +210,6 @@ export default {
     company: "会社",
     legal: "法的情報",
     faq: "よくある質問",
-    restoreAccess: "アクセス復元",
-    pricing: "料金",
     blog: "ブログ",
     about: "概要",
     contact: "お問い合わせ",
@@ -363,10 +283,7 @@ export default {
     pageDescription: "Claude Code Tipsのプライバシーポリシーとデータ取り扱い",
     title: "プライバシーポリシー",
     dataCollectedTitle: "収集するデータ",
-    dataCollectedDescription: "ガイドを購入する際：",
-    dataEmail: "メールアドレス（配信およびアクセス用）",
-    paymentTitle: "支払い処理",
-    paymentDescription: "すべての支払いはStripeによって安全に処理されます。お支払い情報は保存しません。",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "お問い合わせ",
     contactLabel: "メール",
     contactEmail: "hello@claudecodetips.com",
@@ -379,13 +296,7 @@ export default {
     title: "利用規約",
     serviceTitle: "サービス",
     serviceDescription:
-      "Claude Code Tipsは、Claude Codeをマスターするための51のヒントを含むデジタルガイドを提供します。購入すると、永久アクセスが得られます。",
-    paymentTitle: "支払い",
-    paymentDescription: "ガイドへのアクセスを購入できます：",
-    paymentOneTime: "$29 USDの一度きりの支払い",
-    paymentStripe: "すべての支払いはStripeで安全に処理されます",
-    refundTitle: "返金",
-    refundDescription: "7日間の返金保証。ご満足いただけない場合は、7日以内にご連絡いただければ全額返金いたします。",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "お問い合わせ",
     contactLabel: "メール",
     contactEmail: "hello@claudecodetips.com",
@@ -406,23 +317,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "運営責任者",
     headOfOperationsValue: "ご請求があれば遅滞なく開示いたします",
-    additionalFees: "追加料金",
-    additionalFeesValue: "なし",
-    refundPolicy: "返品・返金ポリシー",
-    refundServiceIssues: "サービス上の問題",
-    refundServiceIssuesValue:
-      "システム上の問題によりサービスが提供されない場合は、hello@claudecodetips.comまでご連絡ください。確認の上、全額返金いたします。",
-    refundCustomer: "お客様都合",
-    refundCustomerValue: "7日間の返金保証。ご購入に満足いただけない場合は、7日以内にご連絡いただければ全額返金いたします。",
-    deliveryTime: "引き渡し時期",
-    deliveryTimeValue: "お支払い後、即時アクセス可能",
-    paymentMethods: "支払い方法",
-    paymentMethodsValue: "クレジットカード（Visa、Mastercard、American Express、JCB）",
-    paymentPeriod: "支払い時期",
-    paymentPeriodValue: "クレジットカード決済時に即時処理",
-    price: "販売価格",
-    priceValue: "$29 USD",
-    priceTaxNote: "※価格には適用されるすべての税金が含まれています",
   },
 
   // Blog

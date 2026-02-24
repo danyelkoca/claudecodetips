@@ -33,12 +33,6 @@ export default {
     tipNotFound: "Tips tidak ditemukan",
   },
 
-  // Checkout
-  checkout: {
-    productName: "51 Tips untuk Menguasai Claude Code",
-    productDescription: "Panduan lengkap dengan semua 51 tips - akses seumur hidup",
-  },
-
   // Navigation
   nav: {
     guide: "Panduan",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "Dari pembuat Kumamap (389 ribu pengguna)",
       title: "Kuasai Claude Code dalam Hitungan Hari, Bukan Bulan",
       subtitle: "Alur kerja, shortcut, dan konfigurasi yang membedakan pemula dari pengguna mahir.",
-      cta: "Dapatkan Panduan - $29",
-      guarantee: "Garansi uang kembali 7 hari",
       seeAll: "Lihat Semua {count} Tips",
     },
     social: {
@@ -120,34 +112,9 @@ export default {
       sections: "bagian",
     },
     sample: {
-      title: "Coba Sebelum Membeli",
-      subtitle: "Baca 4 tips ini secara gratis. Jika membantu, bayangkan 47 tips lainnya.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "Baca Gratis",
-    },
-    pricing: {
-      title: "Pembelian Sekali",
-      price: "$29",
-      subtitle: "Akses seumur hidup ke semua 51 tips",
-      features: ["51 tips detail dengan contoh kode", "Konfigurasi CLAUDE.md siap pakai", "13 bagian terorganisir", "Terbaru per Januari 2026"],
-      cta: "Dapatkan Akses Instan",
-      guarantee: "Garansi uang kembali 7 hari. Tanpa pertanyaan.",
-    },
-    checkoutCanceled: "Pembayaran dibatalkan. Siap kapan pun Anda mau.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "Pembayaran - Claude Code Tips",
-    pageDescription: "Akses instan ke semua 51 tips seharga $29",
-    emailLabel: "Alamat Email",
-    emailPlaceholder: "anda@contoh.com",
-    cta: "Lanjut ke Pembayaran",
-    processing: "Memproses...",
-    errors: {
-      emailRequired: "Silakan masukkan email Anda.",
-      invalidEmail: "Silakan masukkan alamat email yang valid.",
-      checkoutFailed: "Terjadi kesalahan. Silakan coba lagi.",
-      rateLimitExceeded: "Terlalu banyak percobaan. Coba lagi dalam satu jam.",
     },
   },
 
@@ -157,19 +124,10 @@ export default {
     overview: "Semua 51 Tips",
     overviewDescription: "Kuasai Claude Code dengan tips teruji dari 6 bulan penggunaan harian.",
     backToGuide: "Kembali ke Panduan",
-    free: "Gratis",
-    freePreview: "Preview Gratis",
-    locked: "Buka untuk membaca",
-    lockedTitle: "Tips ini terkunci",
-    lockedDescription: "Dapatkan akses penuh ke semua 51 tips dengan pembelian sekali.",
-    unlockCta: "Buka Panduan Lengkap - $29",
-    unlockAll: "Buka Semua 51 Tips",
     sections: "bagian",
-    freeLabel: "preview gratis",
     whatsIncluded: "Apa yang Termasuk",
     detailedTips: "tips detail",
     organizedSections: "bagian terorganisir",
-    freePreviews: "preview gratis",
     startReading: "Mulai Membaca",
     jumpTo: "Lompat ke Bagian",
   },
@@ -253,42 +211,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "Buka Panduan Lengkap",
-    description: "Dapatkan akses ke semua 51 tips hanya $29",
-    cta: "Dapatkan Akses Penuh",
-    alreadyPurchased: "Sudah membeli?",
-    restoreAccess: "Pulihkan akses",
-  },
-
-  // Success page
-  success: {
-    title: "Terima Kasih!",
-    description: "Pembelian Anda berhasil. Anda sekarang memiliki akses penuh ke semua 51 tips.",
-    cta: "Mulai Membaca",
-  },
-
-  // Restore page
-  restore: {
-    pageTitle: "Pulihkan Akses - Claude Code Tips",
-    title: "Pulihkan Akses Anda",
-    description: "Masukkan email yang digunakan saat pembelian untuk memulihkan akses di perangkat ini.",
-    emailLabel: "Email pembelian",
-    emailPlaceholder: "anda@contoh.com",
-    cta: "Pulihkan Akses",
-    successMessage: "Akses berhasil dipulihkan!",
-    redirecting: "Mengarahkan ke panduan...",
-    noAccount: "Belum membeli?",
-    buyNow: "Beli Sekarang",
-    errors: {
-      restoreFailed: "Gagal memulihkan akses. Coba lagi.",
-      emailRequired: "Email diperlukan.",
-      invalidEmail: "Silakan masukkan alamat email yang valid.",
-      rateLimitExceeded: "Terlalu banyak percobaan. Coba lagi dalam satu jam.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Dibangun dengan Claude Code",
@@ -296,8 +218,6 @@ export default {
     company: "Perusahaan",
     legal: "Legal",
     faq: "FAQ",
-    restoreAccess: "Pulihkan akses",
-    pricing: "Harga",
     blog: "Blog",
     about: "Tentang",
     contact: "Hubungi Kami",
@@ -373,10 +293,7 @@ export default {
     pageDescription: "Pelajari bagaimana Claude Code Tips menangani data Anda.",
     title: "Kebijakan Privasi",
     dataCollectedTitle: "Data yang Kami Kumpulkan",
-    dataCollectedDescription: "Ketika Anda membeli panduan:",
-    dataEmail: "Email (untuk pengiriman dan akses)",
-    paymentTitle: "Pemrosesan Pembayaran",
-    paymentDescription: "Semua pembayaran diproses dengan aman oleh Stripe. Kami tidak menyimpan informasi pembayaran Anda.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "Kontak",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -389,13 +306,7 @@ export default {
     title: "Ketentuan Layanan",
     serviceTitle: "Layanan",
     serviceDescription:
-      "Claude Code Tips menyediakan panduan digital dengan 51 tips untuk menguasai Claude Code. Setelah pembelian, Anda menerima akses seumur hidup.",
-    paymentTitle: "Pembayaran",
-    paymentDescription: "Anda dapat membeli akses ke panduan:",
-    paymentOneTime: "Pembayaran sekali $29 USD",
-    paymentStripe: "Semua pembayaran diproses dengan aman melalui Stripe",
-    refundTitle: "Pengembalian Dana",
-    refundDescription: "Garansi uang kembali 7 hari. Jika tidak puas, hubungi kami dalam 7 hari untuk pengembalian dana penuh.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "Kontak",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -416,24 +327,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "Kepala Operasi",
     headOfOperationsValue: "Diungkapkan atas permintaan",
-    additionalFees: "Biaya Tambahan",
-    additionalFeesValue: "Tidak ada",
-    refundPolicy: "Kebijakan Pengembalian Dana",
-    refundServiceIssues: "Masalah Layanan",
-    refundServiceIssuesValue:
-      "Jika layanan tidak diberikan karena masalah sistem, silakan hubungi hello@claudecodetips.com. Kami akan meninjau dan memberikan pengembalian dana penuh.",
-    refundCustomer: "Pembatalan oleh Pelanggan",
-    refundCustomerValue:
-      "Garansi uang kembali 7 hari. Jika Anda tidak puas dengan pembelian, hubungi kami dalam 7 hari untuk pengembalian dana penuh, tanpa pertanyaan.",
-    deliveryTime: "Waktu Pengiriman",
-    deliveryTimeValue: "Akses instan setelah pembayaran",
-    paymentMethods: "Metode Pembayaran",
-    paymentMethodsValue: "Kartu kredit (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "Periode Pembayaran",
-    paymentPeriodValue: "Diproses segera setelah pembayaran kartu kredit",
-    price: "Harga",
-    priceValue: "$29 USD",
-    priceTaxNote: "*Harga sudah termasuk semua pajak yang berlaku",
   },
 
   // Blog (UI strings only - post content in .svx files)

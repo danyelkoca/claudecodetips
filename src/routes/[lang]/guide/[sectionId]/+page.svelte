@@ -1,7 +1,5 @@
 <script>
-	import { Lock, ChevronRight, ChevronLeft, Home } from 'lucide-svelte';
-	import { isTipFree } from '$lib/content/tips.js';
-	import PaywallBanner from '$lib/components/PaywallBanner.svelte';
+	import { ChevronRight, ChevronLeft, Home } from 'lucide-svelte';
 	import TipImage from '$lib/components/TipImage.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import JsonLd from '$lib/components/JsonLd.svelte';
@@ -13,7 +11,6 @@
 	$: lang = data.lang;
 	$: section = data.section;
 	$: sectionTips = data.sectionTips;
-	$: hasAccess = data.hasAccess;
 	$: prevSection = data.prevSection;
 	$: nextSection = data.nextSection;
 
@@ -86,7 +83,6 @@
 	<!-- Tips List -->
 	<div class="space-y-4">
 		{#each sectionTips as tip}
-			{@const canAccess = hasAccess || isTipFree(tip.id)}
 			<a
 				href="/{lang}/guide/{section.id}/{tip.id}"
 				class="flex gap-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer group overflow-hidden"
@@ -99,18 +95,9 @@
 					/>
 				</div>
 				<div class="flex-1 min-w-0 py-4 pr-4 flex flex-col justify-center space-y-2">
-					<div class="flex items-center gap-2">
-						<span class="text-foreground text-xs font-bold flex-shrink-0">
-							{tip.id}
-						</span>
-						{#if !hasAccess && tip.isFree}
-							<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full flex-shrink-0">
-								{t.guide.free}
-							</span>
-						{:else if !canAccess}
-							<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
-						{/if}
-					</div>
+					<span class="text-foreground text-xs font-bold flex-shrink-0">
+						{tip.id}
+					</span>
 					<h3 class="font-bold text-foreground group-hover:underline transition-colors">
 						{tip.title}
 					</h3>
@@ -151,8 +138,4 @@
 			<div></div>
 		{/if}
 	</div>
-
-	{#if !hasAccess}
-		<PaywallBanner {t} {lang} />
-	{/if}
 </div>

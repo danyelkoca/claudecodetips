@@ -1,4 +1,4 @@
-import { DEFAULT_LANG } from '$lib/i18n/loader.js';
+import { DEFAULT_LANG } from "$lib/i18n/loader.js";
 
 /**
  * Load all blog posts metadata for a language (server-safe, no components)
@@ -6,58 +6,58 @@ import { DEFAULT_LANG } from '$lib/i18n/loader.js';
  * Returns { posts, isFallback }
  */
 export async function loadBlogPostsMeta(lang) {
-	const modules = import.meta.glob('/src/lib/content/blog/**/*.svx');
-	const posts = [];
+  const modules = import.meta.glob("/src/lib/content/blog/**/*.svx");
+  const posts = [];
 
-	for (const [path, resolver] of Object.entries(modules)) {
-		if (!path.includes(`/blog/${lang}/`)) continue;
+  for (const [path, resolver] of Object.entries(modules)) {
+    if (!path.includes(`/blog/${lang}/`)) continue;
 
-		const post = await resolver();
-		posts.push({
-			...post.metadata
-		});
-	}
+    const post = await resolver();
+    posts.push({
+      ...post.metadata,
+    });
+  }
 
-	if (posts.length > 0) {
-		return { posts: posts.sort((a, b) => new Date(b.date) - new Date(a.date)), isFallback: false };
-	}
+  if (posts.length > 0) {
+    return { posts: posts.sort((a, b) => new Date(b.date) - new Date(a.date)), isFallback: false };
+  }
 
-	// Fall back to English
-	if (lang !== DEFAULT_LANG) {
-		const fallbackPosts = [];
-		for (const [path, resolver] of Object.entries(modules)) {
-			if (!path.includes(`/blog/${DEFAULT_LANG}/`)) continue;
+  // Fall back to English
+  if (lang !== DEFAULT_LANG) {
+    const fallbackPosts = [];
+    for (const [path, resolver] of Object.entries(modules)) {
+      if (!path.includes(`/blog/${DEFAULT_LANG}/`)) continue;
 
-			const post = await resolver();
-			fallbackPosts.push({
-				...post.metadata
-			});
-		}
-		return { posts: fallbackPosts.sort((a, b) => new Date(b.date) - new Date(a.date)), isFallback: true };
-	}
+      const post = await resolver();
+      fallbackPosts.push({
+        ...post.metadata,
+      });
+    }
+    return { posts: fallbackPosts.sort((a, b) => new Date(b.date) - new Date(a.date)), isFallback: true };
+  }
 
-	return { posts: [], isFallback: false };
+  return { posts: [], isFallback: false };
 }
 
 /**
  * Load all blog posts with components for a language (client-side only)
  */
 export async function loadBlogPosts(lang) {
-	const modules = import.meta.glob('/src/lib/content/blog/**/*.svx');
-	const posts = [];
+  const modules = import.meta.glob("/src/lib/content/blog/**/*.svx");
+  const posts = [];
 
-	for (const [path, resolver] of Object.entries(modules)) {
-		if (!path.includes(`/blog/${lang}/`)) continue;
+  for (const [path, resolver] of Object.entries(modules)) {
+    if (!path.includes(`/blog/${lang}/`)) continue;
 
-		const post = await resolver();
-		posts.push({
-			...post.metadata,
-			component: post.default
-		});
-	}
+    const post = await resolver();
+    posts.push({
+      ...post.metadata,
+      component: post.default,
+    });
+  }
 
-	// Sort by date descending (newest first)
-	return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Sort by date descending (newest first)
+  return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
 /**
@@ -66,33 +66,33 @@ export async function loadBlogPosts(lang) {
  * Returns { post, isFallback } or null if not found
  */
 export async function loadBlogPostMeta(slug, lang) {
-	const modules = import.meta.glob('/src/lib/content/blog/**/*.svx');
+  const modules = import.meta.glob("/src/lib/content/blog/**/*.svx");
 
-	// Try requested language first
-	for (const [path, resolver] of Object.entries(modules)) {
-		if (path.includes(`/blog/${lang}/`) && path.includes(`${slug}.svx`)) {
-			const post = await resolver();
-			return {
-				post: { ...post.metadata },
-				isFallback: false
-			};
-		}
-	}
+  // Try requested language first
+  for (const [path, resolver] of Object.entries(modules)) {
+    if (path.includes(`/blog/${lang}/`) && path.includes(`${slug}.svx`)) {
+      const post = await resolver();
+      return {
+        post: { ...post.metadata },
+        isFallback: false,
+      };
+    }
+  }
 
-	// Fall back to English
-	if (lang !== DEFAULT_LANG) {
-		for (const [path, resolver] of Object.entries(modules)) {
-			if (path.includes(`/blog/${DEFAULT_LANG}/`) && path.includes(`${slug}.svx`)) {
-				const post = await resolver();
-				return {
-					post: { ...post.metadata },
-					isFallback: true
-				};
-			}
-		}
-	}
+  // Fall back to English
+  if (lang !== DEFAULT_LANG) {
+    for (const [path, resolver] of Object.entries(modules)) {
+      if (path.includes(`/blog/${DEFAULT_LANG}/`) && path.includes(`${slug}.svx`)) {
+        const post = await resolver();
+        return {
+          post: { ...post.metadata },
+          isFallback: true,
+        };
+      }
+    }
+  }
 
-	return null;
+  return null;
 }
 
 /**
@@ -101,33 +101,33 @@ export async function loadBlogPostMeta(slug, lang) {
  * Returns { post, component, isFallback } or null if not found
  */
 export async function loadBlogPost(slug, lang) {
-	const modules = import.meta.glob('/src/lib/content/blog/**/*.svx');
+  const modules = import.meta.glob("/src/lib/content/blog/**/*.svx");
 
-	// Try requested language first
-	for (const [path, resolver] of Object.entries(modules)) {
-		if (path.includes(`/blog/${lang}/`) && path.includes(`${slug}.svx`)) {
-			const post = await resolver();
-			return {
-				post: { ...post.metadata },
-				component: post.default,
-				isFallback: false
-			};
-		}
-	}
+  // Try requested language first
+  for (const [path, resolver] of Object.entries(modules)) {
+    if (path.includes(`/blog/${lang}/`) && path.includes(`${slug}.svx`)) {
+      const post = await resolver();
+      return {
+        post: { ...post.metadata },
+        component: post.default,
+        isFallback: false,
+      };
+    }
+  }
 
-	// Fall back to English
-	if (lang !== DEFAULT_LANG) {
-		for (const [path, resolver] of Object.entries(modules)) {
-			if (path.includes(`/blog/${DEFAULT_LANG}/`) && path.includes(`${slug}.svx`)) {
-				const post = await resolver();
-				return {
-					post: { ...post.metadata },
-					component: post.default,
-					isFallback: true
-				};
-			}
-		}
-	}
+  // Fall back to English
+  if (lang !== DEFAULT_LANG) {
+    for (const [path, resolver] of Object.entries(modules)) {
+      if (path.includes(`/blog/${DEFAULT_LANG}/`) && path.includes(`${slug}.svx`)) {
+        const post = await resolver();
+        return {
+          post: { ...post.metadata },
+          component: post.default,
+          isFallback: true,
+        };
+      }
+    }
+  }
 
-	return null;
+  return null;
 }

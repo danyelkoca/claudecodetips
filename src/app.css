@@ -55,7 +55,12 @@ body {
 }
 
 /* Internationalized text wrapping for headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
   overflow-wrap: break-word;
 
@@ -63,6 +68,7 @@ h1, h2, h3, h4, h5, h6 {
   &:lang(ja) {
     text-wrap: initial;
     line-break: strict;
+
     @supports (word-break: auto-phrase) {
       word-break: auto-phrase;
       text-wrap: balance;
@@ -72,6 +78,7 @@ h1, h2, h3, h4, h5, h6 {
   /* Korean - keep-all with mobile fallback */
   &:lang(ko) {
     word-break: keep-all;
+
     @media (max-width: 480px) {
       text-wrap: wrap;
       word-break: initial;
@@ -79,7 +86,9 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   /* Chinese (Simplified & Traditional) */
-  &:lang(zh), &:lang(zh-CN), &:lang(zh-TW) {
+  &:lang(zh),
+  &:lang(zh-CN),
+  &:lang(zh-TW) {
     word-break: keep-all;
     line-break: strict;
   }

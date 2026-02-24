@@ -26,20 +26,6 @@
 			</section>
 
 			<section class="space-y-4">
-				<h2 class="text-2xl font-bold text-foreground">{t.terms.paymentTitle}</h2>
-				<p>{t.terms.paymentDescription}</p>
-				<ul class="list-disc pl-6 space-y-2">
-					<li>{t.terms.paymentOneTime}</li>
-					<li>{t.terms.paymentStripe}</li>
-				</ul>
-			</section>
-
-			<section class="space-y-4">
-				<h2 class="text-2xl font-bold text-foreground">{t.terms.refundTitle}</h2>
-				<p>{t.terms.refundDescription}</p>
-			</section>
-
-			<section class="space-y-4">
 				<h2 class="text-2xl font-bold text-foreground">{t.terms.contactTitle}</h2>
 				<p>{t.terms.contactLabel}: <strong>{t.terms.contactEmail}</strong></p>
 			</section>

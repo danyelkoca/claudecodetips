@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { sections, loadTipsMeta, isTipFree } from '$lib/content/tips.js';
+import { sections, loadTipsMeta } from '$lib/content/tips.js';
 
 export async function load({ params, parent }) {
-	const { lang, hasAccess, t } = await parent();
+	const { lang, t } = await parent();
 	const sectionId = params.sectionId;
 	const tipId = parseInt(params.tipId, 10);
 
@@ -24,8 +24,6 @@ export async function load({ params, parent }) {
 		throw error(404, 'tipNotFound');
 	}
 
-	const canAccess = hasAccess || isTipFree(tipId);
-
 	// Helper to find section for any tip ID
 	const findSectionForTip = (id) => sections.find(s => s.tips.includes(id));
 
@@ -45,8 +43,6 @@ export async function load({ params, parent }) {
 		section,
 		tip,
 		tipId,
-		canAccess,
-		hasAccess,
 		prevTipId,
 		nextTipId,
 		prevTip,

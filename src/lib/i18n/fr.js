@@ -33,12 +33,6 @@ export default {
     tipNotFound: "Conseil non trouvé",
   },
 
-  // Checkout
-  checkout: {
-    productName: "51 Conseils pour Maîtriser Claude Code",
-    productDescription: "Guide complet avec les 51 conseils - accès à vie",
-  },
-
   // Navigation
   nav: {
     guide: "Guide",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "Du créateur de Kumamap (389K utilisateurs)",
       title: "Maitrisez Claude Code en Jours, Pas en Mois",
       subtitle: "Les workflows, raccourcis et configurations qui distinguent les debutants des experts.",
-      cta: "Obtenir le Guide - 29$",
-      guarantee: "Garantie satisfait ou rembourse 7 jours",
       seeAll: "Voir les {count} conseils",
     },
     problem: {
@@ -120,39 +112,9 @@ export default {
       sections: "sections",
     },
     sample: {
-      title: "Essayez Avant d'Acheter",
-      subtitle: "Lisez ces 4 conseils gratuitement. S'ils vous aident, imaginez 47 de plus.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "Lire gratuitement",
-    },
-    pricing: {
-      title: "Achat Unique",
-      price: "29$",
-      subtitle: "Acces a vie aux 51 conseils",
-      features: [
-        "51 conseils detailles avec exemples de code",
-        "Configs CLAUDE.md pret-a-copier",
-        "13 sections organisees",
-        "A jour en janvier 2026",
-      ],
-      cta: "Obtenir un Acces Immediat",
-      guarantee: "Garantie satisfait ou rembourse 7 jours. Sans questions.",
-    },
-    checkoutCanceled: "Paiement annule. Pret quand vous le serez.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "Paiement - Claude Code Tips",
-    pageDescription: "Acces instantane aux 51 conseils pour 29$",
-    emailLabel: "Adresse email",
-    emailPlaceholder: "vous@exemple.com",
-    cta: "Continuer vers le paiement",
-    processing: "Traitement...",
-    errors: {
-      emailRequired: "Veuillez entrer votre email.",
-      invalidEmail: "Veuillez entrer une adresse email valide.",
-      checkoutFailed: "Une erreur est survenue. Veuillez reessayer.",
-      rateLimitExceeded: "Trop de tentatives. Reessayez dans une heure.",
     },
   },
 
@@ -162,19 +124,10 @@ export default {
     overview: "Les 51 Conseils",
     overviewDescription: "Maitrisez Claude Code avec ces conseils eprouves issus de 6 mois d'utilisation quotidienne.",
     backToGuide: "Retour au Guide",
-    free: "Gratuit",
-    freePreview: "Apercu Gratuit",
-    locked: "Debloquer pour lire",
-    lockedTitle: "Ce conseil est verrouille",
-    lockedDescription: "Obtenez un acces complet aux 51 conseils avec un achat unique.",
-    unlockCta: "Debloquer le Guide Complet - 29$",
-    unlockAll: "Debloquer les 51 Conseils",
     sections: "sections",
-    freeLabel: "apercus gratuits",
     whatsIncluded: "Ce qui est inclus",
     detailedTips: "conseils detailles",
     organizedSections: "sections organisees",
-    freePreviews: "apercus gratuits",
     startReading: "Commencer a Lire",
     jumpTo: "Aller a la Section",
   },
@@ -260,42 +213,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "Debloquez le Guide Complet",
-    description: "Acces aux 51 conseils pour seulement 29$",
-    cta: "Obtenir un Acces Complet",
-    alreadyPurchased: "Déjà acheté ?",
-    restoreAccess: "Restaurer l'accès",
-  },
-
-  // Success page
-  success: {
-    title: "Merci!",
-    description: "Votre achat a reussi. Vous avez maintenant un acces complet aux 51 conseils.",
-    cta: "Commencer la Lecture",
-  },
-
-  // Restore page
-  restore: {
-    pageTitle: "Restaurer l'accès - Claude Code Tips",
-    title: "Restaurez votre accès",
-    description: "Entrez l'email utilisé lors de l'achat pour restaurer l'accès sur cet appareil.",
-    emailLabel: "Email d'achat",
-    emailPlaceholder: "vous@exemple.com",
-    cta: "Restaurer l'accès",
-    successMessage: "Accès restauré avec succès !",
-    redirecting: "Redirection vers le guide...",
-    noAccount: "Pas encore acheté ?",
-    buyNow: "Acheter maintenant",
-    errors: {
-      restoreFailed: "Échec de la restauration. Réessayez.",
-      emailRequired: "L'email est requis.",
-      invalidEmail: "Veuillez entrer une adresse email valide.",
-      rateLimitExceeded: "Trop de tentatives. Reessayez dans une heure.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Construit avec Claude Code",
@@ -303,8 +220,6 @@ export default {
     company: "Entreprise",
     legal: "Legal",
     faq: "FAQ",
-    restoreAccess: "Restaurer l'accès",
-    pricing: "Tarifs",
     blog: "Blog",
     about: "A Propos",
     contact: "Contact",
@@ -380,10 +295,7 @@ export default {
     pageDescription: "Politique de confidentialite et gestion des donnees de Claude Code Tips",
     title: "Politique de Confidentialite",
     dataCollectedTitle: "Donnees que Nous Collectons",
-    dataCollectedDescription: "Lorsque vous achetez le guide:",
-    dataEmail: "Email (pour la livraison et l'acces)",
-    paymentTitle: "Traitement des Paiements",
-    paymentDescription: "Tous les paiements sont traites de maniere securisee par Stripe. Nous ne stockons pas vos informations de paiement.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "Contact",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -396,14 +308,7 @@ export default {
     title: "Conditions d'Utilisation",
     serviceTitle: "Service",
     serviceDescription:
-      "Claude Code Tips fournit un guide numerique contenant 51 conseils pour maitriser Claude Code. A l'achat, vous recevez un acces a vie.",
-    paymentTitle: "Paiement",
-    paymentDescription: "Vous pouvez acheter l'acces au guide:",
-    paymentOneTime: "Paiement unique de 29$ USD",
-    paymentStripe: "Tous les paiements traites de maniere securisee via Stripe",
-    refundTitle: "Remboursements",
-    refundDescription:
-      "Garantie de remboursement de 7 jours. Si vous n'etes pas satisfait, contactez-nous dans les 7 jours pour un remboursement complet.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "Contact",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -424,24 +329,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "Responsable des Operations",
     headOfOperationsValue: "Divulgue sur demande",
-    additionalFees: "Frais Supplementaires",
-    additionalFeesValue: "Aucun",
-    refundPolicy: "Politique de Remboursement",
-    refundServiceIssues: "Problemes de Service",
-    refundServiceIssuesValue:
-      "Si le service n'est pas fourni en raison de problemes systeme, contactez hello@claudecodetips.com. Nous examinerons et fournirons un remboursement complet.",
-    refundCustomer: "Initie par le Client",
-    refundCustomerValue:
-      "Garantie de remboursement de 7 jours. Si vous n'etes pas satisfait de votre achat, contactez-nous dans les 7 jours pour un remboursement complet, sans questions.",
-    deliveryTime: "Delai de Livraison",
-    deliveryTimeValue: "Acces instantane apres paiement",
-    paymentMethods: "Methodes de Paiement",
-    paymentMethodsValue: "Cartes de credit (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "Periode de Paiement",
-    paymentPeriodValue: "Traite immediatement lors du paiement par carte de credit",
-    price: "Prix",
-    priceValue: "29$ USD",
-    priceTaxNote: "*Le prix inclut toutes les taxes applicables",
   },
 
   // Blog (UI strings only - post content in .svx files)

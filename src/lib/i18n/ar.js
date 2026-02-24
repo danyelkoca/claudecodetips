@@ -33,12 +33,6 @@ export default {
 		tipNotFound: "النصيحة غير موجودة",
 	},
 
-	// Checkout
-	checkout: {
-		productName: "51 نصيحة لإتقان Claude Code",
-		productDescription: "دليل شامل مع جميع النصائح الـ 51 - وصول مدى الحياة",
-	},
-
 	// Navigation
 	nav: {
 		guide: "الدليل",
@@ -57,8 +51,6 @@ export default {
 			eyebrow: "من مبتكر Kumamap (389 ألف مستخدم)",
 			title: "أتقن Claude Code في أيام، وليس أشهر",
 			subtitle: "سير العمل والاختصارات والإعدادات التي تفرق بين المبتدئين والمحترفين.",
-			cta: "احصل على الدليل - 29$",
-			guarantee: "ضمان استرداد المال خلال 7 أيام",
 			seeAll: "عرض جميع النصائح الـ {count}",
 		},
 		social: {
@@ -120,34 +112,9 @@ export default {
 			sections: "أقسام",
 		},
 		sample: {
-			title: "جرب قبل الشراء",
-			subtitle: "اقرأ هذه النصائح الأربع مجانا. إذا ساعدتك، تخيل 47 نصيحة أخرى.",
+			title: "Featured Tips",
+			subtitle: "Start with these popular tips",
 			readFree: "اقرأ مجاناً",
-		},
-		pricing: {
-			title: "شراء لمرة واحدة",
-			price: "29$",
-			subtitle: "وصول مدى الحياة لجميع النصائح الـ 51",
-			features: ["51 نصيحة مفصلة مع أمثلة برمجية", "إعدادات CLAUDE.md جاهزة للنسخ", "13 قسم منظم", "محدث حتى يناير 2026"],
-			cta: "احصل على وصول فوري",
-			guarantee: "ضمان استرداد المال خلال 7 أيام. بدون أسئلة.",
-		},
-		checkoutCanceled: "تم إلغاء الدفع. جاهز عندما تكون مستعداً.",
-	},
-
-	// Pricing page
-	pricingPage: {
-		pageTitle: "الدفع - Claude Code Tips",
-		pageDescription: "وصول فوري لجميع النصائح الـ 51 مقابل 29$",
-		emailLabel: "البريد الإلكتروني",
-		emailPlaceholder: "you@example.com",
-		cta: "المتابعة للدفع",
-		processing: "جاري المعالجة...",
-		errors: {
-			emailRequired: "الرجاء إدخال بريدك الإلكتروني.",
-			invalidEmail: "الرجاء إدخال عنوان بريد إلكتروني صالح.",
-			checkoutFailed: "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
-			rateLimitExceeded: "محاولات كثيرة جدا. حاول مرة أخرى بعد ساعة.",
 		},
 	},
 
@@ -157,19 +124,10 @@ export default {
 		overview: "جميع النصائح الـ 51",
 		overviewDescription: "أتقن Claude Code مع هذه النصائح المجربة من 6 أشهر من الاستخدام اليومي.",
 		backToGuide: "العودة للدليل",
-		free: "مجاني",
-		freePreview: "معاينة مجانية",
-		locked: "افتح للقراءة",
-		lockedTitle: "هذه النصيحة مقفلة",
-		lockedDescription: "احصل على وصول كامل لجميع النصائح الـ 51 بشراء واحد.",
-		unlockCta: "افتح الدليل الكامل - 29$",
-		unlockAll: "افتح جميع النصائح الـ 51",
 		sections: "أقسام",
-		freeLabel: "معاينات مجانية",
 		whatsIncluded: "ماذا يتضمن",
 		detailedTips: "نصائح مفصلة",
 		organizedSections: "أقسام منظمة",
-		freePreviews: "معاينات مجانية",
 		startReading: "ابدأ القراءة",
 		jumpTo: "انتقل إلى القسم",
 	},
@@ -244,42 +202,6 @@ export default {
 		},
 	},
 
-	// Paywall
-	paywall: {
-		title: "افتح الدليل الكامل",
-		description: "احصل على وصول لجميع النصائح الـ 51 مقابل 29$ فقط",
-		cta: "احصل على وصول كامل",
-		alreadyPurchased: "اشتريت بالفعل؟",
-		restoreAccess: "استعادة الوصول",
-	},
-
-	// Success page
-	success: {
-		title: "شكراً لك!",
-		description: "تم الشراء بنجاح. لديك الآن وصول كامل لجميع النصائح الـ 51.",
-		cta: "ابدأ القراءة",
-	},
-
-	// Restore page
-	restore: {
-		pageTitle: "استعادة الوصول - Claude Code Tips",
-		title: "استعادة الوصول",
-		description: "أدخل البريد الإلكتروني الذي استخدمته عند الشراء لاستعادة الوصول على هذا الجهاز.",
-		emailLabel: "البريد الإلكتروني للشراء",
-		emailPlaceholder: "you@example.com",
-		cta: "استعادة الوصول",
-		successMessage: "تم استعادة الوصول بنجاح!",
-		redirecting: "إعادة التوجيه إلى الدليل...",
-		noAccount: "لم تشترِ بعد؟",
-		buyNow: "اشترِ الآن",
-		errors: {
-			restoreFailed: "فشل في استعادة الوصول. حاول مرة أخرى.",
-			emailRequired: "البريد الإلكتروني مطلوب.",
-			invalidEmail: "الرجاء إدخال عنوان بريد إلكتروني صالح.",
-			rateLimitExceeded: "محاولات كثيرة جدا. حاول مرة أخرى بعد ساعة.",
-		},
-	},
-
 	// Footer
 	footer: {
 		builtWith: "بُني باستخدام Claude Code",
@@ -287,8 +209,6 @@ export default {
 		company: "الشركة",
 		legal: "قانوني",
 		faq: "الأسئلة الشائعة",
-		restoreAccess: "استعادة الوصول",
-		pricing: "الأسعار",
 		blog: "المدونة",
 		about: "حول",
 		contact: "تواصل معنا",
@@ -361,10 +281,7 @@ export default {
 		pageDescription: "تعرف على كيفية تعامل Claude Code Tips مع بياناتك.",
 		title: "سياسة الخصوصية",
 		dataCollectedTitle: "البيانات التي نجمعها",
-		dataCollectedDescription: "عند شراء الدليل:",
-		dataEmail: "البريد الإلكتروني (للتسليم والوصول)",
-		paymentTitle: "معالجة الدفع",
-		paymentDescription: "تتم معالجة جميع المدفوعات بشكل آمن عبر Stripe. نحن لا نخزن معلومات الدفع الخاصة بك.",
+		dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
 		contactTitle: "تواصل معنا",
 		contactLabel: "البريد الإلكتروني",
 		contactEmail: "hello@claudecodetips.com",
@@ -376,13 +293,7 @@ export default {
 		pageDescription: "شروط الخدمة لـ Claude Code Tips.",
 		title: "شروط الخدمة",
 		serviceTitle: "الخدمة",
-		serviceDescription: "يوفر Claude Code Tips دليلاً رقمياً يحتوي على 51 نصيحة لإتقان Claude Code. عند الشراء، تحصل على وصول مدى الحياة.",
-		paymentTitle: "الدفع",
-		paymentDescription: "يمكنك شراء الوصول إلى الدليل:",
-		paymentOneTime: "دفعة واحدة بقيمة 29 دولار أمريكي",
-		paymentStripe: "تتم معالجة جميع المدفوعات بشكل آمن عبر Stripe",
-		refundTitle: "الاسترداد",
-		refundDescription: "ضمان استرداد الأموال لمدة 7 أيام. إذا لم تكن راضياً، تواصل معنا خلال 7 أيام لاسترداد كامل المبلغ.",
+		serviceDescription: "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
 		contactTitle: "تواصل معنا",
 		contactLabel: "البريد الإلكتروني",
 		contactEmail: "hello@claudecodetips.com",
@@ -403,23 +314,6 @@ export default {
 		emailValue: "hello@claudecodetips.com",
 		headOfOperations: "رئيس العمليات",
 		headOfOperationsValue: "يُكشف عند الطلب",
-		additionalFees: "رسوم إضافية",
-		additionalFeesValue: "لا يوجد",
-		refundPolicy: "سياسة الاسترداد",
-		refundServiceIssues: "مشاكل الخدمة",
-		refundServiceIssuesValue:
-			"إذا لم يتم تقديم الخدمة بسبب مشاكل في النظام، يرجى التواصل على hello@claudecodetips.com. سنراجع ونقدم استرداداً كاملاً.",
-		refundCustomer: "إلغاء من العميل",
-		refundCustomerValue: "ضمان استرداد الأموال لمدة 7 أيام. إذا لم تكن راضياً عن شرائك، تواصل معنا خلال 7 أيام لاسترداد كامل المبلغ، بدون أسئلة.",
-		deliveryTime: "وقت التسليم",
-		deliveryTimeValue: "وصول فوري بعد الدفع",
-		paymentMethods: "طرق الدفع",
-		paymentMethodsValue: "بطاقات الائتمان (فيزا، ماستركارد، أمريكان إكسبريس، JCB)",
-		paymentPeriod: "فترة الدفع",
-		paymentPeriodValue: "تتم المعالجة فوراً عند الدفع ببطاقة الائتمان",
-		price: "السعر",
-		priceValue: "29 دولار أمريكي",
-		priceTaxNote: "*السعر شامل جميع الضرائب المطبقة",
 	},
 
 	// Blog (UI strings only - post content in .svx files)

@@ -18,7 +18,7 @@
 - Read all relevant files end-to-end before making suggestions
 - Read at least 25 relevant files across the full stack
 - Don't read partially or superficially—read with intent
-- **Read ALL similar implementations first.** E.g., for Stripe, read the checkout implementation.
+- **Read ALL similar implementations first.** E.g., for a new page, read existing page implementations.
 - **Copy-paste, don't reinvent.** If it exists, use it verbatim. Don't try to write it yourself.
 - Never create new utilities, components, or patterns if they already exist
 
@@ -193,7 +193,7 @@ Rule: Use `gap-*` with flex/grid. Use `space-y-*` for simple stacked content.
 | Use | Class |
 |-----|-------|
 | Default page | `max-w-5xl mx-auto px-4` |
-| Narrow (forms, pricing) | `max-w-md mx-auto px-4` |
+| Narrow (forms) | `max-w-md mx-auto px-4` |
 | Prose/article | `max-w-3xl mx-auto px-4` |
 
 ### Icon Sizes
@@ -291,22 +291,21 @@ npm run preview  # Preview production build
 
 ## Architecture
 
-SvelteKit application with Cloudflare Pages adapter, selling access to "51 Tips to Master Claude Code" guide. Content is written in MDSvex (.svx files) with a paywall system.
+**Production URL:** https://claudecodetips.com
+
+SvelteKit application with Cloudflare Pages adapter. Free "51 Tips to Master Claude Code" guide. Content is written in MDSvex (.svx files). All tips are freely accessible.
 
 ### Key Patterns
 
 **Routing**: Language-prefixed routes (`/en`, `/ja`) with `[lang]` dynamic parameter. Root `/` redirects to `/en`. Valid languages defined in `src/lib/i18n/loader.js`.
 
-**Content System**: Tips are `.svx` files in `src/lib/content/tips/{lang}/` named `{NN}-{slug}.svx`. Each has frontmatter with id, title, section, summary, and isFree. Tips organized into 13 sections (12 + bonus) defined in `src/lib/content/tips.js`. Free tips hardcoded in `freeTipIds` array.
+**Content System**: Tips are `.svx` files in `src/lib/content/tips/{lang}/` named `{NN}-{slug}.svx`. Each has frontmatter with id, title, section, and summary. Tips organized into 13 sections (12 + bonus) defined in `src/lib/content/tips.js`.
 
 **i18n**: Translations in `src/lib/i18n/{lang}.js` files. Layout loads translations via `loadTranslations()` and passes `t` object down through `data`.
 
-**Paywall**: Access controlled via `hasAccess` prop passed through layouts. Checks D1 database for valid purchase via `purchase_session` cookie in `src/routes/[lang]/+layout.server.js`.
-
 **Backend**:
 
-- Stripe checkout: `src/routes/api/checkout/+server.js`
-- Stripe webhooks: `src/routes/api/webhooks/stripe/+server.js`
+- Contact form: `src/routes/api/contact/+server.js`
 - D1 Database: `src/lib/server/db.js` helper + `platform.env.DB` binding
 
 ## Full-Stack File Reference
@@ -327,17 +326,14 @@ Before proposing any solution, review all relevant areas:
 
 ### API Layer
 
-- `src/routes/api/checkout/+server.js`
-- `src/routes/api/webhooks/stripe/+server.js`
 - `src/routes/api/contact/+server.js`
-- `src/routes/api/restore/+server.js`
 
 ### Server-Side (SvelteKit)
 
 - `src/routes/[lang]/**/+page.server.js`, `+layout.server.js`
 - `src/routes/+page.server.js`
 - `src/lib/server/db.js` - D1 database helper
-- `src/lib/server/rateLimit.js` - Rate limiting (D1-based)
+- `src/lib/server/rateLimit.js` - Rate limiting (D1-based, used by contact form)
 
 ### Database (D1)
 
@@ -355,7 +351,6 @@ Before proposing any solution, review all relevant areas:
 
 - `src/lib/components/Navbar.svelte`
 - `src/lib/components/Footer.svelte`
-- `src/lib/components/PaywallBanner.svelte`
 - `src/lib/components/TranslationDisclaimer.svelte`
 - `src/lib/components/SeoHead.svelte`
 - `src/lib/components/TipImage.svelte`
@@ -376,16 +371,6 @@ Before proposing any solution, review all relevant areas:
 
 - `src/app.css`, `src/app.html`
 - `static/robots.txt`
-
-## Environment Variables
-
-Required in Cloudflare Pages dashboard:
-
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` - Stripe API
-- `PUBLIC_SITE_URL` - Site base URL
-
-Local development (`.dev.vars`):
-- Same variables as above
 
 ## Adding Content
 

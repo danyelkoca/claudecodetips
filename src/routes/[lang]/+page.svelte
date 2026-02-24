@@ -1,9 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
-	import { Check, X, ChevronDown, ChevronRight, Lock, Layers, Shuffle, AlertCircle } from 'lucide-svelte';
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
-	import { freeTipIds } from '$lib/content/tips.js';
+	import { ChevronDown, ChevronRight, Layers, Shuffle, AlertCircle, X } from 'lucide-svelte';
 	import TipImage from '$lib/components/TipImage.svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
 
@@ -11,45 +7,9 @@
 
 	$: t = data.t;
 	$: lang = data.lang;
-	$: hasAccess = data.hasAccess;
-
-	// Canceled checkout handling
-	let showCanceledBanner = false;
-
-	$: if ($page.url.searchParams.get('canceled') === 'true') {
-		showCanceledBanner = true;
-		if (typeof window !== 'undefined') {
-			goto(`/${lang}`, { replaceState: true });
-		}
-	}
-
-	function dismissCanceledBanner() {
-		showCanceledBanner = false;
-	}
 	$: curriculum = data.curriculum;
-	$: freeTips = data.freeTips;
+	$: sampleTips = data.sampleTips;
 	$: allTipTitles = data.allTipTitles;
-
-	// Sticky CTA visibility
-	let showStickyCta = false;
-
-	onMount(() => {
-		if (typeof IntersectionObserver !== 'undefined') {
-			const observer = new IntersectionObserver(
-				([entry]) => {
-					showStickyCta = !entry.isIntersecting;
-				},
-				{ threshold: 0 }
-			);
-
-			setTimeout(() => {
-				const heroCta = document.getElementById('hero-cta');
-				if (heroCta) observer.observe(heroCta);
-			}, 100);
-
-			return () => observer.disconnect();
-		}
-	});
 </script>
 
 <SeoHead
@@ -58,18 +18,6 @@
 	path="/{lang}"
 	{lang}
 />
-
-<!-- Canceled Checkout Banner -->
-{#if showCanceledBanner}
-	<div class="bg-card border-b border-border">
-		<div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-			<p class="text-foreground text-sm">{t.landing.checkoutCanceled}</p>
-			<button onclick={dismissCanceledBanner} class="text-foreground hover:opacity-80 cursor-pointer">
-				<X class="w-5 h-5" />
-			</button>
-		</div>
-	</div>
-{/if}
 
 <!-- Section 1: Hero -->
 <section class="py-12">
@@ -86,16 +34,13 @@
 						{t.landing.hero.subtitle}
 					</p>
 				</div>
-				<div class="space-y-4">
-					<a
-						id="hero-cta"
-						href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
-						class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
-					>
-						{hasAccess ? t.guide.startReading : t.landing.hero.cta}
-					</a>
-					<p class="text-sm text-muted-foreground">{t.landing.hero.guarantee}</p>
-				</div>
+				<a
+					id="hero-cta"
+					href={`/${lang}/guide`}
+					class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
+				>
+					{t.guide.startReading}
+				</a>
 			</div>
 
 			<!-- Right: Flowing Tip Titles -->
@@ -291,23 +236,10 @@
 								>
 									<span class="text-foreground text-sm font-bold flex-shrink-0 w-6">{tip.id}</span>
 									<div class="flex-1 min-w-0">
-										<div class="flex items-center gap-2">
-											<h4 class="text-sm font-medium text-foreground truncate">{tip.title}</h4>
-											{#if !hasAccess}
-												{#if tip.isFree}
-													<span class="px-2 py-0.5 bg-success-foreground text-success text-xs font-medium rounded-full flex-shrink-0">
-														{t.guide.free}
-													</span>
-												{/if}
-											{/if}
-										</div>
+										<h4 class="text-sm font-medium text-foreground truncate">{tip.title}</h4>
 										<p class="text-xs text-muted-foreground truncate">{tip.summary}</p>
 									</div>
-									{#if !hasAccess && !tip.isFree}
-										<Lock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
-									{:else}
-										<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
-									{/if}
+									<ChevronRight class="w-4 h-4 text-muted-foreground flex-shrink-0" />
 								</a>
 							{/each}
 						</div>
@@ -318,7 +250,7 @@
 	</div>
 </section>
 
-<!-- Section 7: Free Tips -->
+<!-- Section 7: Sample Tips -->
 <section class="py-12">
 	<div class="max-w-5xl mx-auto px-4 space-y-6">
 		<div class="text-center space-y-2">
@@ -329,7 +261,7 @@
 		</div>
 
 		<div class="grid md:grid-cols-2 gap-4">
-			{#each freeTips as tip}
+			{#each sampleTips as tip}
 				<a
 					href="/{lang}/guide/{tip.section}/{tip.id}"
 					class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow cursor-pointer group"
@@ -338,10 +270,7 @@
 						<TipImage tipId={tip.id} alt={tip.title} className="w-full h-full object-cover" />
 					</div>
 					<div class="flex-1 min-w-0 space-y-1">
-						<div class="flex items-center gap-2">
-							<span class="px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">{t.guide.free}</span>
-							<span class="text-sm text-muted-foreground">#{tip.id}</span>
-						</div>
+						<span class="text-sm text-muted-foreground">#{tip.id}</span>
 						<h3 class="font-bold text-foreground">{tip.title}</h3>
 						<p class="text-sm text-muted-foreground line-clamp-2">{tip.summary}</p>
 					</div>
@@ -352,68 +281,7 @@
 	</div>
 </section>
 
-{#if !hasAccess}
-<!-- Section 8: Pricing -->
-<section id="pricing" class="py-12">
-	<div class="max-w-5xl mx-auto px-4">
-		<div class="max-w-md mx-auto space-y-4">
-			<div class="bg-card rounded-xl p-6 border border-border text-center space-y-6">
-				<div class="space-y-2">
-					<h2 class="text-lg text-foreground">{t.landing.pricing.title}</h2>
-					<div class="text-3xl font-bold text-foreground">{t.landing.pricing.price}</div>
-					<p class="text-muted-foreground">{t.landing.pricing.subtitle}</p>
-				</div>
-
-				<ul class="text-left space-y-4">
-					{#each t.landing.pricing.features as feature}
-						<li class="flex items-start gap-4">
-							<Check class="w-5 h-5 text-success flex-shrink-0" />
-							<span class="text-foreground">{feature}</span>
-						</li>
-					{/each}
-				</ul>
-
-				<a
-					href="/{lang}/pricing"
-					class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-lg cursor-pointer transition-colors"
-				>
-					{t.landing.pricing.cta}
-				</a>
-			</div>
-			<p class="text-center text-sm text-muted-foreground">{t.landing.pricing.guarantee}</p>
-		</div>
-	</div>
-</section>
-{/if}
-
-<!-- Sticky Mobile CTA -->
-{#if showStickyCta}
-	<div
-		class="fixed bottom-0 left-0 right-0 p-4 bg-card border-t border-border shadow-lg md:hidden z-50 animate-slide-up"
-	>
-		<a
-			href={hasAccess ? `/${lang}/guide` : `/${lang}/pricing`}
-			class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-center cursor-pointer transition-colors"
-		>
-			{hasAccess ? t.guide.startReading : t.landing.hero.cta}
-		</a>
-	</div>
-{/if}
-
 <style>
-	@keyframes slide-up {
-		from {
-			transform: translateY(100%);
-		}
-		to {
-			transform: translateY(0);
-		}
-	}
-
-	.animate-slide-up {
-		animation: slide-up 0.3s ease-out;
-	}
-
 	/* Accordion summary styling */
 	details summary {
 		list-style: none;

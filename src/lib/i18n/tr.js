@@ -33,12 +33,6 @@ export default {
     tipNotFound: "İpucu bulunamadı",
   },
 
-  // Checkout
-  checkout: {
-    productName: "Claude Code Ustası Olmak için 51 İpucu",
-    productDescription: "51 ipucunun tamamı ile eksiksiz rehber - ömür boyu erişim",
-  },
-
   // Navigation
   nav: {
     guide: "Rehber",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "Kumamap'in yaratıcısından (389 bin kullanıcı)",
       title: "Claude Code'u Aylar Değil, Günler İçinde Ustalaşın",
       subtitle: "Yeni başlayanlarla uzman kullanıcıları ayıran iş akışları, kısayollar ve yapılandırmalar.",
-      cta: "Rehberi Al - $29",
-      guarantee: "7 gün para iade garantisi",
       seeAll: "Tüm {count} İpucunu Gör",
     },
     social: {
@@ -120,39 +112,9 @@ export default {
       sections: "bölüm",
     },
     sample: {
-      title: "Almadan Once Deneyin",
-      subtitle: "Bu 4 ipucunu ucretsiz okuyun. Yardimci olurlarsa, 47 tane daha hayal edin.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "Ucretsiz Oku",
-    },
-    pricing: {
-      title: "Tek Seferlik Satın Alma",
-      price: "$29",
-      subtitle: "51 ipucunun tamamına ömür boyu erişim",
-      features: [
-        "Kod örnekleriyle 51 detaylı ipucu",
-        "Kopyala-yapıştır CLAUDE.md yapılandırmaları",
-        "13 düzenlenmiş bölüm",
-        "Ocak 2026 itibariyla guncel",
-      ],
-      cta: "Anında Erişim Al",
-      guarantee: "7 gün para iade garantisi. Soru sorulmaz.",
-    },
-    checkoutCanceled: "Ödeme iptal edildi. Hazır olduğunuzda.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "Ödeme - Claude Code Tips",
-    pageDescription: "51 ipucunun tamamına $29 ile anında erişim",
-    emailLabel: "E-posta Adresi",
-    emailPlaceholder: "siz@ornek.com",
-    cta: "Ödemeye Devam Et",
-    processing: "İşleniyor...",
-    errors: {
-      emailRequired: "Lütfen e-posta adresinizi girin.",
-      invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
-      checkoutFailed: "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
-      rateLimitExceeded: "Çok fazla deneme. Bir saat sonra tekrar deneyin.",
     },
   },
 
@@ -162,19 +124,10 @@ export default {
     overview: "51 İpucunun Tamamı",
     overviewDescription: "6 aylık günlük kullanımdan elde edilen savaş meydanında test edilmiş ipuçlarıyla Claude Code'da ustalaşın.",
     backToGuide: "Rehbere Dön",
-    free: "Ücretsiz",
-    freePreview: "Ücretsiz Önizleme",
-    locked: "Okumak için aç",
-    lockedTitle: "Bu ipucu kilitli",
-    lockedDescription: "Tek seferlik satın alma ile 51 ipucunun tamamına erişim sağlayın.",
-    unlockCta: "Tam Rehberi Aç - $29",
-    unlockAll: "51 İpucunun Tamamını Aç",
     sections: "bölüm",
-    freeLabel: "ücretsiz önizleme",
     whatsIncluded: "Neler Dahil",
     detailedTips: "detaylı ipucu",
     organizedSections: "düzenlenmiş bölüm",
-    freePreviews: "ücretsiz önizleme",
     startReading: "Okumaya Başla",
     jumpTo: "Bölüme Git",
   },
@@ -258,42 +211,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "Tam Rehberi Aç",
-    description: "51 ipucunun tamamına sadece $29 ile erişin",
-    cta: "Tam Erişim Al",
-    alreadyPurchased: "Zaten satın aldınız mı?",
-    restoreAccess: "Erişimi geri yükle",
-  },
-
-  // Success page
-  success: {
-    title: "Teşekkürler!",
-    description: "Satın alımınız başarılı. Artık 51 ipucunun tamamına erişebilirsiniz.",
-    cta: "Okumaya Başla",
-  },
-
-  // Restore page
-  restore: {
-    pageTitle: "Erişimi Geri Yükle - Claude Code Tips",
-    title: "Erişiminizi Geri Yükleyin",
-    description: "Bu cihazda erişimi geri yüklemek için satın alırken kullandığınız e-postayı girin.",
-    emailLabel: "Satın alma e-postası",
-    emailPlaceholder: "siz@ornek.com",
-    cta: "Erişimi Geri Yükle",
-    successMessage: "Erişim başarıyla geri yüklendi!",
-    redirecting: "Rehbere yönlendiriliyor...",
-    noAccount: "Henüz satın almadınız mı?",
-    buyNow: "Şimdi Satın Al",
-    errors: {
-      restoreFailed: "Erişim geri yüklenemedi. Tekrar deneyin.",
-      emailRequired: "E-posta gerekli.",
-      invalidEmail: "Lütfen geçerli bir e-posta adresi girin.",
-      rateLimitExceeded: "Çok fazla deneme. Bir saat sonra tekrar deneyin.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Claude Code ile inşa edildi",
@@ -301,8 +218,6 @@ export default {
     company: "Şirket",
     legal: "Yasal",
     faq: "SSS",
-    restoreAccess: "Erişimi geri yükle",
-    pricing: "Fiyatlandırma",
     blog: "Blog",
     about: "Hakkında",
     contact: "İletişim",
@@ -378,10 +293,7 @@ export default {
     pageDescription: "Claude Code Tips'in verilerinizi nasıl işlediğini öğrenin.",
     title: "Gizlilik Politikası",
     dataCollectedTitle: "Topladığımız Veriler",
-    dataCollectedDescription: "Rehberi satın aldığınızda:",
-    dataEmail: "E-posta (teslimat ve erişim için)",
-    paymentTitle: "Ödeme İşleme",
-    paymentDescription: "Tüm ödemeler Stripe tarafından güvenli bir şekilde işlenir. Ödeme bilgilerinizi saklamıyoruz.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "İletişim",
     contactLabel: "E-posta",
     contactEmail: "hello@claudecodetips.com",
@@ -394,13 +306,7 @@ export default {
     title: "Hizmet Şartları",
     serviceTitle: "Hizmet",
     serviceDescription:
-      "Claude Code Tips, Claude Code'da ustalaşmak için 51 ipucu içeren dijital bir rehber sağlar. Satın alımda ömür boyu erişim elde edersiniz.",
-    paymentTitle: "Ödeme",
-    paymentDescription: "Rehbere erişim satın alabilirsiniz:",
-    paymentOneTime: "$29 USD tek seferlik ödeme",
-    paymentStripe: "Tüm ödemeler Stripe aracılığıyla güvenli şekilde işlenir",
-    refundTitle: "İade",
-    refundDescription: "7 günlük para iade garantisi. Memnun kalmazsanız, tam iade için 7 gün içinde bize ulaşın.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "İletişim",
     contactLabel: "E-posta",
     contactEmail: "hello@claudecodetips.com",
@@ -421,24 +327,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "Operasyonlar Müdürü",
     headOfOperationsValue: "Talep üzerine açıklanır",
-    additionalFees: "Ek Ücretler",
-    additionalFeesValue: "Yok",
-    refundPolicy: "İade Politikası",
-    refundServiceIssues: "Hizmet Sorunları",
-    refundServiceIssuesValue:
-      "Hizmet sistem sorunları nedeniyle sağlanmazsa, lütfen hello@claudecodetips.com adresinden bize ulaşın. İnceleyip tam iade yapacağız.",
-    refundCustomer: "Müşteri İptali",
-    refundCustomerValue:
-      "7 günlük para iade garantisi. Satın alımınızdan memnun kalmazsanız, soru sorulmadan tam iade için 7 gün içinde bize ulaşın.",
-    deliveryTime: "Teslimat Süresi",
-    deliveryTimeValue: "Ödemeden sonra anında erişim",
-    paymentMethods: "Ödeme Yöntemleri",
-    paymentMethodsValue: "Kredi kartları (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "Ödeme Dönemi",
-    paymentPeriodValue: "Kredi kartı ödemesinde anında işlenir",
-    price: "Fiyat",
-    priceValue: "$29 USD",
-    priceTaxNote: "*Fiyat tüm geçerli vergileri içerir",
   },
 
   // Blog (UI strings only - post content in .svx files)

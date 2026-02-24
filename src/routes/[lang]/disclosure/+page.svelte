@@ -42,44 +42,6 @@
 						<th class="py-3 px-4 text-left bg-border font-semibold">{t.disclosure.headOfOperations}</th>
 						<td class="py-3 px-4">{t.disclosure.headOfOperationsValue}</td>
 					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold">{t.disclosure.additionalFees}</th>
-						<td class="py-3 px-4">{t.disclosure.additionalFeesValue}</td>
-					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold align-top">{t.disclosure.refundPolicy}</th>
-						<td class="py-3 px-4">
-							<div class="space-y-4">
-								<div>
-									<p class="font-medium">{t.disclosure.refundServiceIssues}</p>
-									<p>{t.disclosure.refundServiceIssuesValue}</p>
-								</div>
-								<div>
-									<p class="font-medium">{t.disclosure.refundCustomer}</p>
-									<p>{t.disclosure.refundCustomerValue}</p>
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold">{t.disclosure.deliveryTime}</th>
-						<td class="py-3 px-4">{t.disclosure.deliveryTimeValue}</td>
-					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold">{t.disclosure.paymentMethods}</th>
-						<td class="py-3 px-4">{t.disclosure.paymentMethodsValue}</td>
-					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold">{t.disclosure.paymentPeriod}</th>
-						<td class="py-3 px-4">{t.disclosure.paymentPeriodValue}</td>
-					</tr>
-					<tr class="border-b">
-						<th class="py-3 px-4 text-left bg-border font-semibold align-top">{t.disclosure.price}</th>
-						<td class="py-3 px-4 space-y-2">
-							<p>{t.disclosure.priceValue}</p>
-							<p class="text-sm text-muted-foreground">{t.disclosure.priceTaxNote}</p>
-						</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>

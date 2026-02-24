@@ -33,12 +33,6 @@ export default {
     tipNotFound: "팁을 찾을 수 없습니다",
   },
 
-  // Checkout
-  checkout: {
-    productName: "Claude Code 마스터를 위한 51가지 팁",
-    productDescription: "51가지 팁이 담긴 완전한 가이드 - 평생 이용",
-  },
-
   // Navigation
   nav: {
     guide: "가이드",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "Kumamap(38.9만 사용자) 개발자로부터",
       title: "몇 달이 아닌 며칠 만에 Claude Code 마스터하기",
       subtitle: "초보자와 파워 유저를 구분하는 워크플로우, 단축키, 설정들.",
-      cta: "가이드 구매 - $29",
-      guarantee: "7일 환불 보장",
       seeAll: "전체 {count}개 팁 보기",
     },
     problem: {
@@ -120,34 +112,9 @@ export default {
       sections: "섹션",
     },
     sample: {
-      title: "구매 전 체험하기",
-      subtitle: "4개의 팁을 무료로 읽어보세요. 도움이 된다면, 47개가 더 있습니다.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "무료로 읽기",
-    },
-    pricing: {
-      title: "일회성 구매",
-      price: "$29",
-      subtitle: "51가지 팁 평생 이용",
-      features: ["코드 예제가 포함된 51가지 상세 팁", "복사해서 바로 쓰는 CLAUDE.md 설정", "13개 정리된 섹션", "2026년 1월 기준 최신판"],
-      cta: "즉시 이용하기",
-      guarantee: "7일 환불 보장. 질문 없이.",
-    },
-    checkoutCanceled: "결제가 취소되었습니다. 준비되면 언제든지.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "결제 - Claude Code Tips",
-    pageDescription: "51가지 팁 모두 $29에 즉시 이용",
-    emailLabel: "이메일 주소",
-    emailPlaceholder: "you@example.com",
-    cta: "결제 계속하기",
-    processing: "처리 중...",
-    errors: {
-      emailRequired: "이메일을 입력해주세요.",
-      invalidEmail: "유효한 이메일 주소를 입력해주세요.",
-      checkoutFailed: "문제가 발생했습니다. 다시 시도해주세요.",
-      rateLimitExceeded: "시도 횟수가 너무 많습니다. 1시간 후 다시 시도하세요.",
     },
   },
 
@@ -157,19 +124,10 @@ export default {
     overview: "51가지 팁 전체",
     overviewDescription: "6개월 일일 사용에서 얻은 실전 검증된 팁으로 Claude Code를 마스터하세요.",
     backToGuide: "가이드로 돌아가기",
-    free: "무료",
-    freePreview: "무료 미리보기",
-    locked: "잠금 해제하여 읽기",
-    lockedTitle: "이 팁은 잠겨 있습니다",
-    lockedDescription: "일회성 구매로 51가지 팁 전체에 접근하세요.",
-    unlockCta: "전체 가이드 잠금 해제 - $29",
-    unlockAll: "51가지 팁 전체 잠금 해제",
     sections: "섹션",
-    freeLabel: "무료 미리보기",
     whatsIncluded: "포함 내용",
     detailedTips: "상세 팁",
     organizedSections: "정리된 섹션",
-    freePreviews: "무료 미리보기",
     startReading: "읽기 시작",
     jumpTo: "섹션으로 이동",
   },
@@ -245,42 +203,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "전체 가이드 잠금 해제",
-    description: "$29에 51가지 팁 전체 이용",
-    cta: "전체 이용하기",
-    alreadyPurchased: "이미 구매하셨나요?",
-    restoreAccess: "액세스 복원",
-  },
-
-  // Success page
-  success: {
-    title: "감사합니다!",
-    description: "구매가 완료되었습니다. 이제 51가지 팁 전체에 접근할 수 있습니다.",
-    cta: "읽기 시작",
-  },
-
-  // Restore page
-  restore: {
-    pageTitle: "액세스 복원 - Claude Code Tips",
-    title: "액세스 복원",
-    description: "구매 시 사용한 이메일을 입력하여 이 기기에서 액세스를 복원하세요.",
-    emailLabel: "구매 이메일",
-    emailPlaceholder: "you@example.com",
-    cta: "액세스 복원",
-    successMessage: "액세스가 복원되었습니다!",
-    redirecting: "가이드로 리디렉션 중...",
-    noAccount: "아직 구매하지 않으셨나요?",
-    buyNow: "지금 구매",
-    errors: {
-      restoreFailed: "액세스 복원 실패. 다시 시도하세요.",
-      emailRequired: "이메일이 필요합니다.",
-      invalidEmail: "유효한 이메일 주소를 입력해주세요.",
-      rateLimitExceeded: "시도 횟수가 너무 많습니다. 1시간 후 다시 시도하세요.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Claude Code로 제작",
@@ -288,8 +210,6 @@ export default {
     company: "회사",
     legal: "법적 고지",
     faq: "FAQ",
-    restoreAccess: "액세스 복원",
-    pricing: "가격",
     blog: "블로그",
     about: "소개",
     contact: "문의하기",
@@ -363,10 +283,7 @@ export default {
     pageDescription: "Claude Code Tips 개인정보 처리방침 및 데이터 처리",
     title: "개인정보 처리방침",
     dataCollectedTitle: "수집하는 데이터",
-    dataCollectedDescription: "가이드를 구매할 때:",
-    dataEmail: "이메일 (배송 및 접근용)",
-    paymentTitle: "결제 처리",
-    paymentDescription: "모든 결제는 Stripe에서 안전하게 처리됩니다. 결제 정보를 저장하지 않습니다.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "연락처",
     contactLabel: "이메일",
     contactEmail: "hello@claudecodetips.com",
@@ -379,13 +296,7 @@ export default {
     title: "이용약관",
     serviceTitle: "서비스",
     serviceDescription:
-      "Claude Code Tips는 Claude Code 마스터를 위한 51가지 팁이 담긴 디지털 가이드를 제공합니다. 구매 시 평생 접근 권한을 받습니다.",
-    paymentTitle: "결제",
-    paymentDescription: "가이드 접근권을 구매할 수 있습니다:",
-    paymentOneTime: "$29 USD 일회성 결제",
-    paymentStripe: "모든 결제는 Stripe를 통해 안전하게 처리",
-    refundTitle: "환불",
-    refundDescription: "7일 환불 보장. 만족하지 않으시면 7일 이내에 연락 주시면 전액 환불해 드립니다.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "연락처",
     contactLabel: "이메일",
     contactEmail: "hello@claudecodetips.com",
@@ -406,22 +317,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "운영 책임자",
     headOfOperationsValue: "요청 시 공개",
-    additionalFees: "추가 요금",
-    additionalFeesValue: "없음",
-    refundPolicy: "환불 정책",
-    refundServiceIssues: "서비스 문제",
-    refundServiceIssuesValue: "시스템 문제로 서비스가 제공되지 않는 경우 hello@claudecodetips.com으로 연락해 주세요. 검토 후 전액 환불해 드립니다.",
-    refundCustomer: "고객 요청",
-    refundCustomerValue: "7일 환불 보장. 구매에 만족하지 않으시면 7일 이내에 연락 주시면 질문 없이 전액 환불해 드립니다.",
-    deliveryTime: "배송 시간",
-    deliveryTimeValue: "결제 후 즉시 접근",
-    paymentMethods: "결제 방법",
-    paymentMethodsValue: "신용카드 (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "결제 기간",
-    paymentPeriodValue: "신용카드 결제 시 즉시 처리",
-    price: "가격",
-    priceValue: "$29 USD",
-    priceTaxNote: "*가격에는 모든 적용 세금이 포함됩니다",
   },
 
   // Blog (UI strings only - post content in .svx files)

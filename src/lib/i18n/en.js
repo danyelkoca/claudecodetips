@@ -33,12 +33,6 @@ export default {
     tipNotFound: "Tip not found",
   },
 
-  // Checkout
-  checkout: {
-    productName: "51 Tips to Master Claude Code",
-    productDescription: "Complete guide with all 51 tips - lifetime access",
-  },
-
   // Navigation
   nav: {
     guide: "Guide",
@@ -57,8 +51,6 @@ export default {
       eyebrow: "From the creator of Kumamap (389K users)",
       title: "Claude Code Is Hard. This Guide Makes It Easy.",
       subtitle: "6 months of daily grinding distilled into 51 tips that actually work. No theory. No hand-holding. Just what I learned building production apps.",
-      cta: "Get the Guide - $29",
-      guarantee: "7-day money-back guarantee",
       seeAll: "See All {count} Tips",
     },
     problem: {
@@ -120,34 +112,9 @@ export default {
       sections: "sections",
     },
     sample: {
-      title: "Try Before You Buy",
-      subtitle: "Read these 4 tips free. If they help, imagine 47 more.",
+      title: "Featured Tips",
+      subtitle: "Start with these popular tips",
       readFree: "Read Free",
-    },
-    pricing: {
-      title: "One-Time Purchase",
-      price: "$29",
-      subtitle: "Lifetime access to all 51 tips",
-      features: ["51 detailed tips with code examples", "Copy-paste CLAUDE.md configs", "13 organized sections", "Current as of January 2026"],
-      cta: "Get the Guide",
-      guarantee: "7-day money-back guarantee. No questions asked.",
-    },
-    checkoutCanceled: "Checkout canceled. Ready when you are.",
-  },
-
-  // Pricing page
-  pricingPage: {
-    pageTitle: "Checkout - Claude Code Tips",
-    pageDescription: "Get instant access to all 51 tips for $29",
-    emailLabel: "Email Address",
-    emailPlaceholder: "you@example.com",
-    cta: "Continue to Payment",
-    processing: "Processing...",
-    errors: {
-      emailRequired: "Please enter your email.",
-      invalidEmail: "Please enter a valid email address.",
-      checkoutFailed: "Something went wrong. Please try again.",
-      rateLimitExceeded: "Too many attempts. Try again in an hour.",
     },
   },
 
@@ -157,19 +124,10 @@ export default {
     overview: "All 51 Tips",
     overviewDescription: "Master Claude Code with these battle-tested tips from 6 months of daily use.",
     backToGuide: "Back to Guide",
-    free: "Free",
-    freePreview: "Free Preview",
-    locked: "Unlock to read",
-    lockedTitle: "This tip is locked",
-    lockedDescription: "Get full access to all 51 tips with a one-time purchase.",
-    unlockCta: "Get the Guide - $29",
-    unlockAll: "Unlock All 51 Tips",
     sections: "sections",
-    freeLabel: "free previews",
     whatsIncluded: "What's Included",
     detailedTips: "detailed tips",
     organizedSections: "organized sections",
-    freePreviews: "free previews",
     startReading: "Start Reading",
     jumpTo: "Jump to Section",
   },
@@ -248,42 +206,6 @@ export default {
     },
   },
 
-  // Paywall
-  paywall: {
-    title: "Get the Full Guide",
-    description: "Access all 51 tips for just $29",
-    cta: "Get the Guide",
-    alreadyPurchased: "Already purchased?",
-    restoreAccess: "Restore Access",
-  },
-
-  // Success page
-  success: {
-    title: "Thank You!",
-    description: "Your purchase was successful. You now have full access to all 51 tips.",
-    cta: "Start Reading",
-  },
-
-  // Restore access page
-  restore: {
-    pageTitle: "Restore Access - Claude Code Tips",
-    title: "Restore Your Access",
-    description: "Enter the email you used when purchasing to restore access on this device.",
-    emailLabel: "Purchase Email",
-    emailPlaceholder: "you@example.com",
-    cta: "Restore Access",
-    successMessage: "Access restored successfully!",
-    redirecting: "Redirecting to guide...",
-    noAccount: "No purchase yet?",
-    buyNow: "Buy Now",
-    errors: {
-      restoreFailed: "Failed to restore access. Please try again.",
-      emailRequired: "Email is required.",
-      invalidEmail: "Please enter a valid email address.",
-      rateLimitExceeded: "Too many attempts. Try again in an hour.",
-    },
-  },
-
   // Footer
   footer: {
     builtWith: "Built with Claude Code",
@@ -291,8 +213,6 @@ export default {
     company: "Company",
     legal: "Legal",
     faq: "FAQ",
-    restoreAccess: "Restore Access",
-    pricing: "Pricing",
     blog: "Blog",
     about: "About",
     contact: "Contact",
@@ -367,10 +287,7 @@ export default {
     pageDescription: "Claude Code Tips privacy policy and data handling",
     title: "Privacy Policy",
     dataCollectedTitle: "Data We Collect",
-    dataCollectedDescription: "When you purchase the guide:",
-    dataEmail: "Email (for delivery and access)",
-    paymentTitle: "Payment Processing",
-    paymentDescription: "All payments are processed securely by Stripe. We do not store your payment information.",
+    dataCollectedDescription: "This is a free guide. We only collect data you voluntarily provide through our contact form.",
     contactTitle: "Contact",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -383,13 +300,7 @@ export default {
     title: "Terms of Service",
     serviceTitle: "Service",
     serviceDescription:
-      "Claude Code Tips provides a digital guide containing 51 tips for mastering Claude Code. Upon purchase, you receive lifetime access.",
-    paymentTitle: "Payment",
-    paymentDescription: "You can purchase access to the guide:",
-    paymentOneTime: "One-time payment of $29 USD",
-    paymentStripe: "All payments processed securely through Stripe",
-    refundTitle: "Refunds",
-    refundDescription: "7-day money-back guarantee. If you are not satisfied, contact us within 7 days for a full refund.",
+      "Claude Code Tips provides a free digital guide containing 51 tips for mastering Claude Code.",
     contactTitle: "Contact",
     contactLabel: "Email",
     contactEmail: "hello@claudecodetips.com",
@@ -410,24 +321,6 @@ export default {
     emailValue: "hello@claudecodetips.com",
     headOfOperations: "Head of Operations",
     headOfOperationsValue: "Disclosed upon request",
-    additionalFees: "Additional Fees",
-    additionalFeesValue: "None",
-    refundPolicy: "Refund Policy",
-    refundServiceIssues: "Service Issues",
-    refundServiceIssuesValue:
-      "If the service is not provided due to system issues, please contact hello@claudecodetips.com. We will review and provide a full refund.",
-    refundCustomer: "Customer-Initiated",
-    refundCustomerValue:
-      "7-day money-back guarantee. If you are not satisfied with your purchase, contact us within 7 days for a full refund, no questions asked.",
-    deliveryTime: "Delivery Time",
-    deliveryTimeValue: "Instant access after payment",
-    paymentMethods: "Payment Methods",
-    paymentMethodsValue: "Credit cards (Visa, Mastercard, American Express, JCB)",
-    paymentPeriod: "Payment Period",
-    paymentPeriodValue: "Processed immediately upon credit card payment",
-    price: "Price",
-    priceValue: "$29 USD",
-    priceTaxNote: "*Price includes all applicable taxes",
   },
 
   // Blog (UI strings only - post content in .svx files)

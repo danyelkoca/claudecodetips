@@ -1,7 +1,7 @@
-import { sections, loadTipsMeta, freeTipIds } from '$lib/content/tips.js';
+import { sections, loadTipsMeta } from '$lib/content/tips.js';
 
 export async function load({ parent }) {
-	const { lang, hasAccess, t } = await parent();
+	const { lang, t } = await parent();
 	const { tips: allTips } = await loadTipsMeta(lang, t);
 
 	// Build sections with full tip data
@@ -12,8 +12,7 @@ export async function load({ parent }) {
 			return {
 				id: tipId,
 				title: tip.title,
-				summary: tip.summary,
-				isFree: freeTipIds.includes(tipId)
+				summary: tip.summary
 			};
 		})
 	}));
@@ -21,7 +20,6 @@ export async function load({ parent }) {
 	// Calculate stats
 	const totalTips = sections.reduce((acc, s) => acc + s.tips.length, 0);
 	const totalSections = sections.length;
-	const freeTipsCount = freeTipIds.length;
 
-	return { sectionsWithTips, hasAccess, totalTips, totalSections, freeTipsCount };
+	return { sectionsWithTips, totalTips, totalSections };
 }

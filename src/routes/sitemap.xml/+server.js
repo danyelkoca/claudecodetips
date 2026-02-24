@@ -13,16 +13,13 @@ export async function GET() {
 		// Static pages (no lastmod - they don't change regularly)
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/guide`);
-		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/pricing`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/about`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/faq`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/blog`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/privacy`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/terms`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/disclosure`);
-		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/restore`);
 		staticUrls.push(`${PUBLIC_SITE_URL}/${lang}/contact`);
-		// NOTE: /success excluded (post-checkout confirmation)
 
 		// Sections
 		for (const section of sections) {

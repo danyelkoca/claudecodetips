@@ -1,39 +1,14 @@
 <script>
-	import { Lock, ChevronRight, BookOpen, Layers, Gift } from 'lucide-svelte';
-	import PaywallBanner from '$lib/components/PaywallBanner.svelte';
+	import { ChevronRight, BookOpen, Layers } from 'lucide-svelte';
 	import SeoHead from '$lib/components/SeoHead.svelte';
-	import { onMount } from 'svelte';
 
 	export let data;
 
 	$: t = data.t;
 	$: lang = data.lang;
 	$: sectionsWithTips = data.sectionsWithTips;
-	$: hasAccess = data.hasAccess;
 	$: totalTips = data.totalTips;
 	$: totalSections = data.totalSections;
-	$: freeTipsCount = data.freeTipsCount;
-
-	// Sticky mobile CTA visibility
-	let showStickyCta = false;
-
-	onMount(() => {
-		if (typeof IntersectionObserver !== 'undefined') {
-			const observer = new IntersectionObserver(
-				([entry]) => {
-					showStickyCta = !entry.isIntersecting;
-				},
-				{ threshold: 0 }
-			);
-
-			setTimeout(() => {
-				const heroSection = document.getElementById('guide-hero');
-				if (heroSection) observer.observe(heroSection);
-			}, 100);
-
-			return () => observer.disconnect();
-		}
-	});
 </script>
 
 <SeoHead
@@ -65,12 +40,6 @@
 				<Layers class="w-4 h-4" />
 				<span>{totalSections} {t.guide.sections}</span>
 			</div>
-			{#if !hasAccess}
-			<div class="flex items-center gap-2 text-muted-foreground">
-				<Gift class="w-4 h-4" />
-				<span>{freeTipsCount} {t.guide.freeLabel}</span>
-			</div>
-		{/if}
 		</div>
 	</header>
 
@@ -96,7 +65,6 @@
 					<!-- Tips List -->
 					<div class="space-y-2">
 						{#each section.tips as tip}
-							{@const canAccess = hasAccess || tip.isFree}
 							<a
 								href="/{lang}/guide/{section.id}/{tip.id}"
 								class="flex items-center gap-4 p-4 bg-card rounded-xl border border-border hover:shadow-md transition-shadow group"
@@ -108,28 +76,17 @@
 
 								<!-- Tip Content -->
 								<div class="flex-1 min-w-0 space-y-2">
-									<div class="flex items-center gap-2">
-										<h3 class="font-medium text-foreground truncate">
-											{tip.title}
-										</h3>
-										{#if !hasAccess && tip.isFree}
-											<span class="flex-shrink-0 px-2 py-1 bg-success-foreground text-success text-xs font-medium rounded-full">
-												{t.guide.free}
-											</span>
-										{/if}
-									</div>
+									<h3 class="font-medium text-foreground truncate">
+										{tip.title}
+									</h3>
 									<p class="text-sm text-muted-foreground truncate">
 										{tip.summary}
 									</p>
 								</div>
 
-								<!-- Status Icon -->
+								<!-- Arrow Icon -->
 								<div class="flex-shrink-0">
-									{#if !canAccess}
-										<Lock class="w-4 h-4 text-muted-foreground" />
-									{:else}
-										<ChevronRight class="w-4 h-4 text-muted-foreground" />
-									{/if}
+									<ChevronRight class="w-4 h-4 text-muted-foreground" />
 								</div>
 							</a>
 						{/each}
@@ -153,29 +110,14 @@
 							<Layers class="w-4 h-4 text-foreground flex-shrink-0" />
 							<span class="text-muted-foreground">{totalSections} {t.guide.organizedSections}</span>
 						</li>
-						{#if !hasAccess}
-						<li class="flex items-center gap-4">
-							<Gift class="w-4 h-4 text-foreground flex-shrink-0" />
-							<span class="text-muted-foreground">{freeTipsCount} {t.guide.freePreviews}</span>
-						</li>
-					{/if}
 					</ul>
 
-					{#if !hasAccess}
-						<a
-							href="/{lang}/pricing"
-							class="block w-full py-3 bg-primary text-primary-foreground text-center rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors"
-						>
-							{t.guide.unlockCta}
-						</a>
-					{:else}
-						<a
-							href="/{lang}/guide/{sectionsWithTips[0]?.id}/{sectionsWithTips[0]?.tips[0]?.id}"
-							class="block w-full py-3 bg-primary text-primary-foreground text-center rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors"
-						>
-							{t.guide.startReading}
-						</a>
-					{/if}
+					<a
+						href="/{lang}/guide/{sectionsWithTips[0]?.id}/{sectionsWithTips[0]?.tips[0]?.id}"
+						class="block w-full py-3 bg-primary text-primary-foreground text-center rounded-xl hover:opacity-80 font-bold cursor-pointer transition-colors"
+					>
+						{t.guide.startReading}
+					</a>
 				</div>
 
 				<!-- Section Quick Links -->
@@ -194,38 +136,7 @@
 						{/each}
 					</nav>
 				</div>
-
-				<!-- Paywall Banner (if no access) -->
-				{#if !hasAccess}
-					<div class="text-sm">
-						<p class="text-muted-foreground text-center">
-							{t.paywall.alreadyPurchased}
-							<a href="/{lang}/restore" class="text-foreground underline hover:opacity-80 font-medium">{t.paywall.restoreAccess}</a>
-						</p>
-					</div>
-				{/if}
 			</div>
 		</aside>
 	</div>
-
-	<!-- Mobile Paywall Banner -->
-	{#if !hasAccess}
-		<div class="pt-12 lg:hidden">
-			<PaywallBanner {t} {lang} />
-		</div>
-	{/if}
 </div>
-
-<!-- Sticky Mobile CTA -->
-{#if showStickyCta && !hasAccess}
-	<div
-		class="fixed bottom-0 left-0 right-0 p-4 bg-card border-t border-border shadow-lg lg:hidden z-50"
-	>
-		<a
-			href="/{lang}/pricing"
-			class="block w-full py-3 bg-primary text-primary-foreground rounded-xl hover:opacity-80 font-bold text-center cursor-pointer transition-colors"
-		>
-			{t.guide.unlockCta}
-		</a>
-	</div>
-{/if}

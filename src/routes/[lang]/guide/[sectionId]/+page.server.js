@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 import { sections, loadTipsMeta } from '$lib/content/tips.js';
 
 export async function load({ params, parent }) {
-	const { lang, hasAccess, t } = await parent();
+	const { lang, t } = await parent();
 	const sectionId = params.sectionId;
 
 	const section = sections.find((s) => s.id === sectionId);
@@ -21,7 +21,6 @@ export async function load({ params, parent }) {
 	return {
 		section,
 		sectionTips,
-		hasAccess,
 		prevSection,
 		nextSection
 	};
